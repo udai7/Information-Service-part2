@@ -8,6 +8,7 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
+import { LoadingSpinner } from "../components/ui/loading-spinner";
 import {
   Dialog,
   DialogContent,
@@ -66,7 +67,7 @@ const OfficeDetails: React.FC = () => {
     setLoading(true);
     try {
       // First get the office by name to get its ID
-      const officeResponse = await apiClient.getOfficeByName(officeName);
+      const officeResponse = await apiClient.getPublicOfficeByName(officeName);
       const office = officeResponse.office;
       setOfficeId(office.id!);
 
@@ -87,7 +88,7 @@ const OfficeDetails: React.FC = () => {
   const fetchPosts = async (officeId: number) => {
     setLoading(true);
     try {
-      const response = await apiClient.getOfficePosts(officeId);
+      const response = await apiClient.getPublicOfficePosts(officeId);
       const postsWithUIState: PostWithUIState[] = response.posts.map(
         (post) => ({
           ...post,
@@ -286,7 +287,9 @@ const OfficeDetails: React.FC = () => {
       )}
 
       <div className="grid grid-cols-1 gap-6">
-        {posts.length === 0 && !showAddPostForm ? (
+        {loading ? (
+          <LoadingSpinner variant="card" size="lg" text="Loading office details..." />
+        ) : posts.length === 0 && !showAddPostForm ? (
           <div className="text-center py-8">
             <p className="text-gray-500 text-lg mb-4">No posts added yet.</p>
             <Button onClick={() => setShowAddPostForm(true)}>Add Post</Button>
