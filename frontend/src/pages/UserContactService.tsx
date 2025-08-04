@@ -46,48 +46,67 @@ export default function UserContactService() {
     try {
       // Instead of looking for an office by service name,
       // iterate through the service's contacts (offices) and get posts for each
-      const allPosts = [];
-      const allEmployees = [];
-      const officeDetails = [];
+      const allPosts: any[] = [];
+      const allEmployees: any[] = [];
+      const officeDetails: any[] = [];
 
       if (service.contacts && service.contacts.length > 0) {
-        for (const contact of service.contacts) {
+        for (
+          let officeIndex = 0;
+          officeIndex < service.contacts.length;
+          officeIndex++
+        ) {
+          const contact = service.contacts[officeIndex];
           try {
             // Get posts for this office using the contact's ID as officeId
             const postsResponse = await apiClient.getPublicOfficePosts(
               contact.id,
             );
+
             if (postsResponse.success && postsResponse.posts) {
               // Format posts to match expected structure
-              const formattedPosts = postsResponse.posts.map((post) => ({
-                postName: post.postName,
-                postRank: post.rank,
-                officeIndex: 0,
-                description: post.description,
-                department: post.department,
-                status: post.status,
-              }));
+              const currentOfficePostStartIndex: number = allPosts.length;
+              const formattedPosts: any[] = postsResponse.posts.map(
+                (post, localPostIndex) => ({
+                  postName: post.postName,
+                  postRank: post.rank,
+                  officeIndex: officeIndex,
+                  officeId: contact.id,
+                  officeName: contact.name,
+                  description: post.description,
+                  department: post.department,
+                  status: post.status,
+                  globalPostIndex: currentOfficePostStartIndex + localPostIndex,
+                  postId: post.id,
+                }),
+              );
               allPosts.push(...formattedPosts);
 
               // Extract and format employees from posts
-              const employees = postsResponse.posts.flatMap((post) =>
-                (post.employees || []).map((employee) => ({
-                  employeeName: employee.name,
-                  email: employee.email,
-                  phone: employee.phone,
-                  designation: employee.designation,
-                  employeeId: employee.employeeId,
-                  salary: employee.salary,
-                  status: employee.status,
-                  postIndex: 0,
-                })),
-              );
-              allEmployees.push(...employees);
+              postsResponse.posts.forEach((post, localPostIndex) => {
+                const globalPostIndex: number =
+                  currentOfficePostStartIndex + localPostIndex;
+                const employees: any[] = (post.employees || []).map(
+                  (employee) => ({
+                    employeeName: employee.name,
+                    email: employee.email,
+                    phone: employee.phone,
+                    designation: employee.designation,
+                    employeeId: employee.employeeId,
+                    salary: employee.salary,
+                    status: employee.status,
+                    postIndex: globalPostIndex,
+                    postId: post.id,
+                  }),
+                );
+                allEmployees.push(...employees);
+              });
             }
 
             // Add office details
             officeDetails.push({
               officeName: contact.name,
+              officeId: contact.id,
               level: contact.designation,
               district: contact.district,
               subDistrict: contact.subDistrict,
@@ -272,6 +291,7 @@ export default function UserContactService() {
                               offices:
                                 service.contacts?.map((contact) => ({
                                   officeName: contact.name, // Use the actual office name
+                                  officeId: contact.id,
                                   level: contact.designation, // Use designation which stores the correct level
                                   district: contact.district,
                                   subDistrict: contact.subDistrict,
@@ -384,18 +404,22 @@ export default function UserContactService() {
                     <h3 className="text-xl font-bold mb-2">
                       Department Structure
                     </h3>
+
                     {modalService.offices
                       .filter((office: any) => {
+                        // If no filter is selected or filterType is "State" and no specific district
                         if (filterType === "State") {
                           return office.level === "State";
-                        } else if (
-                          filterType === "District" &&
-                          selectedDistrict
-                        ) {
-                          // Show any office in the selected district, regardless of level
+                        } else if (filterType === "District") {
+                          // If district filter but no specific district selected, show all district offices
+                          if (!selectedDistrict) {
+                            return office.level === "District";
+                          }
+                          // If specific district selected, show offices in that district
                           return office.district === selectedDistrict;
                         }
-                        return true; // Show all if no filter or initial state
+                        // Default: show all offices
+                        return true;
                       })
                       .map((office: any, officeIdx: number) => (
                         <div
@@ -415,18 +439,16 @@ export default function UserContactService() {
                             <h5 className="font-semibold text-md mb-1">
                               Posts:
                             </h5>
+
                             {modalService.posts &&
                             modalService.posts.filter(
-                              (post: any) =>
-                                post.officeIndex ===
-                                modalService.offices.indexOf(office),
+                              (post: any) => post.officeId === office.officeId,
                             ).length > 0 ? (
                               <ul className="list-disc pl-6">
                                 {modalService.posts
                                   .filter(
                                     (post: any) =>
-                                      post.officeIndex ===
-                                      modalService.offices.indexOf(office),
+                                      post.officeId === office.officeId,
                                   )
                                   .map((post: any, postIdx: number) => (
                                     <li key={postIdx} className="mb-2">
@@ -439,7 +461,7 @@ export default function UserContactService() {
                                       modalService.employees.filter(
                                         (emp: any) =>
                                           emp.postIndex ===
-                                          modalService.posts.indexOf(post),
+                                          post.globalPostIndex,
                                       ).length > 0 ? (
                                         <div className="ml-4 mt-1">
                                           <h6 className="font-semibold text-sm mb-1">
@@ -450,9 +472,7 @@ export default function UserContactService() {
                                               .filter(
                                                 (emp: any) =>
                                                   emp.postIndex ===
-                                                  modalService.posts.indexOf(
-                                                    post,
-                                                  ),
+                                                  post.globalPostIndex,
                                               )
                                               .map(
                                                 (emp: any, empIdx: number) => (
