@@ -288,7 +288,11 @@ const OfficeDetails: React.FC = () => {
 
       <div className="grid grid-cols-1 gap-6">
         {loading ? (
-          <LoadingSpinner variant="card" size="lg" text="Loading office details..." />
+          <LoadingSpinner
+            variant="card"
+            size="lg"
+            text="Loading office details..."
+          />
         ) : posts.length === 0 && !showAddPostForm ? (
           <div className="text-center py-8">
             <p className="text-gray-500 text-lg mb-4">No posts added yet.</p>
