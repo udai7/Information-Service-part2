@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ServicesMenu } from "@/components/ui/sidebar";
+import { ServiceCardSkeleton } from "@/components/ui/loading-skeletons";
 import { apiClient } from "../types/api";
 import type { CertificateService } from "../types/api";
 
@@ -145,13 +146,9 @@ export default function UserCertificateService() {
             />
           </div>
           {/* Cards Grid */}
-          {loading && (
-            <div className="text-center py-8">
-              <div className="text-lg">Loading certificate services...</div>
-            </div>
-          )}
-
-          {!loading && (
+          {loading ? (
+            <ServiceCardSkeleton count={6} />
+          ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* API Certificate Service Cards */}
               {filteredApiCerts.map((cert) => (

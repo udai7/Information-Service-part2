@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { ServicesMenu } from "@/components/ui/sidebar";
+import { ServiceCardSkeleton } from "@/components/ui/loading-skeletons";
 import { apiClient } from "../types/api";
 import type { ContactService } from "../types/api";
 
@@ -235,13 +236,9 @@ export default function UserContactService() {
             </Select>
           </div>
           {/* Cards Grid */}
-          {loading && (
-            <div className="text-center py-8">
-              <div className="text-lg">Loading contact services...</div>
-            </div>
-          )}
-
-          {!loading && (
+          {loading ? (
+            <ServiceCardSkeleton count={6} />
+          ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* API Contact Service Cards */}
               {filteredApiServices.map((service) => (

@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ServicesMenu } from "@/components/ui/sidebar";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import {
   AlertTriangle,
   FileText,
@@ -555,11 +556,11 @@ export default function UserGrievancesService() {
             </div>
 
             {loading ? (
-              <Card>
-                <CardContent className="py-8 text-center text-gray-500">
-                  Loading grievances...
-                </CardContent>
-              </Card>
+              <LoadingSpinner
+                size="lg"
+                variant="card"
+                text="Loading grievances..."
+              />
             ) : filteredGrievances.length === 0 ? (
               <Card>
                 <CardContent className="py-8 text-center text-gray-500">

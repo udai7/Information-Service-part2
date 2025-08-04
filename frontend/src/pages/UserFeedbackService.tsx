@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { ServicesMenu } from "@/components/ui/sidebar";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import {
   MessageSquare,
   Star,
@@ -357,11 +358,11 @@ export default function UserFeedbackService() {
               Recent Community Feedbacks
             </h2>
             {loading ? (
-              <Card>
-                <CardContent className="py-8 text-center text-gray-500">
-                  Loading feedbacks...
-                </CardContent>
-              </Card>
+              <LoadingSpinner
+                variant="card"
+                size="lg"
+                text="Loading feedbacks..."
+              />
             ) : userFeedbacks.length === 0 ? (
               <Card>
                 <CardContent className="py-8 text-center text-gray-500">
