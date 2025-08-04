@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: gov-services-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: government_services
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - gov-services-network
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      target: production
+    container_name: gov-services-backend
+    environment:
+      DATABASE_URL: "postgresql://postgres:password@postgres:5432/government_services"
+      JWT_SECRET: "your-jwt-secret-change-in-production"
+      PORT: 3001
+      NODE_ENV: production
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+    networks:
+      - gov-services-network
+    volumes:
+      - ./backend/uploads:/app/backend/uploads
+
+  # Nginx (serves frontend and proxies API)
+  nginx:
+    image: nginx:alpine
+    container_name: gov-services-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./frontend/dist:/usr/share/nginx/html
+    depends_on:
+      - backend
+    networks:
+      - gov-services-network
+
+volumes:
+  postgres_data:
+
+networks:
+  gov-services-network:
+    driver: bridge
