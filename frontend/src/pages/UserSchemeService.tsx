@@ -242,76 +242,112 @@ export default function UserSchemeService() {
           {/* Modal for Scheme Details */}
           {modalScheme && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-              <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh]">
+              <div className="bg-gradient-to-br from-purple-50 to-pink-100 rounded-lg shadow-xl max-w-4xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh]">
                 <button
                   onClick={() => setModalScheme(null)}
                   className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
                 >
                   &times;
                 </button>
-                <h2 className="text-2xl font-bold mb-4">{modalScheme.name}</h2>
-                <p className="mb-4 text-gray-700">{modalScheme.summary}</p>
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                    <h2 className="text-2xl font-bold text-gray-800">
+                      {modalScheme.name}
+                    </h2>
+                  </div>
+                  <p className="text-gray-700 bg-white p-3 rounded-lg shadow-sm">
+                    {modalScheme.summary}
+                  </p>
+                </div>
 
                 {/* Basic Information */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  {modalScheme.type && (
-                    <div>
-                      <h3 className="font-semibold mb-1">Type</h3>
-                      <p className="text-gray-700">{modalScheme.type}</p>
-                    </div>
-                  )}
-                  <div>
-                    <h3 className="font-semibold mb-1">Application Mode</h3>
-                    <p className="text-gray-700">
-                      {modalScheme.applicationMode === "both"
-                        ? "Online/Offline"
-                        : modalScheme.applicationMode === "online"
-                        ? "Online"
-                        : "Offline"}
-                    </p>
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      Basic Information
+                    </h3>
                   </div>
-                  {modalScheme.targetAudience &&
-                    modalScheme.targetAudience.length > 0 && (
-                      <div>
-                        <h3 className="font-semibold mb-1">Target Audience</h3>
-                        <p className="text-gray-700">
-                          {modalScheme.targetAudience.join(", ")}
-                        </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {modalScheme.type && (
+                      <div className="bg-white p-4 rounded-lg shadow-sm">
+                        <h4 className="font-semibold mb-1 text-purple-700">
+                          Type
+                        </h4>
+                        <p className="text-gray-700">{modalScheme.type}</p>
                       </div>
                     )}
-                  <div>
-                    <h3 className="font-semibold mb-1">Status</h3>
-                    <p className="text-gray-700 capitalize">
-                      {modalScheme.status}
-                    </p>
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                      <h4 className="font-semibold mb-1 text-purple-700">
+                        Application Mode
+                      </h4>
+                      <p className="text-gray-700">
+                        {modalScheme.applicationMode === "both"
+                          ? "Online/Offline"
+                          : modalScheme.applicationMode === "online"
+                          ? "Online"
+                          : "Offline"}
+                      </p>
+                    </div>
+                    {modalScheme.targetAudience &&
+                      modalScheme.targetAudience.length > 0 && (
+                        <div className="bg-white p-4 rounded-lg shadow-sm">
+                          <h4 className="font-semibold mb-1 text-purple-700">
+                            Target Audience
+                          </h4>
+                          <p className="text-gray-700">
+                            {modalScheme.targetAudience.join(", ")}
+                          </p>
+                        </div>
+                      )}
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                      <h4 className="font-semibold mb-1 text-purple-700">
+                        Status
+                      </h4>
+                      <p className="text-gray-700 capitalize">
+                        {modalScheme.status}
+                      </p>
+                    </div>
                   </div>
                 </div>
 
                 {/* Application Links */}
                 {(modalScheme.onlineUrl || modalScheme.offlineAddress) && (
                   <div className="mb-6">
-                    <h3 className="font-semibold mb-2">How to Apply</h3>
-                    {modalScheme.onlineUrl && (
-                      <div className="mb-2">
-                        <span className="font-medium">Online:</span>{" "}
-                        <a
-                          href={modalScheme.onlineUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline"
-                        >
-                          {modalScheme.onlineUrl}
-                        </a>
-                      </div>
-                    )}
-                    {modalScheme.offlineAddress && (
-                      <div>
-                        <span className="font-medium">Offline:</span>{" "}
-                        <span className="text-gray-700">
-                          {modalScheme.offlineAddress}
-                        </span>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        How to Apply
+                      </h3>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                      {modalScheme.onlineUrl && (
+                        <div className="mb-2">
+                          <span className="font-medium text-indigo-700">
+                            Online:
+                          </span>{" "}
+                          <a
+                            href={modalScheme.onlineUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline"
+                          >
+                            {modalScheme.onlineUrl}
+                          </a>
+                        </div>
+                      )}
+                      {modalScheme.offlineAddress && (
+                        <div>
+                          <span className="font-medium text-indigo-700">
+                            Offline:
+                          </span>{" "}
+                          <span className="text-gray-700">
+                            {modalScheme.offlineAddress}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
 
@@ -319,18 +355,23 @@ export default function UserSchemeService() {
                 {modalScheme.eligibilityDetails &&
                   modalScheme.eligibilityDetails.length > 0 && (
                     <div className="mb-6">
-                      <h3 className="font-semibold mb-2">
-                        Eligibility Criteria
-                      </h3>
-                      <ul className="list-disc pl-6 space-y-1">
-                        {modalScheme.eligibilityDetails.map(
-                          (item: any, idx: number) => (
-                            <li key={idx} className="text-gray-700">
-                              {item}
-                            </li>
-                          ),
-                        )}
-                      </ul>
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          Eligibility Criteria
+                        </h3>
+                      </div>
+                      <div className="bg-white p-4 rounded-lg shadow-sm">
+                        <ul className="list-disc pl-6 space-y-1">
+                          {modalScheme.eligibilityDetails.map(
+                            (item: any, idx: number) => (
+                              <li key={idx} className="text-gray-700">
+                                {item}
+                              </li>
+                            ),
+                          )}
+                        </ul>
+                      </div>
                     </div>
                   )}
 
@@ -338,16 +379,23 @@ export default function UserSchemeService() {
                 {modalScheme.schemeDetails &&
                   modalScheme.schemeDetails.length > 0 && (
                     <div className="mb-6">
-                      <h3 className="font-semibold mb-2">Scheme Details</h3>
-                      <ul className="list-disc pl-6 space-y-1">
-                        {modalScheme.schemeDetails.map(
-                          (item: any, idx: number) => (
-                            <li key={idx} className="text-gray-700">
-                              {item}
-                            </li>
-                          ),
-                        )}
-                      </ul>
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          Scheme Details
+                        </h3>
+                      </div>
+                      <div className="bg-white p-4 rounded-lg shadow-sm">
+                        <ul className="list-disc pl-6 space-y-1">
+                          {modalScheme.schemeDetails.map(
+                            (item: any, idx: number) => (
+                              <li key={idx} className="text-gray-700">
+                                {item}
+                              </li>
+                            ),
+                          )}
+                        </ul>
+                      </div>
                     </div>
                   )}
 
@@ -355,145 +403,60 @@ export default function UserSchemeService() {
                 {modalScheme.processDetails &&
                   modalScheme.processDetails.length > 0 && (
                     <div className="mb-6">
-                      <h3 className="font-semibold mb-2">
-                        Application Process
-                      </h3>
-                      <ul className="list-disc pl-6 space-y-1">
-                        {modalScheme.processDetails.map(
-                          (item: any, idx: number) => (
-                            <li key={idx} className="text-gray-700">
-                              {item}
-                            </li>
-                          ),
-                        )}
-                      </ul>
-                    </div>
-                  )}
-
-                {/* Process Steps for Different Types */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {modalScheme.processNew && (
-                    <div>
-                      <h3 className="font-semibold mb-2">
-                        New Application Process
-                      </h3>
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <pre className="whitespace-pre-wrap text-sm text-gray-700">
-                          {modalScheme.processNew}
-                        </pre>
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          Application Process
+                        </h3>
+                      </div>
+                      <div className="bg-white p-4 rounded-lg shadow-sm">
+                        <ul className="list-disc pl-6 space-y-1">
+                          {modalScheme.processDetails.map(
+                            (item: any, idx: number) => (
+                              <li key={idx} className="text-gray-700">
+                                {item}
+                              </li>
+                            ),
+                          )}
+                        </ul>
                       </div>
                     </div>
                   )}
-
-                  {modalScheme.processUpdate && (
-                    <div>
-                      <h3 className="font-semibold mb-2">Update Process</h3>
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <pre className="whitespace-pre-wrap text-sm text-gray-700">
-                          {modalScheme.processUpdate}
-                        </pre>
-                      </div>
-                    </div>
-                  )}
-
-                  {modalScheme.processLost && (
-                    <div>
-                      <h3 className="font-semibold mb-2">
-                        Lost Application Process
-                      </h3>
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <pre className="whitespace-pre-wrap text-sm text-gray-700">
-                          {modalScheme.processLost}
-                        </pre>
-                      </div>
-                    </div>
-                  )}
-
-                  {modalScheme.processSurrender && (
-                    <div>
-                      <h3 className="font-semibold mb-2">Surrender Process</h3>
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <pre className="whitespace-pre-wrap text-sm text-gray-700">
-                          {modalScheme.processSurrender}
-                        </pre>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Document Requirements */}
-                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {modalScheme.docNew && (
-                    <div>
-                      <h3 className="font-semibold mb-2">
-                        Documents for New Application
-                      </h3>
-                      <div className="bg-blue-50 p-4 rounded-lg">
-                        <pre className="whitespace-pre-wrap text-sm text-gray-700">
-                          {modalScheme.docNew}
-                        </pre>
-                      </div>
-                    </div>
-                  )}
-
-                  {modalScheme.docUpdate && (
-                    <div>
-                      <h3 className="font-semibold mb-2">
-                        Documents for Update
-                      </h3>
-                      <div className="bg-blue-50 p-4 rounded-lg">
-                        <pre className="whitespace-pre-wrap text-sm text-gray-700">
-                          {modalScheme.docUpdate}
-                        </pre>
-                      </div>
-                    </div>
-                  )}
-
-                  {modalScheme.docLost && (
-                    <div>
-                      <h3 className="font-semibold mb-2">
-                        Documents for Lost Application
-                      </h3>
-                      <div className="bg-blue-50 p-4 rounded-lg">
-                        <pre className="whitespace-pre-wrap text-sm text-gray-700">
-                          {modalScheme.docLost}
-                        </pre>
-                      </div>
-                    </div>
-                  )}
-
-                  {modalScheme.docSurrender && (
-                    <div>
-                      <h3 className="font-semibold mb-2">
-                        Documents for Surrender
-                      </h3>
-                      <div className="bg-blue-50 p-4 rounded-lg">
-                        <pre className="whitespace-pre-wrap text-sm text-gray-700">
-                          {modalScheme.docSurrender}
-                        </pre>
-                      </div>
-                    </div>
-                  )}
-                </div>
 
                 {/* Contacts */}
                 {modalScheme.contacts && modalScheme.contacts.length > 0 && (
-                  <div className="mt-6">
-                    <h3 className="font-semibold mb-2">Contact Information</h3>
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        Contact Information
+                      </h3>
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {modalScheme.contacts.map((contact, idx) => (
-                        <div key={idx} className="bg-green-50 p-4 rounded-lg">
-                          <h4 className="font-medium">{contact.name}</h4>
+                        <div
+                          key={idx}
+                          className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-emerald-400"
+                        >
+                          <h4 className="font-medium text-emerald-700">
+                            {contact.name}
+                          </h4>
                           <p className="text-sm text-gray-600">
                             {contact.designation}
                           </p>
-                          <p className="text-sm">{contact.serviceName}</p>
-                          <p className="text-sm">
+                          <p className="text-sm text-gray-700">
+                            {contact.serviceName}
+                          </p>
+                          <p className="text-sm text-gray-700">
                             {contact.district}, {contact.subDistrict},{" "}
                             {contact.block}
                           </p>
-                          <p className="text-sm">Phone: {contact.contact}</p>
-                          <p className="text-sm">Email: {contact.email}</p>
+                          <p className="text-sm text-emerald-600">
+                            Phone: {contact.contact}
+                          </p>
+                          <p className="text-sm text-emerald-600">
+                            Email: {contact.email}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -501,14 +464,20 @@ export default function UserSchemeService() {
                 )}
 
                 {/* Timestamps */}
-                <div className="mt-6 pt-4 border-t text-sm text-gray-500">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      Created:{" "}
+                <div className="pt-4 border-t border-purple-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                    <h4 className="text-sm font-semibold text-gray-600">
+                      Record Information
+                    </h4>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-500">
+                    <div className="bg-white px-3 py-2 rounded shadow-sm">
+                      <span className="font-medium">Created:</span>{" "}
                       {new Date(modalScheme.createdAt).toLocaleDateString()}
                     </div>
-                    <div>
-                      Updated:{" "}
+                    <div className="bg-white px-3 py-2 rounded shadow-sm">
+                      <span className="font-medium">Updated:</span>{" "}
                       {new Date(modalScheme.updatedAt).toLocaleDateString()}
                     </div>
                   </div>

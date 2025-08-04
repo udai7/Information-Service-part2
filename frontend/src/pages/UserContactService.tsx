@@ -346,62 +346,79 @@ export default function UserContactService() {
           {/* Modal for Contact Service Details */}
           {modalService && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-              <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh]">
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl shadow-2xl max-w-2xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-blue-200">
                 <button
                   onClick={() => setModalService(null)}
-                  className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
+                  className="absolute top-3 right-3 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full p-2 transition-all duration-200 text-xl"
                 >
                   &times;
                 </button>
-                <h2 className="text-2xl font-bold mb-4">{modalService.name}</h2>
-                <p className="mb-2 text-gray-700">{modalService.summary}</p>
-                <div className="mb-4">
-                  <h3 className="font-semibold mb-2">Type</h3>
-                  <p>{modalService.type}</p>
+                <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border-l-4 border-blue-500">
+                  <h2 className="text-2xl font-bold mb-2 text-gray-800">
+                    {modalService.name}
+                  </h2>
+                  <p className="text-gray-600">{modalService.summary}</p>
+                </div>
+
+                <div className="bg-white rounded-lg p-4 mb-4 shadow-sm">
+                  <h3 className="font-semibold mb-2 text-gray-700 flex items-center">
+                    <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                    Type
+                  </h3>
+                  <p className="text-gray-600">{modalService.type}</p>
                 </div>
 
                 {/* Filter Dropdowns */}
                 {modalService.offices && (
-                  <div className="mb-4 flex gap-4">
-                    <Select
-                      onValueChange={(value) => {
-                        setFilterType(value);
-                        setSelectedDistrict(""); // Reset district when filter type changes
-                      }}
-                      value={filterType}
-                    >
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Select Filter Type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="State">State Level</SelectItem>
-                        <SelectItem value="District">District Level</SelectItem>
-                      </SelectContent>
-                    </Select>
-
-                    {filterType === "District" && (
+                  <div className="mb-4 bg-white rounded-lg p-4 shadow-sm">
+                    <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                      <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                      Filter Options
+                    </h4>
+                    <div className="flex gap-4">
                       <Select
-                        onValueChange={(value) => setSelectedDistrict(value)}
-                        value={selectedDistrict}
+                        onValueChange={(value) => {
+                          setFilterType(value);
+                          setSelectedDistrict(""); // Reset district when filter type changes
+                        }}
+                        value={filterType}
                       >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Select District" />
+                        <SelectTrigger className="w-[180px] border-blue-200 focus:border-blue-400">
+                          <SelectValue placeholder="Select Filter Type" />
                         </SelectTrigger>
                         <SelectContent>
-                          {tripuraDistricts.map((district) => (
-                            <SelectItem key={district} value={district}>
-                              {district}
-                            </SelectItem>
-                          ))}
+                          <SelectItem value="State">State Level</SelectItem>
+                          <SelectItem value="District">
+                            District Level
+                          </SelectItem>
                         </SelectContent>
                       </Select>
-                    )}
+
+                      {filterType === "District" && (
+                        <Select
+                          onValueChange={(value) => setSelectedDistrict(value)}
+                          value={selectedDistrict}
+                        >
+                          <SelectTrigger className="w-[180px] border-blue-200 focus:border-blue-400">
+                            <SelectValue placeholder="Select District" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {tripuraDistricts.map((district) => (
+                              <SelectItem key={district} value={district}>
+                                {district}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    </div>
                   </div>
                 )}
 
                 {modalService.offices && (
-                  <div className="mb-4">
-                    <h3 className="text-xl font-bold mb-2">
+                  <div className="mb-4 bg-white rounded-lg p-4 shadow-sm">
+                    <h3 className="text-xl font-bold mb-4 text-gray-800 flex items-center">
+                      <span className="w-3 h-3 bg-blue-500 rounded-full mr-3"></span>
                       Department Structure
                     </h3>
 
@@ -424,19 +441,29 @@ export default function UserContactService() {
                       .map((office: any, officeIdx: number) => (
                         <div
                           key={officeIdx}
-                          className="mb-4 p-3 border rounded-md bg-gray-50"
+                          className="mb-4 p-4 border rounded-lg bg-gradient-to-r from-slate-50 to-blue-50 border-blue-200 shadow-sm hover:shadow-md transition-shadow duration-200"
                         >
-                          <h4 className="font-semibold text-lg mb-1">
+                          <h4 className="font-semibold text-lg mb-2 text-gray-800 flex items-center">
+                            <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
                             Office: {office.officeName}
                           </h4>
-                          <p className="text-sm text-gray-600">
-                            Level: {office.level}, District: {office.district},
-                            Pincode: {office.pincode}, Address: {office.address}
-                          </p>
+                          <div className="bg-white rounded-md p-3 mb-3 border-l-4 border-orange-300">
+                            <p className="text-sm text-gray-600">
+                              <span className="font-medium">Level:</span>{" "}
+                              {office.level},
+                              <span className="font-medium"> District:</span>{" "}
+                              {office.district},
+                              <span className="font-medium"> Pincode:</span>{" "}
+                              {office.pincode},
+                              <span className="font-medium"> Address:</span>{" "}
+                              {office.address}
+                            </p>
+                          </div>
 
                           {/* Posts within this office */}
                           <div className="mt-3">
-                            <h5 className="font-semibold text-md mb-1">
+                            <h5 className="font-semibold text-md mb-2 text-gray-700 flex items-center">
+                              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
                               Posts:
                             </h5>
 
@@ -444,18 +471,26 @@ export default function UserContactService() {
                             modalService.posts.filter(
                               (post: any) => post.officeId === office.officeId,
                             ).length > 0 ? (
-                              <ul className="list-disc pl-6">
+                              <ul className="space-y-3">
                                 {modalService.posts
                                   .filter(
                                     (post: any) =>
                                       post.officeId === office.officeId,
                                   )
                                   .map((post: any, postIdx: number) => (
-                                    <li key={postIdx} className="mb-2">
-                                      <span className="font-medium">
-                                        {post.postName}
-                                      </span>{" "}
-                                      ({post.postRank})
+                                    <li
+                                      key={postIdx}
+                                      className="bg-white rounded-lg p-3 border-l-4 border-green-400 shadow-sm"
+                                    >
+                                      <div className="flex items-center mb-2">
+                                        <span className="w-2 h-2 bg-cyan-500 rounded-full mr-2"></span>
+                                        <span className="font-medium text-gray-800">
+                                          {post.postName}
+                                        </span>
+                                        <span className="ml-2 text-sm bg-cyan-100 text-cyan-700 px-2 py-1 rounded-full">
+                                          {post.postRank}
+                                        </span>
+                                      </div>
                                       {/* Employees within this post */}
                                       {modalService.employees &&
                                       modalService.employees.filter(
@@ -463,11 +498,12 @@ export default function UserContactService() {
                                           emp.postIndex ===
                                           post.globalPostIndex,
                                       ).length > 0 ? (
-                                        <div className="ml-4 mt-1">
-                                          <h6 className="font-semibold text-sm mb-1">
+                                        <div className="ml-4 mt-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-md p-3 border border-green-200">
+                                          <h6 className="font-semibold text-sm mb-2 text-gray-700 flex items-center">
+                                            <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
                                             Employees:
                                           </h6>
-                                          <ul className="list-disc pl-4">
+                                          <ul className="space-y-2">
                                             {modalService.employees
                                               .filter(
                                                 (emp: any) =>
@@ -476,20 +512,33 @@ export default function UserContactService() {
                                               )
                                               .map(
                                                 (emp: any, empIdx: number) => (
-                                                  <li key={empIdx}>
-                                                    {emp.employeeName} (
-                                                    {emp.designation})
-                                                    {emp.email &&
-                                                      `, Email: ${emp.email}`}
-                                                    {emp.phone &&
-                                                      `, Phone: ${emp.phone}`}
+                                                  <li
+                                                    key={empIdx}
+                                                    className="bg-white rounded-md p-2 text-sm border border-green-100"
+                                                  >
+                                                    <span className="font-medium text-gray-800">
+                                                      {emp.employeeName}
+                                                    </span>
+                                                    <span className="ml-2 text-gray-600">
+                                                      ({emp.designation})
+                                                    </span>
+                                                    {emp.email && (
+                                                      <div className="text-blue-600 text-xs mt-1">
+                                                        📧 {emp.email}
+                                                      </div>
+                                                    )}
+                                                    {emp.phone && (
+                                                      <div className="text-green-600 text-xs">
+                                                        📞 {emp.phone}
+                                                      </div>
+                                                    )}
                                                   </li>
                                                 ),
                                               )}
                                           </ul>
                                         </div>
                                       ) : (
-                                        <div className="ml-4 mt-1 text-sm text-gray-500">
+                                        <div className="ml-4 mt-2 text-sm text-gray-500 bg-gray-50 rounded-md p-2 border border-gray-200">
                                           No employee details present
                                         </div>
                                       )}
@@ -497,18 +546,26 @@ export default function UserContactService() {
                                   ))}
                               </ul>
                             ) : (
-                              <p className="text-sm text-gray-500 pl-2">
-                                No post details present
-                              </p>
+                              <div className="bg-gray-50 rounded-md p-3 border border-gray-200">
+                                <p className="text-sm text-gray-500 text-center">
+                                  No post details present
+                                </p>
+                              </div>
                             )}
                           </div>
                         </div>
                       ))}
                   </div>
                 )}
-                <div className="mb-4">
-                  <h3 className="font-semibold mb-2">Status</h3>
-                  <p>{modalService.status}</p>
+
+                <div className="bg-white rounded-lg p-4 shadow-sm border-l-4 border-green-500">
+                  <h3 className="font-semibold mb-2 text-gray-700 flex items-center">
+                    <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                    Status
+                  </h3>
+                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                    {modalService.status}
+                  </span>
                 </div>
               </div>
             </div>
