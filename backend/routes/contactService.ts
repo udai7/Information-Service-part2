@@ -340,9 +340,9 @@ router.patch(
   },
 );
 
-// PATCH /api/contact-services/:id - Toggle contact service active status
+// PATCH /api/contact-services/:id/toggle - Toggle contact service active status
 router.patch(
-  "/:id",
+  "/:id/toggle",
   authenticateAdmin,
   [
     param("id").isInt().withMessage("Invalid service ID"),

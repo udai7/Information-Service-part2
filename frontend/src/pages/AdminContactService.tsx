@@ -70,9 +70,7 @@ export default function AdminContactService() {
 
   const handleToggleActive = async (service: ContactService) => {
     try {
-      await apiClient.updateContactService(service.id, {
-        isActive: !service.isActive,
-      });
+      await apiClient.toggleContactServiceActive(service.id, !service.isActive);
 
       // Refresh the services list
       const response = await apiClient.getContactServices();

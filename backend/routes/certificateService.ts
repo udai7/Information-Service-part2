@@ -373,9 +373,9 @@ router.patch(
   },
 );
 
-// PATCH /api/certificate-services/:id - Toggle certificate service active status
+// PATCH /api/certificate-services/:id/toggle - Toggle certificate service active status
 router.patch(
-  "/:id",
+  "/:id/toggle",
   authenticateAdmin,
   [
     param("id").isInt().withMessage("Invalid service ID"),

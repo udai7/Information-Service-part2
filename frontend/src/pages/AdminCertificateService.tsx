@@ -67,9 +67,7 @@ export default function AdminCertificateService() {
 
   const handleToggleActive = async (cert: CertificateService) => {
     try {
-      await apiClient.updateCertificateService(cert.id, {
-        isActive: !cert.isActive,
-      });
+      await apiClient.toggleCertificateServiceActive(cert.id, !cert.isActive);
 
       // Refresh the certificates list
       const response = await apiClient.getCertificateServices();

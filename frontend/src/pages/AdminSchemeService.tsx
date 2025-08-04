@@ -67,9 +67,7 @@ export default function AdminSchemeService() {
 
   const handleToggleActive = async (scheme: SchemeService) => {
     try {
-      await apiClient.updateSchemeService(scheme.id, {
-        isActive: !scheme.isActive,
-      });
+      await apiClient.toggleSchemeServiceActive(scheme.id, !scheme.isActive);
 
       // Refresh the schemes list
       const response = await apiClient.getSchemeServices();

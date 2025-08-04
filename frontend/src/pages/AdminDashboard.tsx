@@ -20,15 +20,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Clock,
-  CheckCircle,
   Activity,
   Users,
   Search,
   Filter,
   Eye,
-  ToggleLeft,
-  ToggleRight,
   TrendingUp,
   AlertCircle,
   FileText,
@@ -36,6 +32,7 @@ import {
   Award,
 } from "lucide-react";
 import AdminSidebar from "@/components/ui/AdminSidebar";
+import { useToast } from "@/hooks/use-toast";
 import { apiClient } from "../types/api";
 import type {
   SchemeService,
@@ -64,6 +61,7 @@ export function DashboardHome() {
   const [typeFilter, setTypeFilter] = useState("all");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const { toast } = useToast();
 
   // Service states
   const [schemeServices, setSchemeServices] = useState<SchemeService[]>([]);
@@ -79,10 +77,29 @@ export function DashboardHome() {
   const fetchAllServices = async () => {
     setLoading(true);
     try {
-      const data = await apiClient.getAllPublishedServices();
-      setSchemeServices(data.schemeServices);
-      setCertificateServices(data.certificateServices);
-      setContactServices(data.contactServices);
+      // Fetch all services (not just published ones) to include inactive services
+      const [schemeResponse, certResponse, contactResponse] = await Promise.all(
+        [
+          apiClient.getSchemeServices(),
+          apiClient.getCertificateServices(),
+          apiClient.getContactServices(),
+        ],
+      );
+
+      // Only show published services but include both active and inactive
+      const publishedSchemes = (schemeResponse.schemeServices || []).filter(
+        (s) => s.status === "published",
+      );
+      const publishedCerts = (certResponse.certificateServices || []).filter(
+        (s) => s.status === "published",
+      );
+      const publishedContacts = (contactResponse.contactServices || []).filter(
+        (s) => s.status === "published",
+      );
+
+      setSchemeServices(publishedSchemes);
+      setCertificateServices(publishedCerts);
+      setContactServices(publishedContacts);
     } catch (error) {
       console.error("Error fetching services:", error);
     } finally {
@@ -101,25 +118,58 @@ export function DashboardHome() {
       switch (serviceType) {
         case "scheme":
           await apiClient.toggleSchemeServiceActive(id, newStatus);
-          setSchemeServices((prev) =>
-            prev.map((s) => (s.id === id ? { ...s, isActive: newStatus } : s)),
+          // Refresh scheme services from server
+          const schemeResponse = await apiClient.getSchemeServices();
+          const publishedSchemes = (schemeResponse.schemeServices || []).filter(
+            (s) => s.status === "published",
           );
+          setSchemeServices(publishedSchemes);
           break;
         case "certificate":
           await apiClient.toggleCertificateServiceActive(id, newStatus);
-          setCertificateServices((prev) =>
-            prev.map((s) => (s.id === id ? { ...s, isActive: newStatus } : s)),
-          );
+          // Refresh certificate services from server
+          const certResponse = await apiClient.getCertificateServices();
+          const publishedCerts = (
+            certResponse.certificateServices || []
+          ).filter((s) => s.status === "published");
+          setCertificateServices(publishedCerts);
           break;
         case "contact":
           await apiClient.toggleContactServiceActive(id, newStatus);
-          setContactServices((prev) =>
-            prev.map((s) => (s.id === id ? { ...s, isActive: newStatus } : s)),
-          );
+          // Refresh contact services from server
+          const contactResponse = await apiClient.getContactServices();
+          const publishedContacts = (
+            contactResponse.contactServices || []
+          ).filter((s) => s.status === "published");
+          setContactServices(publishedContacts);
           break;
       }
+
+      // Show success message
+      setMessage(
+        `Service ${newStatus ? "activated" : "deactivated"} successfully`,
+      );
+      setTimeout(() => setMessage(null), 3000);
+
+      // Show toast notification
+      toast({
+        title: "Success",
+        description: `Service ${
+          newStatus ? "activated" : "deactivated"
+        } successfully`,
+      });
     } catch (error) {
       console.error("Error toggling service status:", error);
+      // Show error message to user
+      setMessage("Failed to update service status. Please try again.");
+      setTimeout(() => setMessage(null), 5000);
+
+      // Show error toast
+      toast({
+        title: "Error",
+        description: "Failed to update service status. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -193,7 +243,9 @@ export function DashboardHome() {
 
     return (
       <Card
-        className={`hover:shadow-lg transition-all duration-200 ${!isActive ? "opacity-60 border-gray-300" : "border-green-200"}`}
+        className={`hover:shadow-lg transition-all duration-200 ${
+          !isActive ? "opacity-60 border-gray-300" : "border-green-200"
+        }`}
       >
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
