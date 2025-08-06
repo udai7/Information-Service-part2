@@ -378,6 +378,13 @@ export default function UserCertificateService() {
                   </p>
                 </div>
               )}
+              {filteredApiCerts.length === 0 && !search && !loading && (
+                <div className="col-span-full text-center py-8">
+                  <p className="text-gray-500">
+                    No published certificate services available.
+                  </p>
+                </div>
+              )}
             </div>
           )}
           {/* Modal for Certificate Details */}
