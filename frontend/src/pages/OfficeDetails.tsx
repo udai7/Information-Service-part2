@@ -43,8 +43,6 @@ const OfficeDetails: React.FC = () => {
   const [newPost, setNewPost] = useState({
     postName: "",
     rank: "",
-    description: "",
-    department: "",
   });
   const [showAddPostForm, setShowAddPostForm] = useState(false);
   const [currentPostId, setCurrentPostId] = useState<number | null>(null);
@@ -115,8 +113,6 @@ const OfficeDetails: React.FC = () => {
       const response = await apiClient.createPost(officeId, {
         postName: newPost.postName,
         rank: newPost.rank,
-        description: newPost.description,
-        department: newPost.department,
       });
 
       const newPostWithUIState: PostWithUIState = {
@@ -125,7 +121,7 @@ const OfficeDetails: React.FC = () => {
       };
 
       setPosts([...posts, newPostWithUIState]);
-      setNewPost({ postName: "", rank: "", description: "", department: "" });
+      setNewPost({ postName: "", rank: "" });
       setShowAddPostForm(false);
 
       toast({
@@ -284,37 +280,6 @@ const OfficeDetails: React.FC = () => {
                         setNewPost({ ...newPost, rank: e.target.value })
                       }
                       placeholder="e.g., Senior"
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label
-                      htmlFor="description"
-                      className="text-sm font-medium"
-                    >
-                      Description
-                    </Label>
-                    <Input
-                      id="description"
-                      value={newPost.description}
-                      onChange={(e) =>
-                        setNewPost({ ...newPost, description: e.target.value })
-                      }
-                      placeholder="Brief description of the post"
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="department" className="text-sm font-medium">
-                      Department
-                    </Label>
-                    <Input
-                      id="department"
-                      value={newPost.department}
-                      onChange={(e) =>
-                        setNewPost({ ...newPost, department: e.target.value })
-                      }
-                      placeholder="Department name"
                       className="mt-1"
                     />
                   </div>

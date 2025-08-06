@@ -346,7 +346,7 @@ export default function UserContactService() {
           {/* Modal for Contact Service Details */}
           {modalService && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl shadow-2xl max-w-2xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-blue-200">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-2xl max-w-2xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-blue-200">
                 <button
                   onClick={() => setModalService(null)}
                   className="absolute top-3 right-3 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full p-2 transition-all duration-200 text-xl"
@@ -354,25 +354,25 @@ export default function UserContactService() {
                   &times;
                 </button>
                 <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border-l-4 border-blue-500">
-                  <h2 className="text-2xl font-bold mb-2 text-gray-800">
+                  <h2 className="text-2xl font-bold mb-2 text-blue-800">
                     {modalService.name}
                   </h2>
                   <p className="text-gray-600">{modalService.summary}</p>
                 </div>
 
                 <div className="bg-white rounded-lg p-4 mb-4 shadow-sm">
-                  <h3 className="font-semibold mb-2 text-gray-700 flex items-center">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                  <h3 className="font-semibold mb-2 text-blue-700 flex items-center">
+                    <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
                     Type
                   </h3>
-                  <p className="text-gray-600">{modalService.type}</p>
+                  <p className="text-blue-600">{modalService.type}</p>
                 </div>
 
                 {/* Filter Dropdowns */}
                 {modalService.offices && (
                   <div className="mb-4 bg-white rounded-lg p-4 shadow-sm">
-                    <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center">
-                      <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                    <h4 className="text-sm font-medium text-blue-700 mb-3 flex items-center">
+                      <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
                       Filter Options
                     </h4>
                     <div className="flex gap-4">
@@ -417,8 +417,8 @@ export default function UserContactService() {
 
                 {modalService.offices && (
                   <div className="mb-4 bg-white rounded-lg p-4 shadow-sm">
-                    <h3 className="text-xl font-bold mb-4 text-gray-800 flex items-center">
-                      <span className="w-3 h-3 bg-blue-500 rounded-full mr-3"></span>
+                    <h3 className="text-xl font-bold mb-4 text-blue-800 flex items-center">
+                      <span className="w-3 h-3 bg-blue-600 rounded-full mr-3"></span>
                       Department Structure
                     </h3>
 
@@ -441,14 +441,14 @@ export default function UserContactService() {
                       .map((office: any, officeIdx: number) => (
                         <div
                           key={officeIdx}
-                          className="mb-4 p-4 border rounded-lg bg-gradient-to-r from-slate-50 to-blue-50 border-blue-200 shadow-sm hover:shadow-md transition-shadow duration-200"
+                          className="mb-4 p-4 border rounded-lg bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200 shadow-sm hover:shadow-md transition-shadow duration-200"
                         >
-                          <h4 className="font-semibold text-lg mb-2 text-gray-800 flex items-center">
-                            <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                          <h4 className="font-semibold text-lg mb-2 text-blue-800 flex items-center">
+                            <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
                             Office: {office.officeName}
                           </h4>
-                          <div className="bg-white rounded-md p-3 mb-3 border-l-4 border-orange-300">
-                            <p className="text-sm text-gray-600">
+                          <div className="bg-white rounded-md p-3 mb-3 border-l-4 border-blue-300">
+                            <p className="text-sm text-blue-700">
                               <span className="font-medium">Level:</span>{" "}
                               {office.level},
                               <span className="font-medium"> District:</span>{" "}
@@ -462,8 +462,8 @@ export default function UserContactService() {
 
                           {/* Posts within this office */}
                           <div className="mt-3">
-                            <h5 className="font-semibold text-md mb-2 text-gray-700 flex items-center">
-                              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                            <h5 className="font-semibold text-md mb-2 text-blue-700 flex items-center">
+                              <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
                               Posts:
                             </h5>
 
@@ -480,14 +480,14 @@ export default function UserContactService() {
                                   .map((post: any, postIdx: number) => (
                                     <li
                                       key={postIdx}
-                                      className="bg-white rounded-lg p-3 border-l-4 border-green-400 shadow-sm"
+                                      className="bg-white rounded-lg p-3 border-l-4 border-blue-400 shadow-sm"
                                     >
                                       <div className="flex items-center mb-2">
-                                        <span className="w-2 h-2 bg-cyan-500 rounded-full mr-2"></span>
-                                        <span className="font-medium text-gray-800">
+                                        <span className="w-2 h-2 bg-blue-300 rounded-full mr-2"></span>
+                                        <span className="font-medium text-blue-800">
                                           {post.postName}
                                         </span>
-                                        <span className="ml-2 text-sm bg-cyan-100 text-cyan-700 px-2 py-1 rounded-full">
+                                        <span className="ml-2 text-sm bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
                                           {post.postRank}
                                         </span>
                                       </div>
@@ -498,9 +498,9 @@ export default function UserContactService() {
                                           emp.postIndex ===
                                           post.globalPostIndex,
                                       ).length > 0 ? (
-                                        <div className="ml-4 mt-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-md p-3 border border-green-200">
-                                          <h6 className="font-semibold text-sm mb-2 text-gray-700 flex items-center">
-                                            <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                                        <div className="ml-4 mt-2 bg-gradient-to-r from-blue-50 to-blue-100 rounded-md p-3 border border-blue-200">
+                                          <h6 className="font-semibold text-sm mb-2 text-blue-700 flex items-center">
+                                            <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
                                             Employees:
                                           </h6>
                                           <ul className="space-y-2">
@@ -514,21 +514,21 @@ export default function UserContactService() {
                                                 (emp: any, empIdx: number) => (
                                                   <li
                                                     key={empIdx}
-                                                    className="bg-white rounded-md p-2 text-sm border border-green-100"
+                                                    className="bg-white rounded-md p-2 text-sm border border-blue-100"
                                                   >
-                                                    <span className="font-medium text-gray-800">
+                                                    <span className="font-medium text-blue-800">
                                                       {emp.employeeName}
                                                     </span>
-                                                    <span className="ml-2 text-gray-600">
+                                                    <span className="ml-2 text-blue-600">
                                                       ({emp.designation})
                                                     </span>
                                                     {emp.email && (
-                                                      <div className="text-blue-600 text-xs mt-1">
+                                                      <div className="text-blue-500 text-xs mt-1">
                                                         📧 {emp.email}
                                                       </div>
                                                     )}
                                                     {emp.phone && (
-                                                      <div className="text-green-600 text-xs">
+                                                      <div className="text-blue-400 text-xs">
                                                         📞 {emp.phone}
                                                       </div>
                                                     )}
@@ -538,7 +538,7 @@ export default function UserContactService() {
                                           </ul>
                                         </div>
                                       ) : (
-                                        <div className="ml-4 mt-2 text-sm text-gray-500 bg-gray-50 rounded-md p-2 border border-gray-200">
+                                        <div className="ml-4 mt-2 text-sm text-blue-400 bg-blue-50 rounded-md p-2 border border-blue-100">
                                           No employee details present
                                         </div>
                                       )}
@@ -546,8 +546,8 @@ export default function UserContactService() {
                                   ))}
                               </ul>
                             ) : (
-                              <div className="bg-gray-50 rounded-md p-3 border border-gray-200">
-                                <p className="text-sm text-gray-500 text-center">
+                              <div className="bg-blue-50 rounded-md p-3 border border-blue-100">
+                                <p className="text-sm text-blue-400 text-center">
                                   No post details present
                                 </p>
                               </div>
@@ -558,12 +558,12 @@ export default function UserContactService() {
                   </div>
                 )}
 
-                <div className="bg-white rounded-lg p-4 shadow-sm border-l-4 border-green-500">
-                  <h3 className="font-semibold mb-2 text-gray-700 flex items-center">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                <div className="bg-white rounded-lg p-4 shadow-sm border-l-4 border-blue-500">
+                  <h3 className="font-semibold mb-2 text-blue-700 flex items-center">
+                    <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
                     Status
                   </h3>
-                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                  <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
                     {modalService.status}
                   </span>
                 </div>
