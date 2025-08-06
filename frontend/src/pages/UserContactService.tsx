@@ -361,11 +361,24 @@ export default function UserContactService() {
                 </div>
 
                 <div className="bg-white rounded-lg p-4 mb-4 shadow-sm">
-                  <h3 className="font-semibold mb-2 text-blue-700 flex items-center">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
-                    Type
-                  </h3>
-                  <p className="text-blue-600">{modalService.type}</p>
+                  <div className="flex flex-col md:flex-row md:items-center md:gap-8">
+                    <div>
+                      <h3 className="font-semibold mb-2 text-blue-700 flex items-center">
+                        <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                        Type
+                      </h3>
+                      <p className="text-blue-600">{modalService.type}</p>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2 text-blue-700 flex items-center">
+                        <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                        Status
+                      </h3>
+                      <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                        {modalService.status}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Filter Dropdowns */}
@@ -558,14 +571,32 @@ export default function UserContactService() {
                   </div>
                 )}
 
-                <div className="bg-white rounded-lg p-4 shadow-sm border-l-4 border-blue-500">
-                  <h3 className="font-semibold mb-2 text-blue-700 flex items-center">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
-                    Status
-                  </h3>
-                  <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                    {modalService.status}
-                  </span>
+                {/* Record Information */}
+                <div className="pt-4 border-t border-blue-200 mt-6">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 bg-blue-200 rounded-full"></div>
+                    <h4 className="text-sm font-semibold text-blue-600">
+                      Record Information
+                    </h4>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-500">
+                    <div className="bg-white px-3 py-2 rounded shadow-sm">
+                      <span className="font-medium text-blue-700">
+                        Created:
+                      </span>{" "}
+                      {modalService.createdAt
+                        ? new Date(modalService.createdAt).toLocaleDateString()
+                        : "-"}
+                    </div>
+                    <div className="bg-white px-3 py-2 rounded shadow-sm">
+                      <span className="font-medium text-blue-700">
+                        Updated:
+                      </span>{" "}
+                      {modalService.updatedAt
+                        ? new Date(modalService.updatedAt).toLocaleDateString()
+                        : "-"}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

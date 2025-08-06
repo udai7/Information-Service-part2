@@ -390,7 +390,7 @@ export default function UserCertificateService() {
           {/* Modal for Certificate Details */}
           {modalCert && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-              <div className="bg-gradient-to-br from-emerald-50 to-teal-100 rounded-lg shadow-xl max-w-4xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh]">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg shadow-xl max-w-4xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-blue-200">
                 <button
                   onClick={() => setModalCert(null)}
                   className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
