@@ -242,7 +242,7 @@ export default function UserSchemeService() {
           {/* Modal for Scheme Details */}
           {modalScheme && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-              <div className="bg-gradient-to-br from-purple-50 to-pink-100 rounded-lg shadow-xl max-w-4xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh]">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg shadow-xl max-w-4xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-blue-200">
                 <button
                   onClick={() => setModalScheme(null)}
                   className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
@@ -251,8 +251,8 @@ export default function UserSchemeService() {
                 </button>
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                    <h2 className="text-2xl font-bold text-gray-800">
+                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                    <h2 className="text-2xl font-bold text-blue-800">
                       {modalScheme.name}
                     </h2>
                   </div>
@@ -264,8 +264,8 @@ export default function UserSchemeService() {
                 {/* Basic Information */}
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
-                    <h3 className="text-lg font-semibold text-gray-800">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <h3 className="text-lg font-semibold text-blue-800">
                       Basic Information
                     </h3>
                   </div>
