@@ -24,8 +24,6 @@ import {
   ArrowLeft,
   Plus,
   X,
-  Save,
-  Eye,
   Upload,
   CheckCircle,
   AlertCircle,
@@ -176,8 +174,9 @@ export default function CreateCertificateService() {
         status: "draft",
       };
 
-      const response =
-        await apiClient.createCertificateService(certificateData);
+      const response = await apiClient.createCertificateService(
+        certificateData,
+      );
 
       if (response.certificateService) {
         toast({
@@ -206,10 +205,6 @@ export default function CreateCertificateService() {
     }
   };
 
-  const handleSaveDraft = () => {
-    console.log("Draft saved (simulated)");
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
@@ -229,16 +224,6 @@ export default function CreateCertificateService() {
               <span className="text-xl font-bold">
                 Create New Certificate Service
               </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" onClick={handleSaveDraft}>
-                <Save className="h-4 w-4 mr-2" />
-                Save Draft
-              </Button>
-              <Button variant="outline">
-                <Eye className="h-4 w-4 mr-2" />
-                Preview
-              </Button>
             </div>
           </div>
         </div>

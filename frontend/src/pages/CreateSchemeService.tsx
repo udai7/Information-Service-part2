@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { useSchemeServices } from "../hooks/useSchemeServices";
 import { useAuth } from "../contexts/AuthContext";
@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ArrowLeft, Plus } from "lucide-react";
 
 export default function CreateSchemeService() {
   const navigate = useNavigate();
@@ -186,6 +187,28 @@ export default function CreateSchemeService() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-40">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/admin-scheme-service">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Scheme Service
+                </Link>
+              </Button>
+              <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
+                <Plus className="h-4 w-4 text-white" />
+              </div>
+              <span className="text-xl font-bold">
+                Create New Scheme Service
+              </span>
+            </div>
+          </div>
+        </div>
+      </header>
+
       <div className="container mx-auto px-4 py-8">
         <form onSubmit={handleSubmit} className="max-w-xl mx-auto space-y-8">
           <Card>
