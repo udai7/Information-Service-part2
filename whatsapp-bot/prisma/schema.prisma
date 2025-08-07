@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "./generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Admin {
+    id        Int      @id @default(autoincrement())
+    email     String   @unique
+    name      String
+    password  String
+    role      String   @default("admin")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("admin")
+}
+
+model SchemeService {
+    id                 Int      @id @default(autoincrement())
+    name               String
+    summary            String
+    targetAudience     String[]
+    eligibilityDetails String[]
+    benefitDetails     String[]
+    applicationProcess String[]
+    requiredDocuments  String[]
+    applicationMode    String   @default("both") // online, offline, both
+    onlineUrl          String?
+    offlineAddress     String?
+    status             String   @default("draft") // draft, pending, published
+    isActive           Boolean  @default(true)
+    createdAt          DateTime @default(now())
+    updatedAt          DateTime @updatedAt
+
+    @@map("scheme_service")
+}
+
+model CertificateService {
+    id                 Int      @id @default(autoincrement())
+    name               String
+    summary            String
+    type               String?
+    targetAudience     String[]
+    eligibilityDetails String[]
+    certificateDetails String[]
+    applicationProcess String[]
+    requiredDocuments  String[]
+    applicationMode    String   @default("both") // online, offline, both
+    onlineUrl          String?
+    offlineAddress     String?
+    status             String   @default("draft") // draft, pending, published
+    isActive           Boolean  @default(true)
+    createdAt          DateTime @default(now())
+    updatedAt          DateTime @updatedAt
+
+    @@map("certificate_service")
+}
+
+model ContactService {
+    id            Int                     @id @default(autoincrement())
+    serviceName   String
+    district      String
+    subDistrict   String?
+    block         String
+    officeAddress String?
+    status        String                  @default("draft") // draft, pending, published
+    isActive      Boolean                 @default(true)
+    createdAt     DateTime                @default(now())
+    updatedAt     DateTime                @updatedAt
+    contacts      ContactServiceContact[]
+
+    @@map("contact_service")
+}
+
+model ContactServiceContact {
+    id          Int            @id @default(autoincrement())
+    name        String
+    designation String
+    contact     String
+    email       String?
+    serviceId   Int
+    service     ContactService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+    createdAt   DateTime       @default(now())
+    updatedAt   DateTime       @updatedAt
+
+    @@map("contact_service_contact")
+}
+
+model Grievance {
+    id          Int      @id @default(autoincrement())
+    name        String
+    email       String
+    phone       String
+    subject     String
+    description String
+    department  String
+    priority    String   @default("medium") // low, medium, high
+    status      String   @default("pending") // pending, in_progress, resolved, closed
+    source      String   @default("web") // web, whatsapp, mobile
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("grievance")
+}
+
+model Feedback {
+    id          Int      @id @default(autoincrement())
+    name        String
+    email       String?
+    phone       String?
+    rating      Int      @default(5) // 1-5 rating
+    comment     String
+    serviceType String
+    source      String   @default("web") // web, whatsapp, mobile
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("feedback")
+}
