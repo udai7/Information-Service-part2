@@ -176,6 +176,15 @@ export default function UserCertificateService() {
                           ? "Online"
                           : "Offline"}
                       </div>
+                      {cert.targetAudience &&
+                        cert.targetAudience.length > 0 && (
+                          <div>
+                            <span className="font-semibold">
+                              Target Audience:
+                            </span>{" "}
+                            {cert.targetAudience.join(", ")}
+                          </div>
+                        )}
                       {cert.onlineUrl && (
                         <div>
                           <span className="font-semibold">URL:</span>{" "}
@@ -185,7 +194,7 @@ export default function UserCertificateService() {
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:underline"
                           >
-                            {cert.onlineUrl}
+                            Apply Online
                           </a>
                         </div>
                       )}
@@ -399,8 +408,8 @@ export default function UserCertificateService() {
                 </button>
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                    <h2 className="text-2xl font-bold text-gray-800">
+                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                    <h2 className="text-2xl font-bold text-blue-800">
                       {modalCert.name}
                     </h2>
                   </div>
@@ -408,6 +417,101 @@ export default function UserCertificateService() {
                     {modalCert.summary}
                   </p>
                 </div>
+
+                {/* Basic Information */}
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <h3 className="text-lg font-semibold text-blue-800">
+                      Basic Information
+                    </h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Type */}
+                    <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-start justify-center min-h-[80px]">
+                      <span className="text-sm font-medium text-blue-700 mb-1">
+                        Type
+                      </span>
+                      <span className="text-gray-800 text-base font-semibold">
+                        {modalCert.type || "-"}
+                      </span>
+                    </div>
+                    {/* Status */}
+                    <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-start justify-center min-h-[80px]">
+                      <span className="text-sm font-medium text-blue-700 mb-1">
+                        Status
+                      </span>
+                      <span className="text-gray-800 text-base font-semibold capitalize">
+                        {modalCert.status || "-"}
+                      </span>
+                    </div>
+                  </div>
+                  {/* Application Mode & Target Audience below */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-start justify-center min-h-[80px]">
+                      <span className="text-sm font-medium text-purple-700 mb-1">
+                        Application Mode
+                      </span>
+                      <span className="text-gray-800 text-base font-semibold">
+                        {modalCert.applicationMode === "both"
+                          ? "Online/Offline"
+                          : modalCert.applicationMode === "online"
+                          ? "Online"
+                          : "Offline"}
+                      </span>
+                    </div>
+                    {modalCert.targetAudience &&
+                      modalCert.targetAudience.length > 0 && (
+                        <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-start justify-center min-h-[80px]">
+                          <span className="text-sm font-medium text-purple-700 mb-1">
+                            Target Audience
+                          </span>
+                          <span className="text-gray-800 text-base font-semibold">
+                            {modalCert.targetAudience.join(", ")}
+                          </span>
+                        </div>
+                      )}
+                  </div>
+                </div>
+
+                {/* Application Links */}
+                {(modalCert.onlineUrl || modalCert.offlineAddress) && (
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        How to Apply
+                      </h3>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                      {modalCert.onlineUrl && (
+                        <div className="mb-2">
+                          <span className="font-medium text-indigo-700">
+                            Online:
+                          </span>{" "}
+                          <a
+                            href={modalCert.onlineUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline"
+                          >
+                            {modalCert.onlineUrl}
+                          </a>
+                        </div>
+                      )}
+                      {modalCert.offlineAddress && (
+                        <div>
+                          <span className="font-medium text-indigo-700">
+                            Offline:
+                          </span>{" "}
+                          <span className="text-gray-700">
+                            {modalCert.offlineAddress}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {/* Application Type Dropdown */}
                 {modalCert.processSteps && (
@@ -507,7 +611,7 @@ export default function UserCertificateService() {
                     </div>
                   )}
 
-                {/* Eligibility */}
+                {/* Eligibility Details */}
                 {modalCert.eligibility &&
                   modalCert.eligibility[selectedApplicationType] && (
                     <div className="mb-6">
@@ -518,7 +622,7 @@ export default function UserCertificateService() {
                         </h3>
                       </div>
                       <div className="bg-white p-4 rounded-lg shadow-sm">
-                        <ul className="list-disc pl-6 space-y-2">
+                        <ul className="list-disc pl-6 space-y-1">
                           {modalCert.eligibility[selectedApplicationType].map(
                             (criteria: any, idx: number) => (
                               <li key={idx} className="text-gray-700">
@@ -531,87 +635,146 @@ export default function UserCertificateService() {
                     </div>
                   )}
 
-                {/* Contact Person */}
+                {/* Process Details */}
+                {modalCert.processSteps &&
+                  modalCert.processSteps[selectedApplicationType] && (
+                    <div className="mb-6">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          Application Process for {selectedApplicationType}
+                        </h3>
+                      </div>
+                      <div className="bg-white p-4 rounded-lg shadow-sm">
+                        <ul className="list-disc pl-6 space-y-1">
+                          {modalCert.processSteps[selectedApplicationType].map(
+                            (step: any, idx: number) => (
+                              <li key={idx} className="text-gray-700">
+                                <span className="font-medium text-amber-700">
+                                  {step.slNo}.
+                                </span>{" "}
+                                {step.stepDetails}
+                              </li>
+                            ),
+                          )}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+
+                {/* Documents */}
+                {modalCert.documents &&
+                  modalCert.documents[selectedApplicationType] && (
+                    <div className="mb-6">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          Required Documents for {selectedApplicationType}
+                        </h3>
+                      </div>
+                      <div className="bg-white p-4 rounded-lg shadow-sm">
+                        <ul className="list-disc pl-6 space-y-1">
+                          {modalCert.documents[selectedApplicationType].map(
+                            (doc: any, idx: number) => (
+                              <li key={idx} className="text-gray-700">
+                                <span className="font-medium text-orange-700">
+                                  {doc.slNo}.
+                                </span>{" "}
+                                <span className="font-medium text-gray-800">
+                                  {doc.documentType}
+                                </span>{" "}
+                                <span className="text-gray-600">
+                                  - Valid Proof: {doc.validProof}
+                                </span>
+                              </li>
+                            ),
+                          )}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+
+                {/* Contacts */}
                 {modalCert.contact &&
                   modalCert.contact[selectedApplicationType] && (
                     <div className="mb-6">
                       <div className="flex items-center gap-2 mb-3">
-                        <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
                         <h3 className="text-lg font-semibold text-gray-800">
-                          Contact Details for {selectedApplicationType}
+                          Contact Information
                         </h3>
                       </div>
                       {modalCert.contact[selectedApplicationType].map(
                         (contactItem: any, idx: number) => (
                           <div
                             key={idx}
-                            className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-indigo-400 mb-4"
+                            className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-4"
                           >
-                            <h4 className="font-medium mb-2 text-indigo-700">
+                            <h4 className="text-blue-700 text-lg font-semibold mb-4">
                               Contact Person {idx + 1}
                             </h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
                               <div>
-                                <span className="font-medium text-indigo-600">
+                                <span className="font-semibold text-blue-700">
                                   Service Name:
                                 </span>{" "}
-                                <span className="text-gray-700">
+                                <span className="text-gray-800">
                                   {contactItem.serviceName}
                                 </span>
                               </div>
                               <div>
-                                <span className="font-medium text-indigo-600">
+                                <span className="font-semibold text-blue-700">
                                   District:
                                 </span>{" "}
-                                <span className="text-gray-700">
+                                <span className="text-gray-800">
                                   {contactItem.district}
                                 </span>
                               </div>
                               <div>
-                                <span className="font-medium text-indigo-600">
+                                <span className="font-semibold text-blue-700">
                                   Sub District:
                                 </span>{" "}
-                                <span className="text-gray-700">
+                                <span className="text-gray-800">
                                   {contactItem.subDistrict}
                                 </span>
                               </div>
                               <div>
-                                <span className="font-medium text-indigo-600">
+                                <span className="font-semibold text-blue-700">
                                   Block:
                                 </span>{" "}
-                                <span className="text-gray-700">
+                                <span className="text-gray-800">
                                   {contactItem.block}
                                 </span>
                               </div>
                               <div>
-                                <span className="font-medium text-indigo-600">
+                                <span className="font-semibold text-blue-700">
                                   Name:
                                 </span>{" "}
-                                <span className="text-gray-700">
+                                <span className="text-gray-800">
                                   {contactItem.name}
                                 </span>
                               </div>
                               <div>
-                                <span className="font-medium text-indigo-600">
+                                <span className="font-semibold text-blue-700">
                                   Designation:
                                 </span>{" "}
-                                <span className="text-gray-700">
+                                <span className="text-gray-800">
                                   {contactItem.designation}
                                 </span>
                               </div>
                               <div>
-                                <span className="font-medium text-indigo-600">
+                                <span className="font-semibold text-blue-700">
                                   Contact:
                                 </span>{" "}
-                                <span className="text-gray-700">
+                                <span className="text-gray-800">
                                   {contactItem.contact}
                                 </span>
                               </div>
                               <div>
-                                <span className="font-medium text-indigo-600">
+                                <span className="font-semibold text-blue-700">
                                   Email:
                                 </span>{" "}
-                                <span className="text-gray-700">
+                                <span className="text-gray-800">
                                   {contactItem.email}
                                 </span>
                               </div>
