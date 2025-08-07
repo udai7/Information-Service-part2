@@ -17,84 +17,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  ArrowLeft,
-  Plus,
-  X,
-  Upload,
-  CheckCircle,
-  AlertCircle,
-  Trash2,
-} from "lucide-react";
+import { ArrowLeft, Plus, CheckCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { apiClient } from "../types/api";
 
 export default function CreateCertificateService() {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [tags, setTags] = useState<string[]>([]);
-  const [newTag, setNewTag] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
     certificateAbbreviation: "",
     summary: "",
     applicationMode: "",
-    contactName: "",
-    designation: "",
-    contact: "",
-    email: "",
-    district: "",
-    subDistrict: "",
-    block: "",
-    serviceDetails: "",
-    status: "active",
-    processNew: "",
-    processUpdate: "",
-    processLost: "",
-    processSurrender: "",
-    docNew: "",
-    docUpdate: "",
-    docLost: "",
-    docSurrender: "",
     onlineUrl: "",
     offlineAddress: "",
   });
-
-  const [documents, setDocuments] = useState([
-    { slNo: "1", documentType: "", validProof: "" },
-  ]);
-
-  const [processSteps, setProcessSteps] = useState([
-    { slNo: "1", stepDetails: "" },
-  ]);
-
-  const categories = [
-    "Research",
-    "Documentation",
-    "Design",
-    "Analytics",
-    "Legal",
-    "Marketing",
-    "Technology",
-    "Finance",
-    "Consulting",
-    "Education",
-  ];
-
-  const addTag = () => {
-    if (newTag.trim() && !tags.includes(newTag.trim())) {
-      setTags([...tags, newTag.trim()]);
-      setNewTag("");
-    }
-  };
-
-  const removeTag = (tagToRemove: string) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove));
-  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -113,48 +52,6 @@ export default function CreateCertificateService() {
     }));
   };
 
-  const handleDocumentChange = (
-    index: number,
-    field: string,
-    value: string,
-  ) => {
-    setDocuments((prev) =>
-      prev.map((doc, i) => (i === index ? { ...doc, [field]: value } : doc)),
-    );
-  };
-
-  const handleAddDocument = () => {
-    setDocuments((prev) => [
-      ...prev,
-      { slNo: String(prev.length + 1), documentType: "", validProof: "" },
-    ]);
-  };
-
-  const handleRemoveLastDocument = () => {
-    setDocuments((prev) => (prev.length > 1 ? prev.slice(0, -1) : prev));
-  };
-
-  const handleAddProcessStep = () => {
-    setProcessSteps((prev) => [
-      ...prev,
-      { slNo: String(prev.length + 1), stepDetails: "" },
-    ]);
-  };
-
-  const handleRemoveLastProcessStep = () => {
-    setProcessSteps((prev) => (prev.length > 1 ? prev.slice(0, -1) : prev));
-  };
-
-  const handleProcessStepChange = (
-    index: number,
-    field: string,
-    value: string,
-  ) => {
-    setProcessSteps((prev) =>
-      prev.map((step, i) => (i === index ? { ...step, [field]: value } : step)),
-    );
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -164,7 +61,7 @@ export default function CreateCertificateService() {
         name: formData.name,
         summary: formData.summary,
         type: formData.certificateAbbreviation,
-        targetAudience: tags,
+        targetAudience: [],
         applicationMode: formData.applicationMode as
           | "online"
           | "offline"
