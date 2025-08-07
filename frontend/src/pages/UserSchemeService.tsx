@@ -198,6 +198,16 @@ export default function UserSchemeService() {
                           </a>
                         </div>
                       )}
+                      {scheme.offlineAddress && (
+                        <div>
+                          <span className="font-semibold">
+                            Offline Address:
+                          </span>{" "}
+                          <span className="text-gray-700">
+                            {scheme.offlineAddress}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </CardHeader>
                   <CardContent>
@@ -429,34 +439,86 @@ export default function UserSchemeService() {
                     <div className="flex items-center gap-2 mb-3">
                       <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
                       <h3 className="text-lg font-semibold text-gray-800">
-                        Contact Information
+                        Contact Details for New Application
                       </h3>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-4">
                       {modalScheme.contacts.map((contact, idx) => (
                         <div
                           key={idx}
-                          className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-emerald-400"
+                          className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg shadow-sm border-l-4 border-purple-400"
                         >
-                          <h4 className="font-medium text-emerald-700">
-                            {contact.name}
-                          </h4>
-                          <p className="text-sm text-gray-600">
-                            {contact.designation}
-                          </p>
-                          <p className="text-sm text-gray-700">
-                            {contact.serviceName}
-                          </p>
-                          <p className="text-sm text-gray-700">
-                            {contact.district}, {contact.subDistrict},{" "}
-                            {contact.block}
-                          </p>
-                          <p className="text-sm text-emerald-600">
-                            Phone: {contact.contact}
-                          </p>
-                          <p className="text-sm text-emerald-600">
-                            Email: {contact.email}
-                          </p>
+                          <div className="mb-4">
+                            <h4 className="text-lg font-semibold text-purple-700 mb-2">
+                              Contact Person {idx + 1}
+                            </h4>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <span className="text-purple-600 font-medium">
+                                Service Name:
+                              </span>{" "}
+                              <span className="text-gray-700">
+                                {modalScheme.name}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-purple-600 font-medium">
+                                District:
+                              </span>{" "}
+                              <span className="text-gray-700">
+                                {contact.district}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-purple-600 font-medium">
+                                Sub District:
+                              </span>{" "}
+                              <span className="text-gray-700">
+                                {contact.subDistrict}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-purple-600 font-medium">
+                                Block:
+                              </span>{" "}
+                              <span className="text-gray-700">
+                                {contact.block}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-purple-600 font-medium">
+                                Name:
+                              </span>{" "}
+                              <span className="text-gray-700">
+                                {contact.name}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-purple-600 font-medium">
+                                Designation:
+                              </span>{" "}
+                              <span className="text-gray-700">
+                                {contact.designation}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-purple-600 font-medium">
+                                Contact:
+                              </span>{" "}
+                              <span className="text-gray-700">
+                                {contact.contact}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-purple-600 font-medium">
+                                Email:
+                              </span>{" "}
+                              <span className="text-gray-700">
+                                {contact.email}
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       ))}
                     </div>

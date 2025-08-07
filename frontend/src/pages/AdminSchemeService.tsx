@@ -7,6 +7,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Plus, CheckCircle, Activity, Clock, Users } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -23,6 +24,8 @@ export default function AdminSchemeService() {
   const [schemes, setSchemes] = useState<SchemeService[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
+  const [togglingIds, setTogglingIds] = useState<Set<number>>(new Set());
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
@@ -67,6 +70,7 @@ export default function AdminSchemeService() {
 
   const handleToggleActive = async (scheme: SchemeService) => {
     try {
+      setTogglingIds((prev) => new Set(prev).add(scheme.id));
       await apiClient.toggleSchemeServiceActive(scheme.id, !scheme.isActive);
 
       // Refresh the schemes list
@@ -75,11 +79,18 @@ export default function AdminSchemeService() {
     } catch (error) {
       console.error("Error updating scheme status:", error);
       setError("Failed to update scheme status");
+    } finally {
+      setTogglingIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(scheme.id);
+        return newSet;
+      });
     }
   };
 
   const handleDelete = async (scheme: SchemeService) => {
     try {
+      setDeletingIds((prev) => new Set(prev).add(scheme.id));
       await apiClient.deleteSchemeService(scheme.id);
       // Refresh the schemes list
       const response = await apiClient.getSchemeServices();
@@ -87,6 +98,12 @@ export default function AdminSchemeService() {
     } catch (error) {
       console.error("Error deleting scheme:", error);
       setError("Failed to delete scheme");
+    } finally {
+      setDeletingIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(scheme.id);
+        return newSet;
+      });
     }
   };
 
@@ -299,8 +316,16 @@ export default function AdminSchemeService() {
                                     variant="destructive"
                                     size="sm"
                                     onClick={() => handleDelete(scheme)}
+                                    disabled={deletingIds.has(scheme.id)}
                                   >
-                                    Delete
+                                    {deletingIds.has(scheme.id) ? (
+                                      <LoadingSpinner
+                                        size="sm"
+                                        variant="inline"
+                                      />
+                                    ) : (
+                                      "Delete"
+                                    )}
                                   </Button>
                                 </div>
                               </div>
@@ -372,10 +397,18 @@ export default function AdminSchemeService() {
                                         : "default"
                                     }
                                     onClick={() => handleToggleActive(scheme)}
+                                    disabled={togglingIds.has(scheme.id)}
                                   >
-                                    {scheme.isActive !== false
-                                      ? "Deactivate"
-                                      : "Activate"}
+                                    {togglingIds.has(scheme.id) ? (
+                                      <LoadingSpinner
+                                        size="sm"
+                                        variant="inline"
+                                      />
+                                    ) : scheme.isActive !== false ? (
+                                      "Deactivate"
+                                    ) : (
+                                      "Activate"
+                                    )}
                                   </Button>
                                   <Button
                                     variant="outline"
@@ -388,8 +421,16 @@ export default function AdminSchemeService() {
                                     variant="destructive"
                                     size="sm"
                                     onClick={() => handleDelete(scheme)}
+                                    disabled={deletingIds.has(scheme.id)}
                                   >
-                                    Delete
+                                    {deletingIds.has(scheme.id) ? (
+                                      <LoadingSpinner
+                                        size="sm"
+                                        variant="inline"
+                                      />
+                                    ) : (
+                                      "Delete"
+                                    )}
                                   </Button>
                                 </div>
                               </div>

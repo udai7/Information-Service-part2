@@ -7,14 +7,15 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Plus, CheckCircle, Activity, Clock, Users } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { apiClient } from "../types/api";
 import type { ContactService } from "../types/api";
 import { useAuth } from "../contexts/AuthContext";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "../hooks/use-toast";
 
 export default function AdminContactService() {
   const [searchParams] = useSearchParams();
@@ -24,6 +25,8 @@ export default function AdminContactService() {
   const [services, setServices] = useState<ContactService[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
+  const [togglingIds, setTogglingIds] = useState<Set<number>>(new Set());
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
@@ -70,6 +73,7 @@ export default function AdminContactService() {
 
   const handleToggleActive = async (service: ContactService) => {
     try {
+      setTogglingIds((prev) => new Set(prev).add(service.id));
       await apiClient.toggleContactServiceActive(service.id, !service.isActive);
 
       // Refresh the services list
@@ -89,11 +93,18 @@ export default function AdminContactService() {
         description: "Failed to update service status",
         variant: "destructive",
       });
+    } finally {
+      setTogglingIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(service.id);
+        return newSet;
+      });
     }
   };
 
   const handleDelete = async (service: ContactService) => {
     try {
+      setDeletingIds((prev) => new Set(prev).add(service.id));
       await apiClient.deleteContactService(service.id);
       // Refresh the services list
       const response = await apiClient.getContactServices();
@@ -109,6 +120,12 @@ export default function AdminContactService() {
         title: "Error",
         description: "Failed to delete contact service",
         variant: "destructive",
+      });
+    } finally {
+      setDeletingIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(service.id);
+        return newSet;
       });
     }
   };
@@ -292,8 +309,13 @@ export default function AdminContactService() {
                                 size="sm"
                                 variant="destructive"
                                 onClick={() => handleDelete(service)}
+                                disabled={deletingIds.has(service.id)}
                               >
-                                Delete
+                                {deletingIds.has(service.id) ? (
+                                  <LoadingSpinner size="sm" variant="inline" />
+                                ) : (
+                                  "Delete"
+                                )}
                               </Button>
                             </div>
                           </div>
@@ -351,10 +373,15 @@ export default function AdminContactService() {
                                     : "default"
                                 }
                                 onClick={() => handleToggleActive(service)}
+                                disabled={togglingIds.has(service.id)}
                               >
-                                {service.isActive !== false
-                                  ? "Deactivate"
-                                  : "Activate"}
+                                {togglingIds.has(service.id) ? (
+                                  <LoadingSpinner size="sm" variant="inline" />
+                                ) : service.isActive !== false ? (
+                                  "Deactivate"
+                                ) : (
+                                  "Activate"
+                                )}
                               </Button>
                               <Button
                                 size="sm"
@@ -367,8 +394,13 @@ export default function AdminContactService() {
                                 size="sm"
                                 variant="destructive"
                                 onClick={() => handleDelete(service)}
+                                disabled={deletingIds.has(service.id)}
                               >
-                                Delete
+                                {deletingIds.has(service.id) ? (
+                                  <LoadingSpinner size="sm" variant="inline" />
+                                ) : (
+                                  "Delete"
+                                )}
                               </Button>
                             </div>
                           </div>

@@ -7,10 +7,11 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Plus, CheckCircle, Activity, Clock, Users } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { apiClient } from "../types/api";
 import type { CertificateService } from "../types/api";
 import { useAuth } from "../contexts/AuthContext";
@@ -23,6 +24,8 @@ export default function AdminCertificateService() {
   const [certificates, setCertificates] = useState<CertificateService[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
+  const [togglingIds, setTogglingIds] = useState<Set<number>>(new Set());
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
@@ -67,6 +70,7 @@ export default function AdminCertificateService() {
 
   const handleToggleActive = async (cert: CertificateService) => {
     try {
+      setTogglingIds((prev) => new Set(prev).add(cert.id));
       await apiClient.toggleCertificateServiceActive(cert.id, !cert.isActive);
 
       // Refresh the certificates list
@@ -75,11 +79,18 @@ export default function AdminCertificateService() {
     } catch (error) {
       console.error("Error updating certificate status:", error);
       setError("Failed to update certificate status");
+    } finally {
+      setTogglingIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(cert.id);
+        return newSet;
+      });
     }
   };
 
   const handleDelete = async (cert: CertificateService) => {
     try {
+      setDeletingIds((prev) => new Set(prev).add(cert.id));
       await apiClient.deleteCertificateService(cert.id);
       // Refresh the certificates list
       const response = await apiClient.getCertificateServices();
@@ -87,6 +98,12 @@ export default function AdminCertificateService() {
     } catch (error) {
       console.error("Error deleting certificate:", error);
       setError("Failed to delete certificate");
+    } finally {
+      setDeletingIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(cert.id);
+        return newSet;
+      });
     }
   };
   return (
@@ -290,8 +307,16 @@ export default function AdminCertificateService() {
                                     variant="destructive"
                                     size="sm"
                                     onClick={() => handleDelete(cert)}
+                                    disabled={deletingIds.has(cert.id)}
                                   >
-                                    Delete
+                                    {deletingIds.has(cert.id) ? (
+                                      <LoadingSpinner
+                                        size="sm"
+                                        variant="inline"
+                                      />
+                                    ) : (
+                                      "Delete"
+                                    )}
                                   </Button>
                                 </div>
                               </div>
@@ -360,10 +385,18 @@ export default function AdminCertificateService() {
                                         : "default"
                                     }
                                     onClick={() => handleToggleActive(cert)}
+                                    disabled={togglingIds.has(cert.id)}
                                   >
-                                    {cert.isActive !== false
-                                      ? "Deactivate"
-                                      : "Activate"}
+                                    {togglingIds.has(cert.id) ? (
+                                      <LoadingSpinner
+                                        size="sm"
+                                        variant="inline"
+                                      />
+                                    ) : cert.isActive !== false ? (
+                                      "Deactivate"
+                                    ) : (
+                                      "Activate"
+                                    )}
                                   </Button>
                                   <Button
                                     variant="outline"
@@ -376,8 +409,16 @@ export default function AdminCertificateService() {
                                     variant="destructive"
                                     size="sm"
                                     onClick={() => handleDelete(cert)}
+                                    disabled={deletingIds.has(cert.id)}
                                   >
-                                    Delete
+                                    {deletingIds.has(cert.id) ? (
+                                      <LoadingSpinner
+                                        size="sm"
+                                        variant="inline"
+                                      />
+                                    ) : (
+                                      "Delete"
+                                    )}
                                   </Button>
                                 </div>
                               </div>

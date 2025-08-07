@@ -8,6 +8,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   CheckCircle,
@@ -26,6 +27,7 @@ export default function AdminFeedbackService() {
   const [newFeedbacks, setNewFeedbacks] = useState<Feedback[]>([]);
   const [resolvedFeedbacks, setResolvedFeedbacks] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState(false);
+  const [resolvingIds, setResolvingIds] = useState<Set<number>>(new Set());
   const [stats, setStats] = useState({
     newFeedbacks: 0,
     resolvedFeedbacks: 0,
@@ -81,11 +83,18 @@ export default function AdminFeedbackService() {
 
   const handleResolve = async (id: number) => {
     try {
+      setResolvingIds((prev) => new Set(prev).add(id));
       await apiClient.resolveFeedback(id, "Resolved by admin");
       // Refresh feedbacks after resolving
       fetchFeedbacks();
     } catch (error) {
       console.error("Error resolving feedback:", error);
+    } finally {
+      setResolvingIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(id);
+        return newSet;
+      });
     }
   };
 
@@ -237,8 +246,13 @@ export default function AdminFeedbackService() {
                           <Button
                             onClick={() => handleResolve(fb.id)}
                             className="bg-green-600 hover:bg-green-700 text-white"
+                            disabled={resolvingIds.has(fb.id)}
                           >
-                            Mark as Resolved
+                            {resolvingIds.has(fb.id) ? (
+                              <LoadingSpinner size="sm" variant="inline" />
+                            ) : (
+                              "Mark as Resolved"
+                            )}
                           </Button>
                         </CardFooter>
                       </Card>

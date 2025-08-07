@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import {
   Select,
   SelectContent,
@@ -61,6 +62,7 @@ export function DashboardHome() {
   const [typeFilter, setTypeFilter] = useState("all");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [togglingIds, setTogglingIds] = useState<Set<string>>(new Set());
   const { toast } = useToast();
 
   // Service states
@@ -112,7 +114,9 @@ export function DashboardHome() {
     id: number,
     currentStatus: boolean,
   ) => {
+    const toggleKey = `${serviceType}-${id}`;
     try {
+      setTogglingIds((prev) => new Set(prev).add(toggleKey));
       const newStatus = !currentStatus;
 
       switch (serviceType) {
@@ -169,6 +173,12 @@ export function DashboardHome() {
         title: "Error",
         description: "Failed to update service status. Please try again.",
         variant: "destructive",
+      });
+    } finally {
+      setTogglingIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(toggleKey);
+        return newSet;
       });
     }
   };
@@ -295,19 +305,26 @@ export function DashboardHome() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Label
-                htmlFor={`switch-${serviceType}-${service.id}`}
-                className="text-sm"
-              >
-                {isActive ? "Active" : "Inactive"}
-              </Label>
-              <Switch
-                id={`switch-${serviceType}-${service.id}`}
-                checked={isActive}
-                onCheckedChange={() =>
-                  toggleServiceActive(serviceType, service.id, isActive)
-                }
-              />
+              {togglingIds.has(`${serviceType}-${service.id}`) ? (
+                <LoadingSpinner size="sm" variant="inline" text="Updating..." />
+              ) : (
+                <>
+                  <Label
+                    htmlFor={`switch-${serviceType}-${service.id}`}
+                    className="text-sm"
+                  >
+                    {isActive ? "Active" : "Inactive"}
+                  </Label>
+                  <Switch
+                    id={`switch-${serviceType}-${service.id}`}
+                    checked={isActive}
+                    onCheckedChange={() =>
+                      toggleServiceActive(serviceType, service.id, isActive)
+                    }
+                    disabled={togglingIds.has(`${serviceType}-${service.id}`)}
+                  />
+                </>
+              )}
             </div>
           </div>
         </CardContent>
