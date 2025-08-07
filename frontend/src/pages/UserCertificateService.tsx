@@ -806,6 +806,30 @@ export default function UserCertificateService() {
                     </div>
                   </>
                 )}
+
+                {/* Timestamps */}
+                <div className="pt-4 border-t border-purple-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                    <h4 className="text-sm font-semibold text-gray-600">
+                      Record Information
+                    </h4>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-500">
+                    <div className="bg-white px-3 py-2 rounded shadow-sm">
+                      <span className="font-medium">Created:</span>{" "}
+                      {modalCert.createdAt
+                        ? new Date(modalCert.createdAt).toLocaleDateString()
+                        : "N/A"}
+                    </div>
+                    <div className="bg-white px-3 py-2 rounded shadow-sm">
+                      <span className="font-medium">Updated:</span>{" "}
+                      {modalCert.updatedAt
+                        ? new Date(modalCert.updatedAt).toLocaleDateString()
+                        : "N/A"}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
