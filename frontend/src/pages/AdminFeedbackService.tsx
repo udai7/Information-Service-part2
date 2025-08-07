@@ -10,14 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import {
-  CheckCircle,
-  Activity,
-  Clock,
-  Users,
-  MessageSquare,
-  ThumbsUp,
-} from "lucide-react";
+import { CheckCircle, Activity, MessageSquare, ThumbsUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import { apiClient } from "../types/api";
 import type { Feedback } from "../types/api";
