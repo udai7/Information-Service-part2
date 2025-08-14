@@ -117,6 +117,23 @@ export class MessageHandler {
         );
 
       case "contacts_list":
+        return await this.sendContactTypesList(phoneNumber, session.language);
+
+      case "contact_type_selection":
+        return await this.handleContactTypeSelection(
+          phoneNumber,
+          messageText,
+          session,
+        );
+
+      case "contact_location_selection":
+        return await this.handleContactLocationSelection(
+          phoneNumber,
+          messageText,
+          session,
+        );
+
+      case "filtered_contacts_list":
         return await this.handleContactsMenu(phoneNumber, messageText, session);
 
       case "contact_details":
@@ -1113,12 +1130,88 @@ export class MessageHandler {
     return await this.sendResponse(phoneNumber, message);
   }
 
-  private async sendContactsList(
+  private async sendContactTypesList(
     phoneNumber: string,
     language: "en" | "bn",
   ): Promise<string> {
     try {
-      const contacts = await this.databaseService.getActiveContactServices();
+      const title = translationService.translate("contacts.title", language);
+      const typeSelectionMsg = translationService.translate(
+        "contacts.selectType",
+        language,
+      );
+
+      let message = `${title}\n\n${typeSelectionMsg}\n\n`;
+      message += `1️⃣ 🚨 Emergency Contacts\n`;
+      message += `2️⃣ 📞 Regular Contacts\n\n`;
+
+      message += `⬅️ ${translationService.translate(
+        "navigation.back",
+        language,
+      )}`;
+
+      // Set menu context for contact type selection
+      this.sessionManager.setCurrentMenu(phoneNumber, "contact_type_selection");
+
+      return await this.sendResponse(phoneNumber, message);
+    } catch (error) {
+      console.error("Error showing contact types:", error);
+      const errorMsg = translationService.translate("common.error", language);
+      return await this.sendResponse(phoneNumber, errorMsg);
+    }
+  }
+
+  private async sendContactLocationsList(
+    phoneNumber: string,
+    language: "en" | "bn",
+    contactType: string,
+  ): Promise<string> {
+    try {
+      const title = translationService.translate("contacts.title", language);
+      const locationSelectionMsg = translationService.translate(
+        "contacts.selectLocation",
+        language,
+      );
+
+      let message = `${title}\n\n${locationSelectionMsg}\n\n`;
+      message += `1️⃣ 🏛️ State Government\n`;
+      message += `2️⃣ 🏢 District Offices\n\n`;
+
+      message += `⬅️ ${translationService.translate(
+        "navigation.back",
+        language,
+      )}`;
+
+      // Set menu context for location selection with contact type
+      this.sessionManager.setCurrentMenu(
+        phoneNumber,
+        "contact_location_selection",
+      );
+      this.sessionManager.setServiceContext(
+        phoneNumber,
+        "contact_type",
+        contactType,
+      );
+
+      return await this.sendResponse(phoneNumber, message);
+    } catch (error) {
+      console.error("Error showing contact locations:", error);
+      const errorMsg = translationService.translate("common.error", language);
+      return await this.sendResponse(phoneNumber, errorMsg);
+    }
+  }
+
+  private async sendContactsList(
+    phoneNumber: string,
+    language: "en" | "bn",
+    contactType?: string,
+    locationType?: string,
+  ): Promise<string> {
+    try {
+      const contacts = await this.databaseService.getActiveContactServices(
+        contactType,
+        locationType,
+      );
       const title = translationService.translate("contacts.title", language);
       const subtitle = translationService.translate(
         "contacts.subtitle",
@@ -1200,6 +1293,81 @@ export class MessageHandler {
         session.language,
       );
       return await this.sendResponse(phoneNumber, errorMsg);
+    }
+  }
+
+  private async handleContactTypeSelection(
+    phoneNumber: string,
+    messageText: string,
+    session: UserSession,
+  ): Promise<string> {
+    if (messageText === "⬅️" || messageText.toLowerCase() === "back") {
+      this.sessionManager.setCurrentMenu(phoneNumber, "main_menu");
+      return await this.sendMainMenu(phoneNumber, session.language);
+    }
+
+    const choice = parseInt(messageText);
+
+    if (choice === 1) {
+      // Emergency contacts
+      return await this.sendContactLocationsList(
+        phoneNumber,
+        session.language,
+        "Emergency",
+      );
+    } else if (choice === 2) {
+      // Regular contacts
+      return await this.sendContactLocationsList(
+        phoneNumber,
+        session.language,
+        "Regular",
+      );
+    } else {
+      const invalidMsg = translationService.translate(
+        "common.invalidOption",
+        session.language,
+      );
+      return await this.sendResponse(phoneNumber, invalidMsg);
+    }
+  }
+
+  private async handleContactLocationSelection(
+    phoneNumber: string,
+    messageText: string,
+    session: UserSession,
+  ): Promise<string> {
+    if (messageText === "⬅️" || messageText.toLowerCase() === "back") {
+      this.sessionManager.setCurrentMenu(phoneNumber, "contact_type_selection");
+      return await this.sendContactTypesList(phoneNumber, session.language);
+    }
+
+    const choice = parseInt(messageText);
+    const contactType = session.context?.serviceId; // The contact type was stored as serviceId
+
+    if (choice === 1) {
+      // State Government contacts
+      this.sessionManager.setCurrentMenu(phoneNumber, "filtered_contacts_list");
+      return await this.sendContactsList(
+        phoneNumber,
+        session.language,
+        contactType,
+        "State",
+      );
+    } else if (choice === 2) {
+      // District contacts
+      this.sessionManager.setCurrentMenu(phoneNumber, "filtered_contacts_list");
+      return await this.sendContactsList(
+        phoneNumber,
+        session.language,
+        contactType,
+        "District",
+      );
+    } else {
+      const invalidMsg = translationService.translate(
+        "common.invalidOption",
+        session.language,
+      );
+      return await this.sendResponse(phoneNumber, invalidMsg);
     }
   }
 
@@ -1697,6 +1865,9 @@ export class MessageHandler {
       case "schemes_list":
       case "certificates_list":
       case "contacts_list":
+      case "contact_type_selection":
+      case "contact_location_selection":
+      case "filtered_contacts_list":
       case "grievance_form":
       case "feedback_form":
         this.sessionManager.resetToMainMenu(phoneNumber);

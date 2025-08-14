@@ -463,17 +463,33 @@ export class DatabaseService {
   }
 
   // Contact Services
-  async getActiveContactServices(): Promise<any[]> {
+  async getActiveContactServices(
+    contactType?: string,
+    locationType?: string,
+  ): Promise<any[]> {
     try {
+      // Build where clause based on filters
+      const whereClause: any = {
+        isActive: true,
+        status: "published",
+      };
+
+      // Add contact type filter
+      if (contactType) {
+        if (contactType === "Emergency") {
+          whereClause.type = "Emergency";
+        } else if (contactType === "Regular") {
+          whereClause.type = "Regular";
+        }
+      }
+
       const contacts = await this.prisma.contactService.findMany({
-        where: {
-          isActive: true,
-          status: "published",
-        },
+        where: whereClause,
         select: {
           id: true,
           name: true,
           summary: true,
+          type: true,
           applicationMode: true,
           onlineUrl: true,
           offlineAddress: true,
@@ -497,12 +513,35 @@ export class DatabaseService {
         },
       });
 
-      return contacts.map((contact: any) => ({
+      let filteredContacts = contacts.map((contact: any) => ({
         ...contact,
         serviceName: contact.name, // Map name to serviceName for bot compatibility
         district: contact.contacts[0]?.district || "",
         block: contact.contacts[0]?.block || "",
       }));
+
+      // Apply location filter on the mapped results
+      if (locationType) {
+        if (locationType === "State") {
+          // Filter for state-level contacts (where district is "State" or similar)
+          filteredContacts = filteredContacts.filter(
+            (contact) =>
+              contact.district?.toLowerCase().includes("state") ||
+              contact.district?.toLowerCase().includes("agartala") ||
+              contact.district === "",
+          );
+        } else if (locationType === "District") {
+          // Filter for district-level contacts (excluding state-level)
+          filteredContacts = filteredContacts.filter(
+            (contact) =>
+              contact.district &&
+              !contact.district.toLowerCase().includes("state") &&
+              contact.district.toLowerCase() !== "agartala",
+          );
+        }
+      }
+
+      return filteredContacts;
     } catch (error) {
       console.error("Error fetching contact services:", error);
       throw error;
