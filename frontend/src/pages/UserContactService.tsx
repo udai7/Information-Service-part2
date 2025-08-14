@@ -170,7 +170,7 @@ export default function UserContactService() {
 
   const stats = {
     published: apiContactServices.length,
-    active: 0,
+    active: apiContactServices.length, // All services in apiContactServices are active (published and isActive !== false)
     total: apiContactServices.length,
   };
 

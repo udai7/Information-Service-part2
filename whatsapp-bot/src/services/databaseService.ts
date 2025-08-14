@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../../prisma/generated/prisma";
 import { ServiceData, GrievanceInput, FeedbackInput } from "../types";
 
 export class DatabaseService {
@@ -203,17 +203,15 @@ export class DatabaseService {
         },
         select: {
           id: true,
-          name: true, // Changed from serviceName to name to match schema
-          summary: true,
-          offlineAddress: true, // Changed from officeAddress to offlineAddress
+          serviceName: true,
+          district: true,
+          subDistrict: true,
+          block: true,
+          officeAddress: true,
           isActive: true,
           contacts: {
             select: {
               id: true,
-              serviceName: true,
-              district: true,
-              subDistrict: true,
-              block: true,
               name: true,
               designation: true,
               contact: true,
@@ -255,31 +253,22 @@ export class DatabaseService {
   // Grievance Services
   async submitGrievance(grievanceData: GrievanceInput): Promise<string> {
     try {
-      // Generate tracking ID
-      const trackingId = `GRV-${Date.now()
-        .toString(36)
-        .toUpperCase()}-${Math.random()
-        .toString(36)
-        .substring(2, 8)
-        .toUpperCase()}`;
-
       const grievance = await this.prisma.grievance.create({
         data: {
           name: grievanceData.name,
           email: grievanceData.email,
           phone: grievanceData.phone,
-          address: `WhatsApp User - ${grievanceData.phone}`, // Default address
           subject: grievanceData.subject,
           description: grievanceData.description,
           department: grievanceData.department,
           priority: grievanceData.priority,
-          status: "new",
+          status: "pending", // Use "pending" as per schema
           source: "whatsapp",
-          trackingId: trackingId,
-          attachments: [],
         },
       });
 
+      // Create a tracking ID from the grievance ID
+      const trackingId = `GRV-${grievance.id.toString().padStart(6, "0")}`;
       return trackingId;
     } catch (error) {
       console.error("Error submitting grievance:", error);
@@ -295,13 +284,10 @@ export class DatabaseService {
           name: feedbackData.name,
           email: feedbackData.email || null,
           phone: feedbackData.phone || null,
-          subject: "WhatsApp Feedback",
-          message: feedbackData.comment || "",
           comment: feedbackData.comment,
           rating: feedbackData.rating,
           serviceType: feedbackData.serviceType,
           source: "whatsapp",
-          status: "new",
         },
       });
 

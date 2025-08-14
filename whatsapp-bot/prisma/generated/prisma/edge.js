@@ -225,7 +225,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Jinia\\OneDrive\\Desktop\\It-internship-project\\whatsapp-bot\\prisma\\generated\\prisma",
+      "value": "C:\\Users\\udaid\\OneDrive\\Desktop\\Information-Service-part2\\whatsapp-bot\\prisma\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -239,7 +239,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\Jinia\\OneDrive\\Desktop\\It-internship-project\\whatsapp-bot\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\udaid\\OneDrive\\Desktop\\Information-Service-part2\\whatsapp-bot\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

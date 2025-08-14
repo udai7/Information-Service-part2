@@ -49,7 +49,7 @@ export default function UserCertificateService() {
 
   const stats = {
     published: apiCertificateServices.length,
-    active: 0,
+    active: apiCertificateServices.length, // All services in apiCertificateServices are active (published and isActive !== false)
     total: apiCertificateServices.length,
   };
 
@@ -449,7 +449,7 @@ export default function UserCertificateService() {
                   {/* Application Mode & Target Audience below */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-start justify-center min-h-[80px]">
-                      <span className="text-sm font-medium text-purple-700 mb-1">
+                      <span className="text-sm font-medium text-blue-700 mb-1">
                         Application Mode
                       </span>
                       <span className="text-gray-800 text-base font-semibold">
