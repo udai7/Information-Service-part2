@@ -1,5 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -37,14 +35,29 @@ model SchemeService {
   status             String   @default("draft") // draft, pending, published
   isActive           Boolean  @default(true)
   eligibilityDetails String[]
+  schemeDetails      String[]
+  processDetails     String[]
   benefitDetails     String[]
   applicationProcess String[]
   requiredDocuments  String[]
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+
+  // Process flows
+  processNew       String?
+  processUpdate    String?
+  processLost      String?
+  processSurrender String?
+
+  // Document requirements
+  docNew       String?
+  docUpdate    String?
+  docLost      String?
+  docSurrender String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Admin relation
-  adminId Int   @default(1)
+  adminId Int
   admin   Admin @relation(fields: [adminId], references: [id])
 
   // Related entities
@@ -67,42 +80,144 @@ model CertificateService {
   offlineAddress     String?
   status             String   @default("draft") // draft, pending, published
   isActive           Boolean  @default(true)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+
+  // Process flows
+  processNew       String?
+  processUpdate    String?
+  processLost      String?
+  processSurrender String?
+
+  // Document requirements
+  docNew       String?
+  docUpdate    String?
+  docLost      String?
+  docSurrender String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Admin relation
-  adminId Int   @default(1)
+  adminId Int
   admin   Admin @relation(fields: [adminId], references: [id])
+
+  // Related entities
+  contacts         CertificateContact[]
+  documents        CertificateDocument[]
+  processSteps     CertificateProcessStep[]
+  eligibilityItems CertificateEligibility[]
+}
+
+model CertificateContact {
+  id              Int    @id @default(autoincrement())
+  serviceName     String
+  district        String
+  subDistrict     String
+  block           String
+  name            String
+  designation     String
+  contact         String
+  email           String
+  applicationType String @default("New Application") // New Application, Lost Application, etc.
+
+  certificateServiceId Int
+  certificateService   CertificateService @relation(fields: [certificateServiceId], references: [id], onDelete: Cascade)
+}
+
+model CertificateDocument {
+  id              Int     @id @default(autoincrement())
+  slNo            Int
+  documentType    String
+  validProof      String
+  isRequired      Boolean @default(true)
+  applicationType String  @default("New Application") // New Application, Lost Application, etc.
+
+  certificateServiceId Int
+  certificateService   CertificateService @relation(fields: [certificateServiceId], references: [id], onDelete: Cascade)
+}
+
+model CertificateProcessStep {
+  id              Int    @id @default(autoincrement())
+  slNo            Int
+  stepDetails     String
+  applicationType String @default("New Application") // New Application, Lost Application, etc.
+
+  certificateServiceId Int
+  certificateService   CertificateService @relation(fields: [certificateServiceId], references: [id], onDelete: Cascade)
+}
+
+model CertificateEligibility {
+  id                Int    @id @default(autoincrement())
+  eligibilityDetail String
+  applicationType   String @default("New Application") // New Application, Lost Application, etc.
+
+  certificateServiceId Int
+  certificateService   CertificateService @relation(fields: [certificateServiceId], references: [id], onDelete: Cascade)
 }
 
 model ContactService {
-  id            Int                     @id @default(autoincrement())
-  serviceName   String
-  district      String
-  subDistrict   String?
-  block         String
-  officeAddress String?
-  status        String                  @default("draft") // draft, pending, published
-  isActive      Boolean                 @default(true)
-  createdAt     DateTime                @default(now())
-  updatedAt     DateTime                @updatedAt
-  contacts      ContactServiceContact[]
+  id              Int      @id @default(autoincrement())
+  name            String
+  summary         String
+  type            String?
+  targetAudience  String[]
+  applicationMode String
+  onlineUrl       String?
+  offlineAddress  String?
+  status          String   @default("draft") // draft, pending, published
+  isActive        Boolean  @default(true) // Admin dashboard control
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   // Admin relation
-  adminId Int   @default(1)
+  adminId Int
   admin   Admin @relation(fields: [adminId], references: [id])
+
+  // Extended details
+  eligibilityDetails String[]
+  contactDetails     String[]
+  processDetails     String[]
+
+  // Process flows
+  processNew       String?
+  processUpdate    String?
+  processLost      String?
+  processSurrender String?
+
+  // Document requirements
+  docNew       String?
+  docUpdate    String?
+  docLost      String?
+  docSurrender String?
+
+  // Related entities
+  contacts  ContactServiceContact[]
+  documents ContactServiceDocument[]
 }
 
 model ContactServiceContact {
-  id          Int            @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
+  serviceName String
+  district    String
+  subDistrict String
+  block       String
   name        String
   designation String
   contact     String
-  email       String?
-  serviceId   Int
-  service     ContactService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  email       String
+
+  contactServiceId Int
+  contactService   ContactService @relation(fields: [contactServiceId], references: [id], onDelete: Cascade)
+}
+
+model ContactServiceDocument {
+  id           Int     @id @default(autoincrement())
+  slNo         Int
+  documentType String
+  validProof   String
+  isRequired   Boolean @default(true)
+
+  contactServiceId Int
+  contactService   ContactService @relation(fields: [contactServiceId], references: [id], onDelete: Cascade)
 }
 
 model Grievance {

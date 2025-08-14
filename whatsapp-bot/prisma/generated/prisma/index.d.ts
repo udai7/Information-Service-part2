@@ -29,6 +29,26 @@ export type SchemeService = $Result.DefaultSelection<Prisma.$SchemeServicePayloa
  */
 export type CertificateService = $Result.DefaultSelection<Prisma.$CertificateServicePayload>
 /**
+ * Model CertificateContact
+ * 
+ */
+export type CertificateContact = $Result.DefaultSelection<Prisma.$CertificateContactPayload>
+/**
+ * Model CertificateDocument
+ * 
+ */
+export type CertificateDocument = $Result.DefaultSelection<Prisma.$CertificateDocumentPayload>
+/**
+ * Model CertificateProcessStep
+ * 
+ */
+export type CertificateProcessStep = $Result.DefaultSelection<Prisma.$CertificateProcessStepPayload>
+/**
+ * Model CertificateEligibility
+ * 
+ */
+export type CertificateEligibility = $Result.DefaultSelection<Prisma.$CertificateEligibilityPayload>
+/**
  * Model ContactService
  * 
  */
@@ -38,6 +58,11 @@ export type ContactService = $Result.DefaultSelection<Prisma.$ContactServicePayl
  * 
  */
 export type ContactServiceContact = $Result.DefaultSelection<Prisma.$ContactServiceContactPayload>
+/**
+ * Model ContactServiceDocument
+ * 
+ */
+export type ContactServiceDocument = $Result.DefaultSelection<Prisma.$ContactServiceDocumentPayload>
 /**
  * Model Grievance
  * 
@@ -213,6 +238,46 @@ export class PrismaClient<
   get certificateService(): Prisma.CertificateServiceDelegate<ExtArgs>;
 
   /**
+   * `prisma.certificateContact`: Exposes CRUD operations for the **CertificateContact** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CertificateContacts
+    * const certificateContacts = await prisma.certificateContact.findMany()
+    * ```
+    */
+  get certificateContact(): Prisma.CertificateContactDelegate<ExtArgs>;
+
+  /**
+   * `prisma.certificateDocument`: Exposes CRUD operations for the **CertificateDocument** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CertificateDocuments
+    * const certificateDocuments = await prisma.certificateDocument.findMany()
+    * ```
+    */
+  get certificateDocument(): Prisma.CertificateDocumentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.certificateProcessStep`: Exposes CRUD operations for the **CertificateProcessStep** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CertificateProcessSteps
+    * const certificateProcessSteps = await prisma.certificateProcessStep.findMany()
+    * ```
+    */
+  get certificateProcessStep(): Prisma.CertificateProcessStepDelegate<ExtArgs>;
+
+  /**
+   * `prisma.certificateEligibility`: Exposes CRUD operations for the **CertificateEligibility** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CertificateEligibilities
+    * const certificateEligibilities = await prisma.certificateEligibility.findMany()
+    * ```
+    */
+  get certificateEligibility(): Prisma.CertificateEligibilityDelegate<ExtArgs>;
+
+  /**
    * `prisma.contactService`: Exposes CRUD operations for the **ContactService** model.
     * Example usage:
     * ```ts
@@ -231,6 +296,16 @@ export class PrismaClient<
     * ```
     */
   get contactServiceContact(): Prisma.ContactServiceContactDelegate<ExtArgs>;
+
+  /**
+   * `prisma.contactServiceDocument`: Exposes CRUD operations for the **ContactServiceDocument** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ContactServiceDocuments
+    * const contactServiceDocuments = await prisma.contactServiceDocument.findMany()
+    * ```
+    */
+  get contactServiceDocument(): Prisma.ContactServiceDocumentDelegate<ExtArgs>;
 
   /**
    * `prisma.grievance`: Exposes CRUD operations for the **Grievance** model.
@@ -715,8 +790,13 @@ export namespace Prisma {
     Admin: 'Admin',
     SchemeService: 'SchemeService',
     CertificateService: 'CertificateService',
+    CertificateContact: 'CertificateContact',
+    CertificateDocument: 'CertificateDocument',
+    CertificateProcessStep: 'CertificateProcessStep',
+    CertificateEligibility: 'CertificateEligibility',
     ContactService: 'ContactService',
     ContactServiceContact: 'ContactServiceContact',
+    ContactServiceDocument: 'ContactServiceDocument',
     Grievance: 'Grievance',
     Feedback: 'Feedback',
     ContactPerson: 'ContactPerson',
@@ -736,7 +816,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "admin" | "schemeService" | "certificateService" | "contactService" | "contactServiceContact" | "grievance" | "feedback" | "contactPerson" | "supportiveDocument"
+      modelProps: "admin" | "schemeService" | "certificateService" | "certificateContact" | "certificateDocument" | "certificateProcessStep" | "certificateEligibility" | "contactService" | "contactServiceContact" | "contactServiceDocument" | "grievance" | "feedback" | "contactPerson" | "supportiveDocument"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -950,6 +1030,286 @@ export namespace Prisma {
           }
         }
       }
+      CertificateContact: {
+        payload: Prisma.$CertificateContactPayload<ExtArgs>
+        fields: Prisma.CertificateContactFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CertificateContactFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CertificateContactFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
+          }
+          findFirst: {
+            args: Prisma.CertificateContactFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CertificateContactFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
+          }
+          findMany: {
+            args: Prisma.CertificateContactFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>[]
+          }
+          create: {
+            args: Prisma.CertificateContactCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
+          }
+          createMany: {
+            args: Prisma.CertificateContactCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CertificateContactCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>[]
+          }
+          delete: {
+            args: Prisma.CertificateContactDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
+          }
+          update: {
+            args: Prisma.CertificateContactUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
+          }
+          deleteMany: {
+            args: Prisma.CertificateContactDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CertificateContactUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CertificateContactUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
+          }
+          aggregate: {
+            args: Prisma.CertificateContactAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCertificateContact>
+          }
+          groupBy: {
+            args: Prisma.CertificateContactGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CertificateContactGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CertificateContactCountArgs<ExtArgs>
+            result: $Utils.Optional<CertificateContactCountAggregateOutputType> | number
+          }
+        }
+      }
+      CertificateDocument: {
+        payload: Prisma.$CertificateDocumentPayload<ExtArgs>
+        fields: Prisma.CertificateDocumentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CertificateDocumentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CertificateDocumentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
+          }
+          findFirst: {
+            args: Prisma.CertificateDocumentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CertificateDocumentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
+          }
+          findMany: {
+            args: Prisma.CertificateDocumentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>[]
+          }
+          create: {
+            args: Prisma.CertificateDocumentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
+          }
+          createMany: {
+            args: Prisma.CertificateDocumentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CertificateDocumentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>[]
+          }
+          delete: {
+            args: Prisma.CertificateDocumentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
+          }
+          update: {
+            args: Prisma.CertificateDocumentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
+          }
+          deleteMany: {
+            args: Prisma.CertificateDocumentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CertificateDocumentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CertificateDocumentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
+          }
+          aggregate: {
+            args: Prisma.CertificateDocumentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCertificateDocument>
+          }
+          groupBy: {
+            args: Prisma.CertificateDocumentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CertificateDocumentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CertificateDocumentCountArgs<ExtArgs>
+            result: $Utils.Optional<CertificateDocumentCountAggregateOutputType> | number
+          }
+        }
+      }
+      CertificateProcessStep: {
+        payload: Prisma.$CertificateProcessStepPayload<ExtArgs>
+        fields: Prisma.CertificateProcessStepFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CertificateProcessStepFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CertificateProcessStepFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
+          }
+          findFirst: {
+            args: Prisma.CertificateProcessStepFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CertificateProcessStepFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
+          }
+          findMany: {
+            args: Prisma.CertificateProcessStepFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>[]
+          }
+          create: {
+            args: Prisma.CertificateProcessStepCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
+          }
+          createMany: {
+            args: Prisma.CertificateProcessStepCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CertificateProcessStepCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>[]
+          }
+          delete: {
+            args: Prisma.CertificateProcessStepDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
+          }
+          update: {
+            args: Prisma.CertificateProcessStepUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
+          }
+          deleteMany: {
+            args: Prisma.CertificateProcessStepDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CertificateProcessStepUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CertificateProcessStepUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
+          }
+          aggregate: {
+            args: Prisma.CertificateProcessStepAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCertificateProcessStep>
+          }
+          groupBy: {
+            args: Prisma.CertificateProcessStepGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CertificateProcessStepGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CertificateProcessStepCountArgs<ExtArgs>
+            result: $Utils.Optional<CertificateProcessStepCountAggregateOutputType> | number
+          }
+        }
+      }
+      CertificateEligibility: {
+        payload: Prisma.$CertificateEligibilityPayload<ExtArgs>
+        fields: Prisma.CertificateEligibilityFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CertificateEligibilityFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CertificateEligibilityFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
+          }
+          findFirst: {
+            args: Prisma.CertificateEligibilityFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CertificateEligibilityFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
+          }
+          findMany: {
+            args: Prisma.CertificateEligibilityFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>[]
+          }
+          create: {
+            args: Prisma.CertificateEligibilityCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
+          }
+          createMany: {
+            args: Prisma.CertificateEligibilityCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CertificateEligibilityCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>[]
+          }
+          delete: {
+            args: Prisma.CertificateEligibilityDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
+          }
+          update: {
+            args: Prisma.CertificateEligibilityUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
+          }
+          deleteMany: {
+            args: Prisma.CertificateEligibilityDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CertificateEligibilityUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CertificateEligibilityUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
+          }
+          aggregate: {
+            args: Prisma.CertificateEligibilityAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCertificateEligibility>
+          }
+          groupBy: {
+            args: Prisma.CertificateEligibilityGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CertificateEligibilityGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CertificateEligibilityCountArgs<ExtArgs>
+            result: $Utils.Optional<CertificateEligibilityCountAggregateOutputType> | number
+          }
+        }
+      }
       ContactService: {
         payload: Prisma.$ContactServicePayload<ExtArgs>
         fields: Prisma.ContactServiceFieldRefs
@@ -1087,6 +1447,76 @@ export namespace Prisma {
           count: {
             args: Prisma.ContactServiceContactCountArgs<ExtArgs>
             result: $Utils.Optional<ContactServiceContactCountAggregateOutputType> | number
+          }
+        }
+      }
+      ContactServiceDocument: {
+        payload: Prisma.$ContactServiceDocumentPayload<ExtArgs>
+        fields: Prisma.ContactServiceDocumentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ContactServiceDocumentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ContactServiceDocumentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
+          }
+          findFirst: {
+            args: Prisma.ContactServiceDocumentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ContactServiceDocumentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
+          }
+          findMany: {
+            args: Prisma.ContactServiceDocumentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>[]
+          }
+          create: {
+            args: Prisma.ContactServiceDocumentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
+          }
+          createMany: {
+            args: Prisma.ContactServiceDocumentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ContactServiceDocumentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>[]
+          }
+          delete: {
+            args: Prisma.ContactServiceDocumentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
+          }
+          update: {
+            args: Prisma.ContactServiceDocumentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
+          }
+          deleteMany: {
+            args: Prisma.ContactServiceDocumentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ContactServiceDocumentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ContactServiceDocumentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
+          }
+          aggregate: {
+            args: Prisma.ContactServiceDocumentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateContactServiceDocument>
+          }
+          groupBy: {
+            args: Prisma.ContactServiceDocumentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ContactServiceDocumentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ContactServiceDocumentCountArgs<ExtArgs>
+            result: $Utils.Optional<ContactServiceDocumentCountAggregateOutputType> | number
           }
         }
       }
@@ -1616,15 +2046,75 @@ export namespace Prisma {
 
 
   /**
+   * Count Type CertificateServiceCountOutputType
+   */
+
+  export type CertificateServiceCountOutputType = {
+    contacts: number
+    documents: number
+    processSteps: number
+    eligibilityItems: number
+  }
+
+  export type CertificateServiceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contacts?: boolean | CertificateServiceCountOutputTypeCountContactsArgs
+    documents?: boolean | CertificateServiceCountOutputTypeCountDocumentsArgs
+    processSteps?: boolean | CertificateServiceCountOutputTypeCountProcessStepsArgs
+    eligibilityItems?: boolean | CertificateServiceCountOutputTypeCountEligibilityItemsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CertificateServiceCountOutputType without action
+   */
+  export type CertificateServiceCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateServiceCountOutputType
+     */
+    select?: CertificateServiceCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CertificateServiceCountOutputType without action
+   */
+  export type CertificateServiceCountOutputTypeCountContactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateContactWhereInput
+  }
+
+  /**
+   * CertificateServiceCountOutputType without action
+   */
+  export type CertificateServiceCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateDocumentWhereInput
+  }
+
+  /**
+   * CertificateServiceCountOutputType without action
+   */
+  export type CertificateServiceCountOutputTypeCountProcessStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateProcessStepWhereInput
+  }
+
+  /**
+   * CertificateServiceCountOutputType without action
+   */
+  export type CertificateServiceCountOutputTypeCountEligibilityItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateEligibilityWhereInput
+  }
+
+
+  /**
    * Count Type ContactServiceCountOutputType
    */
 
   export type ContactServiceCountOutputType = {
     contacts: number
+    documents: number
   }
 
   export type ContactServiceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     contacts?: boolean | ContactServiceCountOutputTypeCountContactsArgs
+    documents?: boolean | ContactServiceCountOutputTypeCountDocumentsArgs
   }
 
   // Custom InputTypes
@@ -1643,6 +2133,13 @@ export namespace Prisma {
    */
   export type ContactServiceCountOutputTypeCountContactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ContactServiceContactWhereInput
+  }
+
+  /**
+   * ContactServiceCountOutputType without action
+   */
+  export type ContactServiceCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContactServiceDocumentWhereInput
   }
 
 
@@ -2736,6 +3233,14 @@ export namespace Prisma {
     offlineAddress: string | null
     status: string | null
     isActive: boolean | null
+    processNew: string | null
+    processUpdate: string | null
+    processLost: string | null
+    processSurrender: string | null
+    docNew: string | null
+    docUpdate: string | null
+    docLost: string | null
+    docSurrender: string | null
     createdAt: Date | null
     updatedAt: Date | null
     adminId: number | null
@@ -2751,6 +3256,14 @@ export namespace Prisma {
     offlineAddress: string | null
     status: string | null
     isActive: boolean | null
+    processNew: string | null
+    processUpdate: string | null
+    processLost: string | null
+    processSurrender: string | null
+    docNew: string | null
+    docUpdate: string | null
+    docLost: string | null
+    docSurrender: string | null
     createdAt: Date | null
     updatedAt: Date | null
     adminId: number | null
@@ -2768,9 +3281,19 @@ export namespace Prisma {
     status: number
     isActive: number
     eligibilityDetails: number
+    schemeDetails: number
+    processDetails: number
     benefitDetails: number
     applicationProcess: number
     requiredDocuments: number
+    processNew: number
+    processUpdate: number
+    processLost: number
+    processSurrender: number
+    docNew: number
+    docUpdate: number
+    docLost: number
+    docSurrender: number
     createdAt: number
     updatedAt: number
     adminId: number
@@ -2798,6 +3321,14 @@ export namespace Prisma {
     offlineAddress?: true
     status?: true
     isActive?: true
+    processNew?: true
+    processUpdate?: true
+    processLost?: true
+    processSurrender?: true
+    docNew?: true
+    docUpdate?: true
+    docLost?: true
+    docSurrender?: true
     createdAt?: true
     updatedAt?: true
     adminId?: true
@@ -2813,6 +3344,14 @@ export namespace Prisma {
     offlineAddress?: true
     status?: true
     isActive?: true
+    processNew?: true
+    processUpdate?: true
+    processLost?: true
+    processSurrender?: true
+    docNew?: true
+    docUpdate?: true
+    docLost?: true
+    docSurrender?: true
     createdAt?: true
     updatedAt?: true
     adminId?: true
@@ -2830,9 +3369,19 @@ export namespace Prisma {
     status?: true
     isActive?: true
     eligibilityDetails?: true
+    schemeDetails?: true
+    processDetails?: true
     benefitDetails?: true
     applicationProcess?: true
     requiredDocuments?: true
+    processNew?: true
+    processUpdate?: true
+    processLost?: true
+    processSurrender?: true
+    docNew?: true
+    docUpdate?: true
+    docLost?: true
+    docSurrender?: true
     createdAt?: true
     updatedAt?: true
     adminId?: true
@@ -2937,9 +3486,19 @@ export namespace Prisma {
     status: string
     isActive: boolean
     eligibilityDetails: string[]
+    schemeDetails: string[]
+    processDetails: string[]
     benefitDetails: string[]
     applicationProcess: string[]
     requiredDocuments: string[]
+    processNew: string | null
+    processUpdate: string | null
+    processLost: string | null
+    processSurrender: string | null
+    docNew: string | null
+    docUpdate: string | null
+    docLost: string | null
+    docSurrender: string | null
     createdAt: Date
     updatedAt: Date
     adminId: number
@@ -2976,9 +3535,19 @@ export namespace Prisma {
     status?: boolean
     isActive?: boolean
     eligibilityDetails?: boolean
+    schemeDetails?: boolean
+    processDetails?: boolean
     benefitDetails?: boolean
     applicationProcess?: boolean
     requiredDocuments?: boolean
+    processNew?: boolean
+    processUpdate?: boolean
+    processLost?: boolean
+    processSurrender?: boolean
+    docNew?: boolean
+    docUpdate?: boolean
+    docLost?: boolean
+    docSurrender?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     adminId?: boolean
@@ -3000,9 +3569,19 @@ export namespace Prisma {
     status?: boolean
     isActive?: boolean
     eligibilityDetails?: boolean
+    schemeDetails?: boolean
+    processDetails?: boolean
     benefitDetails?: boolean
     applicationProcess?: boolean
     requiredDocuments?: boolean
+    processNew?: boolean
+    processUpdate?: boolean
+    processLost?: boolean
+    processSurrender?: boolean
+    docNew?: boolean
+    docUpdate?: boolean
+    docLost?: boolean
+    docSurrender?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     adminId?: boolean
@@ -3021,9 +3600,19 @@ export namespace Prisma {
     status?: boolean
     isActive?: boolean
     eligibilityDetails?: boolean
+    schemeDetails?: boolean
+    processDetails?: boolean
     benefitDetails?: boolean
     applicationProcess?: boolean
     requiredDocuments?: boolean
+    processNew?: boolean
+    processUpdate?: boolean
+    processLost?: boolean
+    processSurrender?: boolean
+    docNew?: boolean
+    docUpdate?: boolean
+    docLost?: boolean
+    docSurrender?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     adminId?: boolean
@@ -3058,9 +3647,19 @@ export namespace Prisma {
       status: string
       isActive: boolean
       eligibilityDetails: string[]
+      schemeDetails: string[]
+      processDetails: string[]
       benefitDetails: string[]
       applicationProcess: string[]
       requiredDocuments: string[]
+      processNew: string | null
+      processUpdate: string | null
+      processLost: string | null
+      processSurrender: string | null
+      docNew: string | null
+      docUpdate: string | null
+      docLost: string | null
+      docSurrender: string | null
       createdAt: Date
       updatedAt: Date
       adminId: number
@@ -3471,9 +4070,19 @@ export namespace Prisma {
     readonly status: FieldRef<"SchemeService", 'String'>
     readonly isActive: FieldRef<"SchemeService", 'Boolean'>
     readonly eligibilityDetails: FieldRef<"SchemeService", 'String[]'>
+    readonly schemeDetails: FieldRef<"SchemeService", 'String[]'>
+    readonly processDetails: FieldRef<"SchemeService", 'String[]'>
     readonly benefitDetails: FieldRef<"SchemeService", 'String[]'>
     readonly applicationProcess: FieldRef<"SchemeService", 'String[]'>
     readonly requiredDocuments: FieldRef<"SchemeService", 'String[]'>
+    readonly processNew: FieldRef<"SchemeService", 'String'>
+    readonly processUpdate: FieldRef<"SchemeService", 'String'>
+    readonly processLost: FieldRef<"SchemeService", 'String'>
+    readonly processSurrender: FieldRef<"SchemeService", 'String'>
+    readonly docNew: FieldRef<"SchemeService", 'String'>
+    readonly docUpdate: FieldRef<"SchemeService", 'String'>
+    readonly docLost: FieldRef<"SchemeService", 'String'>
+    readonly docSurrender: FieldRef<"SchemeService", 'String'>
     readonly createdAt: FieldRef<"SchemeService", 'DateTime'>
     readonly updatedAt: FieldRef<"SchemeService", 'DateTime'>
     readonly adminId: FieldRef<"SchemeService", 'Int'>
@@ -3881,6 +4490,14 @@ export namespace Prisma {
     offlineAddress: string | null
     status: string | null
     isActive: boolean | null
+    processNew: string | null
+    processUpdate: string | null
+    processLost: string | null
+    processSurrender: string | null
+    docNew: string | null
+    docUpdate: string | null
+    docLost: string | null
+    docSurrender: string | null
     createdAt: Date | null
     updatedAt: Date | null
     adminId: number | null
@@ -3896,6 +4513,14 @@ export namespace Prisma {
     offlineAddress: string | null
     status: string | null
     isActive: boolean | null
+    processNew: string | null
+    processUpdate: string | null
+    processLost: string | null
+    processSurrender: string | null
+    docNew: string | null
+    docUpdate: string | null
+    docLost: string | null
+    docSurrender: string | null
     createdAt: Date | null
     updatedAt: Date | null
     adminId: number | null
@@ -3916,6 +4541,14 @@ export namespace Prisma {
     offlineAddress: number
     status: number
     isActive: number
+    processNew: number
+    processUpdate: number
+    processLost: number
+    processSurrender: number
+    docNew: number
+    docUpdate: number
+    docLost: number
+    docSurrender: number
     createdAt: number
     updatedAt: number
     adminId: number
@@ -3943,6 +4576,14 @@ export namespace Prisma {
     offlineAddress?: true
     status?: true
     isActive?: true
+    processNew?: true
+    processUpdate?: true
+    processLost?: true
+    processSurrender?: true
+    docNew?: true
+    docUpdate?: true
+    docLost?: true
+    docSurrender?: true
     createdAt?: true
     updatedAt?: true
     adminId?: true
@@ -3958,6 +4599,14 @@ export namespace Prisma {
     offlineAddress?: true
     status?: true
     isActive?: true
+    processNew?: true
+    processUpdate?: true
+    processLost?: true
+    processSurrender?: true
+    docNew?: true
+    docUpdate?: true
+    docLost?: true
+    docSurrender?: true
     createdAt?: true
     updatedAt?: true
     adminId?: true
@@ -3978,6 +4627,14 @@ export namespace Prisma {
     offlineAddress?: true
     status?: true
     isActive?: true
+    processNew?: true
+    processUpdate?: true
+    processLost?: true
+    processSurrender?: true
+    docNew?: true
+    docUpdate?: true
+    docLost?: true
+    docSurrender?: true
     createdAt?: true
     updatedAt?: true
     adminId?: true
@@ -4085,6 +4742,14 @@ export namespace Prisma {
     offlineAddress: string | null
     status: string
     isActive: boolean
+    processNew: string | null
+    processUpdate: string | null
+    processLost: string | null
+    processSurrender: string | null
+    docNew: string | null
+    docUpdate: string | null
+    docLost: string | null
+    docSurrender: string | null
     createdAt: Date
     updatedAt: Date
     adminId: number
@@ -4124,10 +4789,23 @@ export namespace Prisma {
     offlineAddress?: boolean
     status?: boolean
     isActive?: boolean
+    processNew?: boolean
+    processUpdate?: boolean
+    processLost?: boolean
+    processSurrender?: boolean
+    docNew?: boolean
+    docUpdate?: boolean
+    docLost?: boolean
+    docSurrender?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     adminId?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
+    contacts?: boolean | CertificateService$contactsArgs<ExtArgs>
+    documents?: boolean | CertificateService$documentsArgs<ExtArgs>
+    processSteps?: boolean | CertificateService$processStepsArgs<ExtArgs>
+    eligibilityItems?: boolean | CertificateService$eligibilityItemsArgs<ExtArgs>
+    _count?: boolean | CertificateServiceCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["certificateService"]>
 
   export type CertificateServiceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4145,6 +4823,14 @@ export namespace Prisma {
     offlineAddress?: boolean
     status?: boolean
     isActive?: boolean
+    processNew?: boolean
+    processUpdate?: boolean
+    processLost?: boolean
+    processSurrender?: boolean
+    docNew?: boolean
+    docUpdate?: boolean
+    docLost?: boolean
+    docSurrender?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     adminId?: boolean
@@ -4166,6 +4852,14 @@ export namespace Prisma {
     offlineAddress?: boolean
     status?: boolean
     isActive?: boolean
+    processNew?: boolean
+    processUpdate?: boolean
+    processLost?: boolean
+    processSurrender?: boolean
+    docNew?: boolean
+    docUpdate?: boolean
+    docLost?: boolean
+    docSurrender?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     adminId?: boolean
@@ -4173,6 +4867,11 @@ export namespace Prisma {
 
   export type CertificateServiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | AdminDefaultArgs<ExtArgs>
+    contacts?: boolean | CertificateService$contactsArgs<ExtArgs>
+    documents?: boolean | CertificateService$documentsArgs<ExtArgs>
+    processSteps?: boolean | CertificateService$processStepsArgs<ExtArgs>
+    eligibilityItems?: boolean | CertificateService$eligibilityItemsArgs<ExtArgs>
+    _count?: boolean | CertificateServiceCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CertificateServiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | AdminDefaultArgs<ExtArgs>
@@ -4182,6 +4881,10 @@ export namespace Prisma {
     name: "CertificateService"
     objects: {
       admin: Prisma.$AdminPayload<ExtArgs>
+      contacts: Prisma.$CertificateContactPayload<ExtArgs>[]
+      documents: Prisma.$CertificateDocumentPayload<ExtArgs>[]
+      processSteps: Prisma.$CertificateProcessStepPayload<ExtArgs>[]
+      eligibilityItems: Prisma.$CertificateEligibilityPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4198,6 +4901,14 @@ export namespace Prisma {
       offlineAddress: string | null
       status: string
       isActive: boolean
+      processNew: string | null
+      processUpdate: string | null
+      processLost: string | null
+      processSurrender: string | null
+      docNew: string | null
+      docUpdate: string | null
+      docLost: string | null
+      docSurrender: string | null
       createdAt: Date
       updatedAt: Date
       adminId: number
@@ -4566,6 +5277,10 @@ export namespace Prisma {
   export interface Prisma__CertificateServiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     admin<T extends AdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminDefaultArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    contacts<T extends CertificateService$contactsArgs<ExtArgs> = {}>(args?: Subset<T, CertificateService$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findMany"> | Null>
+    documents<T extends CertificateService$documentsArgs<ExtArgs> = {}>(args?: Subset<T, CertificateService$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findMany"> | Null>
+    processSteps<T extends CertificateService$processStepsArgs<ExtArgs> = {}>(args?: Subset<T, CertificateService$processStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findMany"> | Null>
+    eligibilityItems<T extends CertificateService$eligibilityItemsArgs<ExtArgs> = {}>(args?: Subset<T, CertificateService$eligibilityItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4609,6 +5324,14 @@ export namespace Prisma {
     readonly offlineAddress: FieldRef<"CertificateService", 'String'>
     readonly status: FieldRef<"CertificateService", 'String'>
     readonly isActive: FieldRef<"CertificateService", 'Boolean'>
+    readonly processNew: FieldRef<"CertificateService", 'String'>
+    readonly processUpdate: FieldRef<"CertificateService", 'String'>
+    readonly processLost: FieldRef<"CertificateService", 'String'>
+    readonly processSurrender: FieldRef<"CertificateService", 'String'>
+    readonly docNew: FieldRef<"CertificateService", 'String'>
+    readonly docUpdate: FieldRef<"CertificateService", 'String'>
+    readonly docLost: FieldRef<"CertificateService", 'String'>
+    readonly docSurrender: FieldRef<"CertificateService", 'String'>
     readonly createdAt: FieldRef<"CertificateService", 'DateTime'>
     readonly updatedAt: FieldRef<"CertificateService", 'DateTime'>
     readonly adminId: FieldRef<"CertificateService", 'Int'>
@@ -4930,6 +5653,86 @@ export namespace Prisma {
   }
 
   /**
+   * CertificateService.contacts
+   */
+  export type CertificateService$contactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateContact
+     */
+    select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateContactInclude<ExtArgs> | null
+    where?: CertificateContactWhereInput
+    orderBy?: CertificateContactOrderByWithRelationInput | CertificateContactOrderByWithRelationInput[]
+    cursor?: CertificateContactWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CertificateContactScalarFieldEnum | CertificateContactScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateService.documents
+   */
+  export type CertificateService$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateDocument
+     */
+    select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateDocumentInclude<ExtArgs> | null
+    where?: CertificateDocumentWhereInput
+    orderBy?: CertificateDocumentOrderByWithRelationInput | CertificateDocumentOrderByWithRelationInput[]
+    cursor?: CertificateDocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CertificateDocumentScalarFieldEnum | CertificateDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateService.processSteps
+   */
+  export type CertificateService$processStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateProcessStep
+     */
+    select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateProcessStepInclude<ExtArgs> | null
+    where?: CertificateProcessStepWhereInput
+    orderBy?: CertificateProcessStepOrderByWithRelationInput | CertificateProcessStepOrderByWithRelationInput[]
+    cursor?: CertificateProcessStepWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CertificateProcessStepScalarFieldEnum | CertificateProcessStepScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateService.eligibilityItems
+   */
+  export type CertificateService$eligibilityItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateEligibility
+     */
+    select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateEligibilityInclude<ExtArgs> | null
+    where?: CertificateEligibilityWhereInput
+    orderBy?: CertificateEligibilityOrderByWithRelationInput | CertificateEligibilityOrderByWithRelationInput[]
+    cursor?: CertificateEligibilityWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CertificateEligibilityScalarFieldEnum | CertificateEligibilityScalarFieldEnum[]
+  }
+
+  /**
    * CertificateService without action
    */
   export type CertificateServiceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4941,6 +5744,3982 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateServiceInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CertificateContact
+   */
+
+  export type AggregateCertificateContact = {
+    _count: CertificateContactCountAggregateOutputType | null
+    _avg: CertificateContactAvgAggregateOutputType | null
+    _sum: CertificateContactSumAggregateOutputType | null
+    _min: CertificateContactMinAggregateOutputType | null
+    _max: CertificateContactMaxAggregateOutputType | null
+  }
+
+  export type CertificateContactAvgAggregateOutputType = {
+    id: number | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateContactSumAggregateOutputType = {
+    id: number | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateContactMinAggregateOutputType = {
+    id: number | null
+    serviceName: string | null
+    district: string | null
+    subDistrict: string | null
+    block: string | null
+    name: string | null
+    designation: string | null
+    contact: string | null
+    email: string | null
+    applicationType: string | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateContactMaxAggregateOutputType = {
+    id: number | null
+    serviceName: string | null
+    district: string | null
+    subDistrict: string | null
+    block: string | null
+    name: string | null
+    designation: string | null
+    contact: string | null
+    email: string | null
+    applicationType: string | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateContactCountAggregateOutputType = {
+    id: number
+    serviceName: number
+    district: number
+    subDistrict: number
+    block: number
+    name: number
+    designation: number
+    contact: number
+    email: number
+    applicationType: number
+    certificateServiceId: number
+    _all: number
+  }
+
+
+  export type CertificateContactAvgAggregateInputType = {
+    id?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateContactSumAggregateInputType = {
+    id?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateContactMinAggregateInputType = {
+    id?: true
+    serviceName?: true
+    district?: true
+    subDistrict?: true
+    block?: true
+    name?: true
+    designation?: true
+    contact?: true
+    email?: true
+    applicationType?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateContactMaxAggregateInputType = {
+    id?: true
+    serviceName?: true
+    district?: true
+    subDistrict?: true
+    block?: true
+    name?: true
+    designation?: true
+    contact?: true
+    email?: true
+    applicationType?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateContactCountAggregateInputType = {
+    id?: true
+    serviceName?: true
+    district?: true
+    subDistrict?: true
+    block?: true
+    name?: true
+    designation?: true
+    contact?: true
+    email?: true
+    applicationType?: true
+    certificateServiceId?: true
+    _all?: true
+  }
+
+  export type CertificateContactAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CertificateContact to aggregate.
+     */
+    where?: CertificateContactWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateContacts to fetch.
+     */
+    orderBy?: CertificateContactOrderByWithRelationInput | CertificateContactOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CertificateContactWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateContacts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateContacts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CertificateContacts
+    **/
+    _count?: true | CertificateContactCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CertificateContactAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CertificateContactSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CertificateContactMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CertificateContactMaxAggregateInputType
+  }
+
+  export type GetCertificateContactAggregateType<T extends CertificateContactAggregateArgs> = {
+        [P in keyof T & keyof AggregateCertificateContact]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCertificateContact[P]>
+      : GetScalarType<T[P], AggregateCertificateContact[P]>
+  }
+
+
+
+
+  export type CertificateContactGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateContactWhereInput
+    orderBy?: CertificateContactOrderByWithAggregationInput | CertificateContactOrderByWithAggregationInput[]
+    by: CertificateContactScalarFieldEnum[] | CertificateContactScalarFieldEnum
+    having?: CertificateContactScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CertificateContactCountAggregateInputType | true
+    _avg?: CertificateContactAvgAggregateInputType
+    _sum?: CertificateContactSumAggregateInputType
+    _min?: CertificateContactMinAggregateInputType
+    _max?: CertificateContactMaxAggregateInputType
+  }
+
+  export type CertificateContactGroupByOutputType = {
+    id: number
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
+    name: string
+    designation: string
+    contact: string
+    email: string
+    applicationType: string
+    certificateServiceId: number
+    _count: CertificateContactCountAggregateOutputType | null
+    _avg: CertificateContactAvgAggregateOutputType | null
+    _sum: CertificateContactSumAggregateOutputType | null
+    _min: CertificateContactMinAggregateOutputType | null
+    _max: CertificateContactMaxAggregateOutputType | null
+  }
+
+  type GetCertificateContactGroupByPayload<T extends CertificateContactGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CertificateContactGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CertificateContactGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CertificateContactGroupByOutputType[P]>
+            : GetScalarType<T[P], CertificateContactGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CertificateContactSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    serviceName?: boolean
+    district?: boolean
+    subDistrict?: boolean
+    block?: boolean
+    name?: boolean
+    designation?: boolean
+    contact?: boolean
+    email?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateContact"]>
+
+  export type CertificateContactSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    serviceName?: boolean
+    district?: boolean
+    subDistrict?: boolean
+    block?: boolean
+    name?: boolean
+    designation?: boolean
+    contact?: boolean
+    email?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateContact"]>
+
+  export type CertificateContactSelectScalar = {
+    id?: boolean
+    serviceName?: boolean
+    district?: boolean
+    subDistrict?: boolean
+    block?: boolean
+    name?: boolean
+    designation?: boolean
+    contact?: boolean
+    email?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+  }
+
+  export type CertificateContactInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }
+  export type CertificateContactIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }
+
+  export type $CertificateContactPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CertificateContact"
+    objects: {
+      certificateService: Prisma.$CertificateServicePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      serviceName: string
+      district: string
+      subDistrict: string
+      block: string
+      name: string
+      designation: string
+      contact: string
+      email: string
+      applicationType: string
+      certificateServiceId: number
+    }, ExtArgs["result"]["certificateContact"]>
+    composites: {}
+  }
+
+  type CertificateContactGetPayload<S extends boolean | null | undefined | CertificateContactDefaultArgs> = $Result.GetResult<Prisma.$CertificateContactPayload, S>
+
+  type CertificateContactCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CertificateContactFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CertificateContactCountAggregateInputType | true
+    }
+
+  export interface CertificateContactDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CertificateContact'], meta: { name: 'CertificateContact' } }
+    /**
+     * Find zero or one CertificateContact that matches the filter.
+     * @param {CertificateContactFindUniqueArgs} args - Arguments to find a CertificateContact
+     * @example
+     * // Get one CertificateContact
+     * const certificateContact = await prisma.certificateContact.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CertificateContactFindUniqueArgs>(args: SelectSubset<T, CertificateContactFindUniqueArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CertificateContact that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CertificateContactFindUniqueOrThrowArgs} args - Arguments to find a CertificateContact
+     * @example
+     * // Get one CertificateContact
+     * const certificateContact = await prisma.certificateContact.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CertificateContactFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateContactFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CertificateContact that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateContactFindFirstArgs} args - Arguments to find a CertificateContact
+     * @example
+     * // Get one CertificateContact
+     * const certificateContact = await prisma.certificateContact.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CertificateContactFindFirstArgs>(args?: SelectSubset<T, CertificateContactFindFirstArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CertificateContact that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateContactFindFirstOrThrowArgs} args - Arguments to find a CertificateContact
+     * @example
+     * // Get one CertificateContact
+     * const certificateContact = await prisma.certificateContact.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CertificateContactFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateContactFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CertificateContacts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateContactFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CertificateContacts
+     * const certificateContacts = await prisma.certificateContact.findMany()
+     * 
+     * // Get first 10 CertificateContacts
+     * const certificateContacts = await prisma.certificateContact.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const certificateContactWithIdOnly = await prisma.certificateContact.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CertificateContactFindManyArgs>(args?: SelectSubset<T, CertificateContactFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CertificateContact.
+     * @param {CertificateContactCreateArgs} args - Arguments to create a CertificateContact.
+     * @example
+     * // Create one CertificateContact
+     * const CertificateContact = await prisma.certificateContact.create({
+     *   data: {
+     *     // ... data to create a CertificateContact
+     *   }
+     * })
+     * 
+     */
+    create<T extends CertificateContactCreateArgs>(args: SelectSubset<T, CertificateContactCreateArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CertificateContacts.
+     * @param {CertificateContactCreateManyArgs} args - Arguments to create many CertificateContacts.
+     * @example
+     * // Create many CertificateContacts
+     * const certificateContact = await prisma.certificateContact.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CertificateContactCreateManyArgs>(args?: SelectSubset<T, CertificateContactCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CertificateContacts and returns the data saved in the database.
+     * @param {CertificateContactCreateManyAndReturnArgs} args - Arguments to create many CertificateContacts.
+     * @example
+     * // Create many CertificateContacts
+     * const certificateContact = await prisma.certificateContact.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CertificateContacts and only return the `id`
+     * const certificateContactWithIdOnly = await prisma.certificateContact.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CertificateContactCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateContactCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CertificateContact.
+     * @param {CertificateContactDeleteArgs} args - Arguments to delete one CertificateContact.
+     * @example
+     * // Delete one CertificateContact
+     * const CertificateContact = await prisma.certificateContact.delete({
+     *   where: {
+     *     // ... filter to delete one CertificateContact
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CertificateContactDeleteArgs>(args: SelectSubset<T, CertificateContactDeleteArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CertificateContact.
+     * @param {CertificateContactUpdateArgs} args - Arguments to update one CertificateContact.
+     * @example
+     * // Update one CertificateContact
+     * const certificateContact = await prisma.certificateContact.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CertificateContactUpdateArgs>(args: SelectSubset<T, CertificateContactUpdateArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CertificateContacts.
+     * @param {CertificateContactDeleteManyArgs} args - Arguments to filter CertificateContacts to delete.
+     * @example
+     * // Delete a few CertificateContacts
+     * const { count } = await prisma.certificateContact.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CertificateContactDeleteManyArgs>(args?: SelectSubset<T, CertificateContactDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CertificateContacts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateContactUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CertificateContacts
+     * const certificateContact = await prisma.certificateContact.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CertificateContactUpdateManyArgs>(args: SelectSubset<T, CertificateContactUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CertificateContact.
+     * @param {CertificateContactUpsertArgs} args - Arguments to update or create a CertificateContact.
+     * @example
+     * // Update or create a CertificateContact
+     * const certificateContact = await prisma.certificateContact.upsert({
+     *   create: {
+     *     // ... data to create a CertificateContact
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CertificateContact we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CertificateContactUpsertArgs>(args: SelectSubset<T, CertificateContactUpsertArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CertificateContacts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateContactCountArgs} args - Arguments to filter CertificateContacts to count.
+     * @example
+     * // Count the number of CertificateContacts
+     * const count = await prisma.certificateContact.count({
+     *   where: {
+     *     // ... the filter for the CertificateContacts we want to count
+     *   }
+     * })
+    **/
+    count<T extends CertificateContactCountArgs>(
+      args?: Subset<T, CertificateContactCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CertificateContactCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CertificateContact.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateContactAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CertificateContactAggregateArgs>(args: Subset<T, CertificateContactAggregateArgs>): Prisma.PrismaPromise<GetCertificateContactAggregateType<T>>
+
+    /**
+     * Group by CertificateContact.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateContactGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CertificateContactGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CertificateContactGroupByArgs['orderBy'] }
+        : { orderBy?: CertificateContactGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CertificateContactGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCertificateContactGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CertificateContact model
+   */
+  readonly fields: CertificateContactFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CertificateContact.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CertificateContactClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    certificateService<T extends CertificateServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateServiceDefaultArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CertificateContact model
+   */ 
+  interface CertificateContactFieldRefs {
+    readonly id: FieldRef<"CertificateContact", 'Int'>
+    readonly serviceName: FieldRef<"CertificateContact", 'String'>
+    readonly district: FieldRef<"CertificateContact", 'String'>
+    readonly subDistrict: FieldRef<"CertificateContact", 'String'>
+    readonly block: FieldRef<"CertificateContact", 'String'>
+    readonly name: FieldRef<"CertificateContact", 'String'>
+    readonly designation: FieldRef<"CertificateContact", 'String'>
+    readonly contact: FieldRef<"CertificateContact", 'String'>
+    readonly email: FieldRef<"CertificateContact", 'String'>
+    readonly applicationType: FieldRef<"CertificateContact", 'String'>
+    readonly certificateServiceId: FieldRef<"CertificateContact", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CertificateContact findUnique
+   */
+  export type CertificateContactFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateContact
+     */
+    select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateContactInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateContact to fetch.
+     */
+    where: CertificateContactWhereUniqueInput
+  }
+
+  /**
+   * CertificateContact findUniqueOrThrow
+   */
+  export type CertificateContactFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateContact
+     */
+    select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateContactInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateContact to fetch.
+     */
+    where: CertificateContactWhereUniqueInput
+  }
+
+  /**
+   * CertificateContact findFirst
+   */
+  export type CertificateContactFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateContact
+     */
+    select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateContactInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateContact to fetch.
+     */
+    where?: CertificateContactWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateContacts to fetch.
+     */
+    orderBy?: CertificateContactOrderByWithRelationInput | CertificateContactOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CertificateContacts.
+     */
+    cursor?: CertificateContactWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateContacts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateContacts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CertificateContacts.
+     */
+    distinct?: CertificateContactScalarFieldEnum | CertificateContactScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateContact findFirstOrThrow
+   */
+  export type CertificateContactFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateContact
+     */
+    select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateContactInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateContact to fetch.
+     */
+    where?: CertificateContactWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateContacts to fetch.
+     */
+    orderBy?: CertificateContactOrderByWithRelationInput | CertificateContactOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CertificateContacts.
+     */
+    cursor?: CertificateContactWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateContacts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateContacts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CertificateContacts.
+     */
+    distinct?: CertificateContactScalarFieldEnum | CertificateContactScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateContact findMany
+   */
+  export type CertificateContactFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateContact
+     */
+    select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateContactInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateContacts to fetch.
+     */
+    where?: CertificateContactWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateContacts to fetch.
+     */
+    orderBy?: CertificateContactOrderByWithRelationInput | CertificateContactOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CertificateContacts.
+     */
+    cursor?: CertificateContactWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateContacts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateContacts.
+     */
+    skip?: number
+    distinct?: CertificateContactScalarFieldEnum | CertificateContactScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateContact create
+   */
+  export type CertificateContactCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateContact
+     */
+    select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateContactInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CertificateContact.
+     */
+    data: XOR<CertificateContactCreateInput, CertificateContactUncheckedCreateInput>
+  }
+
+  /**
+   * CertificateContact createMany
+   */
+  export type CertificateContactCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CertificateContacts.
+     */
+    data: CertificateContactCreateManyInput | CertificateContactCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CertificateContact createManyAndReturn
+   */
+  export type CertificateContactCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateContact
+     */
+    select?: CertificateContactSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CertificateContacts.
+     */
+    data: CertificateContactCreateManyInput | CertificateContactCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateContactIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CertificateContact update
+   */
+  export type CertificateContactUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateContact
+     */
+    select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateContactInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CertificateContact.
+     */
+    data: XOR<CertificateContactUpdateInput, CertificateContactUncheckedUpdateInput>
+    /**
+     * Choose, which CertificateContact to update.
+     */
+    where: CertificateContactWhereUniqueInput
+  }
+
+  /**
+   * CertificateContact updateMany
+   */
+  export type CertificateContactUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CertificateContacts.
+     */
+    data: XOR<CertificateContactUpdateManyMutationInput, CertificateContactUncheckedUpdateManyInput>
+    /**
+     * Filter which CertificateContacts to update
+     */
+    where?: CertificateContactWhereInput
+  }
+
+  /**
+   * CertificateContact upsert
+   */
+  export type CertificateContactUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateContact
+     */
+    select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateContactInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CertificateContact to update in case it exists.
+     */
+    where: CertificateContactWhereUniqueInput
+    /**
+     * In case the CertificateContact found by the `where` argument doesn't exist, create a new CertificateContact with this data.
+     */
+    create: XOR<CertificateContactCreateInput, CertificateContactUncheckedCreateInput>
+    /**
+     * In case the CertificateContact was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CertificateContactUpdateInput, CertificateContactUncheckedUpdateInput>
+  }
+
+  /**
+   * CertificateContact delete
+   */
+  export type CertificateContactDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateContact
+     */
+    select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateContactInclude<ExtArgs> | null
+    /**
+     * Filter which CertificateContact to delete.
+     */
+    where: CertificateContactWhereUniqueInput
+  }
+
+  /**
+   * CertificateContact deleteMany
+   */
+  export type CertificateContactDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CertificateContacts to delete
+     */
+    where?: CertificateContactWhereInput
+  }
+
+  /**
+   * CertificateContact without action
+   */
+  export type CertificateContactDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateContact
+     */
+    select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateContactInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CertificateDocument
+   */
+
+  export type AggregateCertificateDocument = {
+    _count: CertificateDocumentCountAggregateOutputType | null
+    _avg: CertificateDocumentAvgAggregateOutputType | null
+    _sum: CertificateDocumentSumAggregateOutputType | null
+    _min: CertificateDocumentMinAggregateOutputType | null
+    _max: CertificateDocumentMaxAggregateOutputType | null
+  }
+
+  export type CertificateDocumentAvgAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateDocumentSumAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateDocumentMinAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    documentType: string | null
+    validProof: string | null
+    isRequired: boolean | null
+    applicationType: string | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateDocumentMaxAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    documentType: string | null
+    validProof: string | null
+    isRequired: boolean | null
+    applicationType: string | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateDocumentCountAggregateOutputType = {
+    id: number
+    slNo: number
+    documentType: number
+    validProof: number
+    isRequired: number
+    applicationType: number
+    certificateServiceId: number
+    _all: number
+  }
+
+
+  export type CertificateDocumentAvgAggregateInputType = {
+    id?: true
+    slNo?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateDocumentSumAggregateInputType = {
+    id?: true
+    slNo?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateDocumentMinAggregateInputType = {
+    id?: true
+    slNo?: true
+    documentType?: true
+    validProof?: true
+    isRequired?: true
+    applicationType?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateDocumentMaxAggregateInputType = {
+    id?: true
+    slNo?: true
+    documentType?: true
+    validProof?: true
+    isRequired?: true
+    applicationType?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateDocumentCountAggregateInputType = {
+    id?: true
+    slNo?: true
+    documentType?: true
+    validProof?: true
+    isRequired?: true
+    applicationType?: true
+    certificateServiceId?: true
+    _all?: true
+  }
+
+  export type CertificateDocumentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CertificateDocument to aggregate.
+     */
+    where?: CertificateDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateDocuments to fetch.
+     */
+    orderBy?: CertificateDocumentOrderByWithRelationInput | CertificateDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CertificateDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CertificateDocuments
+    **/
+    _count?: true | CertificateDocumentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CertificateDocumentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CertificateDocumentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CertificateDocumentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CertificateDocumentMaxAggregateInputType
+  }
+
+  export type GetCertificateDocumentAggregateType<T extends CertificateDocumentAggregateArgs> = {
+        [P in keyof T & keyof AggregateCertificateDocument]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCertificateDocument[P]>
+      : GetScalarType<T[P], AggregateCertificateDocument[P]>
+  }
+
+
+
+
+  export type CertificateDocumentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateDocumentWhereInput
+    orderBy?: CertificateDocumentOrderByWithAggregationInput | CertificateDocumentOrderByWithAggregationInput[]
+    by: CertificateDocumentScalarFieldEnum[] | CertificateDocumentScalarFieldEnum
+    having?: CertificateDocumentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CertificateDocumentCountAggregateInputType | true
+    _avg?: CertificateDocumentAvgAggregateInputType
+    _sum?: CertificateDocumentSumAggregateInputType
+    _min?: CertificateDocumentMinAggregateInputType
+    _max?: CertificateDocumentMaxAggregateInputType
+  }
+
+  export type CertificateDocumentGroupByOutputType = {
+    id: number
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired: boolean
+    applicationType: string
+    certificateServiceId: number
+    _count: CertificateDocumentCountAggregateOutputType | null
+    _avg: CertificateDocumentAvgAggregateOutputType | null
+    _sum: CertificateDocumentSumAggregateOutputType | null
+    _min: CertificateDocumentMinAggregateOutputType | null
+    _max: CertificateDocumentMaxAggregateOutputType | null
+  }
+
+  type GetCertificateDocumentGroupByPayload<T extends CertificateDocumentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CertificateDocumentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CertificateDocumentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CertificateDocumentGroupByOutputType[P]>
+            : GetScalarType<T[P], CertificateDocumentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CertificateDocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slNo?: boolean
+    documentType?: boolean
+    validProof?: boolean
+    isRequired?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateDocument"]>
+
+  export type CertificateDocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slNo?: boolean
+    documentType?: boolean
+    validProof?: boolean
+    isRequired?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateDocument"]>
+
+  export type CertificateDocumentSelectScalar = {
+    id?: boolean
+    slNo?: boolean
+    documentType?: boolean
+    validProof?: boolean
+    isRequired?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+  }
+
+  export type CertificateDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }
+  export type CertificateDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }
+
+  export type $CertificateDocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CertificateDocument"
+    objects: {
+      certificateService: Prisma.$CertificateServicePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      slNo: number
+      documentType: string
+      validProof: string
+      isRequired: boolean
+      applicationType: string
+      certificateServiceId: number
+    }, ExtArgs["result"]["certificateDocument"]>
+    composites: {}
+  }
+
+  type CertificateDocumentGetPayload<S extends boolean | null | undefined | CertificateDocumentDefaultArgs> = $Result.GetResult<Prisma.$CertificateDocumentPayload, S>
+
+  type CertificateDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CertificateDocumentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CertificateDocumentCountAggregateInputType | true
+    }
+
+  export interface CertificateDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CertificateDocument'], meta: { name: 'CertificateDocument' } }
+    /**
+     * Find zero or one CertificateDocument that matches the filter.
+     * @param {CertificateDocumentFindUniqueArgs} args - Arguments to find a CertificateDocument
+     * @example
+     * // Get one CertificateDocument
+     * const certificateDocument = await prisma.certificateDocument.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CertificateDocumentFindUniqueArgs>(args: SelectSubset<T, CertificateDocumentFindUniqueArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CertificateDocument that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CertificateDocumentFindUniqueOrThrowArgs} args - Arguments to find a CertificateDocument
+     * @example
+     * // Get one CertificateDocument
+     * const certificateDocument = await prisma.certificateDocument.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CertificateDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CertificateDocument that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateDocumentFindFirstArgs} args - Arguments to find a CertificateDocument
+     * @example
+     * // Get one CertificateDocument
+     * const certificateDocument = await prisma.certificateDocument.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CertificateDocumentFindFirstArgs>(args?: SelectSubset<T, CertificateDocumentFindFirstArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CertificateDocument that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateDocumentFindFirstOrThrowArgs} args - Arguments to find a CertificateDocument
+     * @example
+     * // Get one CertificateDocument
+     * const certificateDocument = await prisma.certificateDocument.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CertificateDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CertificateDocuments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateDocumentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CertificateDocuments
+     * const certificateDocuments = await prisma.certificateDocument.findMany()
+     * 
+     * // Get first 10 CertificateDocuments
+     * const certificateDocuments = await prisma.certificateDocument.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const certificateDocumentWithIdOnly = await prisma.certificateDocument.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CertificateDocumentFindManyArgs>(args?: SelectSubset<T, CertificateDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CertificateDocument.
+     * @param {CertificateDocumentCreateArgs} args - Arguments to create a CertificateDocument.
+     * @example
+     * // Create one CertificateDocument
+     * const CertificateDocument = await prisma.certificateDocument.create({
+     *   data: {
+     *     // ... data to create a CertificateDocument
+     *   }
+     * })
+     * 
+     */
+    create<T extends CertificateDocumentCreateArgs>(args: SelectSubset<T, CertificateDocumentCreateArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CertificateDocuments.
+     * @param {CertificateDocumentCreateManyArgs} args - Arguments to create many CertificateDocuments.
+     * @example
+     * // Create many CertificateDocuments
+     * const certificateDocument = await prisma.certificateDocument.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CertificateDocumentCreateManyArgs>(args?: SelectSubset<T, CertificateDocumentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CertificateDocuments and returns the data saved in the database.
+     * @param {CertificateDocumentCreateManyAndReturnArgs} args - Arguments to create many CertificateDocuments.
+     * @example
+     * // Create many CertificateDocuments
+     * const certificateDocument = await prisma.certificateDocument.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CertificateDocuments and only return the `id`
+     * const certificateDocumentWithIdOnly = await prisma.certificateDocument.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CertificateDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CertificateDocument.
+     * @param {CertificateDocumentDeleteArgs} args - Arguments to delete one CertificateDocument.
+     * @example
+     * // Delete one CertificateDocument
+     * const CertificateDocument = await prisma.certificateDocument.delete({
+     *   where: {
+     *     // ... filter to delete one CertificateDocument
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CertificateDocumentDeleteArgs>(args: SelectSubset<T, CertificateDocumentDeleteArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CertificateDocument.
+     * @param {CertificateDocumentUpdateArgs} args - Arguments to update one CertificateDocument.
+     * @example
+     * // Update one CertificateDocument
+     * const certificateDocument = await prisma.certificateDocument.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CertificateDocumentUpdateArgs>(args: SelectSubset<T, CertificateDocumentUpdateArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CertificateDocuments.
+     * @param {CertificateDocumentDeleteManyArgs} args - Arguments to filter CertificateDocuments to delete.
+     * @example
+     * // Delete a few CertificateDocuments
+     * const { count } = await prisma.certificateDocument.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CertificateDocumentDeleteManyArgs>(args?: SelectSubset<T, CertificateDocumentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CertificateDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateDocumentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CertificateDocuments
+     * const certificateDocument = await prisma.certificateDocument.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CertificateDocumentUpdateManyArgs>(args: SelectSubset<T, CertificateDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CertificateDocument.
+     * @param {CertificateDocumentUpsertArgs} args - Arguments to update or create a CertificateDocument.
+     * @example
+     * // Update or create a CertificateDocument
+     * const certificateDocument = await prisma.certificateDocument.upsert({
+     *   create: {
+     *     // ... data to create a CertificateDocument
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CertificateDocument we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CertificateDocumentUpsertArgs>(args: SelectSubset<T, CertificateDocumentUpsertArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CertificateDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateDocumentCountArgs} args - Arguments to filter CertificateDocuments to count.
+     * @example
+     * // Count the number of CertificateDocuments
+     * const count = await prisma.certificateDocument.count({
+     *   where: {
+     *     // ... the filter for the CertificateDocuments we want to count
+     *   }
+     * })
+    **/
+    count<T extends CertificateDocumentCountArgs>(
+      args?: Subset<T, CertificateDocumentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CertificateDocumentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CertificateDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateDocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CertificateDocumentAggregateArgs>(args: Subset<T, CertificateDocumentAggregateArgs>): Prisma.PrismaPromise<GetCertificateDocumentAggregateType<T>>
+
+    /**
+     * Group by CertificateDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateDocumentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CertificateDocumentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CertificateDocumentGroupByArgs['orderBy'] }
+        : { orderBy?: CertificateDocumentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CertificateDocumentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCertificateDocumentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CertificateDocument model
+   */
+  readonly fields: CertificateDocumentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CertificateDocument.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CertificateDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    certificateService<T extends CertificateServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateServiceDefaultArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CertificateDocument model
+   */ 
+  interface CertificateDocumentFieldRefs {
+    readonly id: FieldRef<"CertificateDocument", 'Int'>
+    readonly slNo: FieldRef<"CertificateDocument", 'Int'>
+    readonly documentType: FieldRef<"CertificateDocument", 'String'>
+    readonly validProof: FieldRef<"CertificateDocument", 'String'>
+    readonly isRequired: FieldRef<"CertificateDocument", 'Boolean'>
+    readonly applicationType: FieldRef<"CertificateDocument", 'String'>
+    readonly certificateServiceId: FieldRef<"CertificateDocument", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CertificateDocument findUnique
+   */
+  export type CertificateDocumentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateDocument
+     */
+    select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateDocument to fetch.
+     */
+    where: CertificateDocumentWhereUniqueInput
+  }
+
+  /**
+   * CertificateDocument findUniqueOrThrow
+   */
+  export type CertificateDocumentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateDocument
+     */
+    select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateDocument to fetch.
+     */
+    where: CertificateDocumentWhereUniqueInput
+  }
+
+  /**
+   * CertificateDocument findFirst
+   */
+  export type CertificateDocumentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateDocument
+     */
+    select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateDocument to fetch.
+     */
+    where?: CertificateDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateDocuments to fetch.
+     */
+    orderBy?: CertificateDocumentOrderByWithRelationInput | CertificateDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CertificateDocuments.
+     */
+    cursor?: CertificateDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CertificateDocuments.
+     */
+    distinct?: CertificateDocumentScalarFieldEnum | CertificateDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateDocument findFirstOrThrow
+   */
+  export type CertificateDocumentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateDocument
+     */
+    select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateDocument to fetch.
+     */
+    where?: CertificateDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateDocuments to fetch.
+     */
+    orderBy?: CertificateDocumentOrderByWithRelationInput | CertificateDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CertificateDocuments.
+     */
+    cursor?: CertificateDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CertificateDocuments.
+     */
+    distinct?: CertificateDocumentScalarFieldEnum | CertificateDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateDocument findMany
+   */
+  export type CertificateDocumentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateDocument
+     */
+    select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateDocuments to fetch.
+     */
+    where?: CertificateDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateDocuments to fetch.
+     */
+    orderBy?: CertificateDocumentOrderByWithRelationInput | CertificateDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CertificateDocuments.
+     */
+    cursor?: CertificateDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateDocuments.
+     */
+    skip?: number
+    distinct?: CertificateDocumentScalarFieldEnum | CertificateDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateDocument create
+   */
+  export type CertificateDocumentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateDocument
+     */
+    select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CertificateDocument.
+     */
+    data: XOR<CertificateDocumentCreateInput, CertificateDocumentUncheckedCreateInput>
+  }
+
+  /**
+   * CertificateDocument createMany
+   */
+  export type CertificateDocumentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CertificateDocuments.
+     */
+    data: CertificateDocumentCreateManyInput | CertificateDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CertificateDocument createManyAndReturn
+   */
+  export type CertificateDocumentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateDocument
+     */
+    select?: CertificateDocumentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CertificateDocuments.
+     */
+    data: CertificateDocumentCreateManyInput | CertificateDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateDocumentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CertificateDocument update
+   */
+  export type CertificateDocumentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateDocument
+     */
+    select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CertificateDocument.
+     */
+    data: XOR<CertificateDocumentUpdateInput, CertificateDocumentUncheckedUpdateInput>
+    /**
+     * Choose, which CertificateDocument to update.
+     */
+    where: CertificateDocumentWhereUniqueInput
+  }
+
+  /**
+   * CertificateDocument updateMany
+   */
+  export type CertificateDocumentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CertificateDocuments.
+     */
+    data: XOR<CertificateDocumentUpdateManyMutationInput, CertificateDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which CertificateDocuments to update
+     */
+    where?: CertificateDocumentWhereInput
+  }
+
+  /**
+   * CertificateDocument upsert
+   */
+  export type CertificateDocumentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateDocument
+     */
+    select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateDocumentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CertificateDocument to update in case it exists.
+     */
+    where: CertificateDocumentWhereUniqueInput
+    /**
+     * In case the CertificateDocument found by the `where` argument doesn't exist, create a new CertificateDocument with this data.
+     */
+    create: XOR<CertificateDocumentCreateInput, CertificateDocumentUncheckedCreateInput>
+    /**
+     * In case the CertificateDocument was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CertificateDocumentUpdateInput, CertificateDocumentUncheckedUpdateInput>
+  }
+
+  /**
+   * CertificateDocument delete
+   */
+  export type CertificateDocumentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateDocument
+     */
+    select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateDocumentInclude<ExtArgs> | null
+    /**
+     * Filter which CertificateDocument to delete.
+     */
+    where: CertificateDocumentWhereUniqueInput
+  }
+
+  /**
+   * CertificateDocument deleteMany
+   */
+  export type CertificateDocumentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CertificateDocuments to delete
+     */
+    where?: CertificateDocumentWhereInput
+  }
+
+  /**
+   * CertificateDocument without action
+   */
+  export type CertificateDocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateDocument
+     */
+    select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateDocumentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CertificateProcessStep
+   */
+
+  export type AggregateCertificateProcessStep = {
+    _count: CertificateProcessStepCountAggregateOutputType | null
+    _avg: CertificateProcessStepAvgAggregateOutputType | null
+    _sum: CertificateProcessStepSumAggregateOutputType | null
+    _min: CertificateProcessStepMinAggregateOutputType | null
+    _max: CertificateProcessStepMaxAggregateOutputType | null
+  }
+
+  export type CertificateProcessStepAvgAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateProcessStepSumAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateProcessStepMinAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    stepDetails: string | null
+    applicationType: string | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateProcessStepMaxAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    stepDetails: string | null
+    applicationType: string | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateProcessStepCountAggregateOutputType = {
+    id: number
+    slNo: number
+    stepDetails: number
+    applicationType: number
+    certificateServiceId: number
+    _all: number
+  }
+
+
+  export type CertificateProcessStepAvgAggregateInputType = {
+    id?: true
+    slNo?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateProcessStepSumAggregateInputType = {
+    id?: true
+    slNo?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateProcessStepMinAggregateInputType = {
+    id?: true
+    slNo?: true
+    stepDetails?: true
+    applicationType?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateProcessStepMaxAggregateInputType = {
+    id?: true
+    slNo?: true
+    stepDetails?: true
+    applicationType?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateProcessStepCountAggregateInputType = {
+    id?: true
+    slNo?: true
+    stepDetails?: true
+    applicationType?: true
+    certificateServiceId?: true
+    _all?: true
+  }
+
+  export type CertificateProcessStepAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CertificateProcessStep to aggregate.
+     */
+    where?: CertificateProcessStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateProcessSteps to fetch.
+     */
+    orderBy?: CertificateProcessStepOrderByWithRelationInput | CertificateProcessStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CertificateProcessStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateProcessSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateProcessSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CertificateProcessSteps
+    **/
+    _count?: true | CertificateProcessStepCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CertificateProcessStepAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CertificateProcessStepSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CertificateProcessStepMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CertificateProcessStepMaxAggregateInputType
+  }
+
+  export type GetCertificateProcessStepAggregateType<T extends CertificateProcessStepAggregateArgs> = {
+        [P in keyof T & keyof AggregateCertificateProcessStep]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCertificateProcessStep[P]>
+      : GetScalarType<T[P], AggregateCertificateProcessStep[P]>
+  }
+
+
+
+
+  export type CertificateProcessStepGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateProcessStepWhereInput
+    orderBy?: CertificateProcessStepOrderByWithAggregationInput | CertificateProcessStepOrderByWithAggregationInput[]
+    by: CertificateProcessStepScalarFieldEnum[] | CertificateProcessStepScalarFieldEnum
+    having?: CertificateProcessStepScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CertificateProcessStepCountAggregateInputType | true
+    _avg?: CertificateProcessStepAvgAggregateInputType
+    _sum?: CertificateProcessStepSumAggregateInputType
+    _min?: CertificateProcessStepMinAggregateInputType
+    _max?: CertificateProcessStepMaxAggregateInputType
+  }
+
+  export type CertificateProcessStepGroupByOutputType = {
+    id: number
+    slNo: number
+    stepDetails: string
+    applicationType: string
+    certificateServiceId: number
+    _count: CertificateProcessStepCountAggregateOutputType | null
+    _avg: CertificateProcessStepAvgAggregateOutputType | null
+    _sum: CertificateProcessStepSumAggregateOutputType | null
+    _min: CertificateProcessStepMinAggregateOutputType | null
+    _max: CertificateProcessStepMaxAggregateOutputType | null
+  }
+
+  type GetCertificateProcessStepGroupByPayload<T extends CertificateProcessStepGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CertificateProcessStepGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CertificateProcessStepGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CertificateProcessStepGroupByOutputType[P]>
+            : GetScalarType<T[P], CertificateProcessStepGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CertificateProcessStepSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slNo?: boolean
+    stepDetails?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateProcessStep"]>
+
+  export type CertificateProcessStepSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slNo?: boolean
+    stepDetails?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateProcessStep"]>
+
+  export type CertificateProcessStepSelectScalar = {
+    id?: boolean
+    slNo?: boolean
+    stepDetails?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+  }
+
+  export type CertificateProcessStepInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }
+  export type CertificateProcessStepIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }
+
+  export type $CertificateProcessStepPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CertificateProcessStep"
+    objects: {
+      certificateService: Prisma.$CertificateServicePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      slNo: number
+      stepDetails: string
+      applicationType: string
+      certificateServiceId: number
+    }, ExtArgs["result"]["certificateProcessStep"]>
+    composites: {}
+  }
+
+  type CertificateProcessStepGetPayload<S extends boolean | null | undefined | CertificateProcessStepDefaultArgs> = $Result.GetResult<Prisma.$CertificateProcessStepPayload, S>
+
+  type CertificateProcessStepCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CertificateProcessStepFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CertificateProcessStepCountAggregateInputType | true
+    }
+
+  export interface CertificateProcessStepDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CertificateProcessStep'], meta: { name: 'CertificateProcessStep' } }
+    /**
+     * Find zero or one CertificateProcessStep that matches the filter.
+     * @param {CertificateProcessStepFindUniqueArgs} args - Arguments to find a CertificateProcessStep
+     * @example
+     * // Get one CertificateProcessStep
+     * const certificateProcessStep = await prisma.certificateProcessStep.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CertificateProcessStepFindUniqueArgs>(args: SelectSubset<T, CertificateProcessStepFindUniqueArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CertificateProcessStep that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CertificateProcessStepFindUniqueOrThrowArgs} args - Arguments to find a CertificateProcessStep
+     * @example
+     * // Get one CertificateProcessStep
+     * const certificateProcessStep = await prisma.certificateProcessStep.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CertificateProcessStepFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateProcessStepFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CertificateProcessStep that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateProcessStepFindFirstArgs} args - Arguments to find a CertificateProcessStep
+     * @example
+     * // Get one CertificateProcessStep
+     * const certificateProcessStep = await prisma.certificateProcessStep.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CertificateProcessStepFindFirstArgs>(args?: SelectSubset<T, CertificateProcessStepFindFirstArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CertificateProcessStep that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateProcessStepFindFirstOrThrowArgs} args - Arguments to find a CertificateProcessStep
+     * @example
+     * // Get one CertificateProcessStep
+     * const certificateProcessStep = await prisma.certificateProcessStep.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CertificateProcessStepFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateProcessStepFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CertificateProcessSteps that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateProcessStepFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CertificateProcessSteps
+     * const certificateProcessSteps = await prisma.certificateProcessStep.findMany()
+     * 
+     * // Get first 10 CertificateProcessSteps
+     * const certificateProcessSteps = await prisma.certificateProcessStep.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const certificateProcessStepWithIdOnly = await prisma.certificateProcessStep.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CertificateProcessStepFindManyArgs>(args?: SelectSubset<T, CertificateProcessStepFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CertificateProcessStep.
+     * @param {CertificateProcessStepCreateArgs} args - Arguments to create a CertificateProcessStep.
+     * @example
+     * // Create one CertificateProcessStep
+     * const CertificateProcessStep = await prisma.certificateProcessStep.create({
+     *   data: {
+     *     // ... data to create a CertificateProcessStep
+     *   }
+     * })
+     * 
+     */
+    create<T extends CertificateProcessStepCreateArgs>(args: SelectSubset<T, CertificateProcessStepCreateArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CertificateProcessSteps.
+     * @param {CertificateProcessStepCreateManyArgs} args - Arguments to create many CertificateProcessSteps.
+     * @example
+     * // Create many CertificateProcessSteps
+     * const certificateProcessStep = await prisma.certificateProcessStep.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CertificateProcessStepCreateManyArgs>(args?: SelectSubset<T, CertificateProcessStepCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CertificateProcessSteps and returns the data saved in the database.
+     * @param {CertificateProcessStepCreateManyAndReturnArgs} args - Arguments to create many CertificateProcessSteps.
+     * @example
+     * // Create many CertificateProcessSteps
+     * const certificateProcessStep = await prisma.certificateProcessStep.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CertificateProcessSteps and only return the `id`
+     * const certificateProcessStepWithIdOnly = await prisma.certificateProcessStep.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CertificateProcessStepCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateProcessStepCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CertificateProcessStep.
+     * @param {CertificateProcessStepDeleteArgs} args - Arguments to delete one CertificateProcessStep.
+     * @example
+     * // Delete one CertificateProcessStep
+     * const CertificateProcessStep = await prisma.certificateProcessStep.delete({
+     *   where: {
+     *     // ... filter to delete one CertificateProcessStep
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CertificateProcessStepDeleteArgs>(args: SelectSubset<T, CertificateProcessStepDeleteArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CertificateProcessStep.
+     * @param {CertificateProcessStepUpdateArgs} args - Arguments to update one CertificateProcessStep.
+     * @example
+     * // Update one CertificateProcessStep
+     * const certificateProcessStep = await prisma.certificateProcessStep.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CertificateProcessStepUpdateArgs>(args: SelectSubset<T, CertificateProcessStepUpdateArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CertificateProcessSteps.
+     * @param {CertificateProcessStepDeleteManyArgs} args - Arguments to filter CertificateProcessSteps to delete.
+     * @example
+     * // Delete a few CertificateProcessSteps
+     * const { count } = await prisma.certificateProcessStep.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CertificateProcessStepDeleteManyArgs>(args?: SelectSubset<T, CertificateProcessStepDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CertificateProcessSteps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateProcessStepUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CertificateProcessSteps
+     * const certificateProcessStep = await prisma.certificateProcessStep.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CertificateProcessStepUpdateManyArgs>(args: SelectSubset<T, CertificateProcessStepUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CertificateProcessStep.
+     * @param {CertificateProcessStepUpsertArgs} args - Arguments to update or create a CertificateProcessStep.
+     * @example
+     * // Update or create a CertificateProcessStep
+     * const certificateProcessStep = await prisma.certificateProcessStep.upsert({
+     *   create: {
+     *     // ... data to create a CertificateProcessStep
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CertificateProcessStep we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CertificateProcessStepUpsertArgs>(args: SelectSubset<T, CertificateProcessStepUpsertArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CertificateProcessSteps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateProcessStepCountArgs} args - Arguments to filter CertificateProcessSteps to count.
+     * @example
+     * // Count the number of CertificateProcessSteps
+     * const count = await prisma.certificateProcessStep.count({
+     *   where: {
+     *     // ... the filter for the CertificateProcessSteps we want to count
+     *   }
+     * })
+    **/
+    count<T extends CertificateProcessStepCountArgs>(
+      args?: Subset<T, CertificateProcessStepCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CertificateProcessStepCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CertificateProcessStep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateProcessStepAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CertificateProcessStepAggregateArgs>(args: Subset<T, CertificateProcessStepAggregateArgs>): Prisma.PrismaPromise<GetCertificateProcessStepAggregateType<T>>
+
+    /**
+     * Group by CertificateProcessStep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateProcessStepGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CertificateProcessStepGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CertificateProcessStepGroupByArgs['orderBy'] }
+        : { orderBy?: CertificateProcessStepGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CertificateProcessStepGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCertificateProcessStepGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CertificateProcessStep model
+   */
+  readonly fields: CertificateProcessStepFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CertificateProcessStep.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CertificateProcessStepClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    certificateService<T extends CertificateServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateServiceDefaultArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CertificateProcessStep model
+   */ 
+  interface CertificateProcessStepFieldRefs {
+    readonly id: FieldRef<"CertificateProcessStep", 'Int'>
+    readonly slNo: FieldRef<"CertificateProcessStep", 'Int'>
+    readonly stepDetails: FieldRef<"CertificateProcessStep", 'String'>
+    readonly applicationType: FieldRef<"CertificateProcessStep", 'String'>
+    readonly certificateServiceId: FieldRef<"CertificateProcessStep", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CertificateProcessStep findUnique
+   */
+  export type CertificateProcessStepFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateProcessStep
+     */
+    select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateProcessStepInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateProcessStep to fetch.
+     */
+    where: CertificateProcessStepWhereUniqueInput
+  }
+
+  /**
+   * CertificateProcessStep findUniqueOrThrow
+   */
+  export type CertificateProcessStepFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateProcessStep
+     */
+    select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateProcessStepInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateProcessStep to fetch.
+     */
+    where: CertificateProcessStepWhereUniqueInput
+  }
+
+  /**
+   * CertificateProcessStep findFirst
+   */
+  export type CertificateProcessStepFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateProcessStep
+     */
+    select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateProcessStepInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateProcessStep to fetch.
+     */
+    where?: CertificateProcessStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateProcessSteps to fetch.
+     */
+    orderBy?: CertificateProcessStepOrderByWithRelationInput | CertificateProcessStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CertificateProcessSteps.
+     */
+    cursor?: CertificateProcessStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateProcessSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateProcessSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CertificateProcessSteps.
+     */
+    distinct?: CertificateProcessStepScalarFieldEnum | CertificateProcessStepScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateProcessStep findFirstOrThrow
+   */
+  export type CertificateProcessStepFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateProcessStep
+     */
+    select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateProcessStepInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateProcessStep to fetch.
+     */
+    where?: CertificateProcessStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateProcessSteps to fetch.
+     */
+    orderBy?: CertificateProcessStepOrderByWithRelationInput | CertificateProcessStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CertificateProcessSteps.
+     */
+    cursor?: CertificateProcessStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateProcessSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateProcessSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CertificateProcessSteps.
+     */
+    distinct?: CertificateProcessStepScalarFieldEnum | CertificateProcessStepScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateProcessStep findMany
+   */
+  export type CertificateProcessStepFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateProcessStep
+     */
+    select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateProcessStepInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateProcessSteps to fetch.
+     */
+    where?: CertificateProcessStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateProcessSteps to fetch.
+     */
+    orderBy?: CertificateProcessStepOrderByWithRelationInput | CertificateProcessStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CertificateProcessSteps.
+     */
+    cursor?: CertificateProcessStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateProcessSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateProcessSteps.
+     */
+    skip?: number
+    distinct?: CertificateProcessStepScalarFieldEnum | CertificateProcessStepScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateProcessStep create
+   */
+  export type CertificateProcessStepCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateProcessStep
+     */
+    select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateProcessStepInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CertificateProcessStep.
+     */
+    data: XOR<CertificateProcessStepCreateInput, CertificateProcessStepUncheckedCreateInput>
+  }
+
+  /**
+   * CertificateProcessStep createMany
+   */
+  export type CertificateProcessStepCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CertificateProcessSteps.
+     */
+    data: CertificateProcessStepCreateManyInput | CertificateProcessStepCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CertificateProcessStep createManyAndReturn
+   */
+  export type CertificateProcessStepCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateProcessStep
+     */
+    select?: CertificateProcessStepSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CertificateProcessSteps.
+     */
+    data: CertificateProcessStepCreateManyInput | CertificateProcessStepCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateProcessStepIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CertificateProcessStep update
+   */
+  export type CertificateProcessStepUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateProcessStep
+     */
+    select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateProcessStepInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CertificateProcessStep.
+     */
+    data: XOR<CertificateProcessStepUpdateInput, CertificateProcessStepUncheckedUpdateInput>
+    /**
+     * Choose, which CertificateProcessStep to update.
+     */
+    where: CertificateProcessStepWhereUniqueInput
+  }
+
+  /**
+   * CertificateProcessStep updateMany
+   */
+  export type CertificateProcessStepUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CertificateProcessSteps.
+     */
+    data: XOR<CertificateProcessStepUpdateManyMutationInput, CertificateProcessStepUncheckedUpdateManyInput>
+    /**
+     * Filter which CertificateProcessSteps to update
+     */
+    where?: CertificateProcessStepWhereInput
+  }
+
+  /**
+   * CertificateProcessStep upsert
+   */
+  export type CertificateProcessStepUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateProcessStep
+     */
+    select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateProcessStepInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CertificateProcessStep to update in case it exists.
+     */
+    where: CertificateProcessStepWhereUniqueInput
+    /**
+     * In case the CertificateProcessStep found by the `where` argument doesn't exist, create a new CertificateProcessStep with this data.
+     */
+    create: XOR<CertificateProcessStepCreateInput, CertificateProcessStepUncheckedCreateInput>
+    /**
+     * In case the CertificateProcessStep was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CertificateProcessStepUpdateInput, CertificateProcessStepUncheckedUpdateInput>
+  }
+
+  /**
+   * CertificateProcessStep delete
+   */
+  export type CertificateProcessStepDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateProcessStep
+     */
+    select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateProcessStepInclude<ExtArgs> | null
+    /**
+     * Filter which CertificateProcessStep to delete.
+     */
+    where: CertificateProcessStepWhereUniqueInput
+  }
+
+  /**
+   * CertificateProcessStep deleteMany
+   */
+  export type CertificateProcessStepDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CertificateProcessSteps to delete
+     */
+    where?: CertificateProcessStepWhereInput
+  }
+
+  /**
+   * CertificateProcessStep without action
+   */
+  export type CertificateProcessStepDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateProcessStep
+     */
+    select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateProcessStepInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CertificateEligibility
+   */
+
+  export type AggregateCertificateEligibility = {
+    _count: CertificateEligibilityCountAggregateOutputType | null
+    _avg: CertificateEligibilityAvgAggregateOutputType | null
+    _sum: CertificateEligibilitySumAggregateOutputType | null
+    _min: CertificateEligibilityMinAggregateOutputType | null
+    _max: CertificateEligibilityMaxAggregateOutputType | null
+  }
+
+  export type CertificateEligibilityAvgAggregateOutputType = {
+    id: number | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateEligibilitySumAggregateOutputType = {
+    id: number | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateEligibilityMinAggregateOutputType = {
+    id: number | null
+    eligibilityDetail: string | null
+    applicationType: string | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateEligibilityMaxAggregateOutputType = {
+    id: number | null
+    eligibilityDetail: string | null
+    applicationType: string | null
+    certificateServiceId: number | null
+  }
+
+  export type CertificateEligibilityCountAggregateOutputType = {
+    id: number
+    eligibilityDetail: number
+    applicationType: number
+    certificateServiceId: number
+    _all: number
+  }
+
+
+  export type CertificateEligibilityAvgAggregateInputType = {
+    id?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateEligibilitySumAggregateInputType = {
+    id?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateEligibilityMinAggregateInputType = {
+    id?: true
+    eligibilityDetail?: true
+    applicationType?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateEligibilityMaxAggregateInputType = {
+    id?: true
+    eligibilityDetail?: true
+    applicationType?: true
+    certificateServiceId?: true
+  }
+
+  export type CertificateEligibilityCountAggregateInputType = {
+    id?: true
+    eligibilityDetail?: true
+    applicationType?: true
+    certificateServiceId?: true
+    _all?: true
+  }
+
+  export type CertificateEligibilityAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CertificateEligibility to aggregate.
+     */
+    where?: CertificateEligibilityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateEligibilities to fetch.
+     */
+    orderBy?: CertificateEligibilityOrderByWithRelationInput | CertificateEligibilityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CertificateEligibilityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateEligibilities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateEligibilities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CertificateEligibilities
+    **/
+    _count?: true | CertificateEligibilityCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CertificateEligibilityAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CertificateEligibilitySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CertificateEligibilityMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CertificateEligibilityMaxAggregateInputType
+  }
+
+  export type GetCertificateEligibilityAggregateType<T extends CertificateEligibilityAggregateArgs> = {
+        [P in keyof T & keyof AggregateCertificateEligibility]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCertificateEligibility[P]>
+      : GetScalarType<T[P], AggregateCertificateEligibility[P]>
+  }
+
+
+
+
+  export type CertificateEligibilityGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CertificateEligibilityWhereInput
+    orderBy?: CertificateEligibilityOrderByWithAggregationInput | CertificateEligibilityOrderByWithAggregationInput[]
+    by: CertificateEligibilityScalarFieldEnum[] | CertificateEligibilityScalarFieldEnum
+    having?: CertificateEligibilityScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CertificateEligibilityCountAggregateInputType | true
+    _avg?: CertificateEligibilityAvgAggregateInputType
+    _sum?: CertificateEligibilitySumAggregateInputType
+    _min?: CertificateEligibilityMinAggregateInputType
+    _max?: CertificateEligibilityMaxAggregateInputType
+  }
+
+  export type CertificateEligibilityGroupByOutputType = {
+    id: number
+    eligibilityDetail: string
+    applicationType: string
+    certificateServiceId: number
+    _count: CertificateEligibilityCountAggregateOutputType | null
+    _avg: CertificateEligibilityAvgAggregateOutputType | null
+    _sum: CertificateEligibilitySumAggregateOutputType | null
+    _min: CertificateEligibilityMinAggregateOutputType | null
+    _max: CertificateEligibilityMaxAggregateOutputType | null
+  }
+
+  type GetCertificateEligibilityGroupByPayload<T extends CertificateEligibilityGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CertificateEligibilityGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CertificateEligibilityGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CertificateEligibilityGroupByOutputType[P]>
+            : GetScalarType<T[P], CertificateEligibilityGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CertificateEligibilitySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eligibilityDetail?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateEligibility"]>
+
+  export type CertificateEligibilitySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eligibilityDetail?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateEligibility"]>
+
+  export type CertificateEligibilitySelectScalar = {
+    id?: boolean
+    eligibilityDetail?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+  }
+
+  export type CertificateEligibilityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }
+  export type CertificateEligibilityIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }
+
+  export type $CertificateEligibilityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CertificateEligibility"
+    objects: {
+      certificateService: Prisma.$CertificateServicePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      eligibilityDetail: string
+      applicationType: string
+      certificateServiceId: number
+    }, ExtArgs["result"]["certificateEligibility"]>
+    composites: {}
+  }
+
+  type CertificateEligibilityGetPayload<S extends boolean | null | undefined | CertificateEligibilityDefaultArgs> = $Result.GetResult<Prisma.$CertificateEligibilityPayload, S>
+
+  type CertificateEligibilityCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CertificateEligibilityFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CertificateEligibilityCountAggregateInputType | true
+    }
+
+  export interface CertificateEligibilityDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CertificateEligibility'], meta: { name: 'CertificateEligibility' } }
+    /**
+     * Find zero or one CertificateEligibility that matches the filter.
+     * @param {CertificateEligibilityFindUniqueArgs} args - Arguments to find a CertificateEligibility
+     * @example
+     * // Get one CertificateEligibility
+     * const certificateEligibility = await prisma.certificateEligibility.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CertificateEligibilityFindUniqueArgs>(args: SelectSubset<T, CertificateEligibilityFindUniqueArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CertificateEligibility that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CertificateEligibilityFindUniqueOrThrowArgs} args - Arguments to find a CertificateEligibility
+     * @example
+     * // Get one CertificateEligibility
+     * const certificateEligibility = await prisma.certificateEligibility.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CertificateEligibilityFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateEligibilityFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CertificateEligibility that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateEligibilityFindFirstArgs} args - Arguments to find a CertificateEligibility
+     * @example
+     * // Get one CertificateEligibility
+     * const certificateEligibility = await prisma.certificateEligibility.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CertificateEligibilityFindFirstArgs>(args?: SelectSubset<T, CertificateEligibilityFindFirstArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CertificateEligibility that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateEligibilityFindFirstOrThrowArgs} args - Arguments to find a CertificateEligibility
+     * @example
+     * // Get one CertificateEligibility
+     * const certificateEligibility = await prisma.certificateEligibility.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CertificateEligibilityFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateEligibilityFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CertificateEligibilities that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateEligibilityFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CertificateEligibilities
+     * const certificateEligibilities = await prisma.certificateEligibility.findMany()
+     * 
+     * // Get first 10 CertificateEligibilities
+     * const certificateEligibilities = await prisma.certificateEligibility.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const certificateEligibilityWithIdOnly = await prisma.certificateEligibility.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CertificateEligibilityFindManyArgs>(args?: SelectSubset<T, CertificateEligibilityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CertificateEligibility.
+     * @param {CertificateEligibilityCreateArgs} args - Arguments to create a CertificateEligibility.
+     * @example
+     * // Create one CertificateEligibility
+     * const CertificateEligibility = await prisma.certificateEligibility.create({
+     *   data: {
+     *     // ... data to create a CertificateEligibility
+     *   }
+     * })
+     * 
+     */
+    create<T extends CertificateEligibilityCreateArgs>(args: SelectSubset<T, CertificateEligibilityCreateArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CertificateEligibilities.
+     * @param {CertificateEligibilityCreateManyArgs} args - Arguments to create many CertificateEligibilities.
+     * @example
+     * // Create many CertificateEligibilities
+     * const certificateEligibility = await prisma.certificateEligibility.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CertificateEligibilityCreateManyArgs>(args?: SelectSubset<T, CertificateEligibilityCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CertificateEligibilities and returns the data saved in the database.
+     * @param {CertificateEligibilityCreateManyAndReturnArgs} args - Arguments to create many CertificateEligibilities.
+     * @example
+     * // Create many CertificateEligibilities
+     * const certificateEligibility = await prisma.certificateEligibility.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CertificateEligibilities and only return the `id`
+     * const certificateEligibilityWithIdOnly = await prisma.certificateEligibility.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CertificateEligibilityCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateEligibilityCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CertificateEligibility.
+     * @param {CertificateEligibilityDeleteArgs} args - Arguments to delete one CertificateEligibility.
+     * @example
+     * // Delete one CertificateEligibility
+     * const CertificateEligibility = await prisma.certificateEligibility.delete({
+     *   where: {
+     *     // ... filter to delete one CertificateEligibility
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CertificateEligibilityDeleteArgs>(args: SelectSubset<T, CertificateEligibilityDeleteArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CertificateEligibility.
+     * @param {CertificateEligibilityUpdateArgs} args - Arguments to update one CertificateEligibility.
+     * @example
+     * // Update one CertificateEligibility
+     * const certificateEligibility = await prisma.certificateEligibility.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CertificateEligibilityUpdateArgs>(args: SelectSubset<T, CertificateEligibilityUpdateArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CertificateEligibilities.
+     * @param {CertificateEligibilityDeleteManyArgs} args - Arguments to filter CertificateEligibilities to delete.
+     * @example
+     * // Delete a few CertificateEligibilities
+     * const { count } = await prisma.certificateEligibility.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CertificateEligibilityDeleteManyArgs>(args?: SelectSubset<T, CertificateEligibilityDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CertificateEligibilities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateEligibilityUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CertificateEligibilities
+     * const certificateEligibility = await prisma.certificateEligibility.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CertificateEligibilityUpdateManyArgs>(args: SelectSubset<T, CertificateEligibilityUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CertificateEligibility.
+     * @param {CertificateEligibilityUpsertArgs} args - Arguments to update or create a CertificateEligibility.
+     * @example
+     * // Update or create a CertificateEligibility
+     * const certificateEligibility = await prisma.certificateEligibility.upsert({
+     *   create: {
+     *     // ... data to create a CertificateEligibility
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CertificateEligibility we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CertificateEligibilityUpsertArgs>(args: SelectSubset<T, CertificateEligibilityUpsertArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CertificateEligibilities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateEligibilityCountArgs} args - Arguments to filter CertificateEligibilities to count.
+     * @example
+     * // Count the number of CertificateEligibilities
+     * const count = await prisma.certificateEligibility.count({
+     *   where: {
+     *     // ... the filter for the CertificateEligibilities we want to count
+     *   }
+     * })
+    **/
+    count<T extends CertificateEligibilityCountArgs>(
+      args?: Subset<T, CertificateEligibilityCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CertificateEligibilityCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CertificateEligibility.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateEligibilityAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CertificateEligibilityAggregateArgs>(args: Subset<T, CertificateEligibilityAggregateArgs>): Prisma.PrismaPromise<GetCertificateEligibilityAggregateType<T>>
+
+    /**
+     * Group by CertificateEligibility.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CertificateEligibilityGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CertificateEligibilityGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CertificateEligibilityGroupByArgs['orderBy'] }
+        : { orderBy?: CertificateEligibilityGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CertificateEligibilityGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCertificateEligibilityGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CertificateEligibility model
+   */
+  readonly fields: CertificateEligibilityFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CertificateEligibility.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CertificateEligibilityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    certificateService<T extends CertificateServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateServiceDefaultArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CertificateEligibility model
+   */ 
+  interface CertificateEligibilityFieldRefs {
+    readonly id: FieldRef<"CertificateEligibility", 'Int'>
+    readonly eligibilityDetail: FieldRef<"CertificateEligibility", 'String'>
+    readonly applicationType: FieldRef<"CertificateEligibility", 'String'>
+    readonly certificateServiceId: FieldRef<"CertificateEligibility", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CertificateEligibility findUnique
+   */
+  export type CertificateEligibilityFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateEligibility
+     */
+    select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateEligibilityInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateEligibility to fetch.
+     */
+    where: CertificateEligibilityWhereUniqueInput
+  }
+
+  /**
+   * CertificateEligibility findUniqueOrThrow
+   */
+  export type CertificateEligibilityFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateEligibility
+     */
+    select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateEligibilityInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateEligibility to fetch.
+     */
+    where: CertificateEligibilityWhereUniqueInput
+  }
+
+  /**
+   * CertificateEligibility findFirst
+   */
+  export type CertificateEligibilityFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateEligibility
+     */
+    select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateEligibilityInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateEligibility to fetch.
+     */
+    where?: CertificateEligibilityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateEligibilities to fetch.
+     */
+    orderBy?: CertificateEligibilityOrderByWithRelationInput | CertificateEligibilityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CertificateEligibilities.
+     */
+    cursor?: CertificateEligibilityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateEligibilities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateEligibilities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CertificateEligibilities.
+     */
+    distinct?: CertificateEligibilityScalarFieldEnum | CertificateEligibilityScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateEligibility findFirstOrThrow
+   */
+  export type CertificateEligibilityFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateEligibility
+     */
+    select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateEligibilityInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateEligibility to fetch.
+     */
+    where?: CertificateEligibilityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateEligibilities to fetch.
+     */
+    orderBy?: CertificateEligibilityOrderByWithRelationInput | CertificateEligibilityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CertificateEligibilities.
+     */
+    cursor?: CertificateEligibilityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateEligibilities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateEligibilities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CertificateEligibilities.
+     */
+    distinct?: CertificateEligibilityScalarFieldEnum | CertificateEligibilityScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateEligibility findMany
+   */
+  export type CertificateEligibilityFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateEligibility
+     */
+    select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateEligibilityInclude<ExtArgs> | null
+    /**
+     * Filter, which CertificateEligibilities to fetch.
+     */
+    where?: CertificateEligibilityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CertificateEligibilities to fetch.
+     */
+    orderBy?: CertificateEligibilityOrderByWithRelationInput | CertificateEligibilityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CertificateEligibilities.
+     */
+    cursor?: CertificateEligibilityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CertificateEligibilities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CertificateEligibilities.
+     */
+    skip?: number
+    distinct?: CertificateEligibilityScalarFieldEnum | CertificateEligibilityScalarFieldEnum[]
+  }
+
+  /**
+   * CertificateEligibility create
+   */
+  export type CertificateEligibilityCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateEligibility
+     */
+    select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateEligibilityInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CertificateEligibility.
+     */
+    data: XOR<CertificateEligibilityCreateInput, CertificateEligibilityUncheckedCreateInput>
+  }
+
+  /**
+   * CertificateEligibility createMany
+   */
+  export type CertificateEligibilityCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CertificateEligibilities.
+     */
+    data: CertificateEligibilityCreateManyInput | CertificateEligibilityCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CertificateEligibility createManyAndReturn
+   */
+  export type CertificateEligibilityCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateEligibility
+     */
+    select?: CertificateEligibilitySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CertificateEligibilities.
+     */
+    data: CertificateEligibilityCreateManyInput | CertificateEligibilityCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateEligibilityIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CertificateEligibility update
+   */
+  export type CertificateEligibilityUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateEligibility
+     */
+    select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateEligibilityInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CertificateEligibility.
+     */
+    data: XOR<CertificateEligibilityUpdateInput, CertificateEligibilityUncheckedUpdateInput>
+    /**
+     * Choose, which CertificateEligibility to update.
+     */
+    where: CertificateEligibilityWhereUniqueInput
+  }
+
+  /**
+   * CertificateEligibility updateMany
+   */
+  export type CertificateEligibilityUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CertificateEligibilities.
+     */
+    data: XOR<CertificateEligibilityUpdateManyMutationInput, CertificateEligibilityUncheckedUpdateManyInput>
+    /**
+     * Filter which CertificateEligibilities to update
+     */
+    where?: CertificateEligibilityWhereInput
+  }
+
+  /**
+   * CertificateEligibility upsert
+   */
+  export type CertificateEligibilityUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateEligibility
+     */
+    select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateEligibilityInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CertificateEligibility to update in case it exists.
+     */
+    where: CertificateEligibilityWhereUniqueInput
+    /**
+     * In case the CertificateEligibility found by the `where` argument doesn't exist, create a new CertificateEligibility with this data.
+     */
+    create: XOR<CertificateEligibilityCreateInput, CertificateEligibilityUncheckedCreateInput>
+    /**
+     * In case the CertificateEligibility was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CertificateEligibilityUpdateInput, CertificateEligibilityUncheckedUpdateInput>
+  }
+
+  /**
+   * CertificateEligibility delete
+   */
+  export type CertificateEligibilityDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateEligibility
+     */
+    select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateEligibilityInclude<ExtArgs> | null
+    /**
+     * Filter which CertificateEligibility to delete.
+     */
+    where: CertificateEligibilityWhereUniqueInput
+  }
+
+  /**
+   * CertificateEligibility deleteMany
+   */
+  export type CertificateEligibilityDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CertificateEligibilities to delete
+     */
+    where?: CertificateEligibilityWhereInput
+  }
+
+  /**
+   * CertificateEligibility without action
+   */
+  export type CertificateEligibilityDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateEligibility
+     */
+    select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateEligibilityInclude<ExtArgs> | null
   }
 
 
@@ -4968,44 +9747,75 @@ export namespace Prisma {
 
   export type ContactServiceMinAggregateOutputType = {
     id: number | null
-    serviceName: string | null
-    district: string | null
-    subDistrict: string | null
-    block: string | null
-    officeAddress: string | null
+    name: string | null
+    summary: string | null
+    type: string | null
+    applicationMode: string | null
+    onlineUrl: string | null
+    offlineAddress: string | null
     status: string | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     adminId: number | null
+    processNew: string | null
+    processUpdate: string | null
+    processLost: string | null
+    processSurrender: string | null
+    docNew: string | null
+    docUpdate: string | null
+    docLost: string | null
+    docSurrender: string | null
   }
 
   export type ContactServiceMaxAggregateOutputType = {
     id: number | null
-    serviceName: string | null
-    district: string | null
-    subDistrict: string | null
-    block: string | null
-    officeAddress: string | null
+    name: string | null
+    summary: string | null
+    type: string | null
+    applicationMode: string | null
+    onlineUrl: string | null
+    offlineAddress: string | null
     status: string | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     adminId: number | null
+    processNew: string | null
+    processUpdate: string | null
+    processLost: string | null
+    processSurrender: string | null
+    docNew: string | null
+    docUpdate: string | null
+    docLost: string | null
+    docSurrender: string | null
   }
 
   export type ContactServiceCountAggregateOutputType = {
     id: number
-    serviceName: number
-    district: number
-    subDistrict: number
-    block: number
-    officeAddress: number
+    name: number
+    summary: number
+    type: number
+    targetAudience: number
+    applicationMode: number
+    onlineUrl: number
+    offlineAddress: number
     status: number
     isActive: number
     createdAt: number
     updatedAt: number
     adminId: number
+    eligibilityDetails: number
+    contactDetails: number
+    processDetails: number
+    processNew: number
+    processUpdate: number
+    processLost: number
+    processSurrender: number
+    docNew: number
+    docUpdate: number
+    docLost: number
+    docSurrender: number
     _all: number
   }
 
@@ -5022,44 +9832,75 @@ export namespace Prisma {
 
   export type ContactServiceMinAggregateInputType = {
     id?: true
-    serviceName?: true
-    district?: true
-    subDistrict?: true
-    block?: true
-    officeAddress?: true
+    name?: true
+    summary?: true
+    type?: true
+    applicationMode?: true
+    onlineUrl?: true
+    offlineAddress?: true
     status?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
     adminId?: true
+    processNew?: true
+    processUpdate?: true
+    processLost?: true
+    processSurrender?: true
+    docNew?: true
+    docUpdate?: true
+    docLost?: true
+    docSurrender?: true
   }
 
   export type ContactServiceMaxAggregateInputType = {
     id?: true
-    serviceName?: true
-    district?: true
-    subDistrict?: true
-    block?: true
-    officeAddress?: true
+    name?: true
+    summary?: true
+    type?: true
+    applicationMode?: true
+    onlineUrl?: true
+    offlineAddress?: true
     status?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
     adminId?: true
+    processNew?: true
+    processUpdate?: true
+    processLost?: true
+    processSurrender?: true
+    docNew?: true
+    docUpdate?: true
+    docLost?: true
+    docSurrender?: true
   }
 
   export type ContactServiceCountAggregateInputType = {
     id?: true
-    serviceName?: true
-    district?: true
-    subDistrict?: true
-    block?: true
-    officeAddress?: true
+    name?: true
+    summary?: true
+    type?: true
+    targetAudience?: true
+    applicationMode?: true
+    onlineUrl?: true
+    offlineAddress?: true
     status?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
     adminId?: true
+    eligibilityDetails?: true
+    contactDetails?: true
+    processDetails?: true
+    processNew?: true
+    processUpdate?: true
+    processLost?: true
+    processSurrender?: true
+    docNew?: true
+    docUpdate?: true
+    docLost?: true
+    docSurrender?: true
     _all?: true
   }
 
@@ -5151,16 +9992,29 @@ export namespace Prisma {
 
   export type ContactServiceGroupByOutputType = {
     id: number
-    serviceName: string
-    district: string
-    subDistrict: string | null
-    block: string
-    officeAddress: string | null
+    name: string
+    summary: string
+    type: string | null
+    targetAudience: string[]
+    applicationMode: string
+    onlineUrl: string | null
+    offlineAddress: string | null
     status: string
     isActive: boolean
     createdAt: Date
     updatedAt: Date
     adminId: number
+    eligibilityDetails: string[]
+    contactDetails: string[]
+    processDetails: string[]
+    processNew: string | null
+    processUpdate: string | null
+    processLost: string | null
+    processSurrender: string | null
+    docNew: string | null
+    docUpdate: string | null
+    docLost: string | null
+    docSurrender: string | null
     _count: ContactServiceCountAggregateOutputType | null
     _avg: ContactServiceAvgAggregateOutputType | null
     _sum: ContactServiceSumAggregateOutputType | null
@@ -5184,53 +10038,94 @@ export namespace Prisma {
 
   export type ContactServiceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    serviceName?: boolean
-    district?: boolean
-    subDistrict?: boolean
-    block?: boolean
-    officeAddress?: boolean
+    name?: boolean
+    summary?: boolean
+    type?: boolean
+    targetAudience?: boolean
+    applicationMode?: boolean
+    onlineUrl?: boolean
+    offlineAddress?: boolean
     status?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     adminId?: boolean
-    contacts?: boolean | ContactService$contactsArgs<ExtArgs>
+    eligibilityDetails?: boolean
+    contactDetails?: boolean
+    processDetails?: boolean
+    processNew?: boolean
+    processUpdate?: boolean
+    processLost?: boolean
+    processSurrender?: boolean
+    docNew?: boolean
+    docUpdate?: boolean
+    docLost?: boolean
+    docSurrender?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
+    contacts?: boolean | ContactService$contactsArgs<ExtArgs>
+    documents?: boolean | ContactService$documentsArgs<ExtArgs>
     _count?: boolean | ContactServiceCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contactService"]>
 
   export type ContactServiceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    serviceName?: boolean
-    district?: boolean
-    subDistrict?: boolean
-    block?: boolean
-    officeAddress?: boolean
+    name?: boolean
+    summary?: boolean
+    type?: boolean
+    targetAudience?: boolean
+    applicationMode?: boolean
+    onlineUrl?: boolean
+    offlineAddress?: boolean
     status?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     adminId?: boolean
+    eligibilityDetails?: boolean
+    contactDetails?: boolean
+    processDetails?: boolean
+    processNew?: boolean
+    processUpdate?: boolean
+    processLost?: boolean
+    processSurrender?: boolean
+    docNew?: boolean
+    docUpdate?: boolean
+    docLost?: boolean
+    docSurrender?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contactService"]>
 
   export type ContactServiceSelectScalar = {
     id?: boolean
-    serviceName?: boolean
-    district?: boolean
-    subDistrict?: boolean
-    block?: boolean
-    officeAddress?: boolean
+    name?: boolean
+    summary?: boolean
+    type?: boolean
+    targetAudience?: boolean
+    applicationMode?: boolean
+    onlineUrl?: boolean
+    offlineAddress?: boolean
     status?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     adminId?: boolean
+    eligibilityDetails?: boolean
+    contactDetails?: boolean
+    processDetails?: boolean
+    processNew?: boolean
+    processUpdate?: boolean
+    processLost?: boolean
+    processSurrender?: boolean
+    docNew?: boolean
+    docUpdate?: boolean
+    docLost?: boolean
+    docSurrender?: boolean
   }
 
   export type ContactServiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    contacts?: boolean | ContactService$contactsArgs<ExtArgs>
     admin?: boolean | AdminDefaultArgs<ExtArgs>
+    contacts?: boolean | ContactService$contactsArgs<ExtArgs>
+    documents?: boolean | ContactService$documentsArgs<ExtArgs>
     _count?: boolean | ContactServiceCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ContactServiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5240,21 +10135,35 @@ export namespace Prisma {
   export type $ContactServicePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ContactService"
     objects: {
-      contacts: Prisma.$ContactServiceContactPayload<ExtArgs>[]
       admin: Prisma.$AdminPayload<ExtArgs>
+      contacts: Prisma.$ContactServiceContactPayload<ExtArgs>[]
+      documents: Prisma.$ContactServiceDocumentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      serviceName: string
-      district: string
-      subDistrict: string | null
-      block: string
-      officeAddress: string | null
+      name: string
+      summary: string
+      type: string | null
+      targetAudience: string[]
+      applicationMode: string
+      onlineUrl: string | null
+      offlineAddress: string | null
       status: string
       isActive: boolean
       createdAt: Date
       updatedAt: Date
       adminId: number
+      eligibilityDetails: string[]
+      contactDetails: string[]
+      processDetails: string[]
+      processNew: string | null
+      processUpdate: string | null
+      processLost: string | null
+      processSurrender: string | null
+      docNew: string | null
+      docUpdate: string | null
+      docLost: string | null
+      docSurrender: string | null
     }, ExtArgs["result"]["contactService"]>
     composites: {}
   }
@@ -5619,8 +10528,9 @@ export namespace Prisma {
    */
   export interface Prisma__ContactServiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    contacts<T extends ContactService$contactsArgs<ExtArgs> = {}>(args?: Subset<T, ContactService$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findMany"> | Null>
     admin<T extends AdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminDefaultArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    contacts<T extends ContactService$contactsArgs<ExtArgs> = {}>(args?: Subset<T, ContactService$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findMany"> | Null>
+    documents<T extends ContactService$documentsArgs<ExtArgs> = {}>(args?: Subset<T, ContactService$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5651,16 +10561,29 @@ export namespace Prisma {
    */ 
   interface ContactServiceFieldRefs {
     readonly id: FieldRef<"ContactService", 'Int'>
-    readonly serviceName: FieldRef<"ContactService", 'String'>
-    readonly district: FieldRef<"ContactService", 'String'>
-    readonly subDistrict: FieldRef<"ContactService", 'String'>
-    readonly block: FieldRef<"ContactService", 'String'>
-    readonly officeAddress: FieldRef<"ContactService", 'String'>
+    readonly name: FieldRef<"ContactService", 'String'>
+    readonly summary: FieldRef<"ContactService", 'String'>
+    readonly type: FieldRef<"ContactService", 'String'>
+    readonly targetAudience: FieldRef<"ContactService", 'String[]'>
+    readonly applicationMode: FieldRef<"ContactService", 'String'>
+    readonly onlineUrl: FieldRef<"ContactService", 'String'>
+    readonly offlineAddress: FieldRef<"ContactService", 'String'>
     readonly status: FieldRef<"ContactService", 'String'>
     readonly isActive: FieldRef<"ContactService", 'Boolean'>
     readonly createdAt: FieldRef<"ContactService", 'DateTime'>
     readonly updatedAt: FieldRef<"ContactService", 'DateTime'>
     readonly adminId: FieldRef<"ContactService", 'Int'>
+    readonly eligibilityDetails: FieldRef<"ContactService", 'String[]'>
+    readonly contactDetails: FieldRef<"ContactService", 'String[]'>
+    readonly processDetails: FieldRef<"ContactService", 'String[]'>
+    readonly processNew: FieldRef<"ContactService", 'String'>
+    readonly processUpdate: FieldRef<"ContactService", 'String'>
+    readonly processLost: FieldRef<"ContactService", 'String'>
+    readonly processSurrender: FieldRef<"ContactService", 'String'>
+    readonly docNew: FieldRef<"ContactService", 'String'>
+    readonly docUpdate: FieldRef<"ContactService", 'String'>
+    readonly docLost: FieldRef<"ContactService", 'String'>
+    readonly docSurrender: FieldRef<"ContactService", 'String'>
   }
     
 
@@ -5999,6 +10922,26 @@ export namespace Prisma {
   }
 
   /**
+   * ContactService.documents
+   */
+  export type ContactService$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceDocument
+     */
+    select?: ContactServiceDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceDocumentInclude<ExtArgs> | null
+    where?: ContactServiceDocumentWhereInput
+    orderBy?: ContactServiceDocumentOrderByWithRelationInput | ContactServiceDocumentOrderByWithRelationInput[]
+    cursor?: ContactServiceDocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContactServiceDocumentScalarFieldEnum | ContactServiceDocumentScalarFieldEnum[]
+  }
+
+  /**
    * ContactService without action
    */
   export type ContactServiceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6027,90 +10970,102 @@ export namespace Prisma {
 
   export type ContactServiceContactAvgAggregateOutputType = {
     id: number | null
-    serviceId: number | null
+    contactServiceId: number | null
   }
 
   export type ContactServiceContactSumAggregateOutputType = {
     id: number | null
-    serviceId: number | null
+    contactServiceId: number | null
   }
 
   export type ContactServiceContactMinAggregateOutputType = {
     id: number | null
+    serviceName: string | null
+    district: string | null
+    subDistrict: string | null
+    block: string | null
     name: string | null
     designation: string | null
     contact: string | null
     email: string | null
-    serviceId: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
+    contactServiceId: number | null
   }
 
   export type ContactServiceContactMaxAggregateOutputType = {
     id: number | null
+    serviceName: string | null
+    district: string | null
+    subDistrict: string | null
+    block: string | null
     name: string | null
     designation: string | null
     contact: string | null
     email: string | null
-    serviceId: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
+    contactServiceId: number | null
   }
 
   export type ContactServiceContactCountAggregateOutputType = {
     id: number
+    serviceName: number
+    district: number
+    subDistrict: number
+    block: number
     name: number
     designation: number
     contact: number
     email: number
-    serviceId: number
-    createdAt: number
-    updatedAt: number
+    contactServiceId: number
     _all: number
   }
 
 
   export type ContactServiceContactAvgAggregateInputType = {
     id?: true
-    serviceId?: true
+    contactServiceId?: true
   }
 
   export type ContactServiceContactSumAggregateInputType = {
     id?: true
-    serviceId?: true
+    contactServiceId?: true
   }
 
   export type ContactServiceContactMinAggregateInputType = {
     id?: true
+    serviceName?: true
+    district?: true
+    subDistrict?: true
+    block?: true
     name?: true
     designation?: true
     contact?: true
     email?: true
-    serviceId?: true
-    createdAt?: true
-    updatedAt?: true
+    contactServiceId?: true
   }
 
   export type ContactServiceContactMaxAggregateInputType = {
     id?: true
+    serviceName?: true
+    district?: true
+    subDistrict?: true
+    block?: true
     name?: true
     designation?: true
     contact?: true
     email?: true
-    serviceId?: true
-    createdAt?: true
-    updatedAt?: true
+    contactServiceId?: true
   }
 
   export type ContactServiceContactCountAggregateInputType = {
     id?: true
+    serviceName?: true
+    district?: true
+    subDistrict?: true
+    block?: true
     name?: true
     designation?: true
     contact?: true
     email?: true
-    serviceId?: true
-    createdAt?: true
-    updatedAt?: true
+    contactServiceId?: true
     _all?: true
   }
 
@@ -6202,13 +11157,15 @@ export namespace Prisma {
 
   export type ContactServiceContactGroupByOutputType = {
     id: number
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
     name: string
     designation: string
     contact: string
-    email: string | null
-    serviceId: number
-    createdAt: Date
-    updatedAt: Date
+    email: string
+    contactServiceId: number
     _count: ContactServiceContactCountAggregateOutputType | null
     _avg: ContactServiceContactAvgAggregateOutputType | null
     _sum: ContactServiceContactSumAggregateOutputType | null
@@ -6232,60 +11189,68 @@ export namespace Prisma {
 
   export type ContactServiceContactSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    serviceName?: boolean
+    district?: boolean
+    subDistrict?: boolean
+    block?: boolean
     name?: boolean
     designation?: boolean
     contact?: boolean
     email?: boolean
-    serviceId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    service?: boolean | ContactServiceDefaultArgs<ExtArgs>
+    contactServiceId?: boolean
+    contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contactServiceContact"]>
 
   export type ContactServiceContactSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    serviceName?: boolean
+    district?: boolean
+    subDistrict?: boolean
+    block?: boolean
     name?: boolean
     designation?: boolean
     contact?: boolean
     email?: boolean
-    serviceId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    service?: boolean | ContactServiceDefaultArgs<ExtArgs>
+    contactServiceId?: boolean
+    contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contactServiceContact"]>
 
   export type ContactServiceContactSelectScalar = {
     id?: boolean
+    serviceName?: boolean
+    district?: boolean
+    subDistrict?: boolean
+    block?: boolean
     name?: boolean
     designation?: boolean
     contact?: boolean
     email?: boolean
-    serviceId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
+    contactServiceId?: boolean
   }
 
   export type ContactServiceContactInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    service?: boolean | ContactServiceDefaultArgs<ExtArgs>
+    contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
   }
   export type ContactServiceContactIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    service?: boolean | ContactServiceDefaultArgs<ExtArgs>
+    contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
   }
 
   export type $ContactServiceContactPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ContactServiceContact"
     objects: {
-      service: Prisma.$ContactServicePayload<ExtArgs>
+      contactService: Prisma.$ContactServicePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
+      serviceName: string
+      district: string
+      subDistrict: string
+      block: string
       name: string
       designation: string
       contact: string
-      email: string | null
-      serviceId: number
-      createdAt: Date
-      updatedAt: Date
+      email: string
+      contactServiceId: number
     }, ExtArgs["result"]["contactServiceContact"]>
     composites: {}
   }
@@ -6650,7 +11615,7 @@ export namespace Prisma {
    */
   export interface Prisma__ContactServiceContactClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    service<T extends ContactServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactServiceDefaultArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    contactService<T extends ContactServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactServiceDefaultArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6681,13 +11646,15 @@ export namespace Prisma {
    */ 
   interface ContactServiceContactFieldRefs {
     readonly id: FieldRef<"ContactServiceContact", 'Int'>
+    readonly serviceName: FieldRef<"ContactServiceContact", 'String'>
+    readonly district: FieldRef<"ContactServiceContact", 'String'>
+    readonly subDistrict: FieldRef<"ContactServiceContact", 'String'>
+    readonly block: FieldRef<"ContactServiceContact", 'String'>
     readonly name: FieldRef<"ContactServiceContact", 'String'>
     readonly designation: FieldRef<"ContactServiceContact", 'String'>
     readonly contact: FieldRef<"ContactServiceContact", 'String'>
     readonly email: FieldRef<"ContactServiceContact", 'String'>
-    readonly serviceId: FieldRef<"ContactServiceContact", 'Int'>
-    readonly createdAt: FieldRef<"ContactServiceContact", 'DateTime'>
-    readonly updatedAt: FieldRef<"ContactServiceContact", 'DateTime'>
+    readonly contactServiceId: FieldRef<"ContactServiceContact", 'Int'>
   }
     
 
@@ -7017,6 +11984,993 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceContactInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ContactServiceDocument
+   */
+
+  export type AggregateContactServiceDocument = {
+    _count: ContactServiceDocumentCountAggregateOutputType | null
+    _avg: ContactServiceDocumentAvgAggregateOutputType | null
+    _sum: ContactServiceDocumentSumAggregateOutputType | null
+    _min: ContactServiceDocumentMinAggregateOutputType | null
+    _max: ContactServiceDocumentMaxAggregateOutputType | null
+  }
+
+  export type ContactServiceDocumentAvgAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    contactServiceId: number | null
+  }
+
+  export type ContactServiceDocumentSumAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    contactServiceId: number | null
+  }
+
+  export type ContactServiceDocumentMinAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    documentType: string | null
+    validProof: string | null
+    isRequired: boolean | null
+    contactServiceId: number | null
+  }
+
+  export type ContactServiceDocumentMaxAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    documentType: string | null
+    validProof: string | null
+    isRequired: boolean | null
+    contactServiceId: number | null
+  }
+
+  export type ContactServiceDocumentCountAggregateOutputType = {
+    id: number
+    slNo: number
+    documentType: number
+    validProof: number
+    isRequired: number
+    contactServiceId: number
+    _all: number
+  }
+
+
+  export type ContactServiceDocumentAvgAggregateInputType = {
+    id?: true
+    slNo?: true
+    contactServiceId?: true
+  }
+
+  export type ContactServiceDocumentSumAggregateInputType = {
+    id?: true
+    slNo?: true
+    contactServiceId?: true
+  }
+
+  export type ContactServiceDocumentMinAggregateInputType = {
+    id?: true
+    slNo?: true
+    documentType?: true
+    validProof?: true
+    isRequired?: true
+    contactServiceId?: true
+  }
+
+  export type ContactServiceDocumentMaxAggregateInputType = {
+    id?: true
+    slNo?: true
+    documentType?: true
+    validProof?: true
+    isRequired?: true
+    contactServiceId?: true
+  }
+
+  export type ContactServiceDocumentCountAggregateInputType = {
+    id?: true
+    slNo?: true
+    documentType?: true
+    validProof?: true
+    isRequired?: true
+    contactServiceId?: true
+    _all?: true
+  }
+
+  export type ContactServiceDocumentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ContactServiceDocument to aggregate.
+     */
+    where?: ContactServiceDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactServiceDocuments to fetch.
+     */
+    orderBy?: ContactServiceDocumentOrderByWithRelationInput | ContactServiceDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ContactServiceDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactServiceDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactServiceDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ContactServiceDocuments
+    **/
+    _count?: true | ContactServiceDocumentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ContactServiceDocumentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ContactServiceDocumentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ContactServiceDocumentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ContactServiceDocumentMaxAggregateInputType
+  }
+
+  export type GetContactServiceDocumentAggregateType<T extends ContactServiceDocumentAggregateArgs> = {
+        [P in keyof T & keyof AggregateContactServiceDocument]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateContactServiceDocument[P]>
+      : GetScalarType<T[P], AggregateContactServiceDocument[P]>
+  }
+
+
+
+
+  export type ContactServiceDocumentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContactServiceDocumentWhereInput
+    orderBy?: ContactServiceDocumentOrderByWithAggregationInput | ContactServiceDocumentOrderByWithAggregationInput[]
+    by: ContactServiceDocumentScalarFieldEnum[] | ContactServiceDocumentScalarFieldEnum
+    having?: ContactServiceDocumentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ContactServiceDocumentCountAggregateInputType | true
+    _avg?: ContactServiceDocumentAvgAggregateInputType
+    _sum?: ContactServiceDocumentSumAggregateInputType
+    _min?: ContactServiceDocumentMinAggregateInputType
+    _max?: ContactServiceDocumentMaxAggregateInputType
+  }
+
+  export type ContactServiceDocumentGroupByOutputType = {
+    id: number
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired: boolean
+    contactServiceId: number
+    _count: ContactServiceDocumentCountAggregateOutputType | null
+    _avg: ContactServiceDocumentAvgAggregateOutputType | null
+    _sum: ContactServiceDocumentSumAggregateOutputType | null
+    _min: ContactServiceDocumentMinAggregateOutputType | null
+    _max: ContactServiceDocumentMaxAggregateOutputType | null
+  }
+
+  type GetContactServiceDocumentGroupByPayload<T extends ContactServiceDocumentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ContactServiceDocumentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ContactServiceDocumentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ContactServiceDocumentGroupByOutputType[P]>
+            : GetScalarType<T[P], ContactServiceDocumentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ContactServiceDocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slNo?: boolean
+    documentType?: boolean
+    validProof?: boolean
+    isRequired?: boolean
+    contactServiceId?: boolean
+    contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contactServiceDocument"]>
+
+  export type ContactServiceDocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slNo?: boolean
+    documentType?: boolean
+    validProof?: boolean
+    isRequired?: boolean
+    contactServiceId?: boolean
+    contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contactServiceDocument"]>
+
+  export type ContactServiceDocumentSelectScalar = {
+    id?: boolean
+    slNo?: boolean
+    documentType?: boolean
+    validProof?: boolean
+    isRequired?: boolean
+    contactServiceId?: boolean
+  }
+
+  export type ContactServiceDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
+  }
+  export type ContactServiceDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
+  }
+
+  export type $ContactServiceDocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ContactServiceDocument"
+    objects: {
+      contactService: Prisma.$ContactServicePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      slNo: number
+      documentType: string
+      validProof: string
+      isRequired: boolean
+      contactServiceId: number
+    }, ExtArgs["result"]["contactServiceDocument"]>
+    composites: {}
+  }
+
+  type ContactServiceDocumentGetPayload<S extends boolean | null | undefined | ContactServiceDocumentDefaultArgs> = $Result.GetResult<Prisma.$ContactServiceDocumentPayload, S>
+
+  type ContactServiceDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ContactServiceDocumentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ContactServiceDocumentCountAggregateInputType | true
+    }
+
+  export interface ContactServiceDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ContactServiceDocument'], meta: { name: 'ContactServiceDocument' } }
+    /**
+     * Find zero or one ContactServiceDocument that matches the filter.
+     * @param {ContactServiceDocumentFindUniqueArgs} args - Arguments to find a ContactServiceDocument
+     * @example
+     * // Get one ContactServiceDocument
+     * const contactServiceDocument = await prisma.contactServiceDocument.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ContactServiceDocumentFindUniqueArgs>(args: SelectSubset<T, ContactServiceDocumentFindUniqueArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ContactServiceDocument that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ContactServiceDocumentFindUniqueOrThrowArgs} args - Arguments to find a ContactServiceDocument
+     * @example
+     * // Get one ContactServiceDocument
+     * const contactServiceDocument = await prisma.contactServiceDocument.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ContactServiceDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, ContactServiceDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ContactServiceDocument that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactServiceDocumentFindFirstArgs} args - Arguments to find a ContactServiceDocument
+     * @example
+     * // Get one ContactServiceDocument
+     * const contactServiceDocument = await prisma.contactServiceDocument.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ContactServiceDocumentFindFirstArgs>(args?: SelectSubset<T, ContactServiceDocumentFindFirstArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ContactServiceDocument that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactServiceDocumentFindFirstOrThrowArgs} args - Arguments to find a ContactServiceDocument
+     * @example
+     * // Get one ContactServiceDocument
+     * const contactServiceDocument = await prisma.contactServiceDocument.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ContactServiceDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, ContactServiceDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ContactServiceDocuments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactServiceDocumentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ContactServiceDocuments
+     * const contactServiceDocuments = await prisma.contactServiceDocument.findMany()
+     * 
+     * // Get first 10 ContactServiceDocuments
+     * const contactServiceDocuments = await prisma.contactServiceDocument.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const contactServiceDocumentWithIdOnly = await prisma.contactServiceDocument.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ContactServiceDocumentFindManyArgs>(args?: SelectSubset<T, ContactServiceDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ContactServiceDocument.
+     * @param {ContactServiceDocumentCreateArgs} args - Arguments to create a ContactServiceDocument.
+     * @example
+     * // Create one ContactServiceDocument
+     * const ContactServiceDocument = await prisma.contactServiceDocument.create({
+     *   data: {
+     *     // ... data to create a ContactServiceDocument
+     *   }
+     * })
+     * 
+     */
+    create<T extends ContactServiceDocumentCreateArgs>(args: SelectSubset<T, ContactServiceDocumentCreateArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ContactServiceDocuments.
+     * @param {ContactServiceDocumentCreateManyArgs} args - Arguments to create many ContactServiceDocuments.
+     * @example
+     * // Create many ContactServiceDocuments
+     * const contactServiceDocument = await prisma.contactServiceDocument.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ContactServiceDocumentCreateManyArgs>(args?: SelectSubset<T, ContactServiceDocumentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ContactServiceDocuments and returns the data saved in the database.
+     * @param {ContactServiceDocumentCreateManyAndReturnArgs} args - Arguments to create many ContactServiceDocuments.
+     * @example
+     * // Create many ContactServiceDocuments
+     * const contactServiceDocument = await prisma.contactServiceDocument.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ContactServiceDocuments and only return the `id`
+     * const contactServiceDocumentWithIdOnly = await prisma.contactServiceDocument.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ContactServiceDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, ContactServiceDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ContactServiceDocument.
+     * @param {ContactServiceDocumentDeleteArgs} args - Arguments to delete one ContactServiceDocument.
+     * @example
+     * // Delete one ContactServiceDocument
+     * const ContactServiceDocument = await prisma.contactServiceDocument.delete({
+     *   where: {
+     *     // ... filter to delete one ContactServiceDocument
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ContactServiceDocumentDeleteArgs>(args: SelectSubset<T, ContactServiceDocumentDeleteArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ContactServiceDocument.
+     * @param {ContactServiceDocumentUpdateArgs} args - Arguments to update one ContactServiceDocument.
+     * @example
+     * // Update one ContactServiceDocument
+     * const contactServiceDocument = await prisma.contactServiceDocument.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ContactServiceDocumentUpdateArgs>(args: SelectSubset<T, ContactServiceDocumentUpdateArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ContactServiceDocuments.
+     * @param {ContactServiceDocumentDeleteManyArgs} args - Arguments to filter ContactServiceDocuments to delete.
+     * @example
+     * // Delete a few ContactServiceDocuments
+     * const { count } = await prisma.contactServiceDocument.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ContactServiceDocumentDeleteManyArgs>(args?: SelectSubset<T, ContactServiceDocumentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ContactServiceDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactServiceDocumentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ContactServiceDocuments
+     * const contactServiceDocument = await prisma.contactServiceDocument.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ContactServiceDocumentUpdateManyArgs>(args: SelectSubset<T, ContactServiceDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ContactServiceDocument.
+     * @param {ContactServiceDocumentUpsertArgs} args - Arguments to update or create a ContactServiceDocument.
+     * @example
+     * // Update or create a ContactServiceDocument
+     * const contactServiceDocument = await prisma.contactServiceDocument.upsert({
+     *   create: {
+     *     // ... data to create a ContactServiceDocument
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ContactServiceDocument we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ContactServiceDocumentUpsertArgs>(args: SelectSubset<T, ContactServiceDocumentUpsertArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ContactServiceDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactServiceDocumentCountArgs} args - Arguments to filter ContactServiceDocuments to count.
+     * @example
+     * // Count the number of ContactServiceDocuments
+     * const count = await prisma.contactServiceDocument.count({
+     *   where: {
+     *     // ... the filter for the ContactServiceDocuments we want to count
+     *   }
+     * })
+    **/
+    count<T extends ContactServiceDocumentCountArgs>(
+      args?: Subset<T, ContactServiceDocumentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ContactServiceDocumentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ContactServiceDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactServiceDocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ContactServiceDocumentAggregateArgs>(args: Subset<T, ContactServiceDocumentAggregateArgs>): Prisma.PrismaPromise<GetContactServiceDocumentAggregateType<T>>
+
+    /**
+     * Group by ContactServiceDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactServiceDocumentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ContactServiceDocumentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ContactServiceDocumentGroupByArgs['orderBy'] }
+        : { orderBy?: ContactServiceDocumentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ContactServiceDocumentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetContactServiceDocumentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ContactServiceDocument model
+   */
+  readonly fields: ContactServiceDocumentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ContactServiceDocument.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ContactServiceDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    contactService<T extends ContactServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactServiceDefaultArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ContactServiceDocument model
+   */ 
+  interface ContactServiceDocumentFieldRefs {
+    readonly id: FieldRef<"ContactServiceDocument", 'Int'>
+    readonly slNo: FieldRef<"ContactServiceDocument", 'Int'>
+    readonly documentType: FieldRef<"ContactServiceDocument", 'String'>
+    readonly validProof: FieldRef<"ContactServiceDocument", 'String'>
+    readonly isRequired: FieldRef<"ContactServiceDocument", 'Boolean'>
+    readonly contactServiceId: FieldRef<"ContactServiceDocument", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ContactServiceDocument findUnique
+   */
+  export type ContactServiceDocumentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceDocument
+     */
+    select?: ContactServiceDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactServiceDocument to fetch.
+     */
+    where: ContactServiceDocumentWhereUniqueInput
+  }
+
+  /**
+   * ContactServiceDocument findUniqueOrThrow
+   */
+  export type ContactServiceDocumentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceDocument
+     */
+    select?: ContactServiceDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactServiceDocument to fetch.
+     */
+    where: ContactServiceDocumentWhereUniqueInput
+  }
+
+  /**
+   * ContactServiceDocument findFirst
+   */
+  export type ContactServiceDocumentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceDocument
+     */
+    select?: ContactServiceDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactServiceDocument to fetch.
+     */
+    where?: ContactServiceDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactServiceDocuments to fetch.
+     */
+    orderBy?: ContactServiceDocumentOrderByWithRelationInput | ContactServiceDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ContactServiceDocuments.
+     */
+    cursor?: ContactServiceDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactServiceDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactServiceDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContactServiceDocuments.
+     */
+    distinct?: ContactServiceDocumentScalarFieldEnum | ContactServiceDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * ContactServiceDocument findFirstOrThrow
+   */
+  export type ContactServiceDocumentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceDocument
+     */
+    select?: ContactServiceDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactServiceDocument to fetch.
+     */
+    where?: ContactServiceDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactServiceDocuments to fetch.
+     */
+    orderBy?: ContactServiceDocumentOrderByWithRelationInput | ContactServiceDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ContactServiceDocuments.
+     */
+    cursor?: ContactServiceDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactServiceDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactServiceDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContactServiceDocuments.
+     */
+    distinct?: ContactServiceDocumentScalarFieldEnum | ContactServiceDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * ContactServiceDocument findMany
+   */
+  export type ContactServiceDocumentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceDocument
+     */
+    select?: ContactServiceDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactServiceDocuments to fetch.
+     */
+    where?: ContactServiceDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactServiceDocuments to fetch.
+     */
+    orderBy?: ContactServiceDocumentOrderByWithRelationInput | ContactServiceDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ContactServiceDocuments.
+     */
+    cursor?: ContactServiceDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactServiceDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactServiceDocuments.
+     */
+    skip?: number
+    distinct?: ContactServiceDocumentScalarFieldEnum | ContactServiceDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * ContactServiceDocument create
+   */
+  export type ContactServiceDocumentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceDocument
+     */
+    select?: ContactServiceDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ContactServiceDocument.
+     */
+    data: XOR<ContactServiceDocumentCreateInput, ContactServiceDocumentUncheckedCreateInput>
+  }
+
+  /**
+   * ContactServiceDocument createMany
+   */
+  export type ContactServiceDocumentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ContactServiceDocuments.
+     */
+    data: ContactServiceDocumentCreateManyInput | ContactServiceDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ContactServiceDocument createManyAndReturn
+   */
+  export type ContactServiceDocumentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceDocument
+     */
+    select?: ContactServiceDocumentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ContactServiceDocuments.
+     */
+    data: ContactServiceDocumentCreateManyInput | ContactServiceDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceDocumentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ContactServiceDocument update
+   */
+  export type ContactServiceDocumentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceDocument
+     */
+    select?: ContactServiceDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ContactServiceDocument.
+     */
+    data: XOR<ContactServiceDocumentUpdateInput, ContactServiceDocumentUncheckedUpdateInput>
+    /**
+     * Choose, which ContactServiceDocument to update.
+     */
+    where: ContactServiceDocumentWhereUniqueInput
+  }
+
+  /**
+   * ContactServiceDocument updateMany
+   */
+  export type ContactServiceDocumentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ContactServiceDocuments.
+     */
+    data: XOR<ContactServiceDocumentUpdateManyMutationInput, ContactServiceDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which ContactServiceDocuments to update
+     */
+    where?: ContactServiceDocumentWhereInput
+  }
+
+  /**
+   * ContactServiceDocument upsert
+   */
+  export type ContactServiceDocumentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceDocument
+     */
+    select?: ContactServiceDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceDocumentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ContactServiceDocument to update in case it exists.
+     */
+    where: ContactServiceDocumentWhereUniqueInput
+    /**
+     * In case the ContactServiceDocument found by the `where` argument doesn't exist, create a new ContactServiceDocument with this data.
+     */
+    create: XOR<ContactServiceDocumentCreateInput, ContactServiceDocumentUncheckedCreateInput>
+    /**
+     * In case the ContactServiceDocument was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ContactServiceDocumentUpdateInput, ContactServiceDocumentUncheckedUpdateInput>
+  }
+
+  /**
+   * ContactServiceDocument delete
+   */
+  export type ContactServiceDocumentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceDocument
+     */
+    select?: ContactServiceDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceDocumentInclude<ExtArgs> | null
+    /**
+     * Filter which ContactServiceDocument to delete.
+     */
+    where: ContactServiceDocumentWhereUniqueInput
+  }
+
+  /**
+   * ContactServiceDocument deleteMany
+   */
+  export type ContactServiceDocumentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ContactServiceDocuments to delete
+     */
+    where?: ContactServiceDocumentWhereInput
+  }
+
+  /**
+   * ContactServiceDocument without action
+   */
+  export type ContactServiceDocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceDocument
+     */
+    select?: ContactServiceDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceDocumentInclude<ExtArgs> | null
   }
 
 
@@ -11049,9 +17003,19 @@ export namespace Prisma {
     status: 'status',
     isActive: 'isActive',
     eligibilityDetails: 'eligibilityDetails',
+    schemeDetails: 'schemeDetails',
+    processDetails: 'processDetails',
     benefitDetails: 'benefitDetails',
     applicationProcess: 'applicationProcess',
     requiredDocuments: 'requiredDocuments',
+    processNew: 'processNew',
+    processUpdate: 'processUpdate',
+    processLost: 'processLost',
+    processSurrender: 'processSurrender',
+    docNew: 'docNew',
+    docUpdate: 'docUpdate',
+    docLost: 'docLost',
+    docSurrender: 'docSurrender',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     adminId: 'adminId'
@@ -11075,6 +17039,14 @@ export namespace Prisma {
     offlineAddress: 'offlineAddress',
     status: 'status',
     isActive: 'isActive',
+    processNew: 'processNew',
+    processUpdate: 'processUpdate',
+    processLost: 'processLost',
+    processSurrender: 'processSurrender',
+    docNew: 'docNew',
+    docUpdate: 'docUpdate',
+    docLost: 'docLost',
+    docSurrender: 'docSurrender',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     adminId: 'adminId'
@@ -11083,18 +17055,82 @@ export namespace Prisma {
   export type CertificateServiceScalarFieldEnum = (typeof CertificateServiceScalarFieldEnum)[keyof typeof CertificateServiceScalarFieldEnum]
 
 
-  export const ContactServiceScalarFieldEnum: {
+  export const CertificateContactScalarFieldEnum: {
     id: 'id',
     serviceName: 'serviceName',
     district: 'district',
     subDistrict: 'subDistrict',
     block: 'block',
-    officeAddress: 'officeAddress',
+    name: 'name',
+    designation: 'designation',
+    contact: 'contact',
+    email: 'email',
+    applicationType: 'applicationType',
+    certificateServiceId: 'certificateServiceId'
+  };
+
+  export type CertificateContactScalarFieldEnum = (typeof CertificateContactScalarFieldEnum)[keyof typeof CertificateContactScalarFieldEnum]
+
+
+  export const CertificateDocumentScalarFieldEnum: {
+    id: 'id',
+    slNo: 'slNo',
+    documentType: 'documentType',
+    validProof: 'validProof',
+    isRequired: 'isRequired',
+    applicationType: 'applicationType',
+    certificateServiceId: 'certificateServiceId'
+  };
+
+  export type CertificateDocumentScalarFieldEnum = (typeof CertificateDocumentScalarFieldEnum)[keyof typeof CertificateDocumentScalarFieldEnum]
+
+
+  export const CertificateProcessStepScalarFieldEnum: {
+    id: 'id',
+    slNo: 'slNo',
+    stepDetails: 'stepDetails',
+    applicationType: 'applicationType',
+    certificateServiceId: 'certificateServiceId'
+  };
+
+  export type CertificateProcessStepScalarFieldEnum = (typeof CertificateProcessStepScalarFieldEnum)[keyof typeof CertificateProcessStepScalarFieldEnum]
+
+
+  export const CertificateEligibilityScalarFieldEnum: {
+    id: 'id',
+    eligibilityDetail: 'eligibilityDetail',
+    applicationType: 'applicationType',
+    certificateServiceId: 'certificateServiceId'
+  };
+
+  export type CertificateEligibilityScalarFieldEnum = (typeof CertificateEligibilityScalarFieldEnum)[keyof typeof CertificateEligibilityScalarFieldEnum]
+
+
+  export const ContactServiceScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    summary: 'summary',
+    type: 'type',
+    targetAudience: 'targetAudience',
+    applicationMode: 'applicationMode',
+    onlineUrl: 'onlineUrl',
+    offlineAddress: 'offlineAddress',
     status: 'status',
     isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    adminId: 'adminId'
+    adminId: 'adminId',
+    eligibilityDetails: 'eligibilityDetails',
+    contactDetails: 'contactDetails',
+    processDetails: 'processDetails',
+    processNew: 'processNew',
+    processUpdate: 'processUpdate',
+    processLost: 'processLost',
+    processSurrender: 'processSurrender',
+    docNew: 'docNew',
+    docUpdate: 'docUpdate',
+    docLost: 'docLost',
+    docSurrender: 'docSurrender'
   };
 
   export type ContactServiceScalarFieldEnum = (typeof ContactServiceScalarFieldEnum)[keyof typeof ContactServiceScalarFieldEnum]
@@ -11102,16 +17138,30 @@ export namespace Prisma {
 
   export const ContactServiceContactScalarFieldEnum: {
     id: 'id',
+    serviceName: 'serviceName',
+    district: 'district',
+    subDistrict: 'subDistrict',
+    block: 'block',
     name: 'name',
     designation: 'designation',
     contact: 'contact',
     email: 'email',
-    serviceId: 'serviceId',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    contactServiceId: 'contactServiceId'
   };
 
   export type ContactServiceContactScalarFieldEnum = (typeof ContactServiceContactScalarFieldEnum)[keyof typeof ContactServiceContactScalarFieldEnum]
+
+
+  export const ContactServiceDocumentScalarFieldEnum: {
+    id: 'id',
+    slNo: 'slNo',
+    documentType: 'documentType',
+    validProof: 'validProof',
+    isRequired: 'isRequired',
+    contactServiceId: 'contactServiceId'
+  };
+
+  export type ContactServiceDocumentScalarFieldEnum = (typeof ContactServiceDocumentScalarFieldEnum)[keyof typeof ContactServiceDocumentScalarFieldEnum]
 
 
   export const GrievanceScalarFieldEnum: {
@@ -11359,9 +17409,19 @@ export namespace Prisma {
     status?: StringFilter<"SchemeService"> | string
     isActive?: BoolFilter<"SchemeService"> | boolean
     eligibilityDetails?: StringNullableListFilter<"SchemeService">
+    schemeDetails?: StringNullableListFilter<"SchemeService">
+    processDetails?: StringNullableListFilter<"SchemeService">
     benefitDetails?: StringNullableListFilter<"SchemeService">
     applicationProcess?: StringNullableListFilter<"SchemeService">
     requiredDocuments?: StringNullableListFilter<"SchemeService">
+    processNew?: StringNullableFilter<"SchemeService"> | string | null
+    processUpdate?: StringNullableFilter<"SchemeService"> | string | null
+    processLost?: StringNullableFilter<"SchemeService"> | string | null
+    processSurrender?: StringNullableFilter<"SchemeService"> | string | null
+    docNew?: StringNullableFilter<"SchemeService"> | string | null
+    docUpdate?: StringNullableFilter<"SchemeService"> | string | null
+    docLost?: StringNullableFilter<"SchemeService"> | string | null
+    docSurrender?: StringNullableFilter<"SchemeService"> | string | null
     createdAt?: DateTimeFilter<"SchemeService"> | Date | string
     updatedAt?: DateTimeFilter<"SchemeService"> | Date | string
     adminId?: IntFilter<"SchemeService"> | number
@@ -11382,9 +17442,19 @@ export namespace Prisma {
     status?: SortOrder
     isActive?: SortOrder
     eligibilityDetails?: SortOrder
+    schemeDetails?: SortOrder
+    processDetails?: SortOrder
     benefitDetails?: SortOrder
     applicationProcess?: SortOrder
     requiredDocuments?: SortOrder
+    processNew?: SortOrderInput | SortOrder
+    processUpdate?: SortOrderInput | SortOrder
+    processLost?: SortOrderInput | SortOrder
+    processSurrender?: SortOrderInput | SortOrder
+    docNew?: SortOrderInput | SortOrder
+    docUpdate?: SortOrderInput | SortOrder
+    docLost?: SortOrderInput | SortOrder
+    docSurrender?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
@@ -11408,9 +17478,19 @@ export namespace Prisma {
     status?: StringFilter<"SchemeService"> | string
     isActive?: BoolFilter<"SchemeService"> | boolean
     eligibilityDetails?: StringNullableListFilter<"SchemeService">
+    schemeDetails?: StringNullableListFilter<"SchemeService">
+    processDetails?: StringNullableListFilter<"SchemeService">
     benefitDetails?: StringNullableListFilter<"SchemeService">
     applicationProcess?: StringNullableListFilter<"SchemeService">
     requiredDocuments?: StringNullableListFilter<"SchemeService">
+    processNew?: StringNullableFilter<"SchemeService"> | string | null
+    processUpdate?: StringNullableFilter<"SchemeService"> | string | null
+    processLost?: StringNullableFilter<"SchemeService"> | string | null
+    processSurrender?: StringNullableFilter<"SchemeService"> | string | null
+    docNew?: StringNullableFilter<"SchemeService"> | string | null
+    docUpdate?: StringNullableFilter<"SchemeService"> | string | null
+    docLost?: StringNullableFilter<"SchemeService"> | string | null
+    docSurrender?: StringNullableFilter<"SchemeService"> | string | null
     createdAt?: DateTimeFilter<"SchemeService"> | Date | string
     updatedAt?: DateTimeFilter<"SchemeService"> | Date | string
     adminId?: IntFilter<"SchemeService"> | number
@@ -11431,9 +17511,19 @@ export namespace Prisma {
     status?: SortOrder
     isActive?: SortOrder
     eligibilityDetails?: SortOrder
+    schemeDetails?: SortOrder
+    processDetails?: SortOrder
     benefitDetails?: SortOrder
     applicationProcess?: SortOrder
     requiredDocuments?: SortOrder
+    processNew?: SortOrderInput | SortOrder
+    processUpdate?: SortOrderInput | SortOrder
+    processLost?: SortOrderInput | SortOrder
+    processSurrender?: SortOrderInput | SortOrder
+    docNew?: SortOrderInput | SortOrder
+    docUpdate?: SortOrderInput | SortOrder
+    docLost?: SortOrderInput | SortOrder
+    docSurrender?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
@@ -11459,9 +17549,19 @@ export namespace Prisma {
     status?: StringWithAggregatesFilter<"SchemeService"> | string
     isActive?: BoolWithAggregatesFilter<"SchemeService"> | boolean
     eligibilityDetails?: StringNullableListFilter<"SchemeService">
+    schemeDetails?: StringNullableListFilter<"SchemeService">
+    processDetails?: StringNullableListFilter<"SchemeService">
     benefitDetails?: StringNullableListFilter<"SchemeService">
     applicationProcess?: StringNullableListFilter<"SchemeService">
     requiredDocuments?: StringNullableListFilter<"SchemeService">
+    processNew?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
+    processUpdate?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
+    processLost?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
+    processSurrender?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
+    docNew?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
+    docUpdate?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
+    docLost?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
+    docSurrender?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"SchemeService"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"SchemeService"> | Date | string
     adminId?: IntWithAggregatesFilter<"SchemeService"> | number
@@ -11485,10 +17585,22 @@ export namespace Prisma {
     offlineAddress?: StringNullableFilter<"CertificateService"> | string | null
     status?: StringFilter<"CertificateService"> | string
     isActive?: BoolFilter<"CertificateService"> | boolean
+    processNew?: StringNullableFilter<"CertificateService"> | string | null
+    processUpdate?: StringNullableFilter<"CertificateService"> | string | null
+    processLost?: StringNullableFilter<"CertificateService"> | string | null
+    processSurrender?: StringNullableFilter<"CertificateService"> | string | null
+    docNew?: StringNullableFilter<"CertificateService"> | string | null
+    docUpdate?: StringNullableFilter<"CertificateService"> | string | null
+    docLost?: StringNullableFilter<"CertificateService"> | string | null
+    docSurrender?: StringNullableFilter<"CertificateService"> | string | null
     createdAt?: DateTimeFilter<"CertificateService"> | Date | string
     updatedAt?: DateTimeFilter<"CertificateService"> | Date | string
     adminId?: IntFilter<"CertificateService"> | number
     admin?: XOR<AdminRelationFilter, AdminWhereInput>
+    contacts?: CertificateContactListRelationFilter
+    documents?: CertificateDocumentListRelationFilter
+    processSteps?: CertificateProcessStepListRelationFilter
+    eligibilityItems?: CertificateEligibilityListRelationFilter
   }
 
   export type CertificateServiceOrderByWithRelationInput = {
@@ -11506,10 +17618,22 @@ export namespace Prisma {
     offlineAddress?: SortOrderInput | SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    processNew?: SortOrderInput | SortOrder
+    processUpdate?: SortOrderInput | SortOrder
+    processLost?: SortOrderInput | SortOrder
+    processSurrender?: SortOrderInput | SortOrder
+    docNew?: SortOrderInput | SortOrder
+    docUpdate?: SortOrderInput | SortOrder
+    docLost?: SortOrderInput | SortOrder
+    docSurrender?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
     admin?: AdminOrderByWithRelationInput
+    contacts?: CertificateContactOrderByRelationAggregateInput
+    documents?: CertificateDocumentOrderByRelationAggregateInput
+    processSteps?: CertificateProcessStepOrderByRelationAggregateInput
+    eligibilityItems?: CertificateEligibilityOrderByRelationAggregateInput
   }
 
   export type CertificateServiceWhereUniqueInput = Prisma.AtLeast<{
@@ -11530,10 +17654,22 @@ export namespace Prisma {
     offlineAddress?: StringNullableFilter<"CertificateService"> | string | null
     status?: StringFilter<"CertificateService"> | string
     isActive?: BoolFilter<"CertificateService"> | boolean
+    processNew?: StringNullableFilter<"CertificateService"> | string | null
+    processUpdate?: StringNullableFilter<"CertificateService"> | string | null
+    processLost?: StringNullableFilter<"CertificateService"> | string | null
+    processSurrender?: StringNullableFilter<"CertificateService"> | string | null
+    docNew?: StringNullableFilter<"CertificateService"> | string | null
+    docUpdate?: StringNullableFilter<"CertificateService"> | string | null
+    docLost?: StringNullableFilter<"CertificateService"> | string | null
+    docSurrender?: StringNullableFilter<"CertificateService"> | string | null
     createdAt?: DateTimeFilter<"CertificateService"> | Date | string
     updatedAt?: DateTimeFilter<"CertificateService"> | Date | string
     adminId?: IntFilter<"CertificateService"> | number
     admin?: XOR<AdminRelationFilter, AdminWhereInput>
+    contacts?: CertificateContactListRelationFilter
+    documents?: CertificateDocumentListRelationFilter
+    processSteps?: CertificateProcessStepListRelationFilter
+    eligibilityItems?: CertificateEligibilityListRelationFilter
   }, "id">
 
   export type CertificateServiceOrderByWithAggregationInput = {
@@ -11551,6 +17687,14 @@ export namespace Prisma {
     offlineAddress?: SortOrderInput | SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    processNew?: SortOrderInput | SortOrder
+    processUpdate?: SortOrderInput | SortOrder
+    processLost?: SortOrderInput | SortOrder
+    processSurrender?: SortOrderInput | SortOrder
+    docNew?: SortOrderInput | SortOrder
+    docUpdate?: SortOrderInput | SortOrder
+    docLost?: SortOrderInput | SortOrder
+    docSurrender?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
@@ -11579,9 +17723,280 @@ export namespace Prisma {
     offlineAddress?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
     status?: StringWithAggregatesFilter<"CertificateService"> | string
     isActive?: BoolWithAggregatesFilter<"CertificateService"> | boolean
+    processNew?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
+    processUpdate?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
+    processLost?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
+    processSurrender?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
+    docNew?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
+    docUpdate?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
+    docLost?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
+    docSurrender?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CertificateService"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CertificateService"> | Date | string
     adminId?: IntWithAggregatesFilter<"CertificateService"> | number
+  }
+
+  export type CertificateContactWhereInput = {
+    AND?: CertificateContactWhereInput | CertificateContactWhereInput[]
+    OR?: CertificateContactWhereInput[]
+    NOT?: CertificateContactWhereInput | CertificateContactWhereInput[]
+    id?: IntFilter<"CertificateContact"> | number
+    serviceName?: StringFilter<"CertificateContact"> | string
+    district?: StringFilter<"CertificateContact"> | string
+    subDistrict?: StringFilter<"CertificateContact"> | string
+    block?: StringFilter<"CertificateContact"> | string
+    name?: StringFilter<"CertificateContact"> | string
+    designation?: StringFilter<"CertificateContact"> | string
+    contact?: StringFilter<"CertificateContact"> | string
+    email?: StringFilter<"CertificateContact"> | string
+    applicationType?: StringFilter<"CertificateContact"> | string
+    certificateServiceId?: IntFilter<"CertificateContact"> | number
+    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+  }
+
+  export type CertificateContactOrderByWithRelationInput = {
+    id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
+    name?: SortOrder
+    designation?: SortOrder
+    contact?: SortOrder
+    email?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+    certificateService?: CertificateServiceOrderByWithRelationInput
+  }
+
+  export type CertificateContactWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: CertificateContactWhereInput | CertificateContactWhereInput[]
+    OR?: CertificateContactWhereInput[]
+    NOT?: CertificateContactWhereInput | CertificateContactWhereInput[]
+    serviceName?: StringFilter<"CertificateContact"> | string
+    district?: StringFilter<"CertificateContact"> | string
+    subDistrict?: StringFilter<"CertificateContact"> | string
+    block?: StringFilter<"CertificateContact"> | string
+    name?: StringFilter<"CertificateContact"> | string
+    designation?: StringFilter<"CertificateContact"> | string
+    contact?: StringFilter<"CertificateContact"> | string
+    email?: StringFilter<"CertificateContact"> | string
+    applicationType?: StringFilter<"CertificateContact"> | string
+    certificateServiceId?: IntFilter<"CertificateContact"> | number
+    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+  }, "id">
+
+  export type CertificateContactOrderByWithAggregationInput = {
+    id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
+    name?: SortOrder
+    designation?: SortOrder
+    contact?: SortOrder
+    email?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+    _count?: CertificateContactCountOrderByAggregateInput
+    _avg?: CertificateContactAvgOrderByAggregateInput
+    _max?: CertificateContactMaxOrderByAggregateInput
+    _min?: CertificateContactMinOrderByAggregateInput
+    _sum?: CertificateContactSumOrderByAggregateInput
+  }
+
+  export type CertificateContactScalarWhereWithAggregatesInput = {
+    AND?: CertificateContactScalarWhereWithAggregatesInput | CertificateContactScalarWhereWithAggregatesInput[]
+    OR?: CertificateContactScalarWhereWithAggregatesInput[]
+    NOT?: CertificateContactScalarWhereWithAggregatesInput | CertificateContactScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"CertificateContact"> | number
+    serviceName?: StringWithAggregatesFilter<"CertificateContact"> | string
+    district?: StringWithAggregatesFilter<"CertificateContact"> | string
+    subDistrict?: StringWithAggregatesFilter<"CertificateContact"> | string
+    block?: StringWithAggregatesFilter<"CertificateContact"> | string
+    name?: StringWithAggregatesFilter<"CertificateContact"> | string
+    designation?: StringWithAggregatesFilter<"CertificateContact"> | string
+    contact?: StringWithAggregatesFilter<"CertificateContact"> | string
+    email?: StringWithAggregatesFilter<"CertificateContact"> | string
+    applicationType?: StringWithAggregatesFilter<"CertificateContact"> | string
+    certificateServiceId?: IntWithAggregatesFilter<"CertificateContact"> | number
+  }
+
+  export type CertificateDocumentWhereInput = {
+    AND?: CertificateDocumentWhereInput | CertificateDocumentWhereInput[]
+    OR?: CertificateDocumentWhereInput[]
+    NOT?: CertificateDocumentWhereInput | CertificateDocumentWhereInput[]
+    id?: IntFilter<"CertificateDocument"> | number
+    slNo?: IntFilter<"CertificateDocument"> | number
+    documentType?: StringFilter<"CertificateDocument"> | string
+    validProof?: StringFilter<"CertificateDocument"> | string
+    isRequired?: BoolFilter<"CertificateDocument"> | boolean
+    applicationType?: StringFilter<"CertificateDocument"> | string
+    certificateServiceId?: IntFilter<"CertificateDocument"> | number
+    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+  }
+
+  export type CertificateDocumentOrderByWithRelationInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+    certificateService?: CertificateServiceOrderByWithRelationInput
+  }
+
+  export type CertificateDocumentWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: CertificateDocumentWhereInput | CertificateDocumentWhereInput[]
+    OR?: CertificateDocumentWhereInput[]
+    NOT?: CertificateDocumentWhereInput | CertificateDocumentWhereInput[]
+    slNo?: IntFilter<"CertificateDocument"> | number
+    documentType?: StringFilter<"CertificateDocument"> | string
+    validProof?: StringFilter<"CertificateDocument"> | string
+    isRequired?: BoolFilter<"CertificateDocument"> | boolean
+    applicationType?: StringFilter<"CertificateDocument"> | string
+    certificateServiceId?: IntFilter<"CertificateDocument"> | number
+    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+  }, "id">
+
+  export type CertificateDocumentOrderByWithAggregationInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+    _count?: CertificateDocumentCountOrderByAggregateInput
+    _avg?: CertificateDocumentAvgOrderByAggregateInput
+    _max?: CertificateDocumentMaxOrderByAggregateInput
+    _min?: CertificateDocumentMinOrderByAggregateInput
+    _sum?: CertificateDocumentSumOrderByAggregateInput
+  }
+
+  export type CertificateDocumentScalarWhereWithAggregatesInput = {
+    AND?: CertificateDocumentScalarWhereWithAggregatesInput | CertificateDocumentScalarWhereWithAggregatesInput[]
+    OR?: CertificateDocumentScalarWhereWithAggregatesInput[]
+    NOT?: CertificateDocumentScalarWhereWithAggregatesInput | CertificateDocumentScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"CertificateDocument"> | number
+    slNo?: IntWithAggregatesFilter<"CertificateDocument"> | number
+    documentType?: StringWithAggregatesFilter<"CertificateDocument"> | string
+    validProof?: StringWithAggregatesFilter<"CertificateDocument"> | string
+    isRequired?: BoolWithAggregatesFilter<"CertificateDocument"> | boolean
+    applicationType?: StringWithAggregatesFilter<"CertificateDocument"> | string
+    certificateServiceId?: IntWithAggregatesFilter<"CertificateDocument"> | number
+  }
+
+  export type CertificateProcessStepWhereInput = {
+    AND?: CertificateProcessStepWhereInput | CertificateProcessStepWhereInput[]
+    OR?: CertificateProcessStepWhereInput[]
+    NOT?: CertificateProcessStepWhereInput | CertificateProcessStepWhereInput[]
+    id?: IntFilter<"CertificateProcessStep"> | number
+    slNo?: IntFilter<"CertificateProcessStep"> | number
+    stepDetails?: StringFilter<"CertificateProcessStep"> | string
+    applicationType?: StringFilter<"CertificateProcessStep"> | string
+    certificateServiceId?: IntFilter<"CertificateProcessStep"> | number
+    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+  }
+
+  export type CertificateProcessStepOrderByWithRelationInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    stepDetails?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+    certificateService?: CertificateServiceOrderByWithRelationInput
+  }
+
+  export type CertificateProcessStepWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: CertificateProcessStepWhereInput | CertificateProcessStepWhereInput[]
+    OR?: CertificateProcessStepWhereInput[]
+    NOT?: CertificateProcessStepWhereInput | CertificateProcessStepWhereInput[]
+    slNo?: IntFilter<"CertificateProcessStep"> | number
+    stepDetails?: StringFilter<"CertificateProcessStep"> | string
+    applicationType?: StringFilter<"CertificateProcessStep"> | string
+    certificateServiceId?: IntFilter<"CertificateProcessStep"> | number
+    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+  }, "id">
+
+  export type CertificateProcessStepOrderByWithAggregationInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    stepDetails?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+    _count?: CertificateProcessStepCountOrderByAggregateInput
+    _avg?: CertificateProcessStepAvgOrderByAggregateInput
+    _max?: CertificateProcessStepMaxOrderByAggregateInput
+    _min?: CertificateProcessStepMinOrderByAggregateInput
+    _sum?: CertificateProcessStepSumOrderByAggregateInput
+  }
+
+  export type CertificateProcessStepScalarWhereWithAggregatesInput = {
+    AND?: CertificateProcessStepScalarWhereWithAggregatesInput | CertificateProcessStepScalarWhereWithAggregatesInput[]
+    OR?: CertificateProcessStepScalarWhereWithAggregatesInput[]
+    NOT?: CertificateProcessStepScalarWhereWithAggregatesInput | CertificateProcessStepScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"CertificateProcessStep"> | number
+    slNo?: IntWithAggregatesFilter<"CertificateProcessStep"> | number
+    stepDetails?: StringWithAggregatesFilter<"CertificateProcessStep"> | string
+    applicationType?: StringWithAggregatesFilter<"CertificateProcessStep"> | string
+    certificateServiceId?: IntWithAggregatesFilter<"CertificateProcessStep"> | number
+  }
+
+  export type CertificateEligibilityWhereInput = {
+    AND?: CertificateEligibilityWhereInput | CertificateEligibilityWhereInput[]
+    OR?: CertificateEligibilityWhereInput[]
+    NOT?: CertificateEligibilityWhereInput | CertificateEligibilityWhereInput[]
+    id?: IntFilter<"CertificateEligibility"> | number
+    eligibilityDetail?: StringFilter<"CertificateEligibility"> | string
+    applicationType?: StringFilter<"CertificateEligibility"> | string
+    certificateServiceId?: IntFilter<"CertificateEligibility"> | number
+    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+  }
+
+  export type CertificateEligibilityOrderByWithRelationInput = {
+    id?: SortOrder
+    eligibilityDetail?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+    certificateService?: CertificateServiceOrderByWithRelationInput
+  }
+
+  export type CertificateEligibilityWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: CertificateEligibilityWhereInput | CertificateEligibilityWhereInput[]
+    OR?: CertificateEligibilityWhereInput[]
+    NOT?: CertificateEligibilityWhereInput | CertificateEligibilityWhereInput[]
+    eligibilityDetail?: StringFilter<"CertificateEligibility"> | string
+    applicationType?: StringFilter<"CertificateEligibility"> | string
+    certificateServiceId?: IntFilter<"CertificateEligibility"> | number
+    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+  }, "id">
+
+  export type CertificateEligibilityOrderByWithAggregationInput = {
+    id?: SortOrder
+    eligibilityDetail?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+    _count?: CertificateEligibilityCountOrderByAggregateInput
+    _avg?: CertificateEligibilityAvgOrderByAggregateInput
+    _max?: CertificateEligibilityMaxOrderByAggregateInput
+    _min?: CertificateEligibilityMinOrderByAggregateInput
+    _sum?: CertificateEligibilitySumOrderByAggregateInput
+  }
+
+  export type CertificateEligibilityScalarWhereWithAggregatesInput = {
+    AND?: CertificateEligibilityScalarWhereWithAggregatesInput | CertificateEligibilityScalarWhereWithAggregatesInput[]
+    OR?: CertificateEligibilityScalarWhereWithAggregatesInput[]
+    NOT?: CertificateEligibilityScalarWhereWithAggregatesInput | CertificateEligibilityScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"CertificateEligibility"> | number
+    eligibilityDetail?: StringWithAggregatesFilter<"CertificateEligibility"> | string
+    applicationType?: StringWithAggregatesFilter<"CertificateEligibility"> | string
+    certificateServiceId?: IntWithAggregatesFilter<"CertificateEligibility"> | number
   }
 
   export type ContactServiceWhereInput = {
@@ -11589,34 +18004,62 @@ export namespace Prisma {
     OR?: ContactServiceWhereInput[]
     NOT?: ContactServiceWhereInput | ContactServiceWhereInput[]
     id?: IntFilter<"ContactService"> | number
-    serviceName?: StringFilter<"ContactService"> | string
-    district?: StringFilter<"ContactService"> | string
-    subDistrict?: StringNullableFilter<"ContactService"> | string | null
-    block?: StringFilter<"ContactService"> | string
-    officeAddress?: StringNullableFilter<"ContactService"> | string | null
+    name?: StringFilter<"ContactService"> | string
+    summary?: StringFilter<"ContactService"> | string
+    type?: StringNullableFilter<"ContactService"> | string | null
+    targetAudience?: StringNullableListFilter<"ContactService">
+    applicationMode?: StringFilter<"ContactService"> | string
+    onlineUrl?: StringNullableFilter<"ContactService"> | string | null
+    offlineAddress?: StringNullableFilter<"ContactService"> | string | null
     status?: StringFilter<"ContactService"> | string
     isActive?: BoolFilter<"ContactService"> | boolean
     createdAt?: DateTimeFilter<"ContactService"> | Date | string
     updatedAt?: DateTimeFilter<"ContactService"> | Date | string
     adminId?: IntFilter<"ContactService"> | number
-    contacts?: ContactServiceContactListRelationFilter
+    eligibilityDetails?: StringNullableListFilter<"ContactService">
+    contactDetails?: StringNullableListFilter<"ContactService">
+    processDetails?: StringNullableListFilter<"ContactService">
+    processNew?: StringNullableFilter<"ContactService"> | string | null
+    processUpdate?: StringNullableFilter<"ContactService"> | string | null
+    processLost?: StringNullableFilter<"ContactService"> | string | null
+    processSurrender?: StringNullableFilter<"ContactService"> | string | null
+    docNew?: StringNullableFilter<"ContactService"> | string | null
+    docUpdate?: StringNullableFilter<"ContactService"> | string | null
+    docLost?: StringNullableFilter<"ContactService"> | string | null
+    docSurrender?: StringNullableFilter<"ContactService"> | string | null
     admin?: XOR<AdminRelationFilter, AdminWhereInput>
+    contacts?: ContactServiceContactListRelationFilter
+    documents?: ContactServiceDocumentListRelationFilter
   }
 
   export type ContactServiceOrderByWithRelationInput = {
     id?: SortOrder
-    serviceName?: SortOrder
-    district?: SortOrder
-    subDistrict?: SortOrderInput | SortOrder
-    block?: SortOrder
-    officeAddress?: SortOrderInput | SortOrder
+    name?: SortOrder
+    summary?: SortOrder
+    type?: SortOrderInput | SortOrder
+    targetAudience?: SortOrder
+    applicationMode?: SortOrder
+    onlineUrl?: SortOrderInput | SortOrder
+    offlineAddress?: SortOrderInput | SortOrder
     status?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
-    contacts?: ContactServiceContactOrderByRelationAggregateInput
+    eligibilityDetails?: SortOrder
+    contactDetails?: SortOrder
+    processDetails?: SortOrder
+    processNew?: SortOrderInput | SortOrder
+    processUpdate?: SortOrderInput | SortOrder
+    processLost?: SortOrderInput | SortOrder
+    processSurrender?: SortOrderInput | SortOrder
+    docNew?: SortOrderInput | SortOrder
+    docUpdate?: SortOrderInput | SortOrder
+    docLost?: SortOrderInput | SortOrder
+    docSurrender?: SortOrderInput | SortOrder
     admin?: AdminOrderByWithRelationInput
+    contacts?: ContactServiceContactOrderByRelationAggregateInput
+    documents?: ContactServiceDocumentOrderByRelationAggregateInput
   }
 
   export type ContactServiceWhereUniqueInput = Prisma.AtLeast<{
@@ -11624,32 +18067,59 @@ export namespace Prisma {
     AND?: ContactServiceWhereInput | ContactServiceWhereInput[]
     OR?: ContactServiceWhereInput[]
     NOT?: ContactServiceWhereInput | ContactServiceWhereInput[]
-    serviceName?: StringFilter<"ContactService"> | string
-    district?: StringFilter<"ContactService"> | string
-    subDistrict?: StringNullableFilter<"ContactService"> | string | null
-    block?: StringFilter<"ContactService"> | string
-    officeAddress?: StringNullableFilter<"ContactService"> | string | null
+    name?: StringFilter<"ContactService"> | string
+    summary?: StringFilter<"ContactService"> | string
+    type?: StringNullableFilter<"ContactService"> | string | null
+    targetAudience?: StringNullableListFilter<"ContactService">
+    applicationMode?: StringFilter<"ContactService"> | string
+    onlineUrl?: StringNullableFilter<"ContactService"> | string | null
+    offlineAddress?: StringNullableFilter<"ContactService"> | string | null
     status?: StringFilter<"ContactService"> | string
     isActive?: BoolFilter<"ContactService"> | boolean
     createdAt?: DateTimeFilter<"ContactService"> | Date | string
     updatedAt?: DateTimeFilter<"ContactService"> | Date | string
     adminId?: IntFilter<"ContactService"> | number
-    contacts?: ContactServiceContactListRelationFilter
+    eligibilityDetails?: StringNullableListFilter<"ContactService">
+    contactDetails?: StringNullableListFilter<"ContactService">
+    processDetails?: StringNullableListFilter<"ContactService">
+    processNew?: StringNullableFilter<"ContactService"> | string | null
+    processUpdate?: StringNullableFilter<"ContactService"> | string | null
+    processLost?: StringNullableFilter<"ContactService"> | string | null
+    processSurrender?: StringNullableFilter<"ContactService"> | string | null
+    docNew?: StringNullableFilter<"ContactService"> | string | null
+    docUpdate?: StringNullableFilter<"ContactService"> | string | null
+    docLost?: StringNullableFilter<"ContactService"> | string | null
+    docSurrender?: StringNullableFilter<"ContactService"> | string | null
     admin?: XOR<AdminRelationFilter, AdminWhereInput>
+    contacts?: ContactServiceContactListRelationFilter
+    documents?: ContactServiceDocumentListRelationFilter
   }, "id">
 
   export type ContactServiceOrderByWithAggregationInput = {
     id?: SortOrder
-    serviceName?: SortOrder
-    district?: SortOrder
-    subDistrict?: SortOrderInput | SortOrder
-    block?: SortOrder
-    officeAddress?: SortOrderInput | SortOrder
+    name?: SortOrder
+    summary?: SortOrder
+    type?: SortOrderInput | SortOrder
+    targetAudience?: SortOrder
+    applicationMode?: SortOrder
+    onlineUrl?: SortOrderInput | SortOrder
+    offlineAddress?: SortOrderInput | SortOrder
     status?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
+    eligibilityDetails?: SortOrder
+    contactDetails?: SortOrder
+    processDetails?: SortOrder
+    processNew?: SortOrderInput | SortOrder
+    processUpdate?: SortOrderInput | SortOrder
+    processLost?: SortOrderInput | SortOrder
+    processSurrender?: SortOrderInput | SortOrder
+    docNew?: SortOrderInput | SortOrder
+    docUpdate?: SortOrderInput | SortOrder
+    docLost?: SortOrderInput | SortOrder
+    docSurrender?: SortOrderInput | SortOrder
     _count?: ContactServiceCountOrderByAggregateInput
     _avg?: ContactServiceAvgOrderByAggregateInput
     _max?: ContactServiceMaxOrderByAggregateInput
@@ -11662,16 +18132,29 @@ export namespace Prisma {
     OR?: ContactServiceScalarWhereWithAggregatesInput[]
     NOT?: ContactServiceScalarWhereWithAggregatesInput | ContactServiceScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"ContactService"> | number
-    serviceName?: StringWithAggregatesFilter<"ContactService"> | string
-    district?: StringWithAggregatesFilter<"ContactService"> | string
-    subDistrict?: StringNullableWithAggregatesFilter<"ContactService"> | string | null
-    block?: StringWithAggregatesFilter<"ContactService"> | string
-    officeAddress?: StringNullableWithAggregatesFilter<"ContactService"> | string | null
+    name?: StringWithAggregatesFilter<"ContactService"> | string
+    summary?: StringWithAggregatesFilter<"ContactService"> | string
+    type?: StringNullableWithAggregatesFilter<"ContactService"> | string | null
+    targetAudience?: StringNullableListFilter<"ContactService">
+    applicationMode?: StringWithAggregatesFilter<"ContactService"> | string
+    onlineUrl?: StringNullableWithAggregatesFilter<"ContactService"> | string | null
+    offlineAddress?: StringNullableWithAggregatesFilter<"ContactService"> | string | null
     status?: StringWithAggregatesFilter<"ContactService"> | string
     isActive?: BoolWithAggregatesFilter<"ContactService"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"ContactService"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ContactService"> | Date | string
     adminId?: IntWithAggregatesFilter<"ContactService"> | number
+    eligibilityDetails?: StringNullableListFilter<"ContactService">
+    contactDetails?: StringNullableListFilter<"ContactService">
+    processDetails?: StringNullableListFilter<"ContactService">
+    processNew?: StringNullableWithAggregatesFilter<"ContactService"> | string | null
+    processUpdate?: StringNullableWithAggregatesFilter<"ContactService"> | string | null
+    processLost?: StringNullableWithAggregatesFilter<"ContactService"> | string | null
+    processSurrender?: StringNullableWithAggregatesFilter<"ContactService"> | string | null
+    docNew?: StringNullableWithAggregatesFilter<"ContactService"> | string | null
+    docUpdate?: StringNullableWithAggregatesFilter<"ContactService"> | string | null
+    docLost?: StringNullableWithAggregatesFilter<"ContactService"> | string | null
+    docSurrender?: StringNullableWithAggregatesFilter<"ContactService"> | string | null
   }
 
   export type ContactServiceContactWhereInput = {
@@ -11679,26 +18162,30 @@ export namespace Prisma {
     OR?: ContactServiceContactWhereInput[]
     NOT?: ContactServiceContactWhereInput | ContactServiceContactWhereInput[]
     id?: IntFilter<"ContactServiceContact"> | number
+    serviceName?: StringFilter<"ContactServiceContact"> | string
+    district?: StringFilter<"ContactServiceContact"> | string
+    subDistrict?: StringFilter<"ContactServiceContact"> | string
+    block?: StringFilter<"ContactServiceContact"> | string
     name?: StringFilter<"ContactServiceContact"> | string
     designation?: StringFilter<"ContactServiceContact"> | string
     contact?: StringFilter<"ContactServiceContact"> | string
-    email?: StringNullableFilter<"ContactServiceContact"> | string | null
-    serviceId?: IntFilter<"ContactServiceContact"> | number
-    createdAt?: DateTimeFilter<"ContactServiceContact"> | Date | string
-    updatedAt?: DateTimeFilter<"ContactServiceContact"> | Date | string
-    service?: XOR<ContactServiceRelationFilter, ContactServiceWhereInput>
+    email?: StringFilter<"ContactServiceContact"> | string
+    contactServiceId?: IntFilter<"ContactServiceContact"> | number
+    contactService?: XOR<ContactServiceRelationFilter, ContactServiceWhereInput>
   }
 
   export type ContactServiceContactOrderByWithRelationInput = {
     id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
     name?: SortOrder
     designation?: SortOrder
     contact?: SortOrder
-    email?: SortOrderInput | SortOrder
-    serviceId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    service?: ContactServiceOrderByWithRelationInput
+    email?: SortOrder
+    contactServiceId?: SortOrder
+    contactService?: ContactServiceOrderByWithRelationInput
   }
 
   export type ContactServiceContactWhereUniqueInput = Prisma.AtLeast<{
@@ -11706,25 +18193,29 @@ export namespace Prisma {
     AND?: ContactServiceContactWhereInput | ContactServiceContactWhereInput[]
     OR?: ContactServiceContactWhereInput[]
     NOT?: ContactServiceContactWhereInput | ContactServiceContactWhereInput[]
+    serviceName?: StringFilter<"ContactServiceContact"> | string
+    district?: StringFilter<"ContactServiceContact"> | string
+    subDistrict?: StringFilter<"ContactServiceContact"> | string
+    block?: StringFilter<"ContactServiceContact"> | string
     name?: StringFilter<"ContactServiceContact"> | string
     designation?: StringFilter<"ContactServiceContact"> | string
     contact?: StringFilter<"ContactServiceContact"> | string
-    email?: StringNullableFilter<"ContactServiceContact"> | string | null
-    serviceId?: IntFilter<"ContactServiceContact"> | number
-    createdAt?: DateTimeFilter<"ContactServiceContact"> | Date | string
-    updatedAt?: DateTimeFilter<"ContactServiceContact"> | Date | string
-    service?: XOR<ContactServiceRelationFilter, ContactServiceWhereInput>
+    email?: StringFilter<"ContactServiceContact"> | string
+    contactServiceId?: IntFilter<"ContactServiceContact"> | number
+    contactService?: XOR<ContactServiceRelationFilter, ContactServiceWhereInput>
   }, "id">
 
   export type ContactServiceContactOrderByWithAggregationInput = {
     id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
     name?: SortOrder
     designation?: SortOrder
     contact?: SortOrder
-    email?: SortOrderInput | SortOrder
-    serviceId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    email?: SortOrder
+    contactServiceId?: SortOrder
     _count?: ContactServiceContactCountOrderByAggregateInput
     _avg?: ContactServiceContactAvgOrderByAggregateInput
     _max?: ContactServiceContactMaxOrderByAggregateInput
@@ -11737,13 +18228,77 @@ export namespace Prisma {
     OR?: ContactServiceContactScalarWhereWithAggregatesInput[]
     NOT?: ContactServiceContactScalarWhereWithAggregatesInput | ContactServiceContactScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"ContactServiceContact"> | number
+    serviceName?: StringWithAggregatesFilter<"ContactServiceContact"> | string
+    district?: StringWithAggregatesFilter<"ContactServiceContact"> | string
+    subDistrict?: StringWithAggregatesFilter<"ContactServiceContact"> | string
+    block?: StringWithAggregatesFilter<"ContactServiceContact"> | string
     name?: StringWithAggregatesFilter<"ContactServiceContact"> | string
     designation?: StringWithAggregatesFilter<"ContactServiceContact"> | string
     contact?: StringWithAggregatesFilter<"ContactServiceContact"> | string
-    email?: StringNullableWithAggregatesFilter<"ContactServiceContact"> | string | null
-    serviceId?: IntWithAggregatesFilter<"ContactServiceContact"> | number
-    createdAt?: DateTimeWithAggregatesFilter<"ContactServiceContact"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"ContactServiceContact"> | Date | string
+    email?: StringWithAggregatesFilter<"ContactServiceContact"> | string
+    contactServiceId?: IntWithAggregatesFilter<"ContactServiceContact"> | number
+  }
+
+  export type ContactServiceDocumentWhereInput = {
+    AND?: ContactServiceDocumentWhereInput | ContactServiceDocumentWhereInput[]
+    OR?: ContactServiceDocumentWhereInput[]
+    NOT?: ContactServiceDocumentWhereInput | ContactServiceDocumentWhereInput[]
+    id?: IntFilter<"ContactServiceDocument"> | number
+    slNo?: IntFilter<"ContactServiceDocument"> | number
+    documentType?: StringFilter<"ContactServiceDocument"> | string
+    validProof?: StringFilter<"ContactServiceDocument"> | string
+    isRequired?: BoolFilter<"ContactServiceDocument"> | boolean
+    contactServiceId?: IntFilter<"ContactServiceDocument"> | number
+    contactService?: XOR<ContactServiceRelationFilter, ContactServiceWhereInput>
+  }
+
+  export type ContactServiceDocumentOrderByWithRelationInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    contactServiceId?: SortOrder
+    contactService?: ContactServiceOrderByWithRelationInput
+  }
+
+  export type ContactServiceDocumentWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: ContactServiceDocumentWhereInput | ContactServiceDocumentWhereInput[]
+    OR?: ContactServiceDocumentWhereInput[]
+    NOT?: ContactServiceDocumentWhereInput | ContactServiceDocumentWhereInput[]
+    slNo?: IntFilter<"ContactServiceDocument"> | number
+    documentType?: StringFilter<"ContactServiceDocument"> | string
+    validProof?: StringFilter<"ContactServiceDocument"> | string
+    isRequired?: BoolFilter<"ContactServiceDocument"> | boolean
+    contactServiceId?: IntFilter<"ContactServiceDocument"> | number
+    contactService?: XOR<ContactServiceRelationFilter, ContactServiceWhereInput>
+  }, "id">
+
+  export type ContactServiceDocumentOrderByWithAggregationInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    contactServiceId?: SortOrder
+    _count?: ContactServiceDocumentCountOrderByAggregateInput
+    _avg?: ContactServiceDocumentAvgOrderByAggregateInput
+    _max?: ContactServiceDocumentMaxOrderByAggregateInput
+    _min?: ContactServiceDocumentMinOrderByAggregateInput
+    _sum?: ContactServiceDocumentSumOrderByAggregateInput
+  }
+
+  export type ContactServiceDocumentScalarWhereWithAggregatesInput = {
+    AND?: ContactServiceDocumentScalarWhereWithAggregatesInput | ContactServiceDocumentScalarWhereWithAggregatesInput[]
+    OR?: ContactServiceDocumentScalarWhereWithAggregatesInput[]
+    NOT?: ContactServiceDocumentScalarWhereWithAggregatesInput | ContactServiceDocumentScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"ContactServiceDocument"> | number
+    slNo?: IntWithAggregatesFilter<"ContactServiceDocument"> | number
+    documentType?: StringWithAggregatesFilter<"ContactServiceDocument"> | string
+    validProof?: StringWithAggregatesFilter<"ContactServiceDocument"> | string
+    isRequired?: BoolWithAggregatesFilter<"ContactServiceDocument"> | boolean
+    contactServiceId?: IntWithAggregatesFilter<"ContactServiceDocument"> | number
   }
 
   export type GrievanceWhereInput = {
@@ -12148,12 +18703,22 @@ export namespace Prisma {
     status?: string
     isActive?: boolean
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    admin?: AdminCreateNestedOneWithoutSchemeServicesInput
+    admin: AdminCreateNestedOneWithoutSchemeServicesInput
     contacts?: ContactPersonCreateNestedManyWithoutSchemeServiceInput
     documents?: SupportiveDocumentCreateNestedManyWithoutSchemeServiceInput
   }
@@ -12170,12 +18735,22 @@ export namespace Prisma {
     status?: string
     isActive?: boolean
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    adminId?: number
+    adminId: number
     contacts?: ContactPersonUncheckedCreateNestedManyWithoutSchemeServiceInput
     documents?: SupportiveDocumentUncheckedCreateNestedManyWithoutSchemeServiceInput
   }
@@ -12191,9 +18766,19 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: AdminUpdateOneRequiredWithoutSchemeServicesNestedInput
@@ -12213,9 +18798,19 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     adminId?: IntFieldUpdateOperationsInput | number
@@ -12235,12 +18830,22 @@ export namespace Prisma {
     status?: string
     isActive?: boolean
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    adminId?: number
+    adminId: number
   }
 
   export type SchemeServiceUpdateManyMutationInput = {
@@ -12254,9 +18859,19 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12273,9 +18888,19 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     adminId?: IntFieldUpdateOperationsInput | number
@@ -12295,9 +18920,21 @@ export namespace Prisma {
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    admin?: AdminCreateNestedOneWithoutCertificateServicesInput
+    admin: AdminCreateNestedOneWithoutCertificateServicesInput
+    contacts?: CertificateContactCreateNestedManyWithoutCertificateServiceInput
+    documents?: CertificateDocumentCreateNestedManyWithoutCertificateServiceInput
+    processSteps?: CertificateProcessStepCreateNestedManyWithoutCertificateServiceInput
+    eligibilityItems?: CertificateEligibilityCreateNestedManyWithoutCertificateServiceInput
   }
 
   export type CertificateServiceUncheckedCreateInput = {
@@ -12315,9 +18952,21 @@ export namespace Prisma {
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    adminId?: number
+    adminId: number
+    contacts?: CertificateContactUncheckedCreateNestedManyWithoutCertificateServiceInput
+    documents?: CertificateDocumentUncheckedCreateNestedManyWithoutCertificateServiceInput
+    processSteps?: CertificateProcessStepUncheckedCreateNestedManyWithoutCertificateServiceInput
+    eligibilityItems?: CertificateEligibilityUncheckedCreateNestedManyWithoutCertificateServiceInput
   }
 
   export type CertificateServiceUpdateInput = {
@@ -12334,9 +18983,21 @@ export namespace Prisma {
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: AdminUpdateOneRequiredWithoutCertificateServicesNestedInput
+    contacts?: CertificateContactUpdateManyWithoutCertificateServiceNestedInput
+    documents?: CertificateDocumentUpdateManyWithoutCertificateServiceNestedInput
+    processSteps?: CertificateProcessStepUpdateManyWithoutCertificateServiceNestedInput
+    eligibilityItems?: CertificateEligibilityUpdateManyWithoutCertificateServiceNestedInput
   }
 
   export type CertificateServiceUncheckedUpdateInput = {
@@ -12354,9 +19015,21 @@ export namespace Prisma {
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     adminId?: IntFieldUpdateOperationsInput | number
+    contacts?: CertificateContactUncheckedUpdateManyWithoutCertificateServiceNestedInput
+    documents?: CertificateDocumentUncheckedUpdateManyWithoutCertificateServiceNestedInput
+    processSteps?: CertificateProcessStepUncheckedUpdateManyWithoutCertificateServiceNestedInput
+    eligibilityItems?: CertificateEligibilityUncheckedUpdateManyWithoutCertificateServiceNestedInput
   }
 
   export type CertificateServiceCreateManyInput = {
@@ -12374,9 +19047,17 @@ export namespace Prisma {
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    adminId?: number
+    adminId: number
   }
 
   export type CertificateServiceUpdateManyMutationInput = {
@@ -12393,6 +19074,14 @@ export namespace Prisma {
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12412,180 +19101,613 @@ export namespace Prisma {
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     adminId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type ContactServiceCreateInput = {
+  export type CertificateContactCreateInput = {
     serviceName: string
     district: string
-    subDistrict?: string | null
+    subDistrict: string
     block: string
-    officeAddress?: string | null
+    name: string
+    designation: string
+    contact: string
+    email: string
+    applicationType?: string
+    certificateService: CertificateServiceCreateNestedOneWithoutContactsInput
+  }
+
+  export type CertificateContactUncheckedCreateInput = {
+    id?: number
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
+    name: string
+    designation: string
+    contact: string
+    email: string
+    applicationType?: string
+    certificateServiceId: number
+  }
+
+  export type CertificateContactUpdateInput = {
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+    certificateService?: CertificateServiceUpdateOneRequiredWithoutContactsNestedInput
+  }
+
+  export type CertificateContactUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+    certificateServiceId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type CertificateContactCreateManyInput = {
+    id?: number
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
+    name: string
+    designation: string
+    contact: string
+    email: string
+    applicationType?: string
+    certificateServiceId: number
+  }
+
+  export type CertificateContactUpdateManyMutationInput = {
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CertificateContactUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+    certificateServiceId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type CertificateDocumentCreateInput = {
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
+    applicationType?: string
+    certificateService: CertificateServiceCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type CertificateDocumentUncheckedCreateInput = {
+    id?: number
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
+    applicationType?: string
+    certificateServiceId: number
+  }
+
+  export type CertificateDocumentUpdateInput = {
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    applicationType?: StringFieldUpdateOperationsInput | string
+    certificateService?: CertificateServiceUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type CertificateDocumentUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    applicationType?: StringFieldUpdateOperationsInput | string
+    certificateServiceId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type CertificateDocumentCreateManyInput = {
+    id?: number
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
+    applicationType?: string
+    certificateServiceId: number
+  }
+
+  export type CertificateDocumentUpdateManyMutationInput = {
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    applicationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CertificateDocumentUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    applicationType?: StringFieldUpdateOperationsInput | string
+    certificateServiceId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type CertificateProcessStepCreateInput = {
+    slNo: number
+    stepDetails: string
+    applicationType?: string
+    certificateService: CertificateServiceCreateNestedOneWithoutProcessStepsInput
+  }
+
+  export type CertificateProcessStepUncheckedCreateInput = {
+    id?: number
+    slNo: number
+    stepDetails: string
+    applicationType?: string
+    certificateServiceId: number
+  }
+
+  export type CertificateProcessStepUpdateInput = {
+    slNo?: IntFieldUpdateOperationsInput | number
+    stepDetails?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+    certificateService?: CertificateServiceUpdateOneRequiredWithoutProcessStepsNestedInput
+  }
+
+  export type CertificateProcessStepUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slNo?: IntFieldUpdateOperationsInput | number
+    stepDetails?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+    certificateServiceId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type CertificateProcessStepCreateManyInput = {
+    id?: number
+    slNo: number
+    stepDetails: string
+    applicationType?: string
+    certificateServiceId: number
+  }
+
+  export type CertificateProcessStepUpdateManyMutationInput = {
+    slNo?: IntFieldUpdateOperationsInput | number
+    stepDetails?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CertificateProcessStepUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slNo?: IntFieldUpdateOperationsInput | number
+    stepDetails?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+    certificateServiceId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type CertificateEligibilityCreateInput = {
+    eligibilityDetail: string
+    applicationType?: string
+    certificateService: CertificateServiceCreateNestedOneWithoutEligibilityItemsInput
+  }
+
+  export type CertificateEligibilityUncheckedCreateInput = {
+    id?: number
+    eligibilityDetail: string
+    applicationType?: string
+    certificateServiceId: number
+  }
+
+  export type CertificateEligibilityUpdateInput = {
+    eligibilityDetail?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+    certificateService?: CertificateServiceUpdateOneRequiredWithoutEligibilityItemsNestedInput
+  }
+
+  export type CertificateEligibilityUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    eligibilityDetail?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+    certificateServiceId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type CertificateEligibilityCreateManyInput = {
+    id?: number
+    eligibilityDetail: string
+    applicationType?: string
+    certificateServiceId: number
+  }
+
+  export type CertificateEligibilityUpdateManyMutationInput = {
+    eligibilityDetail?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CertificateEligibilityUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    eligibilityDetail?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+    certificateServiceId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ContactServiceCreateInput = {
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: ContactServiceCreatetargetAudienceInput | string[]
+    applicationMode: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
     status?: string
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    contacts?: ContactServiceContactCreateNestedManyWithoutServiceInput
-    admin?: AdminCreateNestedOneWithoutContactServicesInput
+    eligibilityDetails?: ContactServiceCreateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceCreatecontactDetailsInput | string[]
+    processDetails?: ContactServiceCreateprocessDetailsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    admin: AdminCreateNestedOneWithoutContactServicesInput
+    contacts?: ContactServiceContactCreateNestedManyWithoutContactServiceInput
+    documents?: ContactServiceDocumentCreateNestedManyWithoutContactServiceInput
   }
 
   export type ContactServiceUncheckedCreateInput = {
     id?: number
-    serviceName: string
-    district: string
-    subDistrict?: string | null
-    block: string
-    officeAddress?: string | null
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: ContactServiceCreatetargetAudienceInput | string[]
+    applicationMode: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
     status?: string
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    adminId?: number
-    contacts?: ContactServiceContactUncheckedCreateNestedManyWithoutServiceInput
+    adminId: number
+    eligibilityDetails?: ContactServiceCreateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceCreatecontactDetailsInput | string[]
+    processDetails?: ContactServiceCreateprocessDetailsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    contacts?: ContactServiceContactUncheckedCreateNestedManyWithoutContactServiceInput
+    documents?: ContactServiceDocumentUncheckedCreateNestedManyWithoutContactServiceInput
   }
 
   export type ContactServiceUpdateInput = {
-    serviceName?: StringFieldUpdateOperationsInput | string
-    district?: StringFieldUpdateOperationsInput | string
-    subDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    block?: StringFieldUpdateOperationsInput | string
-    officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: ContactServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    contacts?: ContactServiceContactUpdateManyWithoutServiceNestedInput
+    eligibilityDetails?: ContactServiceUpdateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceUpdatecontactDetailsInput | string[]
+    processDetails?: ContactServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     admin?: AdminUpdateOneRequiredWithoutContactServicesNestedInput
+    contacts?: ContactServiceContactUpdateManyWithoutContactServiceNestedInput
+    documents?: ContactServiceDocumentUpdateManyWithoutContactServiceNestedInput
   }
 
   export type ContactServiceUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    serviceName?: StringFieldUpdateOperationsInput | string
-    district?: StringFieldUpdateOperationsInput | string
-    subDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    block?: StringFieldUpdateOperationsInput | string
-    officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: ContactServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     adminId?: IntFieldUpdateOperationsInput | number
-    contacts?: ContactServiceContactUncheckedUpdateManyWithoutServiceNestedInput
+    eligibilityDetails?: ContactServiceUpdateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceUpdatecontactDetailsInput | string[]
+    processDetails?: ContactServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    contacts?: ContactServiceContactUncheckedUpdateManyWithoutContactServiceNestedInput
+    documents?: ContactServiceDocumentUncheckedUpdateManyWithoutContactServiceNestedInput
   }
 
   export type ContactServiceCreateManyInput = {
     id?: number
-    serviceName: string
-    district: string
-    subDistrict?: string | null
-    block: string
-    officeAddress?: string | null
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: ContactServiceCreatetargetAudienceInput | string[]
+    applicationMode: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
     status?: string
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    adminId?: number
+    adminId: number
+    eligibilityDetails?: ContactServiceCreateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceCreatecontactDetailsInput | string[]
+    processDetails?: ContactServiceCreateprocessDetailsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
   }
 
   export type ContactServiceUpdateManyMutationInput = {
-    serviceName?: StringFieldUpdateOperationsInput | string
-    district?: StringFieldUpdateOperationsInput | string
-    subDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    block?: StringFieldUpdateOperationsInput | string
-    officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: ContactServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: ContactServiceUpdateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceUpdatecontactDetailsInput | string[]
+    processDetails?: ContactServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ContactServiceUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    serviceName?: StringFieldUpdateOperationsInput | string
-    district?: StringFieldUpdateOperationsInput | string
-    subDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    block?: StringFieldUpdateOperationsInput | string
-    officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: ContactServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     adminId?: IntFieldUpdateOperationsInput | number
+    eligibilityDetails?: ContactServiceUpdateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceUpdatecontactDetailsInput | string[]
+    processDetails?: ContactServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ContactServiceContactCreateInput = {
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
     name: string
     designation: string
     contact: string
-    email?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    service: ContactServiceCreateNestedOneWithoutContactsInput
+    email: string
+    contactService: ContactServiceCreateNestedOneWithoutContactsInput
   }
 
   export type ContactServiceContactUncheckedCreateInput = {
     id?: number
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
     name: string
     designation: string
     contact: string
-    email?: string | null
-    serviceId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    email: string
+    contactServiceId: number
   }
 
   export type ContactServiceContactUpdateInput = {
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     designation?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    service?: ContactServiceUpdateOneRequiredWithoutContactsNestedInput
+    email?: StringFieldUpdateOperationsInput | string
+    contactService?: ContactServiceUpdateOneRequiredWithoutContactsNestedInput
   }
 
   export type ContactServiceContactUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     designation?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    serviceId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email?: StringFieldUpdateOperationsInput | string
+    contactServiceId?: IntFieldUpdateOperationsInput | number
   }
 
   export type ContactServiceContactCreateManyInput = {
     id?: number
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
     name: string
     designation: string
     contact: string
-    email?: string | null
-    serviceId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    email: string
+    contactServiceId: number
   }
 
   export type ContactServiceContactUpdateManyMutationInput = {
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     designation?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email?: StringFieldUpdateOperationsInput | string
   }
 
   export type ContactServiceContactUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     designation?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    serviceId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email?: StringFieldUpdateOperationsInput | string
+    contactServiceId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ContactServiceDocumentCreateInput = {
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
+    contactService: ContactServiceCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type ContactServiceDocumentUncheckedCreateInput = {
+    id?: number
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
+    contactServiceId: number
+  }
+
+  export type ContactServiceDocumentUpdateInput = {
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    contactService?: ContactServiceUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type ContactServiceDocumentUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    contactServiceId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ContactServiceDocumentCreateManyInput = {
+    id?: number
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
+    contactServiceId: number
+  }
+
+  export type ContactServiceDocumentUpdateManyMutationInput = {
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type ContactServiceDocumentUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    contactServiceId?: IntFieldUpdateOperationsInput | number
   }
 
   export type GrievanceCreateInput = {
@@ -13147,9 +20269,19 @@ export namespace Prisma {
     status?: SortOrder
     isActive?: SortOrder
     eligibilityDetails?: SortOrder
+    schemeDetails?: SortOrder
+    processDetails?: SortOrder
     benefitDetails?: SortOrder
     applicationProcess?: SortOrder
     requiredDocuments?: SortOrder
+    processNew?: SortOrder
+    processUpdate?: SortOrder
+    processLost?: SortOrder
+    processSurrender?: SortOrder
+    docNew?: SortOrder
+    docUpdate?: SortOrder
+    docLost?: SortOrder
+    docSurrender?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
@@ -13170,6 +20302,14 @@ export namespace Prisma {
     offlineAddress?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    processNew?: SortOrder
+    processUpdate?: SortOrder
+    processLost?: SortOrder
+    processSurrender?: SortOrder
+    docNew?: SortOrder
+    docUpdate?: SortOrder
+    docLost?: SortOrder
+    docSurrender?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
@@ -13185,6 +20325,14 @@ export namespace Prisma {
     offlineAddress?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    processNew?: SortOrder
+    processUpdate?: SortOrder
+    processLost?: SortOrder
+    processSurrender?: SortOrder
+    docNew?: SortOrder
+    docUpdate?: SortOrder
+    docLost?: SortOrder
+    docSurrender?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
@@ -13221,6 +20369,46 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type CertificateContactListRelationFilter = {
+    every?: CertificateContactWhereInput
+    some?: CertificateContactWhereInput
+    none?: CertificateContactWhereInput
+  }
+
+  export type CertificateDocumentListRelationFilter = {
+    every?: CertificateDocumentWhereInput
+    some?: CertificateDocumentWhereInput
+    none?: CertificateDocumentWhereInput
+  }
+
+  export type CertificateProcessStepListRelationFilter = {
+    every?: CertificateProcessStepWhereInput
+    some?: CertificateProcessStepWhereInput
+    none?: CertificateProcessStepWhereInput
+  }
+
+  export type CertificateEligibilityListRelationFilter = {
+    every?: CertificateEligibilityWhereInput
+    some?: CertificateEligibilityWhereInput
+    none?: CertificateEligibilityWhereInput
+  }
+
+  export type CertificateContactOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CertificateDocumentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CertificateProcessStepOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CertificateEligibilityOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type CertificateServiceCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -13236,6 +20424,14 @@ export namespace Prisma {
     offlineAddress?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    processNew?: SortOrder
+    processUpdate?: SortOrder
+    processLost?: SortOrder
+    processSurrender?: SortOrder
+    docNew?: SortOrder
+    docUpdate?: SortOrder
+    docLost?: SortOrder
+    docSurrender?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
@@ -13256,6 +20452,14 @@ export namespace Prisma {
     offlineAddress?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    processNew?: SortOrder
+    processUpdate?: SortOrder
+    processLost?: SortOrder
+    processSurrender?: SortOrder
+    docNew?: SortOrder
+    docUpdate?: SortOrder
+    docLost?: SortOrder
+    docSurrender?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
@@ -13271,6 +20475,14 @@ export namespace Prisma {
     offlineAddress?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    processNew?: SortOrder
+    processUpdate?: SortOrder
+    processLost?: SortOrder
+    processSurrender?: SortOrder
+    docNew?: SortOrder
+    docUpdate?: SortOrder
+    docLost?: SortOrder
+    docSurrender?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
@@ -13281,28 +20493,217 @@ export namespace Prisma {
     adminId?: SortOrder
   }
 
+  export type CertificateServiceRelationFilter = {
+    is?: CertificateServiceWhereInput
+    isNot?: CertificateServiceWhereInput
+  }
+
+  export type CertificateContactCountOrderByAggregateInput = {
+    id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
+    name?: SortOrder
+    designation?: SortOrder
+    contact?: SortOrder
+    email?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateContactAvgOrderByAggregateInput = {
+    id?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateContactMaxOrderByAggregateInput = {
+    id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
+    name?: SortOrder
+    designation?: SortOrder
+    contact?: SortOrder
+    email?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateContactMinOrderByAggregateInput = {
+    id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
+    name?: SortOrder
+    designation?: SortOrder
+    contact?: SortOrder
+    email?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateContactSumOrderByAggregateInput = {
+    id?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateDocumentCountOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateDocumentAvgOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateDocumentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateDocumentMinOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateDocumentSumOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateProcessStepCountOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    stepDetails?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateProcessStepAvgOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateProcessStepMaxOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    stepDetails?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateProcessStepMinOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    stepDetails?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateProcessStepSumOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateEligibilityCountOrderByAggregateInput = {
+    id?: SortOrder
+    eligibilityDetail?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateEligibilityAvgOrderByAggregateInput = {
+    id?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateEligibilityMaxOrderByAggregateInput = {
+    id?: SortOrder
+    eligibilityDetail?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateEligibilityMinOrderByAggregateInput = {
+    id?: SortOrder
+    eligibilityDetail?: SortOrder
+    applicationType?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
+  export type CertificateEligibilitySumOrderByAggregateInput = {
+    id?: SortOrder
+    certificateServiceId?: SortOrder
+  }
+
   export type ContactServiceContactListRelationFilter = {
     every?: ContactServiceContactWhereInput
     some?: ContactServiceContactWhereInput
     none?: ContactServiceContactWhereInput
   }
 
+  export type ContactServiceDocumentListRelationFilter = {
+    every?: ContactServiceDocumentWhereInput
+    some?: ContactServiceDocumentWhereInput
+    none?: ContactServiceDocumentWhereInput
+  }
+
   export type ContactServiceContactOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ContactServiceDocumentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type ContactServiceCountOrderByAggregateInput = {
     id?: SortOrder
-    serviceName?: SortOrder
-    district?: SortOrder
-    subDistrict?: SortOrder
-    block?: SortOrder
-    officeAddress?: SortOrder
+    name?: SortOrder
+    summary?: SortOrder
+    type?: SortOrder
+    targetAudience?: SortOrder
+    applicationMode?: SortOrder
+    onlineUrl?: SortOrder
+    offlineAddress?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
+    eligibilityDetails?: SortOrder
+    contactDetails?: SortOrder
+    processDetails?: SortOrder
+    processNew?: SortOrder
+    processUpdate?: SortOrder
+    processLost?: SortOrder
+    processSurrender?: SortOrder
+    docNew?: SortOrder
+    docUpdate?: SortOrder
+    docLost?: SortOrder
+    docSurrender?: SortOrder
   }
 
   export type ContactServiceAvgOrderByAggregateInput = {
@@ -13312,30 +20713,48 @@ export namespace Prisma {
 
   export type ContactServiceMaxOrderByAggregateInput = {
     id?: SortOrder
-    serviceName?: SortOrder
-    district?: SortOrder
-    subDistrict?: SortOrder
-    block?: SortOrder
-    officeAddress?: SortOrder
+    name?: SortOrder
+    summary?: SortOrder
+    type?: SortOrder
+    applicationMode?: SortOrder
+    onlineUrl?: SortOrder
+    offlineAddress?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
+    processNew?: SortOrder
+    processUpdate?: SortOrder
+    processLost?: SortOrder
+    processSurrender?: SortOrder
+    docNew?: SortOrder
+    docUpdate?: SortOrder
+    docLost?: SortOrder
+    docSurrender?: SortOrder
   }
 
   export type ContactServiceMinOrderByAggregateInput = {
     id?: SortOrder
-    serviceName?: SortOrder
-    district?: SortOrder
-    subDistrict?: SortOrder
-    block?: SortOrder
-    officeAddress?: SortOrder
+    name?: SortOrder
+    summary?: SortOrder
+    type?: SortOrder
+    applicationMode?: SortOrder
+    onlineUrl?: SortOrder
+    offlineAddress?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     adminId?: SortOrder
+    processNew?: SortOrder
+    processUpdate?: SortOrder
+    processLost?: SortOrder
+    processSurrender?: SortOrder
+    docNew?: SortOrder
+    docUpdate?: SortOrder
+    docLost?: SortOrder
+    docSurrender?: SortOrder
   }
 
   export type ContactServiceSumOrderByAggregateInput = {
@@ -13350,45 +20769,90 @@ export namespace Prisma {
 
   export type ContactServiceContactCountOrderByAggregateInput = {
     id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
     name?: SortOrder
     designation?: SortOrder
     contact?: SortOrder
     email?: SortOrder
-    serviceId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    contactServiceId?: SortOrder
   }
 
   export type ContactServiceContactAvgOrderByAggregateInput = {
     id?: SortOrder
-    serviceId?: SortOrder
+    contactServiceId?: SortOrder
   }
 
   export type ContactServiceContactMaxOrderByAggregateInput = {
     id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
     name?: SortOrder
     designation?: SortOrder
     contact?: SortOrder
     email?: SortOrder
-    serviceId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    contactServiceId?: SortOrder
   }
 
   export type ContactServiceContactMinOrderByAggregateInput = {
     id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
     name?: SortOrder
     designation?: SortOrder
     contact?: SortOrder
     email?: SortOrder
-    serviceId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    contactServiceId?: SortOrder
   }
 
   export type ContactServiceContactSumOrderByAggregateInput = {
     id?: SortOrder
-    serviceId?: SortOrder
+    contactServiceId?: SortOrder
+  }
+
+  export type ContactServiceDocumentCountOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    contactServiceId?: SortOrder
+  }
+
+  export type ContactServiceDocumentAvgOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    contactServiceId?: SortOrder
+  }
+
+  export type ContactServiceDocumentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    contactServiceId?: SortOrder
+  }
+
+  export type ContactServiceDocumentMinOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    contactServiceId?: SortOrder
+  }
+
+  export type ContactServiceDocumentSumOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    contactServiceId?: SortOrder
   }
 
   export type GrievanceCountOrderByAggregateInput = {
@@ -13736,6 +21200,14 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type SchemeServiceCreateschemeDetailsInput = {
+    set: string[]
+  }
+
+  export type SchemeServiceCreateprocessDetailsInput = {
+    set: string[]
+  }
+
   export type SchemeServiceCreatebenefitDetailsInput = {
     set: string[]
   }
@@ -13796,6 +21268,16 @@ export namespace Prisma {
   }
 
   export type SchemeServiceUpdateeligibilityDetailsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type SchemeServiceUpdateschemeDetailsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type SchemeServiceUpdateprocessDetailsInput = {
     set?: string[]
     push?: string | string[]
   }
@@ -13905,6 +21387,62 @@ export namespace Prisma {
     connect?: AdminWhereUniqueInput
   }
 
+  export type CertificateContactCreateNestedManyWithoutCertificateServiceInput = {
+    create?: XOR<CertificateContactCreateWithoutCertificateServiceInput, CertificateContactUncheckedCreateWithoutCertificateServiceInput> | CertificateContactCreateWithoutCertificateServiceInput[] | CertificateContactUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateContactCreateOrConnectWithoutCertificateServiceInput | CertificateContactCreateOrConnectWithoutCertificateServiceInput[]
+    createMany?: CertificateContactCreateManyCertificateServiceInputEnvelope
+    connect?: CertificateContactWhereUniqueInput | CertificateContactWhereUniqueInput[]
+  }
+
+  export type CertificateDocumentCreateNestedManyWithoutCertificateServiceInput = {
+    create?: XOR<CertificateDocumentCreateWithoutCertificateServiceInput, CertificateDocumentUncheckedCreateWithoutCertificateServiceInput> | CertificateDocumentCreateWithoutCertificateServiceInput[] | CertificateDocumentUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateDocumentCreateOrConnectWithoutCertificateServiceInput | CertificateDocumentCreateOrConnectWithoutCertificateServiceInput[]
+    createMany?: CertificateDocumentCreateManyCertificateServiceInputEnvelope
+    connect?: CertificateDocumentWhereUniqueInput | CertificateDocumentWhereUniqueInput[]
+  }
+
+  export type CertificateProcessStepCreateNestedManyWithoutCertificateServiceInput = {
+    create?: XOR<CertificateProcessStepCreateWithoutCertificateServiceInput, CertificateProcessStepUncheckedCreateWithoutCertificateServiceInput> | CertificateProcessStepCreateWithoutCertificateServiceInput[] | CertificateProcessStepUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateProcessStepCreateOrConnectWithoutCertificateServiceInput | CertificateProcessStepCreateOrConnectWithoutCertificateServiceInput[]
+    createMany?: CertificateProcessStepCreateManyCertificateServiceInputEnvelope
+    connect?: CertificateProcessStepWhereUniqueInput | CertificateProcessStepWhereUniqueInput[]
+  }
+
+  export type CertificateEligibilityCreateNestedManyWithoutCertificateServiceInput = {
+    create?: XOR<CertificateEligibilityCreateWithoutCertificateServiceInput, CertificateEligibilityUncheckedCreateWithoutCertificateServiceInput> | CertificateEligibilityCreateWithoutCertificateServiceInput[] | CertificateEligibilityUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateEligibilityCreateOrConnectWithoutCertificateServiceInput | CertificateEligibilityCreateOrConnectWithoutCertificateServiceInput[]
+    createMany?: CertificateEligibilityCreateManyCertificateServiceInputEnvelope
+    connect?: CertificateEligibilityWhereUniqueInput | CertificateEligibilityWhereUniqueInput[]
+  }
+
+  export type CertificateContactUncheckedCreateNestedManyWithoutCertificateServiceInput = {
+    create?: XOR<CertificateContactCreateWithoutCertificateServiceInput, CertificateContactUncheckedCreateWithoutCertificateServiceInput> | CertificateContactCreateWithoutCertificateServiceInput[] | CertificateContactUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateContactCreateOrConnectWithoutCertificateServiceInput | CertificateContactCreateOrConnectWithoutCertificateServiceInput[]
+    createMany?: CertificateContactCreateManyCertificateServiceInputEnvelope
+    connect?: CertificateContactWhereUniqueInput | CertificateContactWhereUniqueInput[]
+  }
+
+  export type CertificateDocumentUncheckedCreateNestedManyWithoutCertificateServiceInput = {
+    create?: XOR<CertificateDocumentCreateWithoutCertificateServiceInput, CertificateDocumentUncheckedCreateWithoutCertificateServiceInput> | CertificateDocumentCreateWithoutCertificateServiceInput[] | CertificateDocumentUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateDocumentCreateOrConnectWithoutCertificateServiceInput | CertificateDocumentCreateOrConnectWithoutCertificateServiceInput[]
+    createMany?: CertificateDocumentCreateManyCertificateServiceInputEnvelope
+    connect?: CertificateDocumentWhereUniqueInput | CertificateDocumentWhereUniqueInput[]
+  }
+
+  export type CertificateProcessStepUncheckedCreateNestedManyWithoutCertificateServiceInput = {
+    create?: XOR<CertificateProcessStepCreateWithoutCertificateServiceInput, CertificateProcessStepUncheckedCreateWithoutCertificateServiceInput> | CertificateProcessStepCreateWithoutCertificateServiceInput[] | CertificateProcessStepUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateProcessStepCreateOrConnectWithoutCertificateServiceInput | CertificateProcessStepCreateOrConnectWithoutCertificateServiceInput[]
+    createMany?: CertificateProcessStepCreateManyCertificateServiceInputEnvelope
+    connect?: CertificateProcessStepWhereUniqueInput | CertificateProcessStepWhereUniqueInput[]
+  }
+
+  export type CertificateEligibilityUncheckedCreateNestedManyWithoutCertificateServiceInput = {
+    create?: XOR<CertificateEligibilityCreateWithoutCertificateServiceInput, CertificateEligibilityUncheckedCreateWithoutCertificateServiceInput> | CertificateEligibilityCreateWithoutCertificateServiceInput[] | CertificateEligibilityUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateEligibilityCreateOrConnectWithoutCertificateServiceInput | CertificateEligibilityCreateOrConnectWithoutCertificateServiceInput[]
+    createMany?: CertificateEligibilityCreateManyCertificateServiceInputEnvelope
+    connect?: CertificateEligibilityWhereUniqueInput | CertificateEligibilityWhereUniqueInput[]
+  }
+
   export type CertificateServiceUpdatetargetAudienceInput = {
     set?: string[]
     push?: string | string[]
@@ -13938,11 +21476,188 @@ export namespace Prisma {
     update?: XOR<XOR<AdminUpdateToOneWithWhereWithoutCertificateServicesInput, AdminUpdateWithoutCertificateServicesInput>, AdminUncheckedUpdateWithoutCertificateServicesInput>
   }
 
-  export type ContactServiceContactCreateNestedManyWithoutServiceInput = {
-    create?: XOR<ContactServiceContactCreateWithoutServiceInput, ContactServiceContactUncheckedCreateWithoutServiceInput> | ContactServiceContactCreateWithoutServiceInput[] | ContactServiceContactUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: ContactServiceContactCreateOrConnectWithoutServiceInput | ContactServiceContactCreateOrConnectWithoutServiceInput[]
-    createMany?: ContactServiceContactCreateManyServiceInputEnvelope
-    connect?: ContactServiceContactWhereUniqueInput | ContactServiceContactWhereUniqueInput[]
+  export type CertificateContactUpdateManyWithoutCertificateServiceNestedInput = {
+    create?: XOR<CertificateContactCreateWithoutCertificateServiceInput, CertificateContactUncheckedCreateWithoutCertificateServiceInput> | CertificateContactCreateWithoutCertificateServiceInput[] | CertificateContactUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateContactCreateOrConnectWithoutCertificateServiceInput | CertificateContactCreateOrConnectWithoutCertificateServiceInput[]
+    upsert?: CertificateContactUpsertWithWhereUniqueWithoutCertificateServiceInput | CertificateContactUpsertWithWhereUniqueWithoutCertificateServiceInput[]
+    createMany?: CertificateContactCreateManyCertificateServiceInputEnvelope
+    set?: CertificateContactWhereUniqueInput | CertificateContactWhereUniqueInput[]
+    disconnect?: CertificateContactWhereUniqueInput | CertificateContactWhereUniqueInput[]
+    delete?: CertificateContactWhereUniqueInput | CertificateContactWhereUniqueInput[]
+    connect?: CertificateContactWhereUniqueInput | CertificateContactWhereUniqueInput[]
+    update?: CertificateContactUpdateWithWhereUniqueWithoutCertificateServiceInput | CertificateContactUpdateWithWhereUniqueWithoutCertificateServiceInput[]
+    updateMany?: CertificateContactUpdateManyWithWhereWithoutCertificateServiceInput | CertificateContactUpdateManyWithWhereWithoutCertificateServiceInput[]
+    deleteMany?: CertificateContactScalarWhereInput | CertificateContactScalarWhereInput[]
+  }
+
+  export type CertificateDocumentUpdateManyWithoutCertificateServiceNestedInput = {
+    create?: XOR<CertificateDocumentCreateWithoutCertificateServiceInput, CertificateDocumentUncheckedCreateWithoutCertificateServiceInput> | CertificateDocumentCreateWithoutCertificateServiceInput[] | CertificateDocumentUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateDocumentCreateOrConnectWithoutCertificateServiceInput | CertificateDocumentCreateOrConnectWithoutCertificateServiceInput[]
+    upsert?: CertificateDocumentUpsertWithWhereUniqueWithoutCertificateServiceInput | CertificateDocumentUpsertWithWhereUniqueWithoutCertificateServiceInput[]
+    createMany?: CertificateDocumentCreateManyCertificateServiceInputEnvelope
+    set?: CertificateDocumentWhereUniqueInput | CertificateDocumentWhereUniqueInput[]
+    disconnect?: CertificateDocumentWhereUniqueInput | CertificateDocumentWhereUniqueInput[]
+    delete?: CertificateDocumentWhereUniqueInput | CertificateDocumentWhereUniqueInput[]
+    connect?: CertificateDocumentWhereUniqueInput | CertificateDocumentWhereUniqueInput[]
+    update?: CertificateDocumentUpdateWithWhereUniqueWithoutCertificateServiceInput | CertificateDocumentUpdateWithWhereUniqueWithoutCertificateServiceInput[]
+    updateMany?: CertificateDocumentUpdateManyWithWhereWithoutCertificateServiceInput | CertificateDocumentUpdateManyWithWhereWithoutCertificateServiceInput[]
+    deleteMany?: CertificateDocumentScalarWhereInput | CertificateDocumentScalarWhereInput[]
+  }
+
+  export type CertificateProcessStepUpdateManyWithoutCertificateServiceNestedInput = {
+    create?: XOR<CertificateProcessStepCreateWithoutCertificateServiceInput, CertificateProcessStepUncheckedCreateWithoutCertificateServiceInput> | CertificateProcessStepCreateWithoutCertificateServiceInput[] | CertificateProcessStepUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateProcessStepCreateOrConnectWithoutCertificateServiceInput | CertificateProcessStepCreateOrConnectWithoutCertificateServiceInput[]
+    upsert?: CertificateProcessStepUpsertWithWhereUniqueWithoutCertificateServiceInput | CertificateProcessStepUpsertWithWhereUniqueWithoutCertificateServiceInput[]
+    createMany?: CertificateProcessStepCreateManyCertificateServiceInputEnvelope
+    set?: CertificateProcessStepWhereUniqueInput | CertificateProcessStepWhereUniqueInput[]
+    disconnect?: CertificateProcessStepWhereUniqueInput | CertificateProcessStepWhereUniqueInput[]
+    delete?: CertificateProcessStepWhereUniqueInput | CertificateProcessStepWhereUniqueInput[]
+    connect?: CertificateProcessStepWhereUniqueInput | CertificateProcessStepWhereUniqueInput[]
+    update?: CertificateProcessStepUpdateWithWhereUniqueWithoutCertificateServiceInput | CertificateProcessStepUpdateWithWhereUniqueWithoutCertificateServiceInput[]
+    updateMany?: CertificateProcessStepUpdateManyWithWhereWithoutCertificateServiceInput | CertificateProcessStepUpdateManyWithWhereWithoutCertificateServiceInput[]
+    deleteMany?: CertificateProcessStepScalarWhereInput | CertificateProcessStepScalarWhereInput[]
+  }
+
+  export type CertificateEligibilityUpdateManyWithoutCertificateServiceNestedInput = {
+    create?: XOR<CertificateEligibilityCreateWithoutCertificateServiceInput, CertificateEligibilityUncheckedCreateWithoutCertificateServiceInput> | CertificateEligibilityCreateWithoutCertificateServiceInput[] | CertificateEligibilityUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateEligibilityCreateOrConnectWithoutCertificateServiceInput | CertificateEligibilityCreateOrConnectWithoutCertificateServiceInput[]
+    upsert?: CertificateEligibilityUpsertWithWhereUniqueWithoutCertificateServiceInput | CertificateEligibilityUpsertWithWhereUniqueWithoutCertificateServiceInput[]
+    createMany?: CertificateEligibilityCreateManyCertificateServiceInputEnvelope
+    set?: CertificateEligibilityWhereUniqueInput | CertificateEligibilityWhereUniqueInput[]
+    disconnect?: CertificateEligibilityWhereUniqueInput | CertificateEligibilityWhereUniqueInput[]
+    delete?: CertificateEligibilityWhereUniqueInput | CertificateEligibilityWhereUniqueInput[]
+    connect?: CertificateEligibilityWhereUniqueInput | CertificateEligibilityWhereUniqueInput[]
+    update?: CertificateEligibilityUpdateWithWhereUniqueWithoutCertificateServiceInput | CertificateEligibilityUpdateWithWhereUniqueWithoutCertificateServiceInput[]
+    updateMany?: CertificateEligibilityUpdateManyWithWhereWithoutCertificateServiceInput | CertificateEligibilityUpdateManyWithWhereWithoutCertificateServiceInput[]
+    deleteMany?: CertificateEligibilityScalarWhereInput | CertificateEligibilityScalarWhereInput[]
+  }
+
+  export type CertificateContactUncheckedUpdateManyWithoutCertificateServiceNestedInput = {
+    create?: XOR<CertificateContactCreateWithoutCertificateServiceInput, CertificateContactUncheckedCreateWithoutCertificateServiceInput> | CertificateContactCreateWithoutCertificateServiceInput[] | CertificateContactUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateContactCreateOrConnectWithoutCertificateServiceInput | CertificateContactCreateOrConnectWithoutCertificateServiceInput[]
+    upsert?: CertificateContactUpsertWithWhereUniqueWithoutCertificateServiceInput | CertificateContactUpsertWithWhereUniqueWithoutCertificateServiceInput[]
+    createMany?: CertificateContactCreateManyCertificateServiceInputEnvelope
+    set?: CertificateContactWhereUniqueInput | CertificateContactWhereUniqueInput[]
+    disconnect?: CertificateContactWhereUniqueInput | CertificateContactWhereUniqueInput[]
+    delete?: CertificateContactWhereUniqueInput | CertificateContactWhereUniqueInput[]
+    connect?: CertificateContactWhereUniqueInput | CertificateContactWhereUniqueInput[]
+    update?: CertificateContactUpdateWithWhereUniqueWithoutCertificateServiceInput | CertificateContactUpdateWithWhereUniqueWithoutCertificateServiceInput[]
+    updateMany?: CertificateContactUpdateManyWithWhereWithoutCertificateServiceInput | CertificateContactUpdateManyWithWhereWithoutCertificateServiceInput[]
+    deleteMany?: CertificateContactScalarWhereInput | CertificateContactScalarWhereInput[]
+  }
+
+  export type CertificateDocumentUncheckedUpdateManyWithoutCertificateServiceNestedInput = {
+    create?: XOR<CertificateDocumentCreateWithoutCertificateServiceInput, CertificateDocumentUncheckedCreateWithoutCertificateServiceInput> | CertificateDocumentCreateWithoutCertificateServiceInput[] | CertificateDocumentUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateDocumentCreateOrConnectWithoutCertificateServiceInput | CertificateDocumentCreateOrConnectWithoutCertificateServiceInput[]
+    upsert?: CertificateDocumentUpsertWithWhereUniqueWithoutCertificateServiceInput | CertificateDocumentUpsertWithWhereUniqueWithoutCertificateServiceInput[]
+    createMany?: CertificateDocumentCreateManyCertificateServiceInputEnvelope
+    set?: CertificateDocumentWhereUniqueInput | CertificateDocumentWhereUniqueInput[]
+    disconnect?: CertificateDocumentWhereUniqueInput | CertificateDocumentWhereUniqueInput[]
+    delete?: CertificateDocumentWhereUniqueInput | CertificateDocumentWhereUniqueInput[]
+    connect?: CertificateDocumentWhereUniqueInput | CertificateDocumentWhereUniqueInput[]
+    update?: CertificateDocumentUpdateWithWhereUniqueWithoutCertificateServiceInput | CertificateDocumentUpdateWithWhereUniqueWithoutCertificateServiceInput[]
+    updateMany?: CertificateDocumentUpdateManyWithWhereWithoutCertificateServiceInput | CertificateDocumentUpdateManyWithWhereWithoutCertificateServiceInput[]
+    deleteMany?: CertificateDocumentScalarWhereInput | CertificateDocumentScalarWhereInput[]
+  }
+
+  export type CertificateProcessStepUncheckedUpdateManyWithoutCertificateServiceNestedInput = {
+    create?: XOR<CertificateProcessStepCreateWithoutCertificateServiceInput, CertificateProcessStepUncheckedCreateWithoutCertificateServiceInput> | CertificateProcessStepCreateWithoutCertificateServiceInput[] | CertificateProcessStepUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateProcessStepCreateOrConnectWithoutCertificateServiceInput | CertificateProcessStepCreateOrConnectWithoutCertificateServiceInput[]
+    upsert?: CertificateProcessStepUpsertWithWhereUniqueWithoutCertificateServiceInput | CertificateProcessStepUpsertWithWhereUniqueWithoutCertificateServiceInput[]
+    createMany?: CertificateProcessStepCreateManyCertificateServiceInputEnvelope
+    set?: CertificateProcessStepWhereUniqueInput | CertificateProcessStepWhereUniqueInput[]
+    disconnect?: CertificateProcessStepWhereUniqueInput | CertificateProcessStepWhereUniqueInput[]
+    delete?: CertificateProcessStepWhereUniqueInput | CertificateProcessStepWhereUniqueInput[]
+    connect?: CertificateProcessStepWhereUniqueInput | CertificateProcessStepWhereUniqueInput[]
+    update?: CertificateProcessStepUpdateWithWhereUniqueWithoutCertificateServiceInput | CertificateProcessStepUpdateWithWhereUniqueWithoutCertificateServiceInput[]
+    updateMany?: CertificateProcessStepUpdateManyWithWhereWithoutCertificateServiceInput | CertificateProcessStepUpdateManyWithWhereWithoutCertificateServiceInput[]
+    deleteMany?: CertificateProcessStepScalarWhereInput | CertificateProcessStepScalarWhereInput[]
+  }
+
+  export type CertificateEligibilityUncheckedUpdateManyWithoutCertificateServiceNestedInput = {
+    create?: XOR<CertificateEligibilityCreateWithoutCertificateServiceInput, CertificateEligibilityUncheckedCreateWithoutCertificateServiceInput> | CertificateEligibilityCreateWithoutCertificateServiceInput[] | CertificateEligibilityUncheckedCreateWithoutCertificateServiceInput[]
+    connectOrCreate?: CertificateEligibilityCreateOrConnectWithoutCertificateServiceInput | CertificateEligibilityCreateOrConnectWithoutCertificateServiceInput[]
+    upsert?: CertificateEligibilityUpsertWithWhereUniqueWithoutCertificateServiceInput | CertificateEligibilityUpsertWithWhereUniqueWithoutCertificateServiceInput[]
+    createMany?: CertificateEligibilityCreateManyCertificateServiceInputEnvelope
+    set?: CertificateEligibilityWhereUniqueInput | CertificateEligibilityWhereUniqueInput[]
+    disconnect?: CertificateEligibilityWhereUniqueInput | CertificateEligibilityWhereUniqueInput[]
+    delete?: CertificateEligibilityWhereUniqueInput | CertificateEligibilityWhereUniqueInput[]
+    connect?: CertificateEligibilityWhereUniqueInput | CertificateEligibilityWhereUniqueInput[]
+    update?: CertificateEligibilityUpdateWithWhereUniqueWithoutCertificateServiceInput | CertificateEligibilityUpdateWithWhereUniqueWithoutCertificateServiceInput[]
+    updateMany?: CertificateEligibilityUpdateManyWithWhereWithoutCertificateServiceInput | CertificateEligibilityUpdateManyWithWhereWithoutCertificateServiceInput[]
+    deleteMany?: CertificateEligibilityScalarWhereInput | CertificateEligibilityScalarWhereInput[]
+  }
+
+  export type CertificateServiceCreateNestedOneWithoutContactsInput = {
+    create?: XOR<CertificateServiceCreateWithoutContactsInput, CertificateServiceUncheckedCreateWithoutContactsInput>
+    connectOrCreate?: CertificateServiceCreateOrConnectWithoutContactsInput
+    connect?: CertificateServiceWhereUniqueInput
+  }
+
+  export type CertificateServiceUpdateOneRequiredWithoutContactsNestedInput = {
+    create?: XOR<CertificateServiceCreateWithoutContactsInput, CertificateServiceUncheckedCreateWithoutContactsInput>
+    connectOrCreate?: CertificateServiceCreateOrConnectWithoutContactsInput
+    upsert?: CertificateServiceUpsertWithoutContactsInput
+    connect?: CertificateServiceWhereUniqueInput
+    update?: XOR<XOR<CertificateServiceUpdateToOneWithWhereWithoutContactsInput, CertificateServiceUpdateWithoutContactsInput>, CertificateServiceUncheckedUpdateWithoutContactsInput>
+  }
+
+  export type CertificateServiceCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<CertificateServiceCreateWithoutDocumentsInput, CertificateServiceUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: CertificateServiceCreateOrConnectWithoutDocumentsInput
+    connect?: CertificateServiceWhereUniqueInput
+  }
+
+  export type CertificateServiceUpdateOneRequiredWithoutDocumentsNestedInput = {
+    create?: XOR<CertificateServiceCreateWithoutDocumentsInput, CertificateServiceUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: CertificateServiceCreateOrConnectWithoutDocumentsInput
+    upsert?: CertificateServiceUpsertWithoutDocumentsInput
+    connect?: CertificateServiceWhereUniqueInput
+    update?: XOR<XOR<CertificateServiceUpdateToOneWithWhereWithoutDocumentsInput, CertificateServiceUpdateWithoutDocumentsInput>, CertificateServiceUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type CertificateServiceCreateNestedOneWithoutProcessStepsInput = {
+    create?: XOR<CertificateServiceCreateWithoutProcessStepsInput, CertificateServiceUncheckedCreateWithoutProcessStepsInput>
+    connectOrCreate?: CertificateServiceCreateOrConnectWithoutProcessStepsInput
+    connect?: CertificateServiceWhereUniqueInput
+  }
+
+  export type CertificateServiceUpdateOneRequiredWithoutProcessStepsNestedInput = {
+    create?: XOR<CertificateServiceCreateWithoutProcessStepsInput, CertificateServiceUncheckedCreateWithoutProcessStepsInput>
+    connectOrCreate?: CertificateServiceCreateOrConnectWithoutProcessStepsInput
+    upsert?: CertificateServiceUpsertWithoutProcessStepsInput
+    connect?: CertificateServiceWhereUniqueInput
+    update?: XOR<XOR<CertificateServiceUpdateToOneWithWhereWithoutProcessStepsInput, CertificateServiceUpdateWithoutProcessStepsInput>, CertificateServiceUncheckedUpdateWithoutProcessStepsInput>
+  }
+
+  export type CertificateServiceCreateNestedOneWithoutEligibilityItemsInput = {
+    create?: XOR<CertificateServiceCreateWithoutEligibilityItemsInput, CertificateServiceUncheckedCreateWithoutEligibilityItemsInput>
+    connectOrCreate?: CertificateServiceCreateOrConnectWithoutEligibilityItemsInput
+    connect?: CertificateServiceWhereUniqueInput
+  }
+
+  export type CertificateServiceUpdateOneRequiredWithoutEligibilityItemsNestedInput = {
+    create?: XOR<CertificateServiceCreateWithoutEligibilityItemsInput, CertificateServiceUncheckedCreateWithoutEligibilityItemsInput>
+    connectOrCreate?: CertificateServiceCreateOrConnectWithoutEligibilityItemsInput
+    upsert?: CertificateServiceUpsertWithoutEligibilityItemsInput
+    connect?: CertificateServiceWhereUniqueInput
+    update?: XOR<XOR<CertificateServiceUpdateToOneWithWhereWithoutEligibilityItemsInput, CertificateServiceUpdateWithoutEligibilityItemsInput>, CertificateServiceUncheckedUpdateWithoutEligibilityItemsInput>
+  }
+
+  export type ContactServiceCreatetargetAudienceInput = {
+    set: string[]
+  }
+
+  export type ContactServiceCreateeligibilityDetailsInput = {
+    set: string[]
+  }
+
+  export type ContactServiceCreatecontactDetailsInput = {
+    set: string[]
+  }
+
+  export type ContactServiceCreateprocessDetailsInput = {
+    set: string[]
   }
 
   export type AdminCreateNestedOneWithoutContactServicesInput = {
@@ -13951,25 +21666,52 @@ export namespace Prisma {
     connect?: AdminWhereUniqueInput
   }
 
-  export type ContactServiceContactUncheckedCreateNestedManyWithoutServiceInput = {
-    create?: XOR<ContactServiceContactCreateWithoutServiceInput, ContactServiceContactUncheckedCreateWithoutServiceInput> | ContactServiceContactCreateWithoutServiceInput[] | ContactServiceContactUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: ContactServiceContactCreateOrConnectWithoutServiceInput | ContactServiceContactCreateOrConnectWithoutServiceInput[]
-    createMany?: ContactServiceContactCreateManyServiceInputEnvelope
+  export type ContactServiceContactCreateNestedManyWithoutContactServiceInput = {
+    create?: XOR<ContactServiceContactCreateWithoutContactServiceInput, ContactServiceContactUncheckedCreateWithoutContactServiceInput> | ContactServiceContactCreateWithoutContactServiceInput[] | ContactServiceContactUncheckedCreateWithoutContactServiceInput[]
+    connectOrCreate?: ContactServiceContactCreateOrConnectWithoutContactServiceInput | ContactServiceContactCreateOrConnectWithoutContactServiceInput[]
+    createMany?: ContactServiceContactCreateManyContactServiceInputEnvelope
     connect?: ContactServiceContactWhereUniqueInput | ContactServiceContactWhereUniqueInput[]
   }
 
-  export type ContactServiceContactUpdateManyWithoutServiceNestedInput = {
-    create?: XOR<ContactServiceContactCreateWithoutServiceInput, ContactServiceContactUncheckedCreateWithoutServiceInput> | ContactServiceContactCreateWithoutServiceInput[] | ContactServiceContactUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: ContactServiceContactCreateOrConnectWithoutServiceInput | ContactServiceContactCreateOrConnectWithoutServiceInput[]
-    upsert?: ContactServiceContactUpsertWithWhereUniqueWithoutServiceInput | ContactServiceContactUpsertWithWhereUniqueWithoutServiceInput[]
-    createMany?: ContactServiceContactCreateManyServiceInputEnvelope
-    set?: ContactServiceContactWhereUniqueInput | ContactServiceContactWhereUniqueInput[]
-    disconnect?: ContactServiceContactWhereUniqueInput | ContactServiceContactWhereUniqueInput[]
-    delete?: ContactServiceContactWhereUniqueInput | ContactServiceContactWhereUniqueInput[]
+  export type ContactServiceDocumentCreateNestedManyWithoutContactServiceInput = {
+    create?: XOR<ContactServiceDocumentCreateWithoutContactServiceInput, ContactServiceDocumentUncheckedCreateWithoutContactServiceInput> | ContactServiceDocumentCreateWithoutContactServiceInput[] | ContactServiceDocumentUncheckedCreateWithoutContactServiceInput[]
+    connectOrCreate?: ContactServiceDocumentCreateOrConnectWithoutContactServiceInput | ContactServiceDocumentCreateOrConnectWithoutContactServiceInput[]
+    createMany?: ContactServiceDocumentCreateManyContactServiceInputEnvelope
+    connect?: ContactServiceDocumentWhereUniqueInput | ContactServiceDocumentWhereUniqueInput[]
+  }
+
+  export type ContactServiceContactUncheckedCreateNestedManyWithoutContactServiceInput = {
+    create?: XOR<ContactServiceContactCreateWithoutContactServiceInput, ContactServiceContactUncheckedCreateWithoutContactServiceInput> | ContactServiceContactCreateWithoutContactServiceInput[] | ContactServiceContactUncheckedCreateWithoutContactServiceInput[]
+    connectOrCreate?: ContactServiceContactCreateOrConnectWithoutContactServiceInput | ContactServiceContactCreateOrConnectWithoutContactServiceInput[]
+    createMany?: ContactServiceContactCreateManyContactServiceInputEnvelope
     connect?: ContactServiceContactWhereUniqueInput | ContactServiceContactWhereUniqueInput[]
-    update?: ContactServiceContactUpdateWithWhereUniqueWithoutServiceInput | ContactServiceContactUpdateWithWhereUniqueWithoutServiceInput[]
-    updateMany?: ContactServiceContactUpdateManyWithWhereWithoutServiceInput | ContactServiceContactUpdateManyWithWhereWithoutServiceInput[]
-    deleteMany?: ContactServiceContactScalarWhereInput | ContactServiceContactScalarWhereInput[]
+  }
+
+  export type ContactServiceDocumentUncheckedCreateNestedManyWithoutContactServiceInput = {
+    create?: XOR<ContactServiceDocumentCreateWithoutContactServiceInput, ContactServiceDocumentUncheckedCreateWithoutContactServiceInput> | ContactServiceDocumentCreateWithoutContactServiceInput[] | ContactServiceDocumentUncheckedCreateWithoutContactServiceInput[]
+    connectOrCreate?: ContactServiceDocumentCreateOrConnectWithoutContactServiceInput | ContactServiceDocumentCreateOrConnectWithoutContactServiceInput[]
+    createMany?: ContactServiceDocumentCreateManyContactServiceInputEnvelope
+    connect?: ContactServiceDocumentWhereUniqueInput | ContactServiceDocumentWhereUniqueInput[]
+  }
+
+  export type ContactServiceUpdatetargetAudienceInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type ContactServiceUpdateeligibilityDetailsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type ContactServiceUpdatecontactDetailsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type ContactServiceUpdateprocessDetailsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type AdminUpdateOneRequiredWithoutContactServicesNestedInput = {
@@ -13980,18 +21722,60 @@ export namespace Prisma {
     update?: XOR<XOR<AdminUpdateToOneWithWhereWithoutContactServicesInput, AdminUpdateWithoutContactServicesInput>, AdminUncheckedUpdateWithoutContactServicesInput>
   }
 
-  export type ContactServiceContactUncheckedUpdateManyWithoutServiceNestedInput = {
-    create?: XOR<ContactServiceContactCreateWithoutServiceInput, ContactServiceContactUncheckedCreateWithoutServiceInput> | ContactServiceContactCreateWithoutServiceInput[] | ContactServiceContactUncheckedCreateWithoutServiceInput[]
-    connectOrCreate?: ContactServiceContactCreateOrConnectWithoutServiceInput | ContactServiceContactCreateOrConnectWithoutServiceInput[]
-    upsert?: ContactServiceContactUpsertWithWhereUniqueWithoutServiceInput | ContactServiceContactUpsertWithWhereUniqueWithoutServiceInput[]
-    createMany?: ContactServiceContactCreateManyServiceInputEnvelope
+  export type ContactServiceContactUpdateManyWithoutContactServiceNestedInput = {
+    create?: XOR<ContactServiceContactCreateWithoutContactServiceInput, ContactServiceContactUncheckedCreateWithoutContactServiceInput> | ContactServiceContactCreateWithoutContactServiceInput[] | ContactServiceContactUncheckedCreateWithoutContactServiceInput[]
+    connectOrCreate?: ContactServiceContactCreateOrConnectWithoutContactServiceInput | ContactServiceContactCreateOrConnectWithoutContactServiceInput[]
+    upsert?: ContactServiceContactUpsertWithWhereUniqueWithoutContactServiceInput | ContactServiceContactUpsertWithWhereUniqueWithoutContactServiceInput[]
+    createMany?: ContactServiceContactCreateManyContactServiceInputEnvelope
     set?: ContactServiceContactWhereUniqueInput | ContactServiceContactWhereUniqueInput[]
     disconnect?: ContactServiceContactWhereUniqueInput | ContactServiceContactWhereUniqueInput[]
     delete?: ContactServiceContactWhereUniqueInput | ContactServiceContactWhereUniqueInput[]
     connect?: ContactServiceContactWhereUniqueInput | ContactServiceContactWhereUniqueInput[]
-    update?: ContactServiceContactUpdateWithWhereUniqueWithoutServiceInput | ContactServiceContactUpdateWithWhereUniqueWithoutServiceInput[]
-    updateMany?: ContactServiceContactUpdateManyWithWhereWithoutServiceInput | ContactServiceContactUpdateManyWithWhereWithoutServiceInput[]
+    update?: ContactServiceContactUpdateWithWhereUniqueWithoutContactServiceInput | ContactServiceContactUpdateWithWhereUniqueWithoutContactServiceInput[]
+    updateMany?: ContactServiceContactUpdateManyWithWhereWithoutContactServiceInput | ContactServiceContactUpdateManyWithWhereWithoutContactServiceInput[]
     deleteMany?: ContactServiceContactScalarWhereInput | ContactServiceContactScalarWhereInput[]
+  }
+
+  export type ContactServiceDocumentUpdateManyWithoutContactServiceNestedInput = {
+    create?: XOR<ContactServiceDocumentCreateWithoutContactServiceInput, ContactServiceDocumentUncheckedCreateWithoutContactServiceInput> | ContactServiceDocumentCreateWithoutContactServiceInput[] | ContactServiceDocumentUncheckedCreateWithoutContactServiceInput[]
+    connectOrCreate?: ContactServiceDocumentCreateOrConnectWithoutContactServiceInput | ContactServiceDocumentCreateOrConnectWithoutContactServiceInput[]
+    upsert?: ContactServiceDocumentUpsertWithWhereUniqueWithoutContactServiceInput | ContactServiceDocumentUpsertWithWhereUniqueWithoutContactServiceInput[]
+    createMany?: ContactServiceDocumentCreateManyContactServiceInputEnvelope
+    set?: ContactServiceDocumentWhereUniqueInput | ContactServiceDocumentWhereUniqueInput[]
+    disconnect?: ContactServiceDocumentWhereUniqueInput | ContactServiceDocumentWhereUniqueInput[]
+    delete?: ContactServiceDocumentWhereUniqueInput | ContactServiceDocumentWhereUniqueInput[]
+    connect?: ContactServiceDocumentWhereUniqueInput | ContactServiceDocumentWhereUniqueInput[]
+    update?: ContactServiceDocumentUpdateWithWhereUniqueWithoutContactServiceInput | ContactServiceDocumentUpdateWithWhereUniqueWithoutContactServiceInput[]
+    updateMany?: ContactServiceDocumentUpdateManyWithWhereWithoutContactServiceInput | ContactServiceDocumentUpdateManyWithWhereWithoutContactServiceInput[]
+    deleteMany?: ContactServiceDocumentScalarWhereInput | ContactServiceDocumentScalarWhereInput[]
+  }
+
+  export type ContactServiceContactUncheckedUpdateManyWithoutContactServiceNestedInput = {
+    create?: XOR<ContactServiceContactCreateWithoutContactServiceInput, ContactServiceContactUncheckedCreateWithoutContactServiceInput> | ContactServiceContactCreateWithoutContactServiceInput[] | ContactServiceContactUncheckedCreateWithoutContactServiceInput[]
+    connectOrCreate?: ContactServiceContactCreateOrConnectWithoutContactServiceInput | ContactServiceContactCreateOrConnectWithoutContactServiceInput[]
+    upsert?: ContactServiceContactUpsertWithWhereUniqueWithoutContactServiceInput | ContactServiceContactUpsertWithWhereUniqueWithoutContactServiceInput[]
+    createMany?: ContactServiceContactCreateManyContactServiceInputEnvelope
+    set?: ContactServiceContactWhereUniqueInput | ContactServiceContactWhereUniqueInput[]
+    disconnect?: ContactServiceContactWhereUniqueInput | ContactServiceContactWhereUniqueInput[]
+    delete?: ContactServiceContactWhereUniqueInput | ContactServiceContactWhereUniqueInput[]
+    connect?: ContactServiceContactWhereUniqueInput | ContactServiceContactWhereUniqueInput[]
+    update?: ContactServiceContactUpdateWithWhereUniqueWithoutContactServiceInput | ContactServiceContactUpdateWithWhereUniqueWithoutContactServiceInput[]
+    updateMany?: ContactServiceContactUpdateManyWithWhereWithoutContactServiceInput | ContactServiceContactUpdateManyWithWhereWithoutContactServiceInput[]
+    deleteMany?: ContactServiceContactScalarWhereInput | ContactServiceContactScalarWhereInput[]
+  }
+
+  export type ContactServiceDocumentUncheckedUpdateManyWithoutContactServiceNestedInput = {
+    create?: XOR<ContactServiceDocumentCreateWithoutContactServiceInput, ContactServiceDocumentUncheckedCreateWithoutContactServiceInput> | ContactServiceDocumentCreateWithoutContactServiceInput[] | ContactServiceDocumentUncheckedCreateWithoutContactServiceInput[]
+    connectOrCreate?: ContactServiceDocumentCreateOrConnectWithoutContactServiceInput | ContactServiceDocumentCreateOrConnectWithoutContactServiceInput[]
+    upsert?: ContactServiceDocumentUpsertWithWhereUniqueWithoutContactServiceInput | ContactServiceDocumentUpsertWithWhereUniqueWithoutContactServiceInput[]
+    createMany?: ContactServiceDocumentCreateManyContactServiceInputEnvelope
+    set?: ContactServiceDocumentWhereUniqueInput | ContactServiceDocumentWhereUniqueInput[]
+    disconnect?: ContactServiceDocumentWhereUniqueInput | ContactServiceDocumentWhereUniqueInput[]
+    delete?: ContactServiceDocumentWhereUniqueInput | ContactServiceDocumentWhereUniqueInput[]
+    connect?: ContactServiceDocumentWhereUniqueInput | ContactServiceDocumentWhereUniqueInput[]
+    update?: ContactServiceDocumentUpdateWithWhereUniqueWithoutContactServiceInput | ContactServiceDocumentUpdateWithWhereUniqueWithoutContactServiceInput[]
+    updateMany?: ContactServiceDocumentUpdateManyWithWhereWithoutContactServiceInput | ContactServiceDocumentUpdateManyWithWhereWithoutContactServiceInput[]
+    deleteMany?: ContactServiceDocumentScalarWhereInput | ContactServiceDocumentScalarWhereInput[]
   }
 
   export type ContactServiceCreateNestedOneWithoutContactsInput = {
@@ -14006,6 +21790,20 @@ export namespace Prisma {
     upsert?: ContactServiceUpsertWithoutContactsInput
     connect?: ContactServiceWhereUniqueInput
     update?: XOR<XOR<ContactServiceUpdateToOneWithWhereWithoutContactsInput, ContactServiceUpdateWithoutContactsInput>, ContactServiceUncheckedUpdateWithoutContactsInput>
+  }
+
+  export type ContactServiceCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<ContactServiceCreateWithoutDocumentsInput, ContactServiceUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: ContactServiceCreateOrConnectWithoutDocumentsInput
+    connect?: ContactServiceWhereUniqueInput
+  }
+
+  export type ContactServiceUpdateOneRequiredWithoutDocumentsNestedInput = {
+    create?: XOR<ContactServiceCreateWithoutDocumentsInput, ContactServiceUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: ContactServiceCreateOrConnectWithoutDocumentsInput
+    upsert?: ContactServiceUpsertWithoutDocumentsInput
+    connect?: ContactServiceWhereUniqueInput
+    update?: XOR<XOR<ContactServiceUpdateToOneWithWhereWithoutDocumentsInput, ContactServiceUpdateWithoutDocumentsInput>, ContactServiceUncheckedUpdateWithoutDocumentsInput>
   }
 
   export type SchemeServiceCreateNestedOneWithoutContactsInput = {
@@ -14196,9 +21994,19 @@ export namespace Prisma {
     status?: string
     isActive?: boolean
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     contacts?: ContactPersonCreateNestedManyWithoutSchemeServiceInput
@@ -14217,9 +22025,19 @@ export namespace Prisma {
     status?: string
     isActive?: boolean
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     contacts?: ContactPersonUncheckedCreateNestedManyWithoutSchemeServiceInput
@@ -14250,8 +22068,20 @@ export namespace Prisma {
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    contacts?: CertificateContactCreateNestedManyWithoutCertificateServiceInput
+    documents?: CertificateDocumentCreateNestedManyWithoutCertificateServiceInput
+    processSteps?: CertificateProcessStepCreateNestedManyWithoutCertificateServiceInput
+    eligibilityItems?: CertificateEligibilityCreateNestedManyWithoutCertificateServiceInput
   }
 
   export type CertificateServiceUncheckedCreateWithoutAdminInput = {
@@ -14269,8 +22099,20 @@ export namespace Prisma {
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    contacts?: CertificateContactUncheckedCreateNestedManyWithoutCertificateServiceInput
+    documents?: CertificateDocumentUncheckedCreateNestedManyWithoutCertificateServiceInput
+    processSteps?: CertificateProcessStepUncheckedCreateNestedManyWithoutCertificateServiceInput
+    eligibilityItems?: CertificateEligibilityUncheckedCreateNestedManyWithoutCertificateServiceInput
   }
 
   export type CertificateServiceCreateOrConnectWithoutAdminInput = {
@@ -14284,30 +22126,58 @@ export namespace Prisma {
   }
 
   export type ContactServiceCreateWithoutAdminInput = {
-    serviceName: string
-    district: string
-    subDistrict?: string | null
-    block: string
-    officeAddress?: string | null
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: ContactServiceCreatetargetAudienceInput | string[]
+    applicationMode: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
     status?: string
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    contacts?: ContactServiceContactCreateNestedManyWithoutServiceInput
+    eligibilityDetails?: ContactServiceCreateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceCreatecontactDetailsInput | string[]
+    processDetails?: ContactServiceCreateprocessDetailsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    contacts?: ContactServiceContactCreateNestedManyWithoutContactServiceInput
+    documents?: ContactServiceDocumentCreateNestedManyWithoutContactServiceInput
   }
 
   export type ContactServiceUncheckedCreateWithoutAdminInput = {
     id?: number
-    serviceName: string
-    district: string
-    subDistrict?: string | null
-    block: string
-    officeAddress?: string | null
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: ContactServiceCreatetargetAudienceInput | string[]
+    applicationMode: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
     status?: string
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    contacts?: ContactServiceContactUncheckedCreateNestedManyWithoutServiceInput
+    eligibilityDetails?: ContactServiceCreateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceCreatecontactDetailsInput | string[]
+    processDetails?: ContactServiceCreateprocessDetailsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    contacts?: ContactServiceContactUncheckedCreateNestedManyWithoutContactServiceInput
+    documents?: ContactServiceDocumentUncheckedCreateNestedManyWithoutContactServiceInput
   }
 
   export type ContactServiceCreateOrConnectWithoutAdminInput = {
@@ -14351,9 +22221,19 @@ export namespace Prisma {
     status?: StringFilter<"SchemeService"> | string
     isActive?: BoolFilter<"SchemeService"> | boolean
     eligibilityDetails?: StringNullableListFilter<"SchemeService">
+    schemeDetails?: StringNullableListFilter<"SchemeService">
+    processDetails?: StringNullableListFilter<"SchemeService">
     benefitDetails?: StringNullableListFilter<"SchemeService">
     applicationProcess?: StringNullableListFilter<"SchemeService">
     requiredDocuments?: StringNullableListFilter<"SchemeService">
+    processNew?: StringNullableFilter<"SchemeService"> | string | null
+    processUpdate?: StringNullableFilter<"SchemeService"> | string | null
+    processLost?: StringNullableFilter<"SchemeService"> | string | null
+    processSurrender?: StringNullableFilter<"SchemeService"> | string | null
+    docNew?: StringNullableFilter<"SchemeService"> | string | null
+    docUpdate?: StringNullableFilter<"SchemeService"> | string | null
+    docLost?: StringNullableFilter<"SchemeService"> | string | null
+    docSurrender?: StringNullableFilter<"SchemeService"> | string | null
     createdAt?: DateTimeFilter<"SchemeService"> | Date | string
     updatedAt?: DateTimeFilter<"SchemeService"> | Date | string
     adminId?: IntFilter<"SchemeService"> | number
@@ -14393,6 +22273,14 @@ export namespace Prisma {
     offlineAddress?: StringNullableFilter<"CertificateService"> | string | null
     status?: StringFilter<"CertificateService"> | string
     isActive?: BoolFilter<"CertificateService"> | boolean
+    processNew?: StringNullableFilter<"CertificateService"> | string | null
+    processUpdate?: StringNullableFilter<"CertificateService"> | string | null
+    processLost?: StringNullableFilter<"CertificateService"> | string | null
+    processSurrender?: StringNullableFilter<"CertificateService"> | string | null
+    docNew?: StringNullableFilter<"CertificateService"> | string | null
+    docUpdate?: StringNullableFilter<"CertificateService"> | string | null
+    docLost?: StringNullableFilter<"CertificateService"> | string | null
+    docSurrender?: StringNullableFilter<"CertificateService"> | string | null
     createdAt?: DateTimeFilter<"CertificateService"> | Date | string
     updatedAt?: DateTimeFilter<"CertificateService"> | Date | string
     adminId?: IntFilter<"CertificateService"> | number
@@ -14419,16 +22307,29 @@ export namespace Prisma {
     OR?: ContactServiceScalarWhereInput[]
     NOT?: ContactServiceScalarWhereInput | ContactServiceScalarWhereInput[]
     id?: IntFilter<"ContactService"> | number
-    serviceName?: StringFilter<"ContactService"> | string
-    district?: StringFilter<"ContactService"> | string
-    subDistrict?: StringNullableFilter<"ContactService"> | string | null
-    block?: StringFilter<"ContactService"> | string
-    officeAddress?: StringNullableFilter<"ContactService"> | string | null
+    name?: StringFilter<"ContactService"> | string
+    summary?: StringFilter<"ContactService"> | string
+    type?: StringNullableFilter<"ContactService"> | string | null
+    targetAudience?: StringNullableListFilter<"ContactService">
+    applicationMode?: StringFilter<"ContactService"> | string
+    onlineUrl?: StringNullableFilter<"ContactService"> | string | null
+    offlineAddress?: StringNullableFilter<"ContactService"> | string | null
     status?: StringFilter<"ContactService"> | string
     isActive?: BoolFilter<"ContactService"> | boolean
     createdAt?: DateTimeFilter<"ContactService"> | Date | string
     updatedAt?: DateTimeFilter<"ContactService"> | Date | string
     adminId?: IntFilter<"ContactService"> | number
+    eligibilityDetails?: StringNullableListFilter<"ContactService">
+    contactDetails?: StringNullableListFilter<"ContactService">
+    processDetails?: StringNullableListFilter<"ContactService">
+    processNew?: StringNullableFilter<"ContactService"> | string | null
+    processUpdate?: StringNullableFilter<"ContactService"> | string | null
+    processLost?: StringNullableFilter<"ContactService"> | string | null
+    processSurrender?: StringNullableFilter<"ContactService"> | string | null
+    docNew?: StringNullableFilter<"ContactService"> | string | null
+    docUpdate?: StringNullableFilter<"ContactService"> | string | null
+    docLost?: StringNullableFilter<"ContactService"> | string | null
+    docSurrender?: StringNullableFilter<"ContactService"> | string | null
   }
 
   export type AdminCreateWithoutSchemeServicesInput = {
@@ -14639,6 +22540,112 @@ export namespace Prisma {
     create: XOR<AdminCreateWithoutCertificateServicesInput, AdminUncheckedCreateWithoutCertificateServicesInput>
   }
 
+  export type CertificateContactCreateWithoutCertificateServiceInput = {
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
+    name: string
+    designation: string
+    contact: string
+    email: string
+    applicationType?: string
+  }
+
+  export type CertificateContactUncheckedCreateWithoutCertificateServiceInput = {
+    id?: number
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
+    name: string
+    designation: string
+    contact: string
+    email: string
+    applicationType?: string
+  }
+
+  export type CertificateContactCreateOrConnectWithoutCertificateServiceInput = {
+    where: CertificateContactWhereUniqueInput
+    create: XOR<CertificateContactCreateWithoutCertificateServiceInput, CertificateContactUncheckedCreateWithoutCertificateServiceInput>
+  }
+
+  export type CertificateContactCreateManyCertificateServiceInputEnvelope = {
+    data: CertificateContactCreateManyCertificateServiceInput | CertificateContactCreateManyCertificateServiceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CertificateDocumentCreateWithoutCertificateServiceInput = {
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
+    applicationType?: string
+  }
+
+  export type CertificateDocumentUncheckedCreateWithoutCertificateServiceInput = {
+    id?: number
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
+    applicationType?: string
+  }
+
+  export type CertificateDocumentCreateOrConnectWithoutCertificateServiceInput = {
+    where: CertificateDocumentWhereUniqueInput
+    create: XOR<CertificateDocumentCreateWithoutCertificateServiceInput, CertificateDocumentUncheckedCreateWithoutCertificateServiceInput>
+  }
+
+  export type CertificateDocumentCreateManyCertificateServiceInputEnvelope = {
+    data: CertificateDocumentCreateManyCertificateServiceInput | CertificateDocumentCreateManyCertificateServiceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CertificateProcessStepCreateWithoutCertificateServiceInput = {
+    slNo: number
+    stepDetails: string
+    applicationType?: string
+  }
+
+  export type CertificateProcessStepUncheckedCreateWithoutCertificateServiceInput = {
+    id?: number
+    slNo: number
+    stepDetails: string
+    applicationType?: string
+  }
+
+  export type CertificateProcessStepCreateOrConnectWithoutCertificateServiceInput = {
+    where: CertificateProcessStepWhereUniqueInput
+    create: XOR<CertificateProcessStepCreateWithoutCertificateServiceInput, CertificateProcessStepUncheckedCreateWithoutCertificateServiceInput>
+  }
+
+  export type CertificateProcessStepCreateManyCertificateServiceInputEnvelope = {
+    data: CertificateProcessStepCreateManyCertificateServiceInput | CertificateProcessStepCreateManyCertificateServiceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CertificateEligibilityCreateWithoutCertificateServiceInput = {
+    eligibilityDetail: string
+    applicationType?: string
+  }
+
+  export type CertificateEligibilityUncheckedCreateWithoutCertificateServiceInput = {
+    id?: number
+    eligibilityDetail: string
+    applicationType?: string
+  }
+
+  export type CertificateEligibilityCreateOrConnectWithoutCertificateServiceInput = {
+    where: CertificateEligibilityWhereUniqueInput
+    create: XOR<CertificateEligibilityCreateWithoutCertificateServiceInput, CertificateEligibilityUncheckedCreateWithoutCertificateServiceInput>
+  }
+
+  export type CertificateEligibilityCreateManyCertificateServiceInputEnvelope = {
+    data: CertificateEligibilityCreateManyCertificateServiceInput | CertificateEligibilityCreateManyCertificateServiceInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AdminUpsertWithoutCertificateServicesInput = {
     update: XOR<AdminUpdateWithoutCertificateServicesInput, AdminUncheckedUpdateWithoutCertificateServicesInput>
     create: XOR<AdminCreateWithoutCertificateServicesInput, AdminUncheckedCreateWithoutCertificateServicesInput>
@@ -14673,33 +22680,671 @@ export namespace Prisma {
     contactServices?: ContactServiceUncheckedUpdateManyWithoutAdminNestedInput
   }
 
-  export type ContactServiceContactCreateWithoutServiceInput = {
-    name: string
-    designation: string
-    contact: string
-    email?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type CertificateContactUpsertWithWhereUniqueWithoutCertificateServiceInput = {
+    where: CertificateContactWhereUniqueInput
+    update: XOR<CertificateContactUpdateWithoutCertificateServiceInput, CertificateContactUncheckedUpdateWithoutCertificateServiceInput>
+    create: XOR<CertificateContactCreateWithoutCertificateServiceInput, CertificateContactUncheckedCreateWithoutCertificateServiceInput>
   }
 
-  export type ContactServiceContactUncheckedCreateWithoutServiceInput = {
+  export type CertificateContactUpdateWithWhereUniqueWithoutCertificateServiceInput = {
+    where: CertificateContactWhereUniqueInput
+    data: XOR<CertificateContactUpdateWithoutCertificateServiceInput, CertificateContactUncheckedUpdateWithoutCertificateServiceInput>
+  }
+
+  export type CertificateContactUpdateManyWithWhereWithoutCertificateServiceInput = {
+    where: CertificateContactScalarWhereInput
+    data: XOR<CertificateContactUpdateManyMutationInput, CertificateContactUncheckedUpdateManyWithoutCertificateServiceInput>
+  }
+
+  export type CertificateContactScalarWhereInput = {
+    AND?: CertificateContactScalarWhereInput | CertificateContactScalarWhereInput[]
+    OR?: CertificateContactScalarWhereInput[]
+    NOT?: CertificateContactScalarWhereInput | CertificateContactScalarWhereInput[]
+    id?: IntFilter<"CertificateContact"> | number
+    serviceName?: StringFilter<"CertificateContact"> | string
+    district?: StringFilter<"CertificateContact"> | string
+    subDistrict?: StringFilter<"CertificateContact"> | string
+    block?: StringFilter<"CertificateContact"> | string
+    name?: StringFilter<"CertificateContact"> | string
+    designation?: StringFilter<"CertificateContact"> | string
+    contact?: StringFilter<"CertificateContact"> | string
+    email?: StringFilter<"CertificateContact"> | string
+    applicationType?: StringFilter<"CertificateContact"> | string
+    certificateServiceId?: IntFilter<"CertificateContact"> | number
+  }
+
+  export type CertificateDocumentUpsertWithWhereUniqueWithoutCertificateServiceInput = {
+    where: CertificateDocumentWhereUniqueInput
+    update: XOR<CertificateDocumentUpdateWithoutCertificateServiceInput, CertificateDocumentUncheckedUpdateWithoutCertificateServiceInput>
+    create: XOR<CertificateDocumentCreateWithoutCertificateServiceInput, CertificateDocumentUncheckedCreateWithoutCertificateServiceInput>
+  }
+
+  export type CertificateDocumentUpdateWithWhereUniqueWithoutCertificateServiceInput = {
+    where: CertificateDocumentWhereUniqueInput
+    data: XOR<CertificateDocumentUpdateWithoutCertificateServiceInput, CertificateDocumentUncheckedUpdateWithoutCertificateServiceInput>
+  }
+
+  export type CertificateDocumentUpdateManyWithWhereWithoutCertificateServiceInput = {
+    where: CertificateDocumentScalarWhereInput
+    data: XOR<CertificateDocumentUpdateManyMutationInput, CertificateDocumentUncheckedUpdateManyWithoutCertificateServiceInput>
+  }
+
+  export type CertificateDocumentScalarWhereInput = {
+    AND?: CertificateDocumentScalarWhereInput | CertificateDocumentScalarWhereInput[]
+    OR?: CertificateDocumentScalarWhereInput[]
+    NOT?: CertificateDocumentScalarWhereInput | CertificateDocumentScalarWhereInput[]
+    id?: IntFilter<"CertificateDocument"> | number
+    slNo?: IntFilter<"CertificateDocument"> | number
+    documentType?: StringFilter<"CertificateDocument"> | string
+    validProof?: StringFilter<"CertificateDocument"> | string
+    isRequired?: BoolFilter<"CertificateDocument"> | boolean
+    applicationType?: StringFilter<"CertificateDocument"> | string
+    certificateServiceId?: IntFilter<"CertificateDocument"> | number
+  }
+
+  export type CertificateProcessStepUpsertWithWhereUniqueWithoutCertificateServiceInput = {
+    where: CertificateProcessStepWhereUniqueInput
+    update: XOR<CertificateProcessStepUpdateWithoutCertificateServiceInput, CertificateProcessStepUncheckedUpdateWithoutCertificateServiceInput>
+    create: XOR<CertificateProcessStepCreateWithoutCertificateServiceInput, CertificateProcessStepUncheckedCreateWithoutCertificateServiceInput>
+  }
+
+  export type CertificateProcessStepUpdateWithWhereUniqueWithoutCertificateServiceInput = {
+    where: CertificateProcessStepWhereUniqueInput
+    data: XOR<CertificateProcessStepUpdateWithoutCertificateServiceInput, CertificateProcessStepUncheckedUpdateWithoutCertificateServiceInput>
+  }
+
+  export type CertificateProcessStepUpdateManyWithWhereWithoutCertificateServiceInput = {
+    where: CertificateProcessStepScalarWhereInput
+    data: XOR<CertificateProcessStepUpdateManyMutationInput, CertificateProcessStepUncheckedUpdateManyWithoutCertificateServiceInput>
+  }
+
+  export type CertificateProcessStepScalarWhereInput = {
+    AND?: CertificateProcessStepScalarWhereInput | CertificateProcessStepScalarWhereInput[]
+    OR?: CertificateProcessStepScalarWhereInput[]
+    NOT?: CertificateProcessStepScalarWhereInput | CertificateProcessStepScalarWhereInput[]
+    id?: IntFilter<"CertificateProcessStep"> | number
+    slNo?: IntFilter<"CertificateProcessStep"> | number
+    stepDetails?: StringFilter<"CertificateProcessStep"> | string
+    applicationType?: StringFilter<"CertificateProcessStep"> | string
+    certificateServiceId?: IntFilter<"CertificateProcessStep"> | number
+  }
+
+  export type CertificateEligibilityUpsertWithWhereUniqueWithoutCertificateServiceInput = {
+    where: CertificateEligibilityWhereUniqueInput
+    update: XOR<CertificateEligibilityUpdateWithoutCertificateServiceInput, CertificateEligibilityUncheckedUpdateWithoutCertificateServiceInput>
+    create: XOR<CertificateEligibilityCreateWithoutCertificateServiceInput, CertificateEligibilityUncheckedCreateWithoutCertificateServiceInput>
+  }
+
+  export type CertificateEligibilityUpdateWithWhereUniqueWithoutCertificateServiceInput = {
+    where: CertificateEligibilityWhereUniqueInput
+    data: XOR<CertificateEligibilityUpdateWithoutCertificateServiceInput, CertificateEligibilityUncheckedUpdateWithoutCertificateServiceInput>
+  }
+
+  export type CertificateEligibilityUpdateManyWithWhereWithoutCertificateServiceInput = {
+    where: CertificateEligibilityScalarWhereInput
+    data: XOR<CertificateEligibilityUpdateManyMutationInput, CertificateEligibilityUncheckedUpdateManyWithoutCertificateServiceInput>
+  }
+
+  export type CertificateEligibilityScalarWhereInput = {
+    AND?: CertificateEligibilityScalarWhereInput | CertificateEligibilityScalarWhereInput[]
+    OR?: CertificateEligibilityScalarWhereInput[]
+    NOT?: CertificateEligibilityScalarWhereInput | CertificateEligibilityScalarWhereInput[]
+    id?: IntFilter<"CertificateEligibility"> | number
+    eligibilityDetail?: StringFilter<"CertificateEligibility"> | string
+    applicationType?: StringFilter<"CertificateEligibility"> | string
+    certificateServiceId?: IntFilter<"CertificateEligibility"> | number
+  }
+
+  export type CertificateServiceCreateWithoutContactsInput = {
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
+    applicationMode?: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
+    status?: string
+    isActive?: boolean
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    admin: AdminCreateNestedOneWithoutCertificateServicesInput
+    documents?: CertificateDocumentCreateNestedManyWithoutCertificateServiceInput
+    processSteps?: CertificateProcessStepCreateNestedManyWithoutCertificateServiceInput
+    eligibilityItems?: CertificateEligibilityCreateNestedManyWithoutCertificateServiceInput
+  }
+
+  export type CertificateServiceUncheckedCreateWithoutContactsInput = {
     id?: number
     name: string
-    designation: string
-    contact: string
-    email?: string | null
+    summary: string
+    type?: string | null
+    targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
+    applicationMode?: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
+    status?: string
+    isActive?: boolean
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    adminId: number
+    documents?: CertificateDocumentUncheckedCreateNestedManyWithoutCertificateServiceInput
+    processSteps?: CertificateProcessStepUncheckedCreateNestedManyWithoutCertificateServiceInput
+    eligibilityItems?: CertificateEligibilityUncheckedCreateNestedManyWithoutCertificateServiceInput
   }
 
-  export type ContactServiceContactCreateOrConnectWithoutServiceInput = {
-    where: ContactServiceContactWhereUniqueInput
-    create: XOR<ContactServiceContactCreateWithoutServiceInput, ContactServiceContactUncheckedCreateWithoutServiceInput>
+  export type CertificateServiceCreateOrConnectWithoutContactsInput = {
+    where: CertificateServiceWhereUniqueInput
+    create: XOR<CertificateServiceCreateWithoutContactsInput, CertificateServiceUncheckedCreateWithoutContactsInput>
   }
 
-  export type ContactServiceContactCreateManyServiceInputEnvelope = {
-    data: ContactServiceContactCreateManyServiceInput | ContactServiceContactCreateManyServiceInput[]
-    skipDuplicates?: boolean
+  export type CertificateServiceUpsertWithoutContactsInput = {
+    update: XOR<CertificateServiceUpdateWithoutContactsInput, CertificateServiceUncheckedUpdateWithoutContactsInput>
+    create: XOR<CertificateServiceCreateWithoutContactsInput, CertificateServiceUncheckedCreateWithoutContactsInput>
+    where?: CertificateServiceWhereInput
+  }
+
+  export type CertificateServiceUpdateToOneWithWhereWithoutContactsInput = {
+    where?: CertificateServiceWhereInput
+    data: XOR<CertificateServiceUpdateWithoutContactsInput, CertificateServiceUncheckedUpdateWithoutContactsInput>
+  }
+
+  export type CertificateServiceUpdateWithoutContactsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin?: AdminUpdateOneRequiredWithoutCertificateServicesNestedInput
+    documents?: CertificateDocumentUpdateManyWithoutCertificateServiceNestedInput
+    processSteps?: CertificateProcessStepUpdateManyWithoutCertificateServiceNestedInput
+    eligibilityItems?: CertificateEligibilityUpdateManyWithoutCertificateServiceNestedInput
+  }
+
+  export type CertificateServiceUncheckedUpdateWithoutContactsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
+    documents?: CertificateDocumentUncheckedUpdateManyWithoutCertificateServiceNestedInput
+    processSteps?: CertificateProcessStepUncheckedUpdateManyWithoutCertificateServiceNestedInput
+    eligibilityItems?: CertificateEligibilityUncheckedUpdateManyWithoutCertificateServiceNestedInput
+  }
+
+  export type CertificateServiceCreateWithoutDocumentsInput = {
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
+    applicationMode?: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
+    status?: string
+    isActive?: boolean
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    admin: AdminCreateNestedOneWithoutCertificateServicesInput
+    contacts?: CertificateContactCreateNestedManyWithoutCertificateServiceInput
+    processSteps?: CertificateProcessStepCreateNestedManyWithoutCertificateServiceInput
+    eligibilityItems?: CertificateEligibilityCreateNestedManyWithoutCertificateServiceInput
+  }
+
+  export type CertificateServiceUncheckedCreateWithoutDocumentsInput = {
+    id?: number
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
+    applicationMode?: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
+    status?: string
+    isActive?: boolean
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adminId: number
+    contacts?: CertificateContactUncheckedCreateNestedManyWithoutCertificateServiceInput
+    processSteps?: CertificateProcessStepUncheckedCreateNestedManyWithoutCertificateServiceInput
+    eligibilityItems?: CertificateEligibilityUncheckedCreateNestedManyWithoutCertificateServiceInput
+  }
+
+  export type CertificateServiceCreateOrConnectWithoutDocumentsInput = {
+    where: CertificateServiceWhereUniqueInput
+    create: XOR<CertificateServiceCreateWithoutDocumentsInput, CertificateServiceUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type CertificateServiceUpsertWithoutDocumentsInput = {
+    update: XOR<CertificateServiceUpdateWithoutDocumentsInput, CertificateServiceUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<CertificateServiceCreateWithoutDocumentsInput, CertificateServiceUncheckedCreateWithoutDocumentsInput>
+    where?: CertificateServiceWhereInput
+  }
+
+  export type CertificateServiceUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: CertificateServiceWhereInput
+    data: XOR<CertificateServiceUpdateWithoutDocumentsInput, CertificateServiceUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type CertificateServiceUpdateWithoutDocumentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin?: AdminUpdateOneRequiredWithoutCertificateServicesNestedInput
+    contacts?: CertificateContactUpdateManyWithoutCertificateServiceNestedInput
+    processSteps?: CertificateProcessStepUpdateManyWithoutCertificateServiceNestedInput
+    eligibilityItems?: CertificateEligibilityUpdateManyWithoutCertificateServiceNestedInput
+  }
+
+  export type CertificateServiceUncheckedUpdateWithoutDocumentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
+    contacts?: CertificateContactUncheckedUpdateManyWithoutCertificateServiceNestedInput
+    processSteps?: CertificateProcessStepUncheckedUpdateManyWithoutCertificateServiceNestedInput
+    eligibilityItems?: CertificateEligibilityUncheckedUpdateManyWithoutCertificateServiceNestedInput
+  }
+
+  export type CertificateServiceCreateWithoutProcessStepsInput = {
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
+    applicationMode?: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
+    status?: string
+    isActive?: boolean
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    admin: AdminCreateNestedOneWithoutCertificateServicesInput
+    contacts?: CertificateContactCreateNestedManyWithoutCertificateServiceInput
+    documents?: CertificateDocumentCreateNestedManyWithoutCertificateServiceInput
+    eligibilityItems?: CertificateEligibilityCreateNestedManyWithoutCertificateServiceInput
+  }
+
+  export type CertificateServiceUncheckedCreateWithoutProcessStepsInput = {
+    id?: number
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
+    applicationMode?: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
+    status?: string
+    isActive?: boolean
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adminId: number
+    contacts?: CertificateContactUncheckedCreateNestedManyWithoutCertificateServiceInput
+    documents?: CertificateDocumentUncheckedCreateNestedManyWithoutCertificateServiceInput
+    eligibilityItems?: CertificateEligibilityUncheckedCreateNestedManyWithoutCertificateServiceInput
+  }
+
+  export type CertificateServiceCreateOrConnectWithoutProcessStepsInput = {
+    where: CertificateServiceWhereUniqueInput
+    create: XOR<CertificateServiceCreateWithoutProcessStepsInput, CertificateServiceUncheckedCreateWithoutProcessStepsInput>
+  }
+
+  export type CertificateServiceUpsertWithoutProcessStepsInput = {
+    update: XOR<CertificateServiceUpdateWithoutProcessStepsInput, CertificateServiceUncheckedUpdateWithoutProcessStepsInput>
+    create: XOR<CertificateServiceCreateWithoutProcessStepsInput, CertificateServiceUncheckedCreateWithoutProcessStepsInput>
+    where?: CertificateServiceWhereInput
+  }
+
+  export type CertificateServiceUpdateToOneWithWhereWithoutProcessStepsInput = {
+    where?: CertificateServiceWhereInput
+    data: XOR<CertificateServiceUpdateWithoutProcessStepsInput, CertificateServiceUncheckedUpdateWithoutProcessStepsInput>
+  }
+
+  export type CertificateServiceUpdateWithoutProcessStepsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin?: AdminUpdateOneRequiredWithoutCertificateServicesNestedInput
+    contacts?: CertificateContactUpdateManyWithoutCertificateServiceNestedInput
+    documents?: CertificateDocumentUpdateManyWithoutCertificateServiceNestedInput
+    eligibilityItems?: CertificateEligibilityUpdateManyWithoutCertificateServiceNestedInput
+  }
+
+  export type CertificateServiceUncheckedUpdateWithoutProcessStepsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
+    contacts?: CertificateContactUncheckedUpdateManyWithoutCertificateServiceNestedInput
+    documents?: CertificateDocumentUncheckedUpdateManyWithoutCertificateServiceNestedInput
+    eligibilityItems?: CertificateEligibilityUncheckedUpdateManyWithoutCertificateServiceNestedInput
+  }
+
+  export type CertificateServiceCreateWithoutEligibilityItemsInput = {
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
+    applicationMode?: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
+    status?: string
+    isActive?: boolean
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    admin: AdminCreateNestedOneWithoutCertificateServicesInput
+    contacts?: CertificateContactCreateNestedManyWithoutCertificateServiceInput
+    documents?: CertificateDocumentCreateNestedManyWithoutCertificateServiceInput
+    processSteps?: CertificateProcessStepCreateNestedManyWithoutCertificateServiceInput
+  }
+
+  export type CertificateServiceUncheckedCreateWithoutEligibilityItemsInput = {
+    id?: number
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
+    applicationMode?: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
+    status?: string
+    isActive?: boolean
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adminId: number
+    contacts?: CertificateContactUncheckedCreateNestedManyWithoutCertificateServiceInput
+    documents?: CertificateDocumentUncheckedCreateNestedManyWithoutCertificateServiceInput
+    processSteps?: CertificateProcessStepUncheckedCreateNestedManyWithoutCertificateServiceInput
+  }
+
+  export type CertificateServiceCreateOrConnectWithoutEligibilityItemsInput = {
+    where: CertificateServiceWhereUniqueInput
+    create: XOR<CertificateServiceCreateWithoutEligibilityItemsInput, CertificateServiceUncheckedCreateWithoutEligibilityItemsInput>
+  }
+
+  export type CertificateServiceUpsertWithoutEligibilityItemsInput = {
+    update: XOR<CertificateServiceUpdateWithoutEligibilityItemsInput, CertificateServiceUncheckedUpdateWithoutEligibilityItemsInput>
+    create: XOR<CertificateServiceCreateWithoutEligibilityItemsInput, CertificateServiceUncheckedCreateWithoutEligibilityItemsInput>
+    where?: CertificateServiceWhereInput
+  }
+
+  export type CertificateServiceUpdateToOneWithWhereWithoutEligibilityItemsInput = {
+    where?: CertificateServiceWhereInput
+    data: XOR<CertificateServiceUpdateWithoutEligibilityItemsInput, CertificateServiceUncheckedUpdateWithoutEligibilityItemsInput>
+  }
+
+  export type CertificateServiceUpdateWithoutEligibilityItemsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin?: AdminUpdateOneRequiredWithoutCertificateServicesNestedInput
+    contacts?: CertificateContactUpdateManyWithoutCertificateServiceNestedInput
+    documents?: CertificateDocumentUpdateManyWithoutCertificateServiceNestedInput
+    processSteps?: CertificateProcessStepUpdateManyWithoutCertificateServiceNestedInput
+  }
+
+  export type CertificateServiceUncheckedUpdateWithoutEligibilityItemsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
+    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
+    contacts?: CertificateContactUncheckedUpdateManyWithoutCertificateServiceNestedInput
+    documents?: CertificateDocumentUncheckedUpdateManyWithoutCertificateServiceNestedInput
+    processSteps?: CertificateProcessStepUncheckedUpdateManyWithoutCertificateServiceNestedInput
   }
 
   export type AdminCreateWithoutContactServicesInput = {
@@ -14730,34 +23375,62 @@ export namespace Prisma {
     create: XOR<AdminCreateWithoutContactServicesInput, AdminUncheckedCreateWithoutContactServicesInput>
   }
 
-  export type ContactServiceContactUpsertWithWhereUniqueWithoutServiceInput = {
+  export type ContactServiceContactCreateWithoutContactServiceInput = {
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
+    name: string
+    designation: string
+    contact: string
+    email: string
+  }
+
+  export type ContactServiceContactUncheckedCreateWithoutContactServiceInput = {
+    id?: number
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
+    name: string
+    designation: string
+    contact: string
+    email: string
+  }
+
+  export type ContactServiceContactCreateOrConnectWithoutContactServiceInput = {
     where: ContactServiceContactWhereUniqueInput
-    update: XOR<ContactServiceContactUpdateWithoutServiceInput, ContactServiceContactUncheckedUpdateWithoutServiceInput>
-    create: XOR<ContactServiceContactCreateWithoutServiceInput, ContactServiceContactUncheckedCreateWithoutServiceInput>
+    create: XOR<ContactServiceContactCreateWithoutContactServiceInput, ContactServiceContactUncheckedCreateWithoutContactServiceInput>
   }
 
-  export type ContactServiceContactUpdateWithWhereUniqueWithoutServiceInput = {
-    where: ContactServiceContactWhereUniqueInput
-    data: XOR<ContactServiceContactUpdateWithoutServiceInput, ContactServiceContactUncheckedUpdateWithoutServiceInput>
+  export type ContactServiceContactCreateManyContactServiceInputEnvelope = {
+    data: ContactServiceContactCreateManyContactServiceInput | ContactServiceContactCreateManyContactServiceInput[]
+    skipDuplicates?: boolean
   }
 
-  export type ContactServiceContactUpdateManyWithWhereWithoutServiceInput = {
-    where: ContactServiceContactScalarWhereInput
-    data: XOR<ContactServiceContactUpdateManyMutationInput, ContactServiceContactUncheckedUpdateManyWithoutServiceInput>
+  export type ContactServiceDocumentCreateWithoutContactServiceInput = {
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
   }
 
-  export type ContactServiceContactScalarWhereInput = {
-    AND?: ContactServiceContactScalarWhereInput | ContactServiceContactScalarWhereInput[]
-    OR?: ContactServiceContactScalarWhereInput[]
-    NOT?: ContactServiceContactScalarWhereInput | ContactServiceContactScalarWhereInput[]
-    id?: IntFilter<"ContactServiceContact"> | number
-    name?: StringFilter<"ContactServiceContact"> | string
-    designation?: StringFilter<"ContactServiceContact"> | string
-    contact?: StringFilter<"ContactServiceContact"> | string
-    email?: StringNullableFilter<"ContactServiceContact"> | string | null
-    serviceId?: IntFilter<"ContactServiceContact"> | number
-    createdAt?: DateTimeFilter<"ContactServiceContact"> | Date | string
-    updatedAt?: DateTimeFilter<"ContactServiceContact"> | Date | string
+  export type ContactServiceDocumentUncheckedCreateWithoutContactServiceInput = {
+    id?: number
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
+  }
+
+  export type ContactServiceDocumentCreateOrConnectWithoutContactServiceInput = {
+    where: ContactServiceDocumentWhereUniqueInput
+    create: XOR<ContactServiceDocumentCreateWithoutContactServiceInput, ContactServiceDocumentUncheckedCreateWithoutContactServiceInput>
+  }
+
+  export type ContactServiceDocumentCreateManyContactServiceInputEnvelope = {
+    data: ContactServiceDocumentCreateManyContactServiceInput | ContactServiceDocumentCreateManyContactServiceInput[]
+    skipDuplicates?: boolean
   }
 
   export type AdminUpsertWithoutContactServicesInput = {
@@ -14794,31 +23467,119 @@ export namespace Prisma {
     certificateServices?: CertificateServiceUncheckedUpdateManyWithoutAdminNestedInput
   }
 
+  export type ContactServiceContactUpsertWithWhereUniqueWithoutContactServiceInput = {
+    where: ContactServiceContactWhereUniqueInput
+    update: XOR<ContactServiceContactUpdateWithoutContactServiceInput, ContactServiceContactUncheckedUpdateWithoutContactServiceInput>
+    create: XOR<ContactServiceContactCreateWithoutContactServiceInput, ContactServiceContactUncheckedCreateWithoutContactServiceInput>
+  }
+
+  export type ContactServiceContactUpdateWithWhereUniqueWithoutContactServiceInput = {
+    where: ContactServiceContactWhereUniqueInput
+    data: XOR<ContactServiceContactUpdateWithoutContactServiceInput, ContactServiceContactUncheckedUpdateWithoutContactServiceInput>
+  }
+
+  export type ContactServiceContactUpdateManyWithWhereWithoutContactServiceInput = {
+    where: ContactServiceContactScalarWhereInput
+    data: XOR<ContactServiceContactUpdateManyMutationInput, ContactServiceContactUncheckedUpdateManyWithoutContactServiceInput>
+  }
+
+  export type ContactServiceContactScalarWhereInput = {
+    AND?: ContactServiceContactScalarWhereInput | ContactServiceContactScalarWhereInput[]
+    OR?: ContactServiceContactScalarWhereInput[]
+    NOT?: ContactServiceContactScalarWhereInput | ContactServiceContactScalarWhereInput[]
+    id?: IntFilter<"ContactServiceContact"> | number
+    serviceName?: StringFilter<"ContactServiceContact"> | string
+    district?: StringFilter<"ContactServiceContact"> | string
+    subDistrict?: StringFilter<"ContactServiceContact"> | string
+    block?: StringFilter<"ContactServiceContact"> | string
+    name?: StringFilter<"ContactServiceContact"> | string
+    designation?: StringFilter<"ContactServiceContact"> | string
+    contact?: StringFilter<"ContactServiceContact"> | string
+    email?: StringFilter<"ContactServiceContact"> | string
+    contactServiceId?: IntFilter<"ContactServiceContact"> | number
+  }
+
+  export type ContactServiceDocumentUpsertWithWhereUniqueWithoutContactServiceInput = {
+    where: ContactServiceDocumentWhereUniqueInput
+    update: XOR<ContactServiceDocumentUpdateWithoutContactServiceInput, ContactServiceDocumentUncheckedUpdateWithoutContactServiceInput>
+    create: XOR<ContactServiceDocumentCreateWithoutContactServiceInput, ContactServiceDocumentUncheckedCreateWithoutContactServiceInput>
+  }
+
+  export type ContactServiceDocumentUpdateWithWhereUniqueWithoutContactServiceInput = {
+    where: ContactServiceDocumentWhereUniqueInput
+    data: XOR<ContactServiceDocumentUpdateWithoutContactServiceInput, ContactServiceDocumentUncheckedUpdateWithoutContactServiceInput>
+  }
+
+  export type ContactServiceDocumentUpdateManyWithWhereWithoutContactServiceInput = {
+    where: ContactServiceDocumentScalarWhereInput
+    data: XOR<ContactServiceDocumentUpdateManyMutationInput, ContactServiceDocumentUncheckedUpdateManyWithoutContactServiceInput>
+  }
+
+  export type ContactServiceDocumentScalarWhereInput = {
+    AND?: ContactServiceDocumentScalarWhereInput | ContactServiceDocumentScalarWhereInput[]
+    OR?: ContactServiceDocumentScalarWhereInput[]
+    NOT?: ContactServiceDocumentScalarWhereInput | ContactServiceDocumentScalarWhereInput[]
+    id?: IntFilter<"ContactServiceDocument"> | number
+    slNo?: IntFilter<"ContactServiceDocument"> | number
+    documentType?: StringFilter<"ContactServiceDocument"> | string
+    validProof?: StringFilter<"ContactServiceDocument"> | string
+    isRequired?: BoolFilter<"ContactServiceDocument"> | boolean
+    contactServiceId?: IntFilter<"ContactServiceDocument"> | number
+  }
+
   export type ContactServiceCreateWithoutContactsInput = {
-    serviceName: string
-    district: string
-    subDistrict?: string | null
-    block: string
-    officeAddress?: string | null
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: ContactServiceCreatetargetAudienceInput | string[]
+    applicationMode: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
     status?: string
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    admin?: AdminCreateNestedOneWithoutContactServicesInput
+    eligibilityDetails?: ContactServiceCreateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceCreatecontactDetailsInput | string[]
+    processDetails?: ContactServiceCreateprocessDetailsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    admin: AdminCreateNestedOneWithoutContactServicesInput
+    documents?: ContactServiceDocumentCreateNestedManyWithoutContactServiceInput
   }
 
   export type ContactServiceUncheckedCreateWithoutContactsInput = {
     id?: number
-    serviceName: string
-    district: string
-    subDistrict?: string | null
-    block: string
-    officeAddress?: string | null
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: ContactServiceCreatetargetAudienceInput | string[]
+    applicationMode: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
     status?: string
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    adminId?: number
+    adminId: number
+    eligibilityDetails?: ContactServiceCreateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceCreatecontactDetailsInput | string[]
+    processDetails?: ContactServiceCreateprocessDetailsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    documents?: ContactServiceDocumentUncheckedCreateNestedManyWithoutContactServiceInput
   }
 
   export type ContactServiceCreateOrConnectWithoutContactsInput = {
@@ -14838,30 +23599,184 @@ export namespace Prisma {
   }
 
   export type ContactServiceUpdateWithoutContactsInput = {
-    serviceName?: StringFieldUpdateOperationsInput | string
-    district?: StringFieldUpdateOperationsInput | string
-    subDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    block?: StringFieldUpdateOperationsInput | string
-    officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: ContactServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: ContactServiceUpdateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceUpdatecontactDetailsInput | string[]
+    processDetails?: ContactServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     admin?: AdminUpdateOneRequiredWithoutContactServicesNestedInput
+    documents?: ContactServiceDocumentUpdateManyWithoutContactServiceNestedInput
   }
 
   export type ContactServiceUncheckedUpdateWithoutContactsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    serviceName?: StringFieldUpdateOperationsInput | string
-    district?: StringFieldUpdateOperationsInput | string
-    subDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    block?: StringFieldUpdateOperationsInput | string
-    officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: ContactServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     adminId?: IntFieldUpdateOperationsInput | number
+    eligibilityDetails?: ContactServiceUpdateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceUpdatecontactDetailsInput | string[]
+    processDetails?: ContactServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: ContactServiceDocumentUncheckedUpdateManyWithoutContactServiceNestedInput
+  }
+
+  export type ContactServiceCreateWithoutDocumentsInput = {
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: ContactServiceCreatetargetAudienceInput | string[]
+    applicationMode: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
+    status?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eligibilityDetails?: ContactServiceCreateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceCreatecontactDetailsInput | string[]
+    processDetails?: ContactServiceCreateprocessDetailsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    admin: AdminCreateNestedOneWithoutContactServicesInput
+    contacts?: ContactServiceContactCreateNestedManyWithoutContactServiceInput
+  }
+
+  export type ContactServiceUncheckedCreateWithoutDocumentsInput = {
+    id?: number
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: ContactServiceCreatetargetAudienceInput | string[]
+    applicationMode: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
+    status?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adminId: number
+    eligibilityDetails?: ContactServiceCreateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceCreatecontactDetailsInput | string[]
+    processDetails?: ContactServiceCreateprocessDetailsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    contacts?: ContactServiceContactUncheckedCreateNestedManyWithoutContactServiceInput
+  }
+
+  export type ContactServiceCreateOrConnectWithoutDocumentsInput = {
+    where: ContactServiceWhereUniqueInput
+    create: XOR<ContactServiceCreateWithoutDocumentsInput, ContactServiceUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type ContactServiceUpsertWithoutDocumentsInput = {
+    update: XOR<ContactServiceUpdateWithoutDocumentsInput, ContactServiceUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<ContactServiceCreateWithoutDocumentsInput, ContactServiceUncheckedCreateWithoutDocumentsInput>
+    where?: ContactServiceWhereInput
+  }
+
+  export type ContactServiceUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: ContactServiceWhereInput
+    data: XOR<ContactServiceUpdateWithoutDocumentsInput, ContactServiceUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type ContactServiceUpdateWithoutDocumentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: ContactServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: ContactServiceUpdateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceUpdatecontactDetailsInput | string[]
+    processDetails?: ContactServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    admin?: AdminUpdateOneRequiredWithoutContactServicesNestedInput
+    contacts?: ContactServiceContactUpdateManyWithoutContactServiceNestedInput
+  }
+
+  export type ContactServiceUncheckedUpdateWithoutDocumentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: ContactServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
+    eligibilityDetails?: ContactServiceUpdateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceUpdatecontactDetailsInput | string[]
+    processDetails?: ContactServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    contacts?: ContactServiceContactUncheckedUpdateManyWithoutContactServiceNestedInput
   }
 
   export type SchemeServiceCreateWithoutContactsInput = {
@@ -14875,12 +23790,22 @@ export namespace Prisma {
     status?: string
     isActive?: boolean
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    admin?: AdminCreateNestedOneWithoutSchemeServicesInput
+    admin: AdminCreateNestedOneWithoutSchemeServicesInput
     documents?: SupportiveDocumentCreateNestedManyWithoutSchemeServiceInput
   }
 
@@ -14896,12 +23821,22 @@ export namespace Prisma {
     status?: string
     isActive?: boolean
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    adminId?: number
+    adminId: number
     documents?: SupportiveDocumentUncheckedCreateNestedManyWithoutSchemeServiceInput
   }
 
@@ -14932,9 +23867,19 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: AdminUpdateOneRequiredWithoutSchemeServicesNestedInput
@@ -14953,9 +23898,19 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     adminId?: IntFieldUpdateOperationsInput | number
@@ -14973,12 +23928,22 @@ export namespace Prisma {
     status?: string
     isActive?: boolean
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    admin?: AdminCreateNestedOneWithoutSchemeServicesInput
+    admin: AdminCreateNestedOneWithoutSchemeServicesInput
     contacts?: ContactPersonCreateNestedManyWithoutSchemeServiceInput
   }
 
@@ -14994,12 +23959,22 @@ export namespace Prisma {
     status?: string
     isActive?: boolean
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    adminId?: number
+    adminId: number
     contacts?: ContactPersonUncheckedCreateNestedManyWithoutSchemeServiceInput
   }
 
@@ -15030,9 +24005,19 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: AdminUpdateOneRequiredWithoutSchemeServicesNestedInput
@@ -15051,9 +24036,19 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     adminId?: IntFieldUpdateOperationsInput | number
@@ -15072,9 +24067,19 @@ export namespace Prisma {
     status?: string
     isActive?: boolean
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15094,21 +24099,42 @@ export namespace Prisma {
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ContactServiceCreateManyAdminInput = {
     id?: number
-    serviceName: string
-    district: string
-    subDistrict?: string | null
-    block: string
-    officeAddress?: string | null
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: ContactServiceCreatetargetAudienceInput | string[]
+    applicationMode: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
     status?: string
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    eligibilityDetails?: ContactServiceCreateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceCreatecontactDetailsInput | string[]
+    processDetails?: ContactServiceCreateprocessDetailsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
   }
 
   export type SchemeServiceUpdateWithoutAdminInput = {
@@ -15122,9 +24148,19 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contacts?: ContactPersonUpdateManyWithoutSchemeServiceNestedInput
@@ -15143,9 +24179,19 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contacts?: ContactPersonUncheckedUpdateManyWithoutSchemeServiceNestedInput
@@ -15164,9 +24210,19 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
     benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
     applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
     requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15185,8 +24241,20 @@ export namespace Prisma {
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contacts?: CertificateContactUpdateManyWithoutCertificateServiceNestedInput
+    documents?: CertificateDocumentUpdateManyWithoutCertificateServiceNestedInput
+    processSteps?: CertificateProcessStepUpdateManyWithoutCertificateServiceNestedInput
+    eligibilityItems?: CertificateEligibilityUpdateManyWithoutCertificateServiceNestedInput
   }
 
   export type CertificateServiceUncheckedUpdateWithoutAdminInput = {
@@ -15204,8 +24272,20 @@ export namespace Prisma {
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contacts?: CertificateContactUncheckedUpdateManyWithoutCertificateServiceNestedInput
+    documents?: CertificateDocumentUncheckedUpdateManyWithoutCertificateServiceNestedInput
+    processSteps?: CertificateProcessStepUncheckedUpdateManyWithoutCertificateServiceNestedInput
+    eligibilityItems?: CertificateEligibilityUncheckedUpdateManyWithoutCertificateServiceNestedInput
   }
 
   export type CertificateServiceUncheckedUpdateManyWithoutAdminInput = {
@@ -15223,48 +24303,97 @@ export namespace Prisma {
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ContactServiceUpdateWithoutAdminInput = {
-    serviceName?: StringFieldUpdateOperationsInput | string
-    district?: StringFieldUpdateOperationsInput | string
-    subDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    block?: StringFieldUpdateOperationsInput | string
-    officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: ContactServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    contacts?: ContactServiceContactUpdateManyWithoutServiceNestedInput
+    eligibilityDetails?: ContactServiceUpdateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceUpdatecontactDetailsInput | string[]
+    processDetails?: ContactServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    contacts?: ContactServiceContactUpdateManyWithoutContactServiceNestedInput
+    documents?: ContactServiceDocumentUpdateManyWithoutContactServiceNestedInput
   }
 
   export type ContactServiceUncheckedUpdateWithoutAdminInput = {
     id?: IntFieldUpdateOperationsInput | number
-    serviceName?: StringFieldUpdateOperationsInput | string
-    district?: StringFieldUpdateOperationsInput | string
-    subDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    block?: StringFieldUpdateOperationsInput | string
-    officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: ContactServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    contacts?: ContactServiceContactUncheckedUpdateManyWithoutServiceNestedInput
+    eligibilityDetails?: ContactServiceUpdateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceUpdatecontactDetailsInput | string[]
+    processDetails?: ContactServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    contacts?: ContactServiceContactUncheckedUpdateManyWithoutContactServiceNestedInput
+    documents?: ContactServiceDocumentUncheckedUpdateManyWithoutContactServiceNestedInput
   }
 
   export type ContactServiceUncheckedUpdateManyWithoutAdminInput = {
     id?: IntFieldUpdateOperationsInput | number
-    serviceName?: StringFieldUpdateOperationsInput | string
-    district?: StringFieldUpdateOperationsInput | string
-    subDistrict?: NullableStringFieldUpdateOperationsInput | string | null
-    block?: StringFieldUpdateOperationsInput | string
-    officeAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: ContactServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: ContactServiceUpdateeligibilityDetailsInput | string[]
+    contactDetails?: ContactServiceUpdatecontactDetailsInput | string[]
+    processDetails?: ContactServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ContactPersonCreateManySchemeServiceInput = {
@@ -15345,43 +24474,218 @@ export namespace Prisma {
     isRequired?: BoolFieldUpdateOperationsInput | boolean
   }
 
-  export type ContactServiceContactCreateManyServiceInput = {
+  export type CertificateContactCreateManyCertificateServiceInput = {
     id?: number
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
     name: string
     designation: string
     contact: string
-    email?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    email: string
+    applicationType?: string
   }
 
-  export type ContactServiceContactUpdateWithoutServiceInput = {
+  export type CertificateDocumentCreateManyCertificateServiceInput = {
+    id?: number
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
+    applicationType?: string
+  }
+
+  export type CertificateProcessStepCreateManyCertificateServiceInput = {
+    id?: number
+    slNo: number
+    stepDetails: string
+    applicationType?: string
+  }
+
+  export type CertificateEligibilityCreateManyCertificateServiceInput = {
+    id?: number
+    eligibilityDetail: string
+    applicationType?: string
+  }
+
+  export type CertificateContactUpdateWithoutCertificateServiceInput = {
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     designation?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
   }
 
-  export type ContactServiceContactUncheckedUpdateWithoutServiceInput = {
+  export type CertificateContactUncheckedUpdateWithoutCertificateServiceInput = {
     id?: IntFieldUpdateOperationsInput | number
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     designation?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
   }
 
-  export type ContactServiceContactUncheckedUpdateManyWithoutServiceInput = {
+  export type CertificateContactUncheckedUpdateManyWithoutCertificateServiceInput = {
     id?: IntFieldUpdateOperationsInput | number
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     designation?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CertificateDocumentUpdateWithoutCertificateServiceInput = {
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    applicationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CertificateDocumentUncheckedUpdateWithoutCertificateServiceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    applicationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CertificateDocumentUncheckedUpdateManyWithoutCertificateServiceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    applicationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CertificateProcessStepUpdateWithoutCertificateServiceInput = {
+    slNo?: IntFieldUpdateOperationsInput | number
+    stepDetails?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CertificateProcessStepUncheckedUpdateWithoutCertificateServiceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slNo?: IntFieldUpdateOperationsInput | number
+    stepDetails?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CertificateProcessStepUncheckedUpdateManyWithoutCertificateServiceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slNo?: IntFieldUpdateOperationsInput | number
+    stepDetails?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CertificateEligibilityUpdateWithoutCertificateServiceInput = {
+    eligibilityDetail?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CertificateEligibilityUncheckedUpdateWithoutCertificateServiceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    eligibilityDetail?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CertificateEligibilityUncheckedUpdateManyWithoutCertificateServiceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    eligibilityDetail?: StringFieldUpdateOperationsInput | string
+    applicationType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ContactServiceContactCreateManyContactServiceInput = {
+    id?: number
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
+    name: string
+    designation: string
+    contact: string
+    email: string
+  }
+
+  export type ContactServiceDocumentCreateManyContactServiceInput = {
+    id?: number
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
+  }
+
+  export type ContactServiceContactUpdateWithoutContactServiceInput = {
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ContactServiceContactUncheckedUpdateWithoutContactServiceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ContactServiceContactUncheckedUpdateManyWithoutContactServiceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ContactServiceDocumentUpdateWithoutContactServiceInput = {
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type ContactServiceDocumentUncheckedUpdateWithoutContactServiceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type ContactServiceDocumentUncheckedUpdateManyWithoutContactServiceInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
   }
 
 
@@ -15397,6 +24701,10 @@ export namespace Prisma {
      * @deprecated Use SchemeServiceCountOutputTypeDefaultArgs instead
      */
     export type SchemeServiceCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SchemeServiceCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CertificateServiceCountOutputTypeDefaultArgs instead
+     */
+    export type CertificateServiceCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CertificateServiceCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use ContactServiceCountOutputTypeDefaultArgs instead
      */
@@ -15414,6 +24722,22 @@ export namespace Prisma {
      */
     export type CertificateServiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CertificateServiceDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use CertificateContactDefaultArgs instead
+     */
+    export type CertificateContactArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CertificateContactDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CertificateDocumentDefaultArgs instead
+     */
+    export type CertificateDocumentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CertificateDocumentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CertificateProcessStepDefaultArgs instead
+     */
+    export type CertificateProcessStepArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CertificateProcessStepDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CertificateEligibilityDefaultArgs instead
+     */
+    export type CertificateEligibilityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CertificateEligibilityDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use ContactServiceDefaultArgs instead
      */
     export type ContactServiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ContactServiceDefaultArgs<ExtArgs>
@@ -15421,6 +24745,10 @@ export namespace Prisma {
      * @deprecated Use ContactServiceContactDefaultArgs instead
      */
     export type ContactServiceContactArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ContactServiceContactDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ContactServiceDocumentDefaultArgs instead
+     */
+    export type ContactServiceDocumentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ContactServiceDocumentDefaultArgs<ExtArgs>
     /**
      * @deprecated Use GrievanceDefaultArgs instead
      */

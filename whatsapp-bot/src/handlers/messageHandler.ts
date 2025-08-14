@@ -106,6 +106,13 @@ export class MessageHandler {
           session,
         );
 
+      case "certificate_application_type":
+        return await this.handleCertificateApplicationType(
+          phoneNumber,
+          messageText,
+          session,
+        );
+
       case "contacts_list":
         return await this.handleContactsMenu(phoneNumber, messageText, session);
 
@@ -346,46 +353,130 @@ export class MessageHandler {
     let message = `📊 ${scheme.name}\n\n`;
     message += `📋 ${scheme.summary}\n\n`;
 
+    // Scheme Details Section
+    if (scheme.schemeDetails && scheme.schemeDetails.length > 0) {
+      message += `🔍 Scheme Details:\n`;
+      scheme.schemeDetails.forEach((detail) => {
+        message += `• ${detail}\n`;
+      });
+      message += "\n";
+    }
+
+    // Eligibility Criteria
     if (scheme.eligibilityDetails && scheme.eligibilityDetails.length > 0) {
-      message += `${translations.eligibility}\n`;
+      message += `✅ ${translations.eligibility}\n`;
       scheme.eligibilityDetails.forEach((detail) => {
         message += `• ${detail}\n`;
       });
       message += "\n";
     }
 
+    // Benefits Section
     if (scheme.benefitDetails && scheme.benefitDetails.length > 0) {
-      message += `${translations.benefits}\n`;
+      message += `🎁 ${translations.benefits}\n`;
       scheme.benefitDetails.forEach((benefit) => {
         message += `• ${benefit}\n`;
       });
       message += "\n";
     }
 
+    // How to Apply / Application Process
     if (scheme.applicationProcess && scheme.applicationProcess.length > 0) {
-      message += `${translations.howToApply}\n`;
+      message += `📝 ${translations.howToApply}\n`;
       scheme.applicationProcess.forEach((step, index) => {
         message += `${index + 1}. ${step}\n`;
       });
       message += "\n";
     }
 
+    // Process Details
+    if (scheme.processDetails && scheme.processDetails.length > 0) {
+      message += `⚙️ Process Details:\n`;
+      scheme.processDetails.forEach((detail) => {
+        message += `• ${detail}\n`;
+      });
+      message += "\n";
+    }
+
+    // Specific Process Flows
+    if (scheme.processNew) {
+      message += `🆕 New Application Process:\n${scheme.processNew}\n\n`;
+    }
+    if (scheme.processUpdate) {
+      message += `🔄 Update Process:\n${scheme.processUpdate}\n\n`;
+    }
+    if (scheme.processLost) {
+      message += `🔍 Lost Document Process:\n${scheme.processLost}\n\n`;
+    }
+    if (scheme.processSurrender) {
+      message += `📤 Surrender Process:\n${scheme.processSurrender}\n\n`;
+    }
+
+    // Required Documents
     if (scheme.requiredDocuments && scheme.requiredDocuments.length > 0) {
-      message += `${translations.requiredDocs}\n`;
+      message += `📄 ${translations.requiredDocs}\n`;
       scheme.requiredDocuments.forEach((doc) => {
         message += `• ${doc}\n`;
       });
       message += "\n";
     }
 
-    message += `${translations.applicationMode} ${scheme.applicationMode}\n`;
+    // Document Requirements for Different Processes
+    if (scheme.docNew) {
+      message += `📋 Documents for New Application:\n${scheme.docNew}\n\n`;
+    }
+    if (scheme.docUpdate) {
+      message += `📋 Documents for Update:\n${scheme.docUpdate}\n\n`;
+    }
+    if (scheme.docLost) {
+      message += `📋 Documents for Lost Certificate:\n${scheme.docLost}\n\n`;
+    }
+    if (scheme.docSurrender) {
+      message += `📋 Documents for Surrender:\n${scheme.docSurrender}\n\n`;
+    }
+
+    // Supporting Documents
+    if (scheme.documents && scheme.documents.length > 0) {
+      message += `📑 Supporting Documents:\n`;
+      scheme.documents
+        .sort((a: any, b: any) => a.slNo - b.slNo)
+        .forEach((doc: any) => {
+          const required = doc.isRequired ? "✅ Required" : "⚪ Optional";
+          message += `${doc.slNo}. ${doc.documentType}\n`;
+          message += `   Valid Proof: ${doc.validProof}\n`;
+          message += `   Status: ${required}\n\n`;
+        });
+    }
+
+    // Application Mode and URLs
+    message += `🌐 ${translations.applicationMode} ${scheme.applicationMode}\n`;
 
     if (scheme.onlineUrl) {
-      message += `${translations.onlineUrl} ${scheme.onlineUrl}\n`;
+      message += `🔗 ${translations.onlineUrl} ${scheme.onlineUrl}\n`;
     }
 
     if (scheme.offlineAddress) {
-      message += `${translations.offlineAddress} ${scheme.offlineAddress}\n`;
+      message += `🏢 ${translations.offlineAddress} ${scheme.offlineAddress}\n`;
+    }
+
+    // Contact Details for New Application
+    if (scheme.contacts && scheme.contacts.length > 0) {
+      message += `\n📞 Contact Details for New Application:\n`;
+      scheme.contacts.forEach((contact: any, index: number) => {
+        message += `\n${index + 1}. ${contact.name}\n`;
+        message += `   📋 ${contact.designation}\n`;
+        if (contact.serviceName) {
+          message += `   🏢 Service: ${contact.serviceName}\n`;
+        }
+        message += `   📍 Location: ${contact.district}`;
+        if (contact.subDistrict) message += `, ${contact.subDistrict}`;
+        if (contact.block) message += `, ${contact.block}`;
+        message += `\n   📞 ${contact.contact}\n`;
+        if (contact.email) {
+          message += `   ✉️ ${contact.email}\n`;
+        }
+      });
+      message += "\n";
     }
 
     message += `\n⬅️ ${translationService.translate(
@@ -466,7 +557,10 @@ export class MessageHandler {
           "certificate",
           certificate.id.toString(),
         );
-        this.sessionManager.setCurrentMenu(phoneNumber, "certificate_details");
+        this.sessionManager.setCurrentMenu(
+          phoneNumber,
+          "certificate_application_type",
+        );
         return await this.sendCertificateDetails(
           phoneNumber,
           certificate,
@@ -500,78 +594,268 @@ export class MessageHandler {
     );
 
     let message = `📜 ${certificate.name}\n\n`;
-    message += `📋 ${certificate.summary}\n\n`;
 
-    if (
-      certificate.eligibilityDetails &&
-      certificate.eligibilityDetails.length > 0
-    ) {
-      message += `${translationService.translate(
-        "schemes.eligibility",
-        language,
-      )}\n`;
-      certificate.eligibilityDetails.forEach((detail) => {
-        message += `• ${detail}\n`;
-      });
-      message += "\n";
-    }
+    // Basic Information Section
+    message += `📋 Basic Information:\n`;
+    message += `${certificate.summary}\n\n`;
 
+    // Certificate Details
     if (
       certificate.certificateDetails &&
       certificate.certificateDetails.length > 0
     ) {
-      message += `📜 Certificate Details:\n`;
+      message += `� Certificate Details:\n`;
       certificate.certificateDetails.forEach((detail) => {
         message += `• ${detail}\n`;
       });
       message += "\n";
     }
 
+    // How to Apply - General Information
+    message += `📝 How to Apply:\n`;
     if (
       certificate.applicationProcess &&
       certificate.applicationProcess.length > 0
     ) {
-      message += `${translationService.translate(
-        "schemes.howToApply",
-        language,
-      )}\n`;
       certificate.applicationProcess.forEach((step, index) => {
         message += `${index + 1}. ${step}\n`;
       });
+    } else {
+      message += `Please select your application type below for detailed process.\n`;
+    }
+    message += "\n";
+
+    // Application Mode and URLs
+    message += `🌐 Application Mode: ${certificate.applicationMode}\n`;
+    if (certificate.onlineUrl) {
+      message += `🔗 Online Application: ${certificate.onlineUrl}\n`;
+    }
+    if (certificate.offlineAddress) {
+      message += `🏢 Offline Address: ${certificate.offlineAddress}\n`;
+    }
+    message += "\n";
+
+    // Ask user to select application type for detailed information
+    message += `🎯 Select Application Type for Detailed Information:\n\n`;
+    message += `1️⃣ 🆕 New Application\n`;
+    message += `2️⃣ 🔄 Update/Renewal\n`;
+    message += `3️⃣ 🔍 Lost Certificate\n`;
+    message += `4️⃣ 📤 Surrender Certificate\n\n`;
+
+    message += `⬅️ ${translationService.translate(
+      "navigation.back",
+      language,
+    )}`;
+    message += `\n🏠 ${translationService.translate(
+      "navigation.mainMenu",
+      language,
+    )}`;
+
+    return await this.sendResponse(phoneNumber, message);
+  }
+
+  private async handleCertificateApplicationType(
+    phoneNumber: string,
+    messageText: string,
+    session: UserSession,
+  ): Promise<string> {
+    const applicationTypes = [
+      "New Application",
+      "Update/Renewal",
+      "Lost Certificate",
+      "Surrender Certificate",
+    ];
+    const appTypeIndex = parseInt(messageText) - 1;
+
+    if (appTypeIndex >= 0 && appTypeIndex < applicationTypes.length) {
+      const selectedType = applicationTypes[appTypeIndex];
+
+      // Get the certificate from session context
+      const certificateId = parseInt(session.context?.serviceId || "0");
+
+      try {
+        const certificate = await this.databaseService.getCertificateById(
+          certificateId,
+        );
+
+        if (!certificate) {
+          const errorMsg = translationService.translate(
+            "common.error",
+            session.language,
+          );
+          return await this.sendResponse(phoneNumber, errorMsg);
+        }
+
+        return await this.sendCertificateDetailsByType(
+          phoneNumber,
+          certificate,
+          selectedType,
+          session.language,
+        );
+      } catch (error) {
+        console.error("Error fetching certificate details:", error);
+        const errorMsg = translationService.translate(
+          "common.error",
+          session.language,
+        );
+        return await this.sendResponse(phoneNumber, errorMsg);
+      }
+    } else {
+      const invalidMsg = translationService.translate(
+        "common.invalidOption",
+        session.language,
+      );
+      return await this.sendResponse(phoneNumber, invalidMsg);
+    }
+  }
+
+  private async sendCertificateDetailsByType(
+    phoneNumber: string,
+    certificate: ServiceData,
+    applicationType: string,
+    language: "en" | "bn",
+  ): Promise<string> {
+    let message = `📜 ${certificate.name}\n`;
+    message += `🎯 Application Type: ${applicationType}\n\n`;
+
+    // Process Steps based on application type
+    const processSteps = certificate.processSteps?.filter(
+      (step: any) => step.applicationType === applicationType,
+    );
+
+    if (processSteps && processSteps.length > 0) {
+      message += `⚙️ Process Steps:\n`;
+      processSteps
+        .sort((a: any, b: any) => a.slNo - b.slNo)
+        .forEach((step: any) => {
+          message += `${step.slNo}. ${step.stepDetails}\n`;
+        });
       message += "\n";
+    } else {
+      // Fallback to general application process if no specific steps
+      if (certificate.applicationProcess && certificate.applicationProcess.length > 0) {
+        message += `⚙️ Process Steps:\n`;
+        certificate.applicationProcess.forEach((step: string, index: number) => {
+          message += `${index + 1}. ${step}\n`;
+        });
+        message += "\n";
+      }
     }
 
-    if (
-      certificate.requiredDocuments &&
-      certificate.requiredDocuments.length > 0
-    ) {
-      message += `${translationService.translate(
-        "schemes.requiredDocs",
-        language,
-      )}\n`;
-      certificate.requiredDocuments.forEach((doc) => {
-        message += `• ${doc}\n`;
+    // Required Documents based on application type
+    const documents = certificate.documents?.filter(
+      (doc: any) => doc.applicationType === applicationType,
+    );
+
+    if (documents && documents.length > 0) {
+      message += `📄 Required Documents:\n`;
+      documents
+        .sort((a: any, b: any) => a.slNo - b.slNo)
+        .forEach((doc: any) => {
+          const required = doc.isRequired ? "✅ Required" : "⚪ Optional";
+          message += `${doc.slNo}. ${doc.documentType}\n`;
+          message += `   Valid Proof: ${doc.validProof}\n`;
+          message += `   Status: ${required}\n\n`;
+        });
+    } else {
+      // Fallback to general required documents
+      if (certificate.requiredDocuments && certificate.requiredDocuments.length > 0) {
+        message += `📄 Required Documents:\n`;
+        certificate.requiredDocuments.forEach((doc: string) => {
+          message += `• ${doc}\n`;
+        });
+        message += "\n";
+      }
+    }
+
+    // Eligibility Criteria based on application type
+    const eligibilityItems = certificate.eligibilityItems?.filter(
+      (item: any) => item.applicationType === applicationType,
+    );
+
+    if (eligibilityItems && eligibilityItems.length > 0) {
+      message += `✅ Eligibility Criteria:\n`;
+      eligibilityItems.forEach((item: any) => {
+        message += `• ${item.eligibilityDetail}\n`;
       });
       message += "\n";
+    } else {
+      // Fallback to general eligibility details
+      if (certificate.eligibilityDetails && certificate.eligibilityDetails.length > 0) {
+        message += `✅ Eligibility Criteria:\n`;
+        certificate.eligibilityDetails.forEach((detail: string) => {
+          message += `• ${detail}\n`;
+        });
+        message += "\n";
+      }
     }
 
-    message += `${translationService.translate(
-      "schemes.applicationMode",
-      language,
-    )} ${certificate.applicationMode}\n`;
+    // Specific process information
+    let processInfo = "";
+    switch (applicationType) {
+      case "New Application":
+        processInfo = certificate.processNew || "";
+        break;
+      case "Update/Renewal":
+        processInfo = certificate.processUpdate || "";
+        break;
+      case "Lost Certificate":
+        processInfo = certificate.processLost || "";
+        break;
+      case "Surrender Certificate":
+        processInfo = certificate.processSurrender || "";
+        break;
+    }
 
+    if (processInfo) {
+      message += `📋 Application Process:\n${processInfo}\n\n`;
+    }
+
+    // Contact Information based on application type
+    const contacts = certificate.contacts?.filter(
+      (contact: any) => contact.applicationType === applicationType,
+    );
+
+    if (contacts && contacts.length > 0) {
+      message += `📞 Contact Information:\n`;
+      contacts.forEach((contact: any, index: number) => {
+        message += `\n${index + 1}. ${contact.name}\n`;
+        message += `   📋 ${contact.designation}\n`;
+        if (contact.serviceName) {
+          message += `   🏢 Service: ${contact.serviceName}\n`;
+        }
+        message += `   📍 Location: ${contact.district}`;
+        if (contact.subDistrict) message += `, ${contact.subDistrict}`;
+        if (contact.block) message += `, ${contact.block}`;
+        message += `\n   📞 ${contact.contact}\n`;
+        if (contact.email) {
+          message += `   ✉️ ${contact.email}\n`;
+        }
+      });
+      message += "\n";
+    } else {
+      // Fallback to general contacts if available
+      if (certificate.contacts && certificate.contacts.length > 0) {
+        message += `📞 Contact Information:\n`;
+        certificate.contacts.forEach((contact: any, index: number) => {
+          message += `\n${index + 1}. ${contact.name}\n`;
+          message += `   📋 ${contact.designation}\n`;
+          message += `   📞 ${contact.contact}\n`;
+          if (contact.email) {
+            message += `   ✉️ ${contact.email}\n`;
+          }
+        });
+        message += "\n";
+      }
+    }
+
+    // Application Mode and URLs
+    message += `🌐 Application Mode: ${certificate.applicationMode}\n`;
     if (certificate.onlineUrl) {
-      message += `${translationService.translate(
-        "schemes.onlineUrl",
-        language,
-      )} ${certificate.onlineUrl}\n`;
+      message += `🔗 Online Application: ${certificate.onlineUrl}\n`;
     }
-
     if (certificate.offlineAddress) {
-      message += `${translationService.translate(
-        "schemes.offlineAddress",
-        language,
-      )} ${certificate.offlineAddress}\n`;
+      message += `🏢 Offline Address: ${certificate.offlineAddress}\n`;
     }
 
     message += `\n⬅️ ${translationService.translate(

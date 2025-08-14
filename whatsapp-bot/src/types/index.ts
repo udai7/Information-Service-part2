@@ -68,10 +68,30 @@ export interface ServiceData {
   offlineAddress?: string;
   isActive: boolean;
   eligibilityDetails?: string[];
+  schemeDetails?: string[];
+  processDetails?: string[];
   benefitDetails?: string[];
   certificateDetails?: string[];
   applicationProcess?: string[];
   requiredDocuments?: string[];
+
+  // Process flows
+  processNew?: string;
+  processUpdate?: string;
+  processLost?: string;
+  processSurrender?: string;
+
+  // Document requirements
+  docNew?: string;
+  docUpdate?: string;
+  docLost?: string;
+  docSurrender?: string;
+
+  // Related entities
+  contacts?: any[];
+  documents?: any[];
+  processSteps?: any[];
+  eligibilityItems?: any[];
 }
 
 export interface GrievanceInput {

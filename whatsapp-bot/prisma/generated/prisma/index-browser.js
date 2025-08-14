@@ -144,9 +144,19 @@ exports.Prisma.SchemeServiceScalarFieldEnum = {
   status: 'status',
   isActive: 'isActive',
   eligibilityDetails: 'eligibilityDetails',
+  schemeDetails: 'schemeDetails',
+  processDetails: 'processDetails',
   benefitDetails: 'benefitDetails',
   applicationProcess: 'applicationProcess',
   requiredDocuments: 'requiredDocuments',
+  processNew: 'processNew',
+  processUpdate: 'processUpdate',
+  processLost: 'processLost',
+  processSurrender: 'processSurrender',
+  docNew: 'docNew',
+  docUpdate: 'docUpdate',
+  docLost: 'docLost',
+  docSurrender: 'docSurrender',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   adminId: 'adminId'
@@ -167,34 +177,105 @@ exports.Prisma.CertificateServiceScalarFieldEnum = {
   offlineAddress: 'offlineAddress',
   status: 'status',
   isActive: 'isActive',
+  processNew: 'processNew',
+  processUpdate: 'processUpdate',
+  processLost: 'processLost',
+  processSurrender: 'processSurrender',
+  docNew: 'docNew',
+  docUpdate: 'docUpdate',
+  docLost: 'docLost',
+  docSurrender: 'docSurrender',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   adminId: 'adminId'
 };
 
-exports.Prisma.ContactServiceScalarFieldEnum = {
+exports.Prisma.CertificateContactScalarFieldEnum = {
   id: 'id',
   serviceName: 'serviceName',
   district: 'district',
   subDistrict: 'subDistrict',
   block: 'block',
-  officeAddress: 'officeAddress',
-  status: 'status',
-  isActive: 'isActive',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  adminId: 'adminId'
-};
-
-exports.Prisma.ContactServiceContactScalarFieldEnum = {
-  id: 'id',
   name: 'name',
   designation: 'designation',
   contact: 'contact',
   email: 'email',
-  serviceId: 'serviceId',
+  applicationType: 'applicationType',
+  certificateServiceId: 'certificateServiceId'
+};
+
+exports.Prisma.CertificateDocumentScalarFieldEnum = {
+  id: 'id',
+  slNo: 'slNo',
+  documentType: 'documentType',
+  validProof: 'validProof',
+  isRequired: 'isRequired',
+  applicationType: 'applicationType',
+  certificateServiceId: 'certificateServiceId'
+};
+
+exports.Prisma.CertificateProcessStepScalarFieldEnum = {
+  id: 'id',
+  slNo: 'slNo',
+  stepDetails: 'stepDetails',
+  applicationType: 'applicationType',
+  certificateServiceId: 'certificateServiceId'
+};
+
+exports.Prisma.CertificateEligibilityScalarFieldEnum = {
+  id: 'id',
+  eligibilityDetail: 'eligibilityDetail',
+  applicationType: 'applicationType',
+  certificateServiceId: 'certificateServiceId'
+};
+
+exports.Prisma.ContactServiceScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  summary: 'summary',
+  type: 'type',
+  targetAudience: 'targetAudience',
+  applicationMode: 'applicationMode',
+  onlineUrl: 'onlineUrl',
+  offlineAddress: 'offlineAddress',
+  status: 'status',
+  isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  adminId: 'adminId',
+  eligibilityDetails: 'eligibilityDetails',
+  contactDetails: 'contactDetails',
+  processDetails: 'processDetails',
+  processNew: 'processNew',
+  processUpdate: 'processUpdate',
+  processLost: 'processLost',
+  processSurrender: 'processSurrender',
+  docNew: 'docNew',
+  docUpdate: 'docUpdate',
+  docLost: 'docLost',
+  docSurrender: 'docSurrender'
+};
+
+exports.Prisma.ContactServiceContactScalarFieldEnum = {
+  id: 'id',
+  serviceName: 'serviceName',
+  district: 'district',
+  subDistrict: 'subDistrict',
+  block: 'block',
+  name: 'name',
+  designation: 'designation',
+  contact: 'contact',
+  email: 'email',
+  contactServiceId: 'contactServiceId'
+};
+
+exports.Prisma.ContactServiceDocumentScalarFieldEnum = {
+  id: 'id',
+  slNo: 'slNo',
+  documentType: 'documentType',
+  validProof: 'validProof',
+  isRequired: 'isRequired',
+  contactServiceId: 'contactServiceId'
 };
 
 exports.Prisma.GrievanceScalarFieldEnum = {
@@ -267,8 +348,13 @@ exports.Prisma.ModelName = {
   Admin: 'Admin',
   SchemeService: 'SchemeService',
   CertificateService: 'CertificateService',
+  CertificateContact: 'CertificateContact',
+  CertificateDocument: 'CertificateDocument',
+  CertificateProcessStep: 'CertificateProcessStep',
+  CertificateEligibility: 'CertificateEligibility',
   ContactService: 'ContactService',
   ContactServiceContact: 'ContactServiceContact',
+  ContactServiceDocument: 'ContactServiceDocument',
   Grievance: 'Grievance',
   Feedback: 'Feedback',
   ContactPerson: 'ContactPerson',
