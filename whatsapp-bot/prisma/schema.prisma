@@ -20,27 +20,36 @@ model Admin {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@map("admin")
+    schemeServices      SchemeService[]
+    certificateServices CertificateService[]
+    contactServices     ContactService[]
 }
 
 model SchemeService {
     id                 Int      @id @default(autoincrement())
     name               String
     summary            String
+    type               String?
     targetAudience     String[]
-    eligibilityDetails String[]
-    benefitDetails     String[]
-    applicationProcess String[]
-    requiredDocuments  String[]
     applicationMode    String   @default("both") // online, offline, both
     onlineUrl          String?
     offlineAddress     String?
     status             String   @default("draft") // draft, pending, published
     isActive           Boolean  @default(true)
+    eligibilityDetails String[]
+    benefitDetails     String[]
+    applicationProcess String[]
+    requiredDocuments  String[]
     createdAt          DateTime @default(now())
     updatedAt          DateTime @updatedAt
 
-    @@map("scheme_service")
+    // Admin relation
+    adminId Int @default(1)
+    admin   Admin @relation(fields: [adminId], references: [id])
+
+    // Related entities
+    contacts  ContactPerson[]
+    documents SupportiveDocument[]
 }
 
 model CertificateService {
@@ -61,7 +70,9 @@ model CertificateService {
     createdAt          DateTime @default(now())
     updatedAt          DateTime @updatedAt
 
-    @@map("certificate_service")
+    // Admin relation
+    adminId Int @default(1)
+    admin   Admin @relation(fields: [adminId], references: [id])
 }
 
 model ContactService {
@@ -77,7 +88,9 @@ model ContactService {
     updatedAt     DateTime                @updatedAt
     contacts      ContactServiceContact[]
 
-    @@map("contact_service")
+    // Admin relation
+    adminId Int @default(1)
+    admin   Admin @relation(fields: [adminId], references: [id])
 }
 
 model ContactServiceContact {
@@ -90,8 +103,6 @@ model ContactServiceContact {
     service     ContactService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
     createdAt   DateTime       @default(now())
     updatedAt   DateTime       @updatedAt
-
-    @@map("contact_service_contact")
 }
 
 model Grievance {
@@ -107,8 +118,6 @@ model Grievance {
     source      String   @default("web") // web, whatsapp, mobile
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
-
-    @@map("grievance")
 }
 
 model Feedback {
@@ -122,6 +131,30 @@ model Feedback {
     source      String   @default("web") // web, whatsapp, mobile
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
+}
 
-    @@map("feedback")
+model ContactPerson {
+  id          Int    @id @default(autoincrement())
+  serviceName String
+  district    String
+  subDistrict String
+  block       String
+  name        String
+  designation String
+  contact     String
+  email       String
+
+  schemeServiceId Int
+  schemeService   SchemeService @relation(fields: [schemeServiceId], references: [id], onDelete: Cascade)
+}
+
+model SupportiveDocument {
+  id           Int     @id @default(autoincrement())
+  slNo         Int
+  documentType String
+  validProof   String
+  isRequired   Boolean @default(true)
+
+  schemeServiceId Int
+  schemeService   SchemeService @relation(fields: [schemeServiceId], references: [id], onDelete: Cascade)
 }

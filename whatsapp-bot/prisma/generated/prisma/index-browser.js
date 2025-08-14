@@ -136,18 +136,20 @@ exports.Prisma.SchemeServiceScalarFieldEnum = {
   id: 'id',
   name: 'name',
   summary: 'summary',
+  type: 'type',
   targetAudience: 'targetAudience',
-  eligibilityDetails: 'eligibilityDetails',
-  benefitDetails: 'benefitDetails',
-  applicationProcess: 'applicationProcess',
-  requiredDocuments: 'requiredDocuments',
   applicationMode: 'applicationMode',
   onlineUrl: 'onlineUrl',
   offlineAddress: 'offlineAddress',
   status: 'status',
   isActive: 'isActive',
+  eligibilityDetails: 'eligibilityDetails',
+  benefitDetails: 'benefitDetails',
+  applicationProcess: 'applicationProcess',
+  requiredDocuments: 'requiredDocuments',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  adminId: 'adminId'
 };
 
 exports.Prisma.CertificateServiceScalarFieldEnum = {
@@ -166,7 +168,8 @@ exports.Prisma.CertificateServiceScalarFieldEnum = {
   status: 'status',
   isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  adminId: 'adminId'
 };
 
 exports.Prisma.ContactServiceScalarFieldEnum = {
@@ -179,7 +182,8 @@ exports.Prisma.ContactServiceScalarFieldEnum = {
   status: 'status',
   isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  adminId: 'adminId'
 };
 
 exports.Prisma.ContactServiceContactScalarFieldEnum = {
@@ -221,6 +225,28 @@ exports.Prisma.FeedbackScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ContactPersonScalarFieldEnum = {
+  id: 'id',
+  serviceName: 'serviceName',
+  district: 'district',
+  subDistrict: 'subDistrict',
+  block: 'block',
+  name: 'name',
+  designation: 'designation',
+  contact: 'contact',
+  email: 'email',
+  schemeServiceId: 'schemeServiceId'
+};
+
+exports.Prisma.SupportiveDocumentScalarFieldEnum = {
+  id: 'id',
+  slNo: 'slNo',
+  documentType: 'documentType',
+  validProof: 'validProof',
+  isRequired: 'isRequired',
+  schemeServiceId: 'schemeServiceId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -244,7 +270,9 @@ exports.Prisma.ModelName = {
   ContactService: 'ContactService',
   ContactServiceContact: 'ContactServiceContact',
   Grievance: 'Grievance',
-  Feedback: 'Feedback'
+  Feedback: 'Feedback',
+  ContactPerson: 'ContactPerson',
+  SupportiveDocument: 'SupportiveDocument'
 };
 
 /**

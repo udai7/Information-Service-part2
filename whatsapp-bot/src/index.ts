@@ -30,6 +30,38 @@ app.get("/health", (req, res) => {
   });
 });
 
+// Token validation endpoint
+app.get("/validate-token", async (req, res) => {
+  try {
+    const response = await fetch(
+      `https://graph.facebook.com/v18.0/${process.env.WHATSAPP_PHONE_NUMBER_ID}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.WHATSAPP_ACCESS_TOKEN}`,
+        },
+      },
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      res.json({
+        status: "valid",
+        phone_number: data,
+      });
+    } else {
+      res.status(400).json({
+        status: "invalid",
+        error: await response.text(),
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error,
+    });
+  }
+});
+
 // WhatsApp webhook verification
 app.get("/webhook", (req, res) => {
   const verifyToken = process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN;

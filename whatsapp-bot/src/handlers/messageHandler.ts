@@ -201,6 +201,8 @@ export class MessageHandler {
       case "1":
       case "schemes":
       case "scheme":
+      case "scheme services":
+      case "📊 scheme services":
         this.sessionManager.setCurrentMenu(phoneNumber, "schemes_list");
         this.sessionManager.setServiceContext(phoneNumber, "scheme");
         return await this.sendSchemesList(phoneNumber, session.language);
@@ -208,6 +210,8 @@ export class MessageHandler {
       case "2":
       case "certificates":
       case "certificate":
+      case "certificate services":
+      case "📜 certificate services":
         this.sessionManager.setCurrentMenu(phoneNumber, "certificates_list");
         this.sessionManager.setServiceContext(phoneNumber, "certificate");
         return await this.sendCertificatesList(phoneNumber, session.language);
@@ -215,6 +219,8 @@ export class MessageHandler {
       case "3":
       case "contacts":
       case "contact":
+      case "contact services":
+      case "📞 contact services":
         this.sessionManager.setCurrentMenu(phoneNumber, "contacts_list");
         this.sessionManager.setServiceContext(phoneNumber, "contact");
         return await this.sendContactsList(phoneNumber, session.language);
@@ -222,6 +228,8 @@ export class MessageHandler {
       case "4":
       case "grievances":
       case "grievance":
+      case "grievances service":
+      case "📝 grievances service":
         this.sessionManager.setCurrentMenu(phoneNumber, "grievance_form");
         this.sessionManager.setServiceContext(phoneNumber, "grievance");
         this.sessionManager.setFormStep(phoneNumber, 1);
@@ -229,6 +237,8 @@ export class MessageHandler {
 
       case "5":
       case "feedback":
+      case "feedback service":
+      case "💬 feedback service":
         this.sessionManager.setCurrentMenu(phoneNumber, "feedback_form");
         this.sessionManager.setServiceContext(phoneNumber, "feedback");
         this.sessionManager.setFormStep(phoneNumber, 1);
