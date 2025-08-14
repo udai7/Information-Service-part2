@@ -82,6 +82,9 @@ export class MessageHandler {
           session,
         );
 
+      case "scheme_types":
+        return await this.handleSchemeTypes(phoneNumber, messageText, session);
+
       case "schemes_list":
         return await this.handleSchemesMenu(phoneNumber, messageText, session);
 
@@ -210,9 +213,9 @@ export class MessageHandler {
       case "scheme":
       case "scheme services":
       case "📊 scheme services":
-        this.sessionManager.setCurrentMenu(phoneNumber, "schemes_list");
+        this.sessionManager.setCurrentMenu(phoneNumber, "scheme_types");
         this.sessionManager.setServiceContext(phoneNumber, "scheme");
-        return await this.sendSchemesList(phoneNumber, session.language);
+        return await this.sendSchemeTypes(phoneNumber, session.language);
 
       case "2":
       case "certificates":
@@ -295,6 +298,147 @@ export class MessageHandler {
       return await this.sendResponse(phoneNumber, message);
     } catch (error) {
       console.error("Error fetching schemes:", error);
+      const errorMsg = translationService.translate("common.error", language);
+      return await this.sendResponse(phoneNumber, errorMsg);
+    }
+  }
+
+  private async sendSchemeTypes(
+    phoneNumber: string,
+    language: "en" | "bn",
+  ): Promise<string> {
+    try {
+      const title = translationService.translate("schemes.title", language);
+      const subtitle = "Select a scheme category:";
+
+      const schemeTypes = [
+        "All Types",
+        "Central Government",
+        "State Government",
+        "Social Welfare",
+        "Education",
+        "Healthcare",
+        "Agriculture",
+        "Employment",
+        "Housing",
+      ];
+
+      let message = `${title} 📊\n\n${subtitle}\n\n`;
+
+      schemeTypes.forEach((type, index) => {
+        message += `${index + 1}️⃣ ${type}\n`;
+      });
+
+      message += `\n⬅️ ${translationService.translate(
+        "navigation.back",
+        language,
+      )}`;
+
+      return await this.sendResponse(phoneNumber, message);
+    } catch (error) {
+      console.error("Error sending scheme types:", error);
+      const errorMsg = translationService.translate("common.error", language);
+      return await this.sendResponse(phoneNumber, errorMsg);
+    }
+  }
+
+  private async handleSchemeTypes(
+    phoneNumber: string,
+    messageText: string,
+    session: UserSession,
+  ): Promise<string> {
+    const typeIndex = parseInt(messageText) - 1;
+    const schemeTypes = [
+      "All Types",
+      "Central Government",
+      "State Government",
+      "Social Welfare",
+      "Education",
+      "Healthcare",
+      "Agriculture",
+      "Employment",
+      "Housing",
+    ];
+
+    try {
+      if (typeIndex >= 0 && typeIndex < schemeTypes.length) {
+        const selectedType = schemeTypes[typeIndex];
+
+        // Store the selected type in session context
+        this.sessionManager.setServiceContext(
+          phoneNumber,
+          "scheme",
+          selectedType,
+        );
+        this.sessionManager.setCurrentMenu(phoneNumber, "schemes_list");
+
+        return await this.sendSchemesListByType(
+          phoneNumber,
+          selectedType,
+          session.language,
+        );
+      } else {
+        const invalidMsg = translationService.translate(
+          "common.invalidOption",
+          session.language,
+        );
+        return await this.sendResponse(phoneNumber, invalidMsg);
+      }
+    } catch (error) {
+      console.error("Error handling scheme types:", error);
+      const errorMsg = translationService.translate(
+        "common.error",
+        session.language,
+      );
+      return await this.sendResponse(phoneNumber, errorMsg);
+    }
+  }
+
+  private async sendSchemesListByType(
+    phoneNumber: string,
+    selectedType: string,
+    language: "en" | "bn",
+  ): Promise<string> {
+    try {
+      let schemes;
+
+      if (selectedType === "All Types") {
+        schemes = await this.databaseService.getActiveSchemeServices();
+      } else {
+        schemes = await this.databaseService.getSchemeServicesByType(
+          selectedType,
+        );
+      }
+
+      const title = translationService.translate("schemes.title", language);
+      const subtitle = `${selectedType} Schemes:`;
+
+      if (schemes.length === 0) {
+        const noSchemes = `No schemes present in this category: ${selectedType}`;
+        return await this.sendResponse(
+          phoneNumber,
+          `${title}\n\n${noSchemes}\n\n⬅️ ${translationService.translate(
+            "navigation.back",
+            language,
+          )}`,
+        );
+      }
+
+      let message = `${title}\n\n${subtitle}\n\n`;
+      schemes.forEach((scheme, index) => {
+        message += `${index + 1}️⃣ ${
+          scheme.name
+        }\n📋 ${scheme.summary.substring(0, 100)}...\n\n`;
+      });
+
+      message += `\n⬅️ ${translationService.translate(
+        "navigation.back",
+        language,
+      )}`;
+
+      return await this.sendResponse(phoneNumber, message);
+    } catch (error) {
+      console.error("Error fetching schemes by type:", error);
       const errorMsg = translationService.translate("common.error", language);
       return await this.sendResponse(phoneNumber, errorMsg);
     }
