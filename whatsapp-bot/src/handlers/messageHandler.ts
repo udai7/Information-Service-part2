@@ -718,6 +718,37 @@ export class MessageHandler {
     let message = `📜 ${certificate.name}\n`;
     message += `🎯 Application Type: ${applicationType}\n\n`;
 
+    // Debug logging
+    console.log(`🔍 Debug - Application Type: "${applicationType}"`);
+    console.log(
+      `🔍 Debug - Available processSteps:`,
+      certificate.processSteps?.map((s) => ({
+        applicationType: s.applicationType,
+        stepDetails: s.stepDetails,
+      })),
+    );
+    console.log(
+      `🔍 Debug - Available documents:`,
+      certificate.documents?.map((d) => ({
+        applicationType: d.applicationType,
+        documentType: d.documentType,
+      })),
+    );
+    console.log(
+      `🔍 Debug - Available eligibilityItems:`,
+      certificate.eligibilityItems?.map((e) => ({
+        applicationType: e.applicationType,
+        eligibilityDetail: e.eligibilityDetail,
+      })),
+    );
+    console.log(
+      `🔍 Debug - Available contacts:`,
+      certificate.contacts?.map((c) => ({
+        applicationType: c.applicationType,
+        name: c.name,
+      })),
+    );
+
     // Process Steps based on application type
     const processSteps = certificate.processSteps?.filter(
       (step: any) => step.applicationType === applicationType,
@@ -732,13 +763,20 @@ export class MessageHandler {
         });
       message += "\n";
     } else {
-      // Fallback to general application process if no specific steps
-      if (certificate.applicationProcess && certificate.applicationProcess.length > 0) {
+      // Check if there are any general application process steps
+      if (
+        certificate.applicationProcess &&
+        certificate.applicationProcess.length > 0
+      ) {
         message += `⚙️ Process Steps:\n`;
-        certificate.applicationProcess.forEach((step: string, index: number) => {
-          message += `${index + 1}. ${step}\n`;
-        });
+        certificate.applicationProcess.forEach(
+          (step: string, index: number) => {
+            message += `${index + 1}. ${step}\n`;
+          },
+        );
         message += "\n";
+      } else {
+        message += `⚙️ Process Steps:\n❌ No data available\n\n`;
       }
     }
 
@@ -758,13 +796,18 @@ export class MessageHandler {
           message += `   Status: ${required}\n\n`;
         });
     } else {
-      // Fallback to general required documents
-      if (certificate.requiredDocuments && certificate.requiredDocuments.length > 0) {
+      // Check if there are any general required documents
+      if (
+        certificate.requiredDocuments &&
+        certificate.requiredDocuments.length > 0
+      ) {
         message += `📄 Required Documents:\n`;
         certificate.requiredDocuments.forEach((doc: string) => {
           message += `• ${doc}\n`;
         });
         message += "\n";
+      } else {
+        message += `📄 Required Documents:\n❌ No data available\n\n`;
       }
     }
 
@@ -780,13 +823,18 @@ export class MessageHandler {
       });
       message += "\n";
     } else {
-      // Fallback to general eligibility details
-      if (certificate.eligibilityDetails && certificate.eligibilityDetails.length > 0) {
+      // Check if there are any general eligibility details
+      if (
+        certificate.eligibilityDetails &&
+        certificate.eligibilityDetails.length > 0
+      ) {
         message += `✅ Eligibility Criteria:\n`;
         certificate.eligibilityDetails.forEach((detail: string) => {
           message += `• ${detail}\n`;
         });
         message += "\n";
+      } else {
+        message += `✅ Eligibility Criteria:\n❌ No data available\n\n`;
       }
     }
 
@@ -807,8 +855,10 @@ export class MessageHandler {
         break;
     }
 
-    if (processInfo) {
+    if (processInfo && processInfo.trim()) {
       message += `📋 Application Process:\n${processInfo}\n\n`;
+    } else {
+      message += `📋 Application Process:\n❌ No data available\n\n`;
     }
 
     // Contact Information based on application type
@@ -834,10 +884,17 @@ export class MessageHandler {
       });
       message += "\n";
     } else {
-      // Fallback to general contacts if available
-      if (certificate.contacts && certificate.contacts.length > 0) {
+      // Check if there are any general contacts
+      const generalContacts = certificate.contacts?.filter(
+        (contact: any) =>
+          !contact.applicationType ||
+          contact.applicationType === null ||
+          contact.applicationType === "",
+      );
+
+      if (generalContacts && generalContacts.length > 0) {
         message += `📞 Contact Information:\n`;
-        certificate.contacts.forEach((contact: any, index: number) => {
+        generalContacts.forEach((contact: any, index: number) => {
           message += `\n${index + 1}. ${contact.name}\n`;
           message += `   📋 ${contact.designation}\n`;
           message += `   📞 ${contact.contact}\n`;
@@ -846,6 +903,8 @@ export class MessageHandler {
           }
         });
         message += "\n";
+      } else {
+        message += `📞 Contact Information:\n❌ No data available\n\n`;
       }
     }
 
