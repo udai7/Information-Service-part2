@@ -98,9 +98,10 @@ export interface GrievanceInput {
   name: string;
   email: string;
   phone: string;
+  address?: string;
   subject: string;
   description: string;
-  department: string;
+  department?: string;
   priority: "low" | "medium" | "high";
 }
 
@@ -111,4 +112,5 @@ export interface FeedbackInput {
   rating: number;
   comment: string;
   serviceType: string;
+  source?: string;
 }

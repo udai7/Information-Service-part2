@@ -1,7 +1,9 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -12,8 +14,8 @@ datasource db {
 model Admin {
   id        Int      @id @default(autoincrement())
   email     String   @unique
-  name      String
   password  String
+  name      String
   role      String   @default("admin")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -24,22 +26,27 @@ model Admin {
 }
 
 model SchemeService {
-  id                 Int      @id @default(autoincrement())
-  name               String
-  summary            String
-  type               String?
-  targetAudience     String[]
-  applicationMode    String   @default("both") // online, offline, both
-  onlineUrl          String?
-  offlineAddress     String?
-  status             String   @default("draft") // draft, pending, published
-  isActive           Boolean  @default(true)
+  id              Int      @id @default(autoincrement())
+  name            String
+  summary         String
+  type            String?
+  targetAudience  String[]
+  applicationMode String
+  onlineUrl       String?
+  offlineAddress  String?
+  status          String   @default("draft") // draft, pending, published
+  isActive        Boolean  @default(true) // Admin dashboard control
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Admin relation
+  adminId Int
+  admin   Admin @relation(fields: [adminId], references: [id])
+
+  // Extended details
   eligibilityDetails String[]
   schemeDetails      String[]
   processDetails     String[]
-  benefitDetails     String[]
-  applicationProcess String[]
-  requiredDocuments  String[]
 
   // Process flows
   processNew       String?
@@ -52,34 +59,60 @@ model SchemeService {
   docUpdate    String?
   docLost      String?
   docSurrender String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Admin relation
-  adminId Int
-  admin   Admin @relation(fields: [adminId], references: [id])
 
   // Related entities
   contacts  ContactPerson[]
   documents SupportiveDocument[]
 }
 
+model ContactPerson {
+  id          Int    @id @default(autoincrement())
+  serviceName String
+  district    String
+  subDistrict String
+  block       String
+  name        String
+  designation String
+  contact     String
+  email       String
+
+  schemeServiceId Int
+  schemeService   SchemeService @relation(fields: [schemeServiceId], references: [id], onDelete: Cascade)
+}
+
+model SupportiveDocument {
+  id           Int     @id @default(autoincrement())
+  slNo         Int
+  documentType String
+  validProof   String
+  isRequired   Boolean @default(true)
+
+  schemeServiceId Int
+  schemeService   SchemeService @relation(fields: [schemeServiceId], references: [id], onDelete: Cascade)
+}
+
 model CertificateService {
-  id                 Int      @id @default(autoincrement())
-  name               String
-  summary            String
-  type               String?
-  targetAudience     String[]
+  id              Int      @id @default(autoincrement())
+  name            String
+  summary         String
+  type            String?
+  targetAudience  String[]
+  applicationMode String
+  onlineUrl       String?
+  offlineAddress  String?
+  status          String   @default("draft") // draft, pending, published
+  isActive        Boolean  @default(true) // Admin dashboard control
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Admin relation
+  adminId Int
+  admin   Admin @relation(fields: [adminId], references: [id])
+
+  // Extended details
   eligibilityDetails String[]
   certificateDetails String[]
-  applicationProcess String[]
-  requiredDocuments  String[]
-  applicationMode    String   @default("both") // online, offline, both
-  onlineUrl          String?
-  offlineAddress     String?
-  status             String   @default("draft") // draft, pending, published
-  isActive           Boolean  @default(true)
+  processDetails     String[]
 
   // Process flows
   processNew       String?
@@ -92,13 +125,6 @@ model CertificateService {
   docUpdate    String?
   docLost      String?
   docSurrender String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Admin relation
-  adminId Int
-  admin   Admin @relation(fields: [adminId], references: [id])
 
   // Related entities
   contacts         CertificateContact[]
@@ -207,6 +233,9 @@ model ContactServiceContact {
 
   contactServiceId Int
   contactService   ContactService @relation(fields: [contactServiceId], references: [id], onDelete: Cascade)
+
+  // Related entities for office management
+  posts Post[]
 }
 
 model ContactServiceDocument {
@@ -220,56 +249,79 @@ model ContactServiceDocument {
   contactService   ContactService @relation(fields: [contactServiceId], references: [id], onDelete: Cascade)
 }
 
+model Post {
+  id          Int      @id @default(autoincrement())
+  postName    String // Changed from 'title' to match frontend
+  rank        String // Changed from 'level' to match frontend
+  description String?
+  department  String?
+  status      String   @default("active") // active, inactive
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Office relation
+  officeId Int
+  office   ContactServiceContact @relation(fields: [officeId], references: [id], onDelete: Cascade)
+
+  // Related entities
+  employees Employee[]
+}
+
+model Employee {
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String
+  phone       String
+  designation String
+  employeeId  String? // Employee ID/Number (optional)
+  joiningDate DateTime?
+  salary      Float?
+  status      String    @default("active") // active, inactive, on_leave
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Post relation
+  postId Int
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Feedback {
+  id         Int       @id @default(autoincrement())
+  name       String
+  email      String
+  phone      String?
+  subject    String
+  message    String
+  rating     Int? // 1-5 star rating (optional)
+  category   String? // General, Service, Technical, etc.
+  status     String    @default("new") // new, resolved
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  resolvedAt DateTime?
+  resolvedBy String? // Admin name who resolved it
+  adminNotes String? // Internal notes by admin
+}
+
 model Grievance {
   id          Int      @id @default(autoincrement())
   name        String
   email       String
   phone       String
+  address     String
   subject     String
   description String
-  department  String
-  priority    String   @default("medium") // low, medium, high
-  status      String   @default("pending") // pending, in_progress, resolved, closed
-  source      String   @default("web") // web, whatsapp, mobile
+  category    String? // Service Related, Technical, Policy, etc.
+  priority    String   @default("medium") // low, medium, high, urgent
+  status      String   @default("new") // new, pending, solved
+  attachments String[] // File paths or URLs
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-}
 
-model Feedback {
-  id          Int      @id @default(autoincrement())
-  name        String
-  email       String?
-  phone       String?
-  rating      Int      @default(5) // 1-5 rating
-  comment     String
-  serviceType String
-  source      String   @default("web") // web, whatsapp, mobile
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
+  // Admin tracking
+  assignedTo String? // Admin name who is handling
+  adminNotes String? // Internal notes by admin
+  resolvedAt DateTime?
 
-model ContactPerson {
-  id          Int    @id @default(autoincrement())
-  serviceName String
-  district    String
-  subDistrict String
-  block       String
-  name        String
-  designation String
-  contact     String
-  email       String
-
-  schemeServiceId Int
-  schemeService   SchemeService @relation(fields: [schemeServiceId], references: [id], onDelete: Cascade)
-}
-
-model SupportiveDocument {
-  id           Int     @id @default(autoincrement())
-  slNo         Int
-  documentType String
-  validProof   String
-  isRequired   Boolean @default(true)
-
-  schemeServiceId Int
-  schemeService   SchemeService @relation(fields: [schemeServiceId], references: [id], onDelete: Cascade)
+  // Tracking information
+  trackingId String @unique // Unique tracking ID for users
 }

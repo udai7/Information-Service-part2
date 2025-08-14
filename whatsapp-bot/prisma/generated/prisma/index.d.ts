@@ -24,6 +24,16 @@ export type Admin = $Result.DefaultSelection<Prisma.$AdminPayload>
  */
 export type SchemeService = $Result.DefaultSelection<Prisma.$SchemeServicePayload>
 /**
+ * Model ContactPerson
+ * 
+ */
+export type ContactPerson = $Result.DefaultSelection<Prisma.$ContactPersonPayload>
+/**
+ * Model SupportiveDocument
+ * 
+ */
+export type SupportiveDocument = $Result.DefaultSelection<Prisma.$SupportiveDocumentPayload>
+/**
  * Model CertificateService
  * 
  */
@@ -64,29 +74,29 @@ export type ContactServiceContact = $Result.DefaultSelection<Prisma.$ContactServ
  */
 export type ContactServiceDocument = $Result.DefaultSelection<Prisma.$ContactServiceDocumentPayload>
 /**
- * Model Grievance
+ * Model Post
  * 
  */
-export type Grievance = $Result.DefaultSelection<Prisma.$GrievancePayload>
+export type Post = $Result.DefaultSelection<Prisma.$PostPayload>
+/**
+ * Model Employee
+ * 
+ */
+export type Employee = $Result.DefaultSelection<Prisma.$EmployeePayload>
 /**
  * Model Feedback
  * 
  */
 export type Feedback = $Result.DefaultSelection<Prisma.$FeedbackPayload>
 /**
- * Model ContactPerson
+ * Model Grievance
  * 
  */
-export type ContactPerson = $Result.DefaultSelection<Prisma.$ContactPersonPayload>
-/**
- * Model SupportiveDocument
- * 
- */
-export type SupportiveDocument = $Result.DefaultSelection<Prisma.$SupportiveDocumentPayload>
+export type Grievance = $Result.DefaultSelection<Prisma.$GrievancePayload>
 
 /**
  * ##  Prisma Client ʲˢ
- * 
+ *
  * Type-safe database client for TypeScript & Node.js
  * @example
  * ```
@@ -95,19 +105,19 @@ export type SupportiveDocument = $Result.DefaultSelection<Prisma.$SupportiveDocu
  * const admins = await prisma.admin.findMany()
  * ```
  *
- * 
+ *
  * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
+  const U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
   ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
 
     /**
    * ##  Prisma Client ʲˢ
-   * 
+   *
    * Type-safe database client for TypeScript & Node.js
    * @example
    * ```
@@ -116,12 +126,12 @@ export class PrismaClient<
    * const admins = await prisma.admin.findMany()
    * ```
    *
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
    */
 
   constructor(optionsArg ?: Prisma.Subset<ClientOptions, Prisma.PrismaClientOptions>);
-  $on<V extends U>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): void;
+  $on<V extends U>(eventType: V, callback: (event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent) => void): PrismaClient;
 
   /**
    * Connect with the database
@@ -146,7 +156,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
    * ```
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $executeRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<number>;
@@ -158,7 +168,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$executeRawUnsafe('UPDATE User SET cool = $1 WHERE email = $2 ;', true, 'user@email.com')
    * ```
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $executeRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<number>;
@@ -169,7 +179,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`
    * ```
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $queryRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<T>;
@@ -181,7 +191,7 @@ export class PrismaClient<
    * ```
    * const result = await prisma.$queryRawUnsafe('SELECT * FROM User WHERE id = $1 OR email = $2;', 1, 'user@email.com')
    * ```
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $queryRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<T>;
@@ -205,7 +215,9 @@ export class PrismaClient<
   $transaction<R>(fn: (prisma: Omit<PrismaClient, runtime.ITXClientDenyList>) => $Utils.JsPromise<R>, options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<R>
 
 
-  $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb, ExtArgs>
+  $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb<ClientOptions>, ExtArgs, $Utils.Call<Prisma.TypeMapCb<ClientOptions>, {
+    extArgs: ExtArgs
+  }>>
 
       /**
    * `prisma.admin`: Exposes CRUD operations for the **Admin** model.
@@ -215,7 +227,7 @@ export class PrismaClient<
     * const admins = await prisma.admin.findMany()
     * ```
     */
-  get admin(): Prisma.AdminDelegate<ExtArgs>;
+  get admin(): Prisma.AdminDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.schemeService`: Exposes CRUD operations for the **SchemeService** model.
@@ -225,107 +237,7 @@ export class PrismaClient<
     * const schemeServices = await prisma.schemeService.findMany()
     * ```
     */
-  get schemeService(): Prisma.SchemeServiceDelegate<ExtArgs>;
-
-  /**
-   * `prisma.certificateService`: Exposes CRUD operations for the **CertificateService** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more CertificateServices
-    * const certificateServices = await prisma.certificateService.findMany()
-    * ```
-    */
-  get certificateService(): Prisma.CertificateServiceDelegate<ExtArgs>;
-
-  /**
-   * `prisma.certificateContact`: Exposes CRUD operations for the **CertificateContact** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more CertificateContacts
-    * const certificateContacts = await prisma.certificateContact.findMany()
-    * ```
-    */
-  get certificateContact(): Prisma.CertificateContactDelegate<ExtArgs>;
-
-  /**
-   * `prisma.certificateDocument`: Exposes CRUD operations for the **CertificateDocument** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more CertificateDocuments
-    * const certificateDocuments = await prisma.certificateDocument.findMany()
-    * ```
-    */
-  get certificateDocument(): Prisma.CertificateDocumentDelegate<ExtArgs>;
-
-  /**
-   * `prisma.certificateProcessStep`: Exposes CRUD operations for the **CertificateProcessStep** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more CertificateProcessSteps
-    * const certificateProcessSteps = await prisma.certificateProcessStep.findMany()
-    * ```
-    */
-  get certificateProcessStep(): Prisma.CertificateProcessStepDelegate<ExtArgs>;
-
-  /**
-   * `prisma.certificateEligibility`: Exposes CRUD operations for the **CertificateEligibility** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more CertificateEligibilities
-    * const certificateEligibilities = await prisma.certificateEligibility.findMany()
-    * ```
-    */
-  get certificateEligibility(): Prisma.CertificateEligibilityDelegate<ExtArgs>;
-
-  /**
-   * `prisma.contactService`: Exposes CRUD operations for the **ContactService** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ContactServices
-    * const contactServices = await prisma.contactService.findMany()
-    * ```
-    */
-  get contactService(): Prisma.ContactServiceDelegate<ExtArgs>;
-
-  /**
-   * `prisma.contactServiceContact`: Exposes CRUD operations for the **ContactServiceContact** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ContactServiceContacts
-    * const contactServiceContacts = await prisma.contactServiceContact.findMany()
-    * ```
-    */
-  get contactServiceContact(): Prisma.ContactServiceContactDelegate<ExtArgs>;
-
-  /**
-   * `prisma.contactServiceDocument`: Exposes CRUD operations for the **ContactServiceDocument** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ContactServiceDocuments
-    * const contactServiceDocuments = await prisma.contactServiceDocument.findMany()
-    * ```
-    */
-  get contactServiceDocument(): Prisma.ContactServiceDocumentDelegate<ExtArgs>;
-
-  /**
-   * `prisma.grievance`: Exposes CRUD operations for the **Grievance** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Grievances
-    * const grievances = await prisma.grievance.findMany()
-    * ```
-    */
-  get grievance(): Prisma.GrievanceDelegate<ExtArgs>;
-
-  /**
-   * `prisma.feedback`: Exposes CRUD operations for the **Feedback** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Feedbacks
-    * const feedbacks = await prisma.feedback.findMany()
-    * ```
-    */
-  get feedback(): Prisma.FeedbackDelegate<ExtArgs>;
+  get schemeService(): Prisma.SchemeServiceDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.contactPerson`: Exposes CRUD operations for the **ContactPerson** model.
@@ -335,7 +247,7 @@ export class PrismaClient<
     * const contactPeople = await prisma.contactPerson.findMany()
     * ```
     */
-  get contactPerson(): Prisma.ContactPersonDelegate<ExtArgs>;
+  get contactPerson(): Prisma.ContactPersonDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.supportiveDocument`: Exposes CRUD operations for the **SupportiveDocument** model.
@@ -345,7 +257,127 @@ export class PrismaClient<
     * const supportiveDocuments = await prisma.supportiveDocument.findMany()
     * ```
     */
-  get supportiveDocument(): Prisma.SupportiveDocumentDelegate<ExtArgs>;
+  get supportiveDocument(): Prisma.SupportiveDocumentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.certificateService`: Exposes CRUD operations for the **CertificateService** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CertificateServices
+    * const certificateServices = await prisma.certificateService.findMany()
+    * ```
+    */
+  get certificateService(): Prisma.CertificateServiceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.certificateContact`: Exposes CRUD operations for the **CertificateContact** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CertificateContacts
+    * const certificateContacts = await prisma.certificateContact.findMany()
+    * ```
+    */
+  get certificateContact(): Prisma.CertificateContactDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.certificateDocument`: Exposes CRUD operations for the **CertificateDocument** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CertificateDocuments
+    * const certificateDocuments = await prisma.certificateDocument.findMany()
+    * ```
+    */
+  get certificateDocument(): Prisma.CertificateDocumentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.certificateProcessStep`: Exposes CRUD operations for the **CertificateProcessStep** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CertificateProcessSteps
+    * const certificateProcessSteps = await prisma.certificateProcessStep.findMany()
+    * ```
+    */
+  get certificateProcessStep(): Prisma.CertificateProcessStepDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.certificateEligibility`: Exposes CRUD operations for the **CertificateEligibility** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CertificateEligibilities
+    * const certificateEligibilities = await prisma.certificateEligibility.findMany()
+    * ```
+    */
+  get certificateEligibility(): Prisma.CertificateEligibilityDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.contactService`: Exposes CRUD operations for the **ContactService** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ContactServices
+    * const contactServices = await prisma.contactService.findMany()
+    * ```
+    */
+  get contactService(): Prisma.ContactServiceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.contactServiceContact`: Exposes CRUD operations for the **ContactServiceContact** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ContactServiceContacts
+    * const contactServiceContacts = await prisma.contactServiceContact.findMany()
+    * ```
+    */
+  get contactServiceContact(): Prisma.ContactServiceContactDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.contactServiceDocument`: Exposes CRUD operations for the **ContactServiceDocument** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ContactServiceDocuments
+    * const contactServiceDocuments = await prisma.contactServiceDocument.findMany()
+    * ```
+    */
+  get contactServiceDocument(): Prisma.ContactServiceDocumentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.post`: Exposes CRUD operations for the **Post** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Posts
+    * const posts = await prisma.post.findMany()
+    * ```
+    */
+  get post(): Prisma.PostDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.employee`: Exposes CRUD operations for the **Employee** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Employees
+    * const employees = await prisma.employee.findMany()
+    * ```
+    */
+  get employee(): Prisma.EmployeeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.feedback`: Exposes CRUD operations for the **Feedback** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Feedbacks
+    * const feedbacks = await prisma.feedback.findMany()
+    * ```
+    */
+  get feedback(): Prisma.FeedbackDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.grievance`: Exposes CRUD operations for the **Grievance** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Grievances
+    * const grievances = await prisma.grievance.findMany()
+    * ```
+    */
+  get grievance(): Prisma.GrievanceDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -366,7 +398,6 @@ export namespace Prisma {
   export import PrismaClientRustPanicError = runtime.PrismaClientRustPanicError
   export import PrismaClientInitializationError = runtime.PrismaClientInitializationError
   export import PrismaClientValidationError = runtime.PrismaClientValidationError
-  export import NotFoundError = runtime.NotFoundError
 
   /**
    * Re-export of sql-template-tag
@@ -387,7 +418,7 @@ export namespace Prisma {
   export type DecimalJsLike = runtime.DecimalJsLike
 
   /**
-   * Metrics 
+   * Metrics
    */
   export type Metrics = runtime.Metrics
   export type Metric<T> = runtime.Metric<T>
@@ -405,14 +436,14 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 5.22.0
-   * Query Engine version: 605197351a3c8bdd595af2d2a9bc3025bca48ea2
+   * Prisma Client JS version: 6.13.0
+   * Query Engine version: 361e86d0ea4987e9f53a565309b3eed797a6bcbd
    */
   export type PrismaVersion = {
     client: string
   }
 
-  export const prismaVersion: PrismaVersion 
+  export const prismaVersion: PrismaVersion
 
   /**
    * Utility Types
@@ -428,15 +459,15 @@ export namespace Prisma {
 
   /**
    * Types of the values used to represent different kinds of `null` values when working with JSON fields.
-   * 
+   *
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   namespace NullTypes {
     /**
     * Type of `Prisma.DbNull`.
-    * 
+    *
     * You cannot use other instances of this class. Please use the `Prisma.DbNull` value.
-    * 
+    *
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class DbNull {
@@ -446,9 +477,9 @@ export namespace Prisma {
 
     /**
     * Type of `Prisma.JsonNull`.
-    * 
+    *
     * You cannot use other instances of this class. Please use the `Prisma.JsonNull` value.
-    * 
+    *
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class JsonNull {
@@ -458,9 +489,9 @@ export namespace Prisma {
 
     /**
     * Type of `Prisma.AnyNull`.
-    * 
+    *
     * You cannot use other instances of this class. Please use the `Prisma.AnyNull` value.
-    * 
+    *
     * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
     */
     class AnyNull {
@@ -471,21 +502,21 @@ export namespace Prisma {
 
   /**
    * Helper for filtering JSON entries that have `null` on the database (empty on the db)
-   * 
+   *
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const DbNull: NullTypes.DbNull
 
   /**
    * Helper for filtering JSON entries that have JSON `null` values (not empty on the db)
-   * 
+   *
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const JsonNull: NullTypes.JsonNull
 
   /**
    * Helper for filtering JSON entries that are `Prisma.DbNull` or `Prisma.JsonNull`
-   * 
+   *
    * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
    */
   export const AnyNull: NullTypes.AnyNull
@@ -673,7 +704,7 @@ export namespace Prisma {
   type AtLeast<O extends object, K extends string> = NoExpand<
     O extends unknown
     ? | (K extends keyof O ? { [P in K]: O[P] } & O : O)
-      | {[P in keyof O as P extends K ? K : never]-?: O[P]} & O
+      | {[P in keyof O as P extends K ? P : never]-?: O[P]} & O
     : never>;
 
   type _Strict<U, _U = U> = U extends unknown ? U & OptionalFlat<_Record<Exclude<Keys<_U>, keyof U>, never>> : never;
@@ -789,6 +820,8 @@ export namespace Prisma {
   export const ModelName: {
     Admin: 'Admin',
     SchemeService: 'SchemeService',
+    ContactPerson: 'ContactPerson',
+    SupportiveDocument: 'SupportiveDocument',
     CertificateService: 'CertificateService',
     CertificateContact: 'CertificateContact',
     CertificateDocument: 'CertificateDocument',
@@ -797,10 +830,10 @@ export namespace Prisma {
     ContactService: 'ContactService',
     ContactServiceContact: 'ContactServiceContact',
     ContactServiceDocument: 'ContactServiceDocument',
-    Grievance: 'Grievance',
+    Post: 'Post',
+    Employee: 'Employee',
     Feedback: 'Feedback',
-    ContactPerson: 'ContactPerson',
-    SupportiveDocument: 'SupportiveDocument'
+    Grievance: 'Grievance'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -810,13 +843,16 @@ export namespace Prisma {
     db?: Datasource
   }
 
-  interface TypeMapCb extends $Utils.Fn<{extArgs: $Extensions.InternalArgs, clientOptions: PrismaClientOptions }, $Utils.Record<string, any>> {
-    returns: Prisma.TypeMap<this['params']['extArgs'], this['params']['clientOptions']>
+  interface TypeMapCb<ClientOptions = {}> extends $Utils.Fn<{extArgs: $Extensions.InternalArgs }, $Utils.Record<string, any>> {
+    returns: Prisma.TypeMap<this['params']['extArgs'], ClientOptions extends { omit: infer OmitOptions } ? OmitOptions : {}>
   }
 
-  export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
+  export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> = {
+    globalOmitOptions: {
+      omit: GlobalOmitOptions
+    }
     meta: {
-      modelProps: "admin" | "schemeService" | "certificateService" | "certificateContact" | "certificateDocument" | "certificateProcessStep" | "certificateEligibility" | "contactService" | "contactServiceContact" | "contactServiceDocument" | "grievance" | "feedback" | "contactPerson" | "supportiveDocument"
+      modelProps: "admin" | "schemeService" | "contactPerson" | "supportiveDocument" | "certificateService" | "certificateContact" | "certificateDocument" | "certificateProcessStep" | "certificateEligibility" | "contactService" | "contactServiceContact" | "contactServiceDocument" | "post" | "employee" | "feedback" | "grievance"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -871,6 +907,10 @@ export namespace Prisma {
           updateMany: {
             args: Prisma.AdminUpdateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdminUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminPayload>[]
           }
           upsert: {
             args: Prisma.AdminUpsertArgs<ExtArgs>
@@ -942,6 +982,10 @@ export namespace Prisma {
             args: Prisma.SchemeServiceUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          updateManyAndReturn: {
+            args: Prisma.SchemeServiceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SchemeServicePayload>[]
+          }
           upsert: {
             args: Prisma.SchemeServiceUpsertArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$SchemeServicePayload>
@@ -957,706 +1001,6 @@ export namespace Prisma {
           count: {
             args: Prisma.SchemeServiceCountArgs<ExtArgs>
             result: $Utils.Optional<SchemeServiceCountAggregateOutputType> | number
-          }
-        }
-      }
-      CertificateService: {
-        payload: Prisma.$CertificateServicePayload<ExtArgs>
-        fields: Prisma.CertificateServiceFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.CertificateServiceFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.CertificateServiceFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>
-          }
-          findFirst: {
-            args: Prisma.CertificateServiceFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.CertificateServiceFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>
-          }
-          findMany: {
-            args: Prisma.CertificateServiceFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>[]
-          }
-          create: {
-            args: Prisma.CertificateServiceCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>
-          }
-          createMany: {
-            args: Prisma.CertificateServiceCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.CertificateServiceCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>[]
-          }
-          delete: {
-            args: Prisma.CertificateServiceDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>
-          }
-          update: {
-            args: Prisma.CertificateServiceUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>
-          }
-          deleteMany: {
-            args: Prisma.CertificateServiceDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.CertificateServiceUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.CertificateServiceUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>
-          }
-          aggregate: {
-            args: Prisma.CertificateServiceAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCertificateService>
-          }
-          groupBy: {
-            args: Prisma.CertificateServiceGroupByArgs<ExtArgs>
-            result: $Utils.Optional<CertificateServiceGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.CertificateServiceCountArgs<ExtArgs>
-            result: $Utils.Optional<CertificateServiceCountAggregateOutputType> | number
-          }
-        }
-      }
-      CertificateContact: {
-        payload: Prisma.$CertificateContactPayload<ExtArgs>
-        fields: Prisma.CertificateContactFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.CertificateContactFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.CertificateContactFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
-          }
-          findFirst: {
-            args: Prisma.CertificateContactFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.CertificateContactFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
-          }
-          findMany: {
-            args: Prisma.CertificateContactFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>[]
-          }
-          create: {
-            args: Prisma.CertificateContactCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
-          }
-          createMany: {
-            args: Prisma.CertificateContactCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.CertificateContactCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>[]
-          }
-          delete: {
-            args: Prisma.CertificateContactDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
-          }
-          update: {
-            args: Prisma.CertificateContactUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
-          }
-          deleteMany: {
-            args: Prisma.CertificateContactDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.CertificateContactUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.CertificateContactUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
-          }
-          aggregate: {
-            args: Prisma.CertificateContactAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCertificateContact>
-          }
-          groupBy: {
-            args: Prisma.CertificateContactGroupByArgs<ExtArgs>
-            result: $Utils.Optional<CertificateContactGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.CertificateContactCountArgs<ExtArgs>
-            result: $Utils.Optional<CertificateContactCountAggregateOutputType> | number
-          }
-        }
-      }
-      CertificateDocument: {
-        payload: Prisma.$CertificateDocumentPayload<ExtArgs>
-        fields: Prisma.CertificateDocumentFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.CertificateDocumentFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.CertificateDocumentFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
-          }
-          findFirst: {
-            args: Prisma.CertificateDocumentFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.CertificateDocumentFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
-          }
-          findMany: {
-            args: Prisma.CertificateDocumentFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>[]
-          }
-          create: {
-            args: Prisma.CertificateDocumentCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
-          }
-          createMany: {
-            args: Prisma.CertificateDocumentCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.CertificateDocumentCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>[]
-          }
-          delete: {
-            args: Prisma.CertificateDocumentDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
-          }
-          update: {
-            args: Prisma.CertificateDocumentUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
-          }
-          deleteMany: {
-            args: Prisma.CertificateDocumentDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.CertificateDocumentUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.CertificateDocumentUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
-          }
-          aggregate: {
-            args: Prisma.CertificateDocumentAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCertificateDocument>
-          }
-          groupBy: {
-            args: Prisma.CertificateDocumentGroupByArgs<ExtArgs>
-            result: $Utils.Optional<CertificateDocumentGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.CertificateDocumentCountArgs<ExtArgs>
-            result: $Utils.Optional<CertificateDocumentCountAggregateOutputType> | number
-          }
-        }
-      }
-      CertificateProcessStep: {
-        payload: Prisma.$CertificateProcessStepPayload<ExtArgs>
-        fields: Prisma.CertificateProcessStepFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.CertificateProcessStepFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.CertificateProcessStepFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
-          }
-          findFirst: {
-            args: Prisma.CertificateProcessStepFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.CertificateProcessStepFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
-          }
-          findMany: {
-            args: Prisma.CertificateProcessStepFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>[]
-          }
-          create: {
-            args: Prisma.CertificateProcessStepCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
-          }
-          createMany: {
-            args: Prisma.CertificateProcessStepCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.CertificateProcessStepCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>[]
-          }
-          delete: {
-            args: Prisma.CertificateProcessStepDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
-          }
-          update: {
-            args: Prisma.CertificateProcessStepUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
-          }
-          deleteMany: {
-            args: Prisma.CertificateProcessStepDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.CertificateProcessStepUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.CertificateProcessStepUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
-          }
-          aggregate: {
-            args: Prisma.CertificateProcessStepAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCertificateProcessStep>
-          }
-          groupBy: {
-            args: Prisma.CertificateProcessStepGroupByArgs<ExtArgs>
-            result: $Utils.Optional<CertificateProcessStepGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.CertificateProcessStepCountArgs<ExtArgs>
-            result: $Utils.Optional<CertificateProcessStepCountAggregateOutputType> | number
-          }
-        }
-      }
-      CertificateEligibility: {
-        payload: Prisma.$CertificateEligibilityPayload<ExtArgs>
-        fields: Prisma.CertificateEligibilityFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.CertificateEligibilityFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.CertificateEligibilityFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
-          }
-          findFirst: {
-            args: Prisma.CertificateEligibilityFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.CertificateEligibilityFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
-          }
-          findMany: {
-            args: Prisma.CertificateEligibilityFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>[]
-          }
-          create: {
-            args: Prisma.CertificateEligibilityCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
-          }
-          createMany: {
-            args: Prisma.CertificateEligibilityCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.CertificateEligibilityCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>[]
-          }
-          delete: {
-            args: Prisma.CertificateEligibilityDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
-          }
-          update: {
-            args: Prisma.CertificateEligibilityUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
-          }
-          deleteMany: {
-            args: Prisma.CertificateEligibilityDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.CertificateEligibilityUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.CertificateEligibilityUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
-          }
-          aggregate: {
-            args: Prisma.CertificateEligibilityAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCertificateEligibility>
-          }
-          groupBy: {
-            args: Prisma.CertificateEligibilityGroupByArgs<ExtArgs>
-            result: $Utils.Optional<CertificateEligibilityGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.CertificateEligibilityCountArgs<ExtArgs>
-            result: $Utils.Optional<CertificateEligibilityCountAggregateOutputType> | number
-          }
-        }
-      }
-      ContactService: {
-        payload: Prisma.$ContactServicePayload<ExtArgs>
-        fields: Prisma.ContactServiceFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ContactServiceFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ContactServiceFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>
-          }
-          findFirst: {
-            args: Prisma.ContactServiceFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ContactServiceFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>
-          }
-          findMany: {
-            args: Prisma.ContactServiceFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>[]
-          }
-          create: {
-            args: Prisma.ContactServiceCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>
-          }
-          createMany: {
-            args: Prisma.ContactServiceCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ContactServiceCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>[]
-          }
-          delete: {
-            args: Prisma.ContactServiceDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>
-          }
-          update: {
-            args: Prisma.ContactServiceUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>
-          }
-          deleteMany: {
-            args: Prisma.ContactServiceDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ContactServiceUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.ContactServiceUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>
-          }
-          aggregate: {
-            args: Prisma.ContactServiceAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateContactService>
-          }
-          groupBy: {
-            args: Prisma.ContactServiceGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ContactServiceGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ContactServiceCountArgs<ExtArgs>
-            result: $Utils.Optional<ContactServiceCountAggregateOutputType> | number
-          }
-        }
-      }
-      ContactServiceContact: {
-        payload: Prisma.$ContactServiceContactPayload<ExtArgs>
-        fields: Prisma.ContactServiceContactFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ContactServiceContactFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ContactServiceContactFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>
-          }
-          findFirst: {
-            args: Prisma.ContactServiceContactFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ContactServiceContactFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>
-          }
-          findMany: {
-            args: Prisma.ContactServiceContactFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>[]
-          }
-          create: {
-            args: Prisma.ContactServiceContactCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>
-          }
-          createMany: {
-            args: Prisma.ContactServiceContactCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ContactServiceContactCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>[]
-          }
-          delete: {
-            args: Prisma.ContactServiceContactDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>
-          }
-          update: {
-            args: Prisma.ContactServiceContactUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>
-          }
-          deleteMany: {
-            args: Prisma.ContactServiceContactDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ContactServiceContactUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.ContactServiceContactUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>
-          }
-          aggregate: {
-            args: Prisma.ContactServiceContactAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateContactServiceContact>
-          }
-          groupBy: {
-            args: Prisma.ContactServiceContactGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ContactServiceContactGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ContactServiceContactCountArgs<ExtArgs>
-            result: $Utils.Optional<ContactServiceContactCountAggregateOutputType> | number
-          }
-        }
-      }
-      ContactServiceDocument: {
-        payload: Prisma.$ContactServiceDocumentPayload<ExtArgs>
-        fields: Prisma.ContactServiceDocumentFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ContactServiceDocumentFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ContactServiceDocumentFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
-          }
-          findFirst: {
-            args: Prisma.ContactServiceDocumentFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ContactServiceDocumentFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
-          }
-          findMany: {
-            args: Prisma.ContactServiceDocumentFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>[]
-          }
-          create: {
-            args: Prisma.ContactServiceDocumentCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
-          }
-          createMany: {
-            args: Prisma.ContactServiceDocumentCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ContactServiceDocumentCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>[]
-          }
-          delete: {
-            args: Prisma.ContactServiceDocumentDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
-          }
-          update: {
-            args: Prisma.ContactServiceDocumentUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
-          }
-          deleteMany: {
-            args: Prisma.ContactServiceDocumentDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ContactServiceDocumentUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.ContactServiceDocumentUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
-          }
-          aggregate: {
-            args: Prisma.ContactServiceDocumentAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateContactServiceDocument>
-          }
-          groupBy: {
-            args: Prisma.ContactServiceDocumentGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ContactServiceDocumentGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ContactServiceDocumentCountArgs<ExtArgs>
-            result: $Utils.Optional<ContactServiceDocumentCountAggregateOutputType> | number
-          }
-        }
-      }
-      Grievance: {
-        payload: Prisma.$GrievancePayload<ExtArgs>
-        fields: Prisma.GrievanceFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.GrievanceFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GrievancePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.GrievanceFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>
-          }
-          findFirst: {
-            args: Prisma.GrievanceFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GrievancePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.GrievanceFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>
-          }
-          findMany: {
-            args: Prisma.GrievanceFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>[]
-          }
-          create: {
-            args: Prisma.GrievanceCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>
-          }
-          createMany: {
-            args: Prisma.GrievanceCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.GrievanceCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>[]
-          }
-          delete: {
-            args: Prisma.GrievanceDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>
-          }
-          update: {
-            args: Prisma.GrievanceUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>
-          }
-          deleteMany: {
-            args: Prisma.GrievanceDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.GrievanceUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.GrievanceUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>
-          }
-          aggregate: {
-            args: Prisma.GrievanceAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateGrievance>
-          }
-          groupBy: {
-            args: Prisma.GrievanceGroupByArgs<ExtArgs>
-            result: $Utils.Optional<GrievanceGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.GrievanceCountArgs<ExtArgs>
-            result: $Utils.Optional<GrievanceCountAggregateOutputType> | number
-          }
-        }
-      }
-      Feedback: {
-        payload: Prisma.$FeedbackPayload<ExtArgs>
-        fields: Prisma.FeedbackFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.FeedbackFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.FeedbackFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>
-          }
-          findFirst: {
-            args: Prisma.FeedbackFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.FeedbackFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>
-          }
-          findMany: {
-            args: Prisma.FeedbackFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>[]
-          }
-          create: {
-            args: Prisma.FeedbackCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>
-          }
-          createMany: {
-            args: Prisma.FeedbackCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.FeedbackCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>[]
-          }
-          delete: {
-            args: Prisma.FeedbackDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>
-          }
-          update: {
-            args: Prisma.FeedbackUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>
-          }
-          deleteMany: {
-            args: Prisma.FeedbackDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.FeedbackUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.FeedbackUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>
-          }
-          aggregate: {
-            args: Prisma.FeedbackAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateFeedback>
-          }
-          groupBy: {
-            args: Prisma.FeedbackGroupByArgs<ExtArgs>
-            result: $Utils.Optional<FeedbackGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.FeedbackCountArgs<ExtArgs>
-            result: $Utils.Optional<FeedbackCountAggregateOutputType> | number
           }
         }
       }
@@ -1711,6 +1055,10 @@ export namespace Prisma {
           updateMany: {
             args: Prisma.ContactPersonUpdateManyArgs<ExtArgs>
             result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ContactPersonUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactPersonPayload>[]
           }
           upsert: {
             args: Prisma.ContactPersonUpsertArgs<ExtArgs>
@@ -1782,6 +1130,10 @@ export namespace Prisma {
             args: Prisma.SupportiveDocumentUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
+          updateManyAndReturn: {
+            args: Prisma.SupportiveDocumentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportiveDocumentPayload>[]
+          }
           upsert: {
             args: Prisma.SupportiveDocumentUpsertArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$SupportiveDocumentPayload>
@@ -1797,6 +1149,894 @@ export namespace Prisma {
           count: {
             args: Prisma.SupportiveDocumentCountArgs<ExtArgs>
             result: $Utils.Optional<SupportiveDocumentCountAggregateOutputType> | number
+          }
+        }
+      }
+      CertificateService: {
+        payload: Prisma.$CertificateServicePayload<ExtArgs>
+        fields: Prisma.CertificateServiceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CertificateServiceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CertificateServiceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>
+          }
+          findFirst: {
+            args: Prisma.CertificateServiceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CertificateServiceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>
+          }
+          findMany: {
+            args: Prisma.CertificateServiceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>[]
+          }
+          create: {
+            args: Prisma.CertificateServiceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>
+          }
+          createMany: {
+            args: Prisma.CertificateServiceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CertificateServiceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>[]
+          }
+          delete: {
+            args: Prisma.CertificateServiceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>
+          }
+          update: {
+            args: Prisma.CertificateServiceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>
+          }
+          deleteMany: {
+            args: Prisma.CertificateServiceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CertificateServiceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CertificateServiceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>[]
+          }
+          upsert: {
+            args: Prisma.CertificateServiceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateServicePayload>
+          }
+          aggregate: {
+            args: Prisma.CertificateServiceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCertificateService>
+          }
+          groupBy: {
+            args: Prisma.CertificateServiceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CertificateServiceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CertificateServiceCountArgs<ExtArgs>
+            result: $Utils.Optional<CertificateServiceCountAggregateOutputType> | number
+          }
+        }
+      }
+      CertificateContact: {
+        payload: Prisma.$CertificateContactPayload<ExtArgs>
+        fields: Prisma.CertificateContactFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CertificateContactFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CertificateContactFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
+          }
+          findFirst: {
+            args: Prisma.CertificateContactFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CertificateContactFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
+          }
+          findMany: {
+            args: Prisma.CertificateContactFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>[]
+          }
+          create: {
+            args: Prisma.CertificateContactCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
+          }
+          createMany: {
+            args: Prisma.CertificateContactCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CertificateContactCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>[]
+          }
+          delete: {
+            args: Prisma.CertificateContactDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
+          }
+          update: {
+            args: Prisma.CertificateContactUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
+          }
+          deleteMany: {
+            args: Prisma.CertificateContactDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CertificateContactUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CertificateContactUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>[]
+          }
+          upsert: {
+            args: Prisma.CertificateContactUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateContactPayload>
+          }
+          aggregate: {
+            args: Prisma.CertificateContactAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCertificateContact>
+          }
+          groupBy: {
+            args: Prisma.CertificateContactGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CertificateContactGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CertificateContactCountArgs<ExtArgs>
+            result: $Utils.Optional<CertificateContactCountAggregateOutputType> | number
+          }
+        }
+      }
+      CertificateDocument: {
+        payload: Prisma.$CertificateDocumentPayload<ExtArgs>
+        fields: Prisma.CertificateDocumentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CertificateDocumentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CertificateDocumentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
+          }
+          findFirst: {
+            args: Prisma.CertificateDocumentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CertificateDocumentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
+          }
+          findMany: {
+            args: Prisma.CertificateDocumentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>[]
+          }
+          create: {
+            args: Prisma.CertificateDocumentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
+          }
+          createMany: {
+            args: Prisma.CertificateDocumentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CertificateDocumentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>[]
+          }
+          delete: {
+            args: Prisma.CertificateDocumentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
+          }
+          update: {
+            args: Prisma.CertificateDocumentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
+          }
+          deleteMany: {
+            args: Prisma.CertificateDocumentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CertificateDocumentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CertificateDocumentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>[]
+          }
+          upsert: {
+            args: Prisma.CertificateDocumentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateDocumentPayload>
+          }
+          aggregate: {
+            args: Prisma.CertificateDocumentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCertificateDocument>
+          }
+          groupBy: {
+            args: Prisma.CertificateDocumentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CertificateDocumentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CertificateDocumentCountArgs<ExtArgs>
+            result: $Utils.Optional<CertificateDocumentCountAggregateOutputType> | number
+          }
+        }
+      }
+      CertificateProcessStep: {
+        payload: Prisma.$CertificateProcessStepPayload<ExtArgs>
+        fields: Prisma.CertificateProcessStepFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CertificateProcessStepFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CertificateProcessStepFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
+          }
+          findFirst: {
+            args: Prisma.CertificateProcessStepFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CertificateProcessStepFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
+          }
+          findMany: {
+            args: Prisma.CertificateProcessStepFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>[]
+          }
+          create: {
+            args: Prisma.CertificateProcessStepCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
+          }
+          createMany: {
+            args: Prisma.CertificateProcessStepCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CertificateProcessStepCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>[]
+          }
+          delete: {
+            args: Prisma.CertificateProcessStepDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
+          }
+          update: {
+            args: Prisma.CertificateProcessStepUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
+          }
+          deleteMany: {
+            args: Prisma.CertificateProcessStepDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CertificateProcessStepUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CertificateProcessStepUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>[]
+          }
+          upsert: {
+            args: Prisma.CertificateProcessStepUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateProcessStepPayload>
+          }
+          aggregate: {
+            args: Prisma.CertificateProcessStepAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCertificateProcessStep>
+          }
+          groupBy: {
+            args: Prisma.CertificateProcessStepGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CertificateProcessStepGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CertificateProcessStepCountArgs<ExtArgs>
+            result: $Utils.Optional<CertificateProcessStepCountAggregateOutputType> | number
+          }
+        }
+      }
+      CertificateEligibility: {
+        payload: Prisma.$CertificateEligibilityPayload<ExtArgs>
+        fields: Prisma.CertificateEligibilityFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CertificateEligibilityFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CertificateEligibilityFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
+          }
+          findFirst: {
+            args: Prisma.CertificateEligibilityFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CertificateEligibilityFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
+          }
+          findMany: {
+            args: Prisma.CertificateEligibilityFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>[]
+          }
+          create: {
+            args: Prisma.CertificateEligibilityCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
+          }
+          createMany: {
+            args: Prisma.CertificateEligibilityCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CertificateEligibilityCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>[]
+          }
+          delete: {
+            args: Prisma.CertificateEligibilityDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
+          }
+          update: {
+            args: Prisma.CertificateEligibilityUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
+          }
+          deleteMany: {
+            args: Prisma.CertificateEligibilityDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CertificateEligibilityUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CertificateEligibilityUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>[]
+          }
+          upsert: {
+            args: Prisma.CertificateEligibilityUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CertificateEligibilityPayload>
+          }
+          aggregate: {
+            args: Prisma.CertificateEligibilityAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCertificateEligibility>
+          }
+          groupBy: {
+            args: Prisma.CertificateEligibilityGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CertificateEligibilityGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CertificateEligibilityCountArgs<ExtArgs>
+            result: $Utils.Optional<CertificateEligibilityCountAggregateOutputType> | number
+          }
+        }
+      }
+      ContactService: {
+        payload: Prisma.$ContactServicePayload<ExtArgs>
+        fields: Prisma.ContactServiceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ContactServiceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ContactServiceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>
+          }
+          findFirst: {
+            args: Prisma.ContactServiceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ContactServiceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>
+          }
+          findMany: {
+            args: Prisma.ContactServiceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>[]
+          }
+          create: {
+            args: Prisma.ContactServiceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>
+          }
+          createMany: {
+            args: Prisma.ContactServiceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ContactServiceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>[]
+          }
+          delete: {
+            args: Prisma.ContactServiceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>
+          }
+          update: {
+            args: Prisma.ContactServiceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>
+          }
+          deleteMany: {
+            args: Prisma.ContactServiceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ContactServiceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ContactServiceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>[]
+          }
+          upsert: {
+            args: Prisma.ContactServiceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServicePayload>
+          }
+          aggregate: {
+            args: Prisma.ContactServiceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateContactService>
+          }
+          groupBy: {
+            args: Prisma.ContactServiceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ContactServiceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ContactServiceCountArgs<ExtArgs>
+            result: $Utils.Optional<ContactServiceCountAggregateOutputType> | number
+          }
+        }
+      }
+      ContactServiceContact: {
+        payload: Prisma.$ContactServiceContactPayload<ExtArgs>
+        fields: Prisma.ContactServiceContactFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ContactServiceContactFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ContactServiceContactFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>
+          }
+          findFirst: {
+            args: Prisma.ContactServiceContactFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ContactServiceContactFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>
+          }
+          findMany: {
+            args: Prisma.ContactServiceContactFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>[]
+          }
+          create: {
+            args: Prisma.ContactServiceContactCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>
+          }
+          createMany: {
+            args: Prisma.ContactServiceContactCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ContactServiceContactCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>[]
+          }
+          delete: {
+            args: Prisma.ContactServiceContactDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>
+          }
+          update: {
+            args: Prisma.ContactServiceContactUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>
+          }
+          deleteMany: {
+            args: Prisma.ContactServiceContactDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ContactServiceContactUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ContactServiceContactUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>[]
+          }
+          upsert: {
+            args: Prisma.ContactServiceContactUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceContactPayload>
+          }
+          aggregate: {
+            args: Prisma.ContactServiceContactAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateContactServiceContact>
+          }
+          groupBy: {
+            args: Prisma.ContactServiceContactGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ContactServiceContactGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ContactServiceContactCountArgs<ExtArgs>
+            result: $Utils.Optional<ContactServiceContactCountAggregateOutputType> | number
+          }
+        }
+      }
+      ContactServiceDocument: {
+        payload: Prisma.$ContactServiceDocumentPayload<ExtArgs>
+        fields: Prisma.ContactServiceDocumentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ContactServiceDocumentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ContactServiceDocumentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
+          }
+          findFirst: {
+            args: Prisma.ContactServiceDocumentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ContactServiceDocumentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
+          }
+          findMany: {
+            args: Prisma.ContactServiceDocumentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>[]
+          }
+          create: {
+            args: Prisma.ContactServiceDocumentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
+          }
+          createMany: {
+            args: Prisma.ContactServiceDocumentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ContactServiceDocumentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>[]
+          }
+          delete: {
+            args: Prisma.ContactServiceDocumentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
+          }
+          update: {
+            args: Prisma.ContactServiceDocumentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
+          }
+          deleteMany: {
+            args: Prisma.ContactServiceDocumentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ContactServiceDocumentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ContactServiceDocumentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>[]
+          }
+          upsert: {
+            args: Prisma.ContactServiceDocumentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactServiceDocumentPayload>
+          }
+          aggregate: {
+            args: Prisma.ContactServiceDocumentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateContactServiceDocument>
+          }
+          groupBy: {
+            args: Prisma.ContactServiceDocumentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ContactServiceDocumentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ContactServiceDocumentCountArgs<ExtArgs>
+            result: $Utils.Optional<ContactServiceDocumentCountAggregateOutputType> | number
+          }
+        }
+      }
+      Post: {
+        payload: Prisma.$PostPayload<ExtArgs>
+        fields: Prisma.PostFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PostFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PostFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>
+          }
+          findFirst: {
+            args: Prisma.PostFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PostFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>
+          }
+          findMany: {
+            args: Prisma.PostFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>[]
+          }
+          create: {
+            args: Prisma.PostCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>
+          }
+          createMany: {
+            args: Prisma.PostCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PostCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>[]
+          }
+          delete: {
+            args: Prisma.PostDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>
+          }
+          update: {
+            args: Prisma.PostUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>
+          }
+          deleteMany: {
+            args: Prisma.PostDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PostUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PostUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>[]
+          }
+          upsert: {
+            args: Prisma.PostUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PostPayload>
+          }
+          aggregate: {
+            args: Prisma.PostAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePost>
+          }
+          groupBy: {
+            args: Prisma.PostGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PostGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PostCountArgs<ExtArgs>
+            result: $Utils.Optional<PostCountAggregateOutputType> | number
+          }
+        }
+      }
+      Employee: {
+        payload: Prisma.$EmployeePayload<ExtArgs>
+        fields: Prisma.EmployeeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EmployeeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EmployeeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+          }
+          findFirst: {
+            args: Prisma.EmployeeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EmployeeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+          }
+          findMany: {
+            args: Prisma.EmployeeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>[]
+          }
+          create: {
+            args: Prisma.EmployeeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+          }
+          createMany: {
+            args: Prisma.EmployeeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EmployeeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>[]
+          }
+          delete: {
+            args: Prisma.EmployeeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+          }
+          update: {
+            args: Prisma.EmployeeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+          }
+          deleteMany: {
+            args: Prisma.EmployeeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EmployeeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EmployeeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>[]
+          }
+          upsert: {
+            args: Prisma.EmployeeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+          }
+          aggregate: {
+            args: Prisma.EmployeeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEmployee>
+          }
+          groupBy: {
+            args: Prisma.EmployeeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EmployeeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EmployeeCountArgs<ExtArgs>
+            result: $Utils.Optional<EmployeeCountAggregateOutputType> | number
+          }
+        }
+      }
+      Feedback: {
+        payload: Prisma.$FeedbackPayload<ExtArgs>
+        fields: Prisma.FeedbackFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FeedbackFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FeedbackFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>
+          }
+          findFirst: {
+            args: Prisma.FeedbackFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FeedbackFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>
+          }
+          findMany: {
+            args: Prisma.FeedbackFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>[]
+          }
+          create: {
+            args: Prisma.FeedbackCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>
+          }
+          createMany: {
+            args: Prisma.FeedbackCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FeedbackCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>[]
+          }
+          delete: {
+            args: Prisma.FeedbackDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>
+          }
+          update: {
+            args: Prisma.FeedbackUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>
+          }
+          deleteMany: {
+            args: Prisma.FeedbackDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FeedbackUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FeedbackUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>[]
+          }
+          upsert: {
+            args: Prisma.FeedbackUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeedbackPayload>
+          }
+          aggregate: {
+            args: Prisma.FeedbackAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFeedback>
+          }
+          groupBy: {
+            args: Prisma.FeedbackGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FeedbackGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FeedbackCountArgs<ExtArgs>
+            result: $Utils.Optional<FeedbackCountAggregateOutputType> | number
+          }
+        }
+      }
+      Grievance: {
+        payload: Prisma.$GrievancePayload<ExtArgs>
+        fields: Prisma.GrievanceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GrievanceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrievancePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GrievanceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>
+          }
+          findFirst: {
+            args: Prisma.GrievanceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrievancePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GrievanceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>
+          }
+          findMany: {
+            args: Prisma.GrievanceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>[]
+          }
+          create: {
+            args: Prisma.GrievanceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>
+          }
+          createMany: {
+            args: Prisma.GrievanceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GrievanceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>[]
+          }
+          delete: {
+            args: Prisma.GrievanceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>
+          }
+          update: {
+            args: Prisma.GrievanceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>
+          }
+          deleteMany: {
+            args: Prisma.GrievanceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GrievanceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GrievanceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>[]
+          }
+          upsert: {
+            args: Prisma.GrievanceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrievancePayload>
+          }
+          aggregate: {
+            args: Prisma.GrievanceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGrievance>
+          }
+          groupBy: {
+            args: Prisma.GrievanceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GrievanceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GrievanceCountArgs<ExtArgs>
+            result: $Utils.Optional<GrievanceCountAggregateOutputType> | number
           }
         }
       }
@@ -1843,16 +2083,24 @@ export namespace Prisma {
     /**
      * @example
      * ```
-     * // Defaults to stdout
+     * // Shorthand for `emit: 'stdout'`
      * log: ['query', 'info', 'warn', 'error']
      * 
-     * // Emit as events
+     * // Emit as events only
      * log: [
-     *   { emit: 'stdout', level: 'query' },
-     *   { emit: 'stdout', level: 'info' },
-     *   { emit: 'stdout', level: 'warn' }
-     *   { emit: 'stdout', level: 'error' }
+     *   { emit: 'event', level: 'query' },
+     *   { emit: 'event', level: 'info' },
+     *   { emit: 'event', level: 'warn' }
+     *   { emit: 'event', level: 'error' }
      * ]
+     * 
+     * / Emit as events and log to stdout
+     * og: [
+     *  { emit: 'stdout', level: 'query' },
+     *  { emit: 'stdout', level: 'info' },
+     *  { emit: 'stdout', level: 'warn' }
+     *  { emit: 'stdout', level: 'error' }
+     * 
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -1867,8 +2115,40 @@ export namespace Prisma {
       timeout?: number
       isolationLevel?: Prisma.TransactionIsolationLevel
     }
+    /**
+     * Global configuration for omitting model fields by default.
+     * 
+     * @example
+     * ```
+     * const prisma = new PrismaClient({
+     *   omit: {
+     *     user: {
+     *       password: true
+     *     }
+     *   }
+     * })
+     * ```
+     */
+    omit?: Prisma.GlobalOmitConfig
   }
-
+  export type GlobalOmitConfig = {
+    admin?: AdminOmit
+    schemeService?: SchemeServiceOmit
+    contactPerson?: ContactPersonOmit
+    supportiveDocument?: SupportiveDocumentOmit
+    certificateService?: CertificateServiceOmit
+    certificateContact?: CertificateContactOmit
+    certificateDocument?: CertificateDocumentOmit
+    certificateProcessStep?: CertificateProcessStepOmit
+    certificateEligibility?: CertificateEligibilityOmit
+    contactService?: ContactServiceOmit
+    contactServiceContact?: ContactServiceContactOmit
+    contactServiceDocument?: ContactServiceDocumentOmit
+    post?: PostOmit
+    employee?: EmployeeOmit
+    feedback?: FeedbackOmit
+    grievance?: GrievanceOmit
+  }
 
   /* Types for Logging */
   export type LogLevel = 'info' | 'query' | 'warn' | 'error'
@@ -1877,10 +2157,15 @@ export namespace Prisma {
     emit: 'stdout' | 'event'
   }
 
-  export type GetLogType<T extends LogLevel | LogDefinition> = T extends LogDefinition ? T['emit'] extends 'event' ? T['level'] : never : never
-  export type GetEvents<T extends any> = T extends Array<LogLevel | LogDefinition> ?
-    GetLogType<T[0]> | GetLogType<T[1]> | GetLogType<T[2]> | GetLogType<T[3]>
-    : never
+  export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
+
+  export type GetLogType<T> = CheckIsLogLevel<
+    T extends LogDefinition ? T['level'] : T
+  >;
+
+  export type GetEvents<T extends any[]> = T extends Array<LogLevel | LogDefinition>
+    ? GetLogType<T[number]>
+    : never;
 
   export type QueryEvent = {
     timestamp: Date
@@ -1909,6 +2194,7 @@ export namespace Prisma {
     | 'createManyAndReturn'
     | 'update'
     | 'updateMany'
+    | 'updateManyAndReturn'
     | 'upsert'
     | 'delete'
     | 'deleteMany'
@@ -2144,6 +2430,68 @@ export namespace Prisma {
 
 
   /**
+   * Count Type ContactServiceContactCountOutputType
+   */
+
+  export type ContactServiceContactCountOutputType = {
+    posts: number
+  }
+
+  export type ContactServiceContactCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    posts?: boolean | ContactServiceContactCountOutputTypeCountPostsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ContactServiceContactCountOutputType without action
+   */
+  export type ContactServiceContactCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceContactCountOutputType
+     */
+    select?: ContactServiceContactCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ContactServiceContactCountOutputType without action
+   */
+  export type ContactServiceContactCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostWhereInput
+  }
+
+
+  /**
+   * Count Type PostCountOutputType
+   */
+
+  export type PostCountOutputType = {
+    employees: number
+  }
+
+  export type PostCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    employees?: boolean | PostCountOutputTypeCountEmployeesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PostCountOutputType without action
+   */
+  export type PostCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PostCountOutputType
+     */
+    select?: PostCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PostCountOutputType without action
+   */
+  export type PostCountOutputTypeCountEmployeesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmployeeWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -2170,8 +2518,8 @@ export namespace Prisma {
   export type AdminMinAggregateOutputType = {
     id: number | null
     email: string | null
-    name: string | null
     password: string | null
+    name: string | null
     role: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -2180,8 +2528,8 @@ export namespace Prisma {
   export type AdminMaxAggregateOutputType = {
     id: number | null
     email: string | null
-    name: string | null
     password: string | null
+    name: string | null
     role: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -2190,8 +2538,8 @@ export namespace Prisma {
   export type AdminCountAggregateOutputType = {
     id: number
     email: number
-    name: number
     password: number
+    name: number
     role: number
     createdAt: number
     updatedAt: number
@@ -2210,8 +2558,8 @@ export namespace Prisma {
   export type AdminMinAggregateInputType = {
     id?: true
     email?: true
-    name?: true
     password?: true
+    name?: true
     role?: true
     createdAt?: true
     updatedAt?: true
@@ -2220,8 +2568,8 @@ export namespace Prisma {
   export type AdminMaxAggregateInputType = {
     id?: true
     email?: true
-    name?: true
     password?: true
+    name?: true
     role?: true
     createdAt?: true
     updatedAt?: true
@@ -2230,8 +2578,8 @@ export namespace Prisma {
   export type AdminCountAggregateInputType = {
     id?: true
     email?: true
-    name?: true
     password?: true
+    name?: true
     role?: true
     createdAt?: true
     updatedAt?: true
@@ -2327,8 +2675,8 @@ export namespace Prisma {
   export type AdminGroupByOutputType = {
     id: number
     email: string
-    name: string
     password: string
+    name: string
     role: string
     createdAt: Date
     updatedAt: Date
@@ -2356,8 +2704,8 @@ export namespace Prisma {
   export type AdminSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     email?: boolean
-    name?: boolean
     password?: boolean
+    name?: boolean
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2370,8 +2718,18 @@ export namespace Prisma {
   export type AdminSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     email?: boolean
-    name?: boolean
     password?: boolean
+    name?: boolean
+    role?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["admin"]>
+
+  export type AdminSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    password?: boolean
+    name?: boolean
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2380,13 +2738,14 @@ export namespace Prisma {
   export type AdminSelectScalar = {
     id?: boolean
     email?: boolean
-    name?: boolean
     password?: boolean
+    name?: boolean
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
+  export type AdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "name" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["admin"]>
   export type AdminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     schemeServices?: boolean | Admin$schemeServicesArgs<ExtArgs>
     certificateServices?: boolean | Admin$certificateServicesArgs<ExtArgs>
@@ -2394,6 +2753,7 @@ export namespace Prisma {
     _count?: boolean | AdminCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AdminIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type AdminIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $AdminPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Admin"
@@ -2405,8 +2765,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       email: string
-      name: string
       password: string
+      name: string
       role: string
       createdAt: Date
       updatedAt: Date
@@ -2416,12 +2776,12 @@ export namespace Prisma {
 
   type AdminGetPayload<S extends boolean | null | undefined | AdminDefaultArgs> = $Result.GetResult<Prisma.$AdminPayload, S>
 
-  type AdminCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<AdminFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type AdminCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdminFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: AdminCountAggregateInputType | true
     }
 
-  export interface AdminDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface AdminDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Admin'], meta: { name: 'Admin' } }
     /**
      * Find zero or one Admin that matches the filter.
@@ -2434,10 +2794,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends AdminFindUniqueArgs>(args: SelectSubset<T, AdminFindUniqueArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends AdminFindUniqueArgs>(args: SelectSubset<T, AdminFindUniqueArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Admin that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one Admin that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {AdminFindUniqueOrThrowArgs} args - Arguments to find a Admin
      * @example
@@ -2448,7 +2808,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends AdminFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends AdminFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Admin that matches the filter.
@@ -2463,7 +2823,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends AdminFindFirstArgs>(args?: SelectSubset<T, AdminFindFirstArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends AdminFindFirstArgs>(args?: SelectSubset<T, AdminFindFirstArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Admin that matches the filter or
@@ -2479,7 +2839,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends AdminFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends AdminFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more Admins that matches the filter.
@@ -2497,7 +2857,7 @@ export namespace Prisma {
      * const adminWithIdOnly = await prisma.admin.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends AdminFindManyArgs>(args?: SelectSubset<T, AdminFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends AdminFindManyArgs>(args?: SelectSubset<T, AdminFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a Admin.
@@ -2511,7 +2871,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends AdminCreateArgs>(args: SelectSubset<T, AdminCreateArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends AdminCreateArgs>(args: SelectSubset<T, AdminCreateArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many Admins.
@@ -2539,7 +2899,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many Admins and only return the `id`
-     * const adminWithIdOnly = await prisma.admin.createManyAndReturn({ 
+     * const adminWithIdOnly = await prisma.admin.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -2549,7 +2909,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends AdminCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends AdminCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a Admin.
@@ -2563,7 +2923,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends AdminDeleteArgs>(args: SelectSubset<T, AdminDeleteArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends AdminDeleteArgs>(args: SelectSubset<T, AdminDeleteArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one Admin.
@@ -2580,7 +2940,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends AdminUpdateArgs>(args: SelectSubset<T, AdminUpdateArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends AdminUpdateArgs>(args: SelectSubset<T, AdminUpdateArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more Admins.
@@ -2616,6 +2976,36 @@ export namespace Prisma {
     updateMany<T extends AdminUpdateManyArgs>(args: SelectSubset<T, AdminUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more Admins and returns the data updated in the database.
+     * @param {AdminUpdateManyAndReturnArgs} args - Arguments to update many Admins.
+     * @example
+     * // Update many Admins
+     * const admin = await prisma.admin.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Admins and only return the `id`
+     * const adminWithIdOnly = await prisma.admin.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdminUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one Admin.
      * @param {AdminUpsertArgs} args - Arguments to update or create a Admin.
      * @example
@@ -2632,7 +3022,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends AdminUpsertArgs>(args: SelectSubset<T, AdminUpsertArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends AdminUpsertArgs>(args: SelectSubset<T, AdminUpsertArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -2772,11 +3162,11 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__AdminClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__AdminClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    schemeServices<T extends Admin$schemeServicesArgs<ExtArgs> = {}>(args?: Subset<T, Admin$schemeServicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findMany"> | Null>
-    certificateServices<T extends Admin$certificateServicesArgs<ExtArgs> = {}>(args?: Subset<T, Admin$certificateServicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findMany"> | Null>
-    contactServices<T extends Admin$contactServicesArgs<ExtArgs> = {}>(args?: Subset<T, Admin$contactServicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findMany"> | Null>
+    schemeServices<T extends Admin$schemeServicesArgs<ExtArgs> = {}>(args?: Subset<T, Admin$schemeServicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    certificateServices<T extends Admin$certificateServicesArgs<ExtArgs> = {}>(args?: Subset<T, Admin$certificateServicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    contactServices<T extends Admin$contactServicesArgs<ExtArgs> = {}>(args?: Subset<T, Admin$contactServicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2804,12 +3194,12 @@ export namespace Prisma {
 
   /**
    * Fields of the Admin model
-   */ 
+   */
   interface AdminFieldRefs {
     readonly id: FieldRef<"Admin", 'Int'>
     readonly email: FieldRef<"Admin", 'String'>
-    readonly name: FieldRef<"Admin", 'String'>
     readonly password: FieldRef<"Admin", 'String'>
+    readonly name: FieldRef<"Admin", 'String'>
     readonly role: FieldRef<"Admin", 'String'>
     readonly createdAt: FieldRef<"Admin", 'DateTime'>
     readonly updatedAt: FieldRef<"Admin", 'DateTime'>
@@ -2825,6 +3215,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Admin
      */
     select?: AdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Admin
+     */
+    omit?: AdminOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -2844,6 +3238,10 @@ export namespace Prisma {
      */
     select?: AdminSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Admin
+     */
+    omit?: AdminOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AdminInclude<ExtArgs> | null
@@ -2861,6 +3259,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Admin
      */
     select?: AdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Admin
+     */
+    omit?: AdminOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -2910,6 +3312,10 @@ export namespace Prisma {
      */
     select?: AdminSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Admin
+     */
+    omit?: AdminOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AdminInclude<ExtArgs> | null
@@ -2958,6 +3364,10 @@ export namespace Prisma {
      */
     select?: AdminSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Admin
+     */
+    omit?: AdminOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AdminInclude<ExtArgs> | null
@@ -3001,6 +3411,10 @@ export namespace Prisma {
      */
     select?: AdminSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Admin
+     */
+    omit?: AdminOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AdminInclude<ExtArgs> | null
@@ -3030,6 +3444,10 @@ export namespace Prisma {
      */
     select?: AdminSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the Admin
+     */
+    omit?: AdminOmit<ExtArgs> | null
+    /**
      * The data used to create many Admins.
      */
     data: AdminCreateManyInput | AdminCreateManyInput[]
@@ -3044,6 +3462,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Admin
      */
     select?: AdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Admin
+     */
+    omit?: AdminOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3070,6 +3492,36 @@ export namespace Prisma {
      * Filter which Admins to update
      */
     where?: AdminWhereInput
+    /**
+     * Limit how many Admins to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Admin updateManyAndReturn
+   */
+  export type AdminUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Admin
+     */
+    select?: AdminSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Admin
+     */
+    omit?: AdminOmit<ExtArgs> | null
+    /**
+     * The data used to update Admins.
+     */
+    data: XOR<AdminUpdateManyMutationInput, AdminUncheckedUpdateManyInput>
+    /**
+     * Filter which Admins to update
+     */
+    where?: AdminWhereInput
+    /**
+     * Limit how many Admins to update.
+     */
+    limit?: number
   }
 
   /**
@@ -3080,6 +3532,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Admin
      */
     select?: AdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Admin
+     */
+    omit?: AdminOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3107,6 +3563,10 @@ export namespace Prisma {
      */
     select?: AdminSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Admin
+     */
+    omit?: AdminOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AdminInclude<ExtArgs> | null
@@ -3124,6 +3584,10 @@ export namespace Prisma {
      * Filter which Admins to delete
      */
     where?: AdminWhereInput
+    /**
+     * Limit how many Admins to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -3134,6 +3598,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SchemeService
      */
     select?: SchemeServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SchemeService
+     */
+    omit?: SchemeServiceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3155,6 +3623,10 @@ export namespace Prisma {
      */
     select?: CertificateServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateService
+     */
+    omit?: CertificateServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateServiceInclude<ExtArgs> | null
@@ -3175,6 +3647,10 @@ export namespace Prisma {
      */
     select?: ContactServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactService
+     */
+    omit?: ContactServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceInclude<ExtArgs> | null
@@ -3194,6 +3670,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Admin
      */
     select?: AdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Admin
+     */
+    omit?: AdminOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3233,6 +3713,9 @@ export namespace Prisma {
     offlineAddress: string | null
     status: string | null
     isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    adminId: number | null
     processNew: string | null
     processUpdate: string | null
     processLost: string | null
@@ -3241,9 +3724,6 @@ export namespace Prisma {
     docUpdate: string | null
     docLost: string | null
     docSurrender: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    adminId: number | null
   }
 
   export type SchemeServiceMaxAggregateOutputType = {
@@ -3256,6 +3736,9 @@ export namespace Prisma {
     offlineAddress: string | null
     status: string | null
     isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    adminId: number | null
     processNew: string | null
     processUpdate: string | null
     processLost: string | null
@@ -3264,9 +3747,6 @@ export namespace Prisma {
     docUpdate: string | null
     docLost: string | null
     docSurrender: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    adminId: number | null
   }
 
   export type SchemeServiceCountAggregateOutputType = {
@@ -3280,12 +3760,12 @@ export namespace Prisma {
     offlineAddress: number
     status: number
     isActive: number
+    createdAt: number
+    updatedAt: number
+    adminId: number
     eligibilityDetails: number
     schemeDetails: number
     processDetails: number
-    benefitDetails: number
-    applicationProcess: number
-    requiredDocuments: number
     processNew: number
     processUpdate: number
     processLost: number
@@ -3294,9 +3774,6 @@ export namespace Prisma {
     docUpdate: number
     docLost: number
     docSurrender: number
-    createdAt: number
-    updatedAt: number
-    adminId: number
     _all: number
   }
 
@@ -3321,6 +3798,9 @@ export namespace Prisma {
     offlineAddress?: true
     status?: true
     isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    adminId?: true
     processNew?: true
     processUpdate?: true
     processLost?: true
@@ -3329,9 +3809,6 @@ export namespace Prisma {
     docUpdate?: true
     docLost?: true
     docSurrender?: true
-    createdAt?: true
-    updatedAt?: true
-    adminId?: true
   }
 
   export type SchemeServiceMaxAggregateInputType = {
@@ -3344,6 +3821,9 @@ export namespace Prisma {
     offlineAddress?: true
     status?: true
     isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    adminId?: true
     processNew?: true
     processUpdate?: true
     processLost?: true
@@ -3352,9 +3832,6 @@ export namespace Prisma {
     docUpdate?: true
     docLost?: true
     docSurrender?: true
-    createdAt?: true
-    updatedAt?: true
-    adminId?: true
   }
 
   export type SchemeServiceCountAggregateInputType = {
@@ -3368,12 +3845,12 @@ export namespace Prisma {
     offlineAddress?: true
     status?: true
     isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    adminId?: true
     eligibilityDetails?: true
     schemeDetails?: true
     processDetails?: true
-    benefitDetails?: true
-    applicationProcess?: true
-    requiredDocuments?: true
     processNew?: true
     processUpdate?: true
     processLost?: true
@@ -3382,9 +3859,6 @@ export namespace Prisma {
     docUpdate?: true
     docLost?: true
     docSurrender?: true
-    createdAt?: true
-    updatedAt?: true
-    adminId?: true
     _all?: true
   }
 
@@ -3485,12 +3959,12 @@ export namespace Prisma {
     offlineAddress: string | null
     status: string
     isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    adminId: number
     eligibilityDetails: string[]
     schemeDetails: string[]
     processDetails: string[]
-    benefitDetails: string[]
-    applicationProcess: string[]
-    requiredDocuments: string[]
     processNew: string | null
     processUpdate: string | null
     processLost: string | null
@@ -3499,9 +3973,6 @@ export namespace Prisma {
     docUpdate: string | null
     docLost: string | null
     docSurrender: string | null
-    createdAt: Date
-    updatedAt: Date
-    adminId: number
     _count: SchemeServiceCountAggregateOutputType | null
     _avg: SchemeServiceAvgAggregateOutputType | null
     _sum: SchemeServiceSumAggregateOutputType | null
@@ -3534,12 +4005,12 @@ export namespace Prisma {
     offlineAddress?: boolean
     status?: boolean
     isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    adminId?: boolean
     eligibilityDetails?: boolean
     schemeDetails?: boolean
     processDetails?: boolean
-    benefitDetails?: boolean
-    applicationProcess?: boolean
-    requiredDocuments?: boolean
     processNew?: boolean
     processUpdate?: boolean
     processLost?: boolean
@@ -3548,9 +4019,6 @@ export namespace Prisma {
     docUpdate?: boolean
     docLost?: boolean
     docSurrender?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    adminId?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
     contacts?: boolean | SchemeService$contactsArgs<ExtArgs>
     documents?: boolean | SchemeService$documentsArgs<ExtArgs>
@@ -3568,12 +4036,12 @@ export namespace Prisma {
     offlineAddress?: boolean
     status?: boolean
     isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    adminId?: boolean
     eligibilityDetails?: boolean
     schemeDetails?: boolean
     processDetails?: boolean
-    benefitDetails?: boolean
-    applicationProcess?: boolean
-    requiredDocuments?: boolean
     processNew?: boolean
     processUpdate?: boolean
     processLost?: boolean
@@ -3582,9 +4050,34 @@ export namespace Prisma {
     docUpdate?: boolean
     docLost?: boolean
     docSurrender?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["schemeService"]>
+
+  export type SchemeServiceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    summary?: boolean
+    type?: boolean
+    targetAudience?: boolean
+    applicationMode?: boolean
+    onlineUrl?: boolean
+    offlineAddress?: boolean
+    status?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     adminId?: boolean
+    eligibilityDetails?: boolean
+    schemeDetails?: boolean
+    processDetails?: boolean
+    processNew?: boolean
+    processUpdate?: boolean
+    processLost?: boolean
+    processSurrender?: boolean
+    docNew?: boolean
+    docUpdate?: boolean
+    docLost?: boolean
+    docSurrender?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["schemeService"]>
 
@@ -3599,12 +4092,12 @@ export namespace Prisma {
     offlineAddress?: boolean
     status?: boolean
     isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    adminId?: boolean
     eligibilityDetails?: boolean
     schemeDetails?: boolean
     processDetails?: boolean
-    benefitDetails?: boolean
-    applicationProcess?: boolean
-    requiredDocuments?: boolean
     processNew?: boolean
     processUpdate?: boolean
     processLost?: boolean
@@ -3613,11 +4106,9 @@ export namespace Prisma {
     docUpdate?: boolean
     docLost?: boolean
     docSurrender?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    adminId?: boolean
   }
 
+  export type SchemeServiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "summary" | "type" | "targetAudience" | "applicationMode" | "onlineUrl" | "offlineAddress" | "status" | "isActive" | "createdAt" | "updatedAt" | "adminId" | "eligibilityDetails" | "schemeDetails" | "processDetails" | "processNew" | "processUpdate" | "processLost" | "processSurrender" | "docNew" | "docUpdate" | "docLost" | "docSurrender", ExtArgs["result"]["schemeService"]>
   export type SchemeServiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | AdminDefaultArgs<ExtArgs>
     contacts?: boolean | SchemeService$contactsArgs<ExtArgs>
@@ -3625,6 +4116,9 @@ export namespace Prisma {
     _count?: boolean | SchemeServiceCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SchemeServiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+  }
+  export type SchemeServiceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | AdminDefaultArgs<ExtArgs>
   }
 
@@ -3646,12 +4140,12 @@ export namespace Prisma {
       offlineAddress: string | null
       status: string
       isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+      adminId: number
       eligibilityDetails: string[]
       schemeDetails: string[]
       processDetails: string[]
-      benefitDetails: string[]
-      applicationProcess: string[]
-      requiredDocuments: string[]
       processNew: string | null
       processUpdate: string | null
       processLost: string | null
@@ -3660,21 +4154,18 @@ export namespace Prisma {
       docUpdate: string | null
       docLost: string | null
       docSurrender: string | null
-      createdAt: Date
-      updatedAt: Date
-      adminId: number
     }, ExtArgs["result"]["schemeService"]>
     composites: {}
   }
 
   type SchemeServiceGetPayload<S extends boolean | null | undefined | SchemeServiceDefaultArgs> = $Result.GetResult<Prisma.$SchemeServicePayload, S>
 
-  type SchemeServiceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<SchemeServiceFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type SchemeServiceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SchemeServiceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: SchemeServiceCountAggregateInputType | true
     }
 
-  export interface SchemeServiceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface SchemeServiceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SchemeService'], meta: { name: 'SchemeService' } }
     /**
      * Find zero or one SchemeService that matches the filter.
@@ -3687,10 +4178,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends SchemeServiceFindUniqueArgs>(args: SelectSubset<T, SchemeServiceFindUniqueArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends SchemeServiceFindUniqueArgs>(args: SelectSubset<T, SchemeServiceFindUniqueArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one SchemeService that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one SchemeService that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {SchemeServiceFindUniqueOrThrowArgs} args - Arguments to find a SchemeService
      * @example
@@ -3701,7 +4192,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends SchemeServiceFindUniqueOrThrowArgs>(args: SelectSubset<T, SchemeServiceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends SchemeServiceFindUniqueOrThrowArgs>(args: SelectSubset<T, SchemeServiceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first SchemeService that matches the filter.
@@ -3716,7 +4207,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends SchemeServiceFindFirstArgs>(args?: SelectSubset<T, SchemeServiceFindFirstArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends SchemeServiceFindFirstArgs>(args?: SelectSubset<T, SchemeServiceFindFirstArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first SchemeService that matches the filter or
@@ -3732,7 +4223,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends SchemeServiceFindFirstOrThrowArgs>(args?: SelectSubset<T, SchemeServiceFindFirstOrThrowArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends SchemeServiceFindFirstOrThrowArgs>(args?: SelectSubset<T, SchemeServiceFindFirstOrThrowArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more SchemeServices that matches the filter.
@@ -3750,7 +4241,7 @@ export namespace Prisma {
      * const schemeServiceWithIdOnly = await prisma.schemeService.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends SchemeServiceFindManyArgs>(args?: SelectSubset<T, SchemeServiceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findMany">>
+    findMany<T extends SchemeServiceFindManyArgs>(args?: SelectSubset<T, SchemeServiceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a SchemeService.
@@ -3764,7 +4255,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends SchemeServiceCreateArgs>(args: SelectSubset<T, SchemeServiceCreateArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends SchemeServiceCreateArgs>(args: SelectSubset<T, SchemeServiceCreateArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many SchemeServices.
@@ -3792,7 +4283,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many SchemeServices and only return the `id`
-     * const schemeServiceWithIdOnly = await prisma.schemeService.createManyAndReturn({ 
+     * const schemeServiceWithIdOnly = await prisma.schemeService.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -3802,7 +4293,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends SchemeServiceCreateManyAndReturnArgs>(args?: SelectSubset<T, SchemeServiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends SchemeServiceCreateManyAndReturnArgs>(args?: SelectSubset<T, SchemeServiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a SchemeService.
@@ -3816,7 +4307,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends SchemeServiceDeleteArgs>(args: SelectSubset<T, SchemeServiceDeleteArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends SchemeServiceDeleteArgs>(args: SelectSubset<T, SchemeServiceDeleteArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one SchemeService.
@@ -3833,7 +4324,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends SchemeServiceUpdateArgs>(args: SelectSubset<T, SchemeServiceUpdateArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends SchemeServiceUpdateArgs>(args: SelectSubset<T, SchemeServiceUpdateArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more SchemeServices.
@@ -3869,6 +4360,36 @@ export namespace Prisma {
     updateMany<T extends SchemeServiceUpdateManyArgs>(args: SelectSubset<T, SchemeServiceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more SchemeServices and returns the data updated in the database.
+     * @param {SchemeServiceUpdateManyAndReturnArgs} args - Arguments to update many SchemeServices.
+     * @example
+     * // Update many SchemeServices
+     * const schemeService = await prisma.schemeService.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SchemeServices and only return the `id`
+     * const schemeServiceWithIdOnly = await prisma.schemeService.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SchemeServiceUpdateManyAndReturnArgs>(args: SelectSubset<T, SchemeServiceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one SchemeService.
      * @param {SchemeServiceUpsertArgs} args - Arguments to update or create a SchemeService.
      * @example
@@ -3885,7 +4406,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends SchemeServiceUpsertArgs>(args: SelectSubset<T, SchemeServiceUpsertArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends SchemeServiceUpsertArgs>(args: SelectSubset<T, SchemeServiceUpsertArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -4025,11 +4546,11 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__SchemeServiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__SchemeServiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    admin<T extends AdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminDefaultArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    contacts<T extends SchemeService$contactsArgs<ExtArgs> = {}>(args?: Subset<T, SchemeService$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findMany"> | Null>
-    documents<T extends SchemeService$documentsArgs<ExtArgs> = {}>(args?: Subset<T, SchemeService$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "findMany"> | Null>
+    admin<T extends AdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminDefaultArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    contacts<T extends SchemeService$contactsArgs<ExtArgs> = {}>(args?: Subset<T, SchemeService$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    documents<T extends SchemeService$documentsArgs<ExtArgs> = {}>(args?: Subset<T, SchemeService$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4057,7 +4578,7 @@ export namespace Prisma {
 
   /**
    * Fields of the SchemeService model
-   */ 
+   */
   interface SchemeServiceFieldRefs {
     readonly id: FieldRef<"SchemeService", 'Int'>
     readonly name: FieldRef<"SchemeService", 'String'>
@@ -4069,12 +4590,12 @@ export namespace Prisma {
     readonly offlineAddress: FieldRef<"SchemeService", 'String'>
     readonly status: FieldRef<"SchemeService", 'String'>
     readonly isActive: FieldRef<"SchemeService", 'Boolean'>
+    readonly createdAt: FieldRef<"SchemeService", 'DateTime'>
+    readonly updatedAt: FieldRef<"SchemeService", 'DateTime'>
+    readonly adminId: FieldRef<"SchemeService", 'Int'>
     readonly eligibilityDetails: FieldRef<"SchemeService", 'String[]'>
     readonly schemeDetails: FieldRef<"SchemeService", 'String[]'>
     readonly processDetails: FieldRef<"SchemeService", 'String[]'>
-    readonly benefitDetails: FieldRef<"SchemeService", 'String[]'>
-    readonly applicationProcess: FieldRef<"SchemeService", 'String[]'>
-    readonly requiredDocuments: FieldRef<"SchemeService", 'String[]'>
     readonly processNew: FieldRef<"SchemeService", 'String'>
     readonly processUpdate: FieldRef<"SchemeService", 'String'>
     readonly processLost: FieldRef<"SchemeService", 'String'>
@@ -4083,9 +4604,6 @@ export namespace Prisma {
     readonly docUpdate: FieldRef<"SchemeService", 'String'>
     readonly docLost: FieldRef<"SchemeService", 'String'>
     readonly docSurrender: FieldRef<"SchemeService", 'String'>
-    readonly createdAt: FieldRef<"SchemeService", 'DateTime'>
-    readonly updatedAt: FieldRef<"SchemeService", 'DateTime'>
-    readonly adminId: FieldRef<"SchemeService", 'Int'>
   }
     
 
@@ -4098,6 +4616,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SchemeService
      */
     select?: SchemeServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SchemeService
+     */
+    omit?: SchemeServiceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4117,6 +4639,10 @@ export namespace Prisma {
      */
     select?: SchemeServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SchemeService
+     */
+    omit?: SchemeServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SchemeServiceInclude<ExtArgs> | null
@@ -4134,6 +4660,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SchemeService
      */
     select?: SchemeServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SchemeService
+     */
+    omit?: SchemeServiceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4183,6 +4713,10 @@ export namespace Prisma {
      */
     select?: SchemeServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SchemeService
+     */
+    omit?: SchemeServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SchemeServiceInclude<ExtArgs> | null
@@ -4231,6 +4765,10 @@ export namespace Prisma {
      */
     select?: SchemeServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SchemeService
+     */
+    omit?: SchemeServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SchemeServiceInclude<ExtArgs> | null
@@ -4274,6 +4812,10 @@ export namespace Prisma {
      */
     select?: SchemeServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SchemeService
+     */
+    omit?: SchemeServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SchemeServiceInclude<ExtArgs> | null
@@ -4303,6 +4845,10 @@ export namespace Prisma {
      */
     select?: SchemeServiceSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the SchemeService
+     */
+    omit?: SchemeServiceOmit<ExtArgs> | null
+    /**
      * The data used to create many SchemeServices.
      */
     data: SchemeServiceCreateManyInput | SchemeServiceCreateManyInput[]
@@ -4321,6 +4867,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SchemeService
      */
     select?: SchemeServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SchemeService
+     */
+    omit?: SchemeServiceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4347,6 +4897,40 @@ export namespace Prisma {
      * Filter which SchemeServices to update
      */
     where?: SchemeServiceWhereInput
+    /**
+     * Limit how many SchemeServices to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SchemeService updateManyAndReturn
+   */
+  export type SchemeServiceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SchemeService
+     */
+    select?: SchemeServiceSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SchemeService
+     */
+    omit?: SchemeServiceOmit<ExtArgs> | null
+    /**
+     * The data used to update SchemeServices.
+     */
+    data: XOR<SchemeServiceUpdateManyMutationInput, SchemeServiceUncheckedUpdateManyInput>
+    /**
+     * Filter which SchemeServices to update
+     */
+    where?: SchemeServiceWhereInput
+    /**
+     * Limit how many SchemeServices to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SchemeServiceIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4357,6 +4941,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the SchemeService
      */
     select?: SchemeServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SchemeService
+     */
+    omit?: SchemeServiceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4384,6 +4972,10 @@ export namespace Prisma {
      */
     select?: SchemeServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SchemeService
+     */
+    omit?: SchemeServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SchemeServiceInclude<ExtArgs> | null
@@ -4401,6 +4993,10 @@ export namespace Prisma {
      * Filter which SchemeServices to delete
      */
     where?: SchemeServiceWhereInput
+    /**
+     * Limit how many SchemeServices to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -4411,6 +5007,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ContactPerson
      */
     select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4432,6 +5032,10 @@ export namespace Prisma {
      */
     select?: SupportiveDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SupportiveDocument
+     */
+    omit?: SupportiveDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SupportiveDocumentInclude<ExtArgs> | null
@@ -4452,9 +5056,2287 @@ export namespace Prisma {
      */
     select?: SchemeServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the SchemeService
+     */
+    omit?: SchemeServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: SchemeServiceInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ContactPerson
+   */
+
+  export type AggregateContactPerson = {
+    _count: ContactPersonCountAggregateOutputType | null
+    _avg: ContactPersonAvgAggregateOutputType | null
+    _sum: ContactPersonSumAggregateOutputType | null
+    _min: ContactPersonMinAggregateOutputType | null
+    _max: ContactPersonMaxAggregateOutputType | null
+  }
+
+  export type ContactPersonAvgAggregateOutputType = {
+    id: number | null
+    schemeServiceId: number | null
+  }
+
+  export type ContactPersonSumAggregateOutputType = {
+    id: number | null
+    schemeServiceId: number | null
+  }
+
+  export type ContactPersonMinAggregateOutputType = {
+    id: number | null
+    serviceName: string | null
+    district: string | null
+    subDistrict: string | null
+    block: string | null
+    name: string | null
+    designation: string | null
+    contact: string | null
+    email: string | null
+    schemeServiceId: number | null
+  }
+
+  export type ContactPersonMaxAggregateOutputType = {
+    id: number | null
+    serviceName: string | null
+    district: string | null
+    subDistrict: string | null
+    block: string | null
+    name: string | null
+    designation: string | null
+    contact: string | null
+    email: string | null
+    schemeServiceId: number | null
+  }
+
+  export type ContactPersonCountAggregateOutputType = {
+    id: number
+    serviceName: number
+    district: number
+    subDistrict: number
+    block: number
+    name: number
+    designation: number
+    contact: number
+    email: number
+    schemeServiceId: number
+    _all: number
+  }
+
+
+  export type ContactPersonAvgAggregateInputType = {
+    id?: true
+    schemeServiceId?: true
+  }
+
+  export type ContactPersonSumAggregateInputType = {
+    id?: true
+    schemeServiceId?: true
+  }
+
+  export type ContactPersonMinAggregateInputType = {
+    id?: true
+    serviceName?: true
+    district?: true
+    subDistrict?: true
+    block?: true
+    name?: true
+    designation?: true
+    contact?: true
+    email?: true
+    schemeServiceId?: true
+  }
+
+  export type ContactPersonMaxAggregateInputType = {
+    id?: true
+    serviceName?: true
+    district?: true
+    subDistrict?: true
+    block?: true
+    name?: true
+    designation?: true
+    contact?: true
+    email?: true
+    schemeServiceId?: true
+  }
+
+  export type ContactPersonCountAggregateInputType = {
+    id?: true
+    serviceName?: true
+    district?: true
+    subDistrict?: true
+    block?: true
+    name?: true
+    designation?: true
+    contact?: true
+    email?: true
+    schemeServiceId?: true
+    _all?: true
+  }
+
+  export type ContactPersonAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ContactPerson to aggregate.
+     */
+    where?: ContactPersonWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactPeople to fetch.
+     */
+    orderBy?: ContactPersonOrderByWithRelationInput | ContactPersonOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ContactPersonWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactPeople from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactPeople.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ContactPeople
+    **/
+    _count?: true | ContactPersonCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ContactPersonAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ContactPersonSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ContactPersonMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ContactPersonMaxAggregateInputType
+  }
+
+  export type GetContactPersonAggregateType<T extends ContactPersonAggregateArgs> = {
+        [P in keyof T & keyof AggregateContactPerson]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateContactPerson[P]>
+      : GetScalarType<T[P], AggregateContactPerson[P]>
+  }
+
+
+
+
+  export type ContactPersonGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContactPersonWhereInput
+    orderBy?: ContactPersonOrderByWithAggregationInput | ContactPersonOrderByWithAggregationInput[]
+    by: ContactPersonScalarFieldEnum[] | ContactPersonScalarFieldEnum
+    having?: ContactPersonScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ContactPersonCountAggregateInputType | true
+    _avg?: ContactPersonAvgAggregateInputType
+    _sum?: ContactPersonSumAggregateInputType
+    _min?: ContactPersonMinAggregateInputType
+    _max?: ContactPersonMaxAggregateInputType
+  }
+
+  export type ContactPersonGroupByOutputType = {
+    id: number
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
+    name: string
+    designation: string
+    contact: string
+    email: string
+    schemeServiceId: number
+    _count: ContactPersonCountAggregateOutputType | null
+    _avg: ContactPersonAvgAggregateOutputType | null
+    _sum: ContactPersonSumAggregateOutputType | null
+    _min: ContactPersonMinAggregateOutputType | null
+    _max: ContactPersonMaxAggregateOutputType | null
+  }
+
+  type GetContactPersonGroupByPayload<T extends ContactPersonGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ContactPersonGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ContactPersonGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ContactPersonGroupByOutputType[P]>
+            : GetScalarType<T[P], ContactPersonGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ContactPersonSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    serviceName?: boolean
+    district?: boolean
+    subDistrict?: boolean
+    block?: boolean
+    name?: boolean
+    designation?: boolean
+    contact?: boolean
+    email?: boolean
+    schemeServiceId?: boolean
+    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contactPerson"]>
+
+  export type ContactPersonSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    serviceName?: boolean
+    district?: boolean
+    subDistrict?: boolean
+    block?: boolean
+    name?: boolean
+    designation?: boolean
+    contact?: boolean
+    email?: boolean
+    schemeServiceId?: boolean
+    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contactPerson"]>
+
+  export type ContactPersonSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    serviceName?: boolean
+    district?: boolean
+    subDistrict?: boolean
+    block?: boolean
+    name?: boolean
+    designation?: boolean
+    contact?: boolean
+    email?: boolean
+    schemeServiceId?: boolean
+    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contactPerson"]>
+
+  export type ContactPersonSelectScalar = {
+    id?: boolean
+    serviceName?: boolean
+    district?: boolean
+    subDistrict?: boolean
+    block?: boolean
+    name?: boolean
+    designation?: boolean
+    contact?: boolean
+    email?: boolean
+    schemeServiceId?: boolean
+  }
+
+  export type ContactPersonOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serviceName" | "district" | "subDistrict" | "block" | "name" | "designation" | "contact" | "email" | "schemeServiceId", ExtArgs["result"]["contactPerson"]>
+  export type ContactPersonInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
+  }
+  export type ContactPersonIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
+  }
+  export type ContactPersonIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
+  }
+
+  export type $ContactPersonPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ContactPerson"
+    objects: {
+      schemeService: Prisma.$SchemeServicePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      serviceName: string
+      district: string
+      subDistrict: string
+      block: string
+      name: string
+      designation: string
+      contact: string
+      email: string
+      schemeServiceId: number
+    }, ExtArgs["result"]["contactPerson"]>
+    composites: {}
+  }
+
+  type ContactPersonGetPayload<S extends boolean | null | undefined | ContactPersonDefaultArgs> = $Result.GetResult<Prisma.$ContactPersonPayload, S>
+
+  type ContactPersonCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ContactPersonFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ContactPersonCountAggregateInputType | true
+    }
+
+  export interface ContactPersonDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ContactPerson'], meta: { name: 'ContactPerson' } }
+    /**
+     * Find zero or one ContactPerson that matches the filter.
+     * @param {ContactPersonFindUniqueArgs} args - Arguments to find a ContactPerson
+     * @example
+     * // Get one ContactPerson
+     * const contactPerson = await prisma.contactPerson.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ContactPersonFindUniqueArgs>(args: SelectSubset<T, ContactPersonFindUniqueArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ContactPerson that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ContactPersonFindUniqueOrThrowArgs} args - Arguments to find a ContactPerson
+     * @example
+     * // Get one ContactPerson
+     * const contactPerson = await prisma.contactPerson.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ContactPersonFindUniqueOrThrowArgs>(args: SelectSubset<T, ContactPersonFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ContactPerson that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactPersonFindFirstArgs} args - Arguments to find a ContactPerson
+     * @example
+     * // Get one ContactPerson
+     * const contactPerson = await prisma.contactPerson.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ContactPersonFindFirstArgs>(args?: SelectSubset<T, ContactPersonFindFirstArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ContactPerson that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactPersonFindFirstOrThrowArgs} args - Arguments to find a ContactPerson
+     * @example
+     * // Get one ContactPerson
+     * const contactPerson = await prisma.contactPerson.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ContactPersonFindFirstOrThrowArgs>(args?: SelectSubset<T, ContactPersonFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ContactPeople that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactPersonFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ContactPeople
+     * const contactPeople = await prisma.contactPerson.findMany()
+     * 
+     * // Get first 10 ContactPeople
+     * const contactPeople = await prisma.contactPerson.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const contactPersonWithIdOnly = await prisma.contactPerson.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ContactPersonFindManyArgs>(args?: SelectSubset<T, ContactPersonFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ContactPerson.
+     * @param {ContactPersonCreateArgs} args - Arguments to create a ContactPerson.
+     * @example
+     * // Create one ContactPerson
+     * const ContactPerson = await prisma.contactPerson.create({
+     *   data: {
+     *     // ... data to create a ContactPerson
+     *   }
+     * })
+     * 
+     */
+    create<T extends ContactPersonCreateArgs>(args: SelectSubset<T, ContactPersonCreateArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ContactPeople.
+     * @param {ContactPersonCreateManyArgs} args - Arguments to create many ContactPeople.
+     * @example
+     * // Create many ContactPeople
+     * const contactPerson = await prisma.contactPerson.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ContactPersonCreateManyArgs>(args?: SelectSubset<T, ContactPersonCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ContactPeople and returns the data saved in the database.
+     * @param {ContactPersonCreateManyAndReturnArgs} args - Arguments to create many ContactPeople.
+     * @example
+     * // Create many ContactPeople
+     * const contactPerson = await prisma.contactPerson.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ContactPeople and only return the `id`
+     * const contactPersonWithIdOnly = await prisma.contactPerson.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ContactPersonCreateManyAndReturnArgs>(args?: SelectSubset<T, ContactPersonCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ContactPerson.
+     * @param {ContactPersonDeleteArgs} args - Arguments to delete one ContactPerson.
+     * @example
+     * // Delete one ContactPerson
+     * const ContactPerson = await prisma.contactPerson.delete({
+     *   where: {
+     *     // ... filter to delete one ContactPerson
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ContactPersonDeleteArgs>(args: SelectSubset<T, ContactPersonDeleteArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ContactPerson.
+     * @param {ContactPersonUpdateArgs} args - Arguments to update one ContactPerson.
+     * @example
+     * // Update one ContactPerson
+     * const contactPerson = await prisma.contactPerson.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ContactPersonUpdateArgs>(args: SelectSubset<T, ContactPersonUpdateArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ContactPeople.
+     * @param {ContactPersonDeleteManyArgs} args - Arguments to filter ContactPeople to delete.
+     * @example
+     * // Delete a few ContactPeople
+     * const { count } = await prisma.contactPerson.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ContactPersonDeleteManyArgs>(args?: SelectSubset<T, ContactPersonDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ContactPeople.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactPersonUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ContactPeople
+     * const contactPerson = await prisma.contactPerson.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ContactPersonUpdateManyArgs>(args: SelectSubset<T, ContactPersonUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ContactPeople and returns the data updated in the database.
+     * @param {ContactPersonUpdateManyAndReturnArgs} args - Arguments to update many ContactPeople.
+     * @example
+     * // Update many ContactPeople
+     * const contactPerson = await prisma.contactPerson.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ContactPeople and only return the `id`
+     * const contactPersonWithIdOnly = await prisma.contactPerson.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ContactPersonUpdateManyAndReturnArgs>(args: SelectSubset<T, ContactPersonUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ContactPerson.
+     * @param {ContactPersonUpsertArgs} args - Arguments to update or create a ContactPerson.
+     * @example
+     * // Update or create a ContactPerson
+     * const contactPerson = await prisma.contactPerson.upsert({
+     *   create: {
+     *     // ... data to create a ContactPerson
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ContactPerson we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ContactPersonUpsertArgs>(args: SelectSubset<T, ContactPersonUpsertArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ContactPeople.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactPersonCountArgs} args - Arguments to filter ContactPeople to count.
+     * @example
+     * // Count the number of ContactPeople
+     * const count = await prisma.contactPerson.count({
+     *   where: {
+     *     // ... the filter for the ContactPeople we want to count
+     *   }
+     * })
+    **/
+    count<T extends ContactPersonCountArgs>(
+      args?: Subset<T, ContactPersonCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ContactPersonCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ContactPerson.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactPersonAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ContactPersonAggregateArgs>(args: Subset<T, ContactPersonAggregateArgs>): Prisma.PrismaPromise<GetContactPersonAggregateType<T>>
+
+    /**
+     * Group by ContactPerson.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactPersonGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ContactPersonGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ContactPersonGroupByArgs['orderBy'] }
+        : { orderBy?: ContactPersonGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ContactPersonGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetContactPersonGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ContactPerson model
+   */
+  readonly fields: ContactPersonFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ContactPerson.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ContactPersonClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    schemeService<T extends SchemeServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SchemeServiceDefaultArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ContactPerson model
+   */
+  interface ContactPersonFieldRefs {
+    readonly id: FieldRef<"ContactPerson", 'Int'>
+    readonly serviceName: FieldRef<"ContactPerson", 'String'>
+    readonly district: FieldRef<"ContactPerson", 'String'>
+    readonly subDistrict: FieldRef<"ContactPerson", 'String'>
+    readonly block: FieldRef<"ContactPerson", 'String'>
+    readonly name: FieldRef<"ContactPerson", 'String'>
+    readonly designation: FieldRef<"ContactPerson", 'String'>
+    readonly contact: FieldRef<"ContactPerson", 'String'>
+    readonly email: FieldRef<"ContactPerson", 'String'>
+    readonly schemeServiceId: FieldRef<"ContactPerson", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ContactPerson findUnique
+   */
+  export type ContactPersonFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactPerson to fetch.
+     */
+    where: ContactPersonWhereUniqueInput
+  }
+
+  /**
+   * ContactPerson findUniqueOrThrow
+   */
+  export type ContactPersonFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactPerson to fetch.
+     */
+    where: ContactPersonWhereUniqueInput
+  }
+
+  /**
+   * ContactPerson findFirst
+   */
+  export type ContactPersonFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactPerson to fetch.
+     */
+    where?: ContactPersonWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactPeople to fetch.
+     */
+    orderBy?: ContactPersonOrderByWithRelationInput | ContactPersonOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ContactPeople.
+     */
+    cursor?: ContactPersonWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactPeople from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactPeople.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContactPeople.
+     */
+    distinct?: ContactPersonScalarFieldEnum | ContactPersonScalarFieldEnum[]
+  }
+
+  /**
+   * ContactPerson findFirstOrThrow
+   */
+  export type ContactPersonFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactPerson to fetch.
+     */
+    where?: ContactPersonWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactPeople to fetch.
+     */
+    orderBy?: ContactPersonOrderByWithRelationInput | ContactPersonOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ContactPeople.
+     */
+    cursor?: ContactPersonWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactPeople from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactPeople.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContactPeople.
+     */
+    distinct?: ContactPersonScalarFieldEnum | ContactPersonScalarFieldEnum[]
+  }
+
+  /**
+   * ContactPerson findMany
+   */
+  export type ContactPersonFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactPeople to fetch.
+     */
+    where?: ContactPersonWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactPeople to fetch.
+     */
+    orderBy?: ContactPersonOrderByWithRelationInput | ContactPersonOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ContactPeople.
+     */
+    cursor?: ContactPersonWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactPeople from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactPeople.
+     */
+    skip?: number
+    distinct?: ContactPersonScalarFieldEnum | ContactPersonScalarFieldEnum[]
+  }
+
+  /**
+   * ContactPerson create
+   */
+  export type ContactPersonCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ContactPerson.
+     */
+    data: XOR<ContactPersonCreateInput, ContactPersonUncheckedCreateInput>
+  }
+
+  /**
+   * ContactPerson createMany
+   */
+  export type ContactPersonCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ContactPeople.
+     */
+    data: ContactPersonCreateManyInput | ContactPersonCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ContactPerson createManyAndReturn
+   */
+  export type ContactPersonCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * The data used to create many ContactPeople.
+     */
+    data: ContactPersonCreateManyInput | ContactPersonCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ContactPerson update
+   */
+  export type ContactPersonUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ContactPerson.
+     */
+    data: XOR<ContactPersonUpdateInput, ContactPersonUncheckedUpdateInput>
+    /**
+     * Choose, which ContactPerson to update.
+     */
+    where: ContactPersonWhereUniqueInput
+  }
+
+  /**
+   * ContactPerson updateMany
+   */
+  export type ContactPersonUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ContactPeople.
+     */
+    data: XOR<ContactPersonUpdateManyMutationInput, ContactPersonUncheckedUpdateManyInput>
+    /**
+     * Filter which ContactPeople to update
+     */
+    where?: ContactPersonWhereInput
+    /**
+     * Limit how many ContactPeople to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContactPerson updateManyAndReturn
+   */
+  export type ContactPersonUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * The data used to update ContactPeople.
+     */
+    data: XOR<ContactPersonUpdateManyMutationInput, ContactPersonUncheckedUpdateManyInput>
+    /**
+     * Filter which ContactPeople to update
+     */
+    where?: ContactPersonWhereInput
+    /**
+     * Limit how many ContactPeople to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ContactPerson upsert
+   */
+  export type ContactPersonUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ContactPerson to update in case it exists.
+     */
+    where: ContactPersonWhereUniqueInput
+    /**
+     * In case the ContactPerson found by the `where` argument doesn't exist, create a new ContactPerson with this data.
+     */
+    create: XOR<ContactPersonCreateInput, ContactPersonUncheckedCreateInput>
+    /**
+     * In case the ContactPerson was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ContactPersonUpdateInput, ContactPersonUncheckedUpdateInput>
+  }
+
+  /**
+   * ContactPerson delete
+   */
+  export type ContactPersonDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * Filter which ContactPerson to delete.
+     */
+    where: ContactPersonWhereUniqueInput
+  }
+
+  /**
+   * ContactPerson deleteMany
+   */
+  export type ContactPersonDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ContactPeople to delete
+     */
+    where?: ContactPersonWhereInput
+    /**
+     * Limit how many ContactPeople to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContactPerson without action
+   */
+  export type ContactPersonDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SupportiveDocument
+   */
+
+  export type AggregateSupportiveDocument = {
+    _count: SupportiveDocumentCountAggregateOutputType | null
+    _avg: SupportiveDocumentAvgAggregateOutputType | null
+    _sum: SupportiveDocumentSumAggregateOutputType | null
+    _min: SupportiveDocumentMinAggregateOutputType | null
+    _max: SupportiveDocumentMaxAggregateOutputType | null
+  }
+
+  export type SupportiveDocumentAvgAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    schemeServiceId: number | null
+  }
+
+  export type SupportiveDocumentSumAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    schemeServiceId: number | null
+  }
+
+  export type SupportiveDocumentMinAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    documentType: string | null
+    validProof: string | null
+    isRequired: boolean | null
+    schemeServiceId: number | null
+  }
+
+  export type SupportiveDocumentMaxAggregateOutputType = {
+    id: number | null
+    slNo: number | null
+    documentType: string | null
+    validProof: string | null
+    isRequired: boolean | null
+    schemeServiceId: number | null
+  }
+
+  export type SupportiveDocumentCountAggregateOutputType = {
+    id: number
+    slNo: number
+    documentType: number
+    validProof: number
+    isRequired: number
+    schemeServiceId: number
+    _all: number
+  }
+
+
+  export type SupportiveDocumentAvgAggregateInputType = {
+    id?: true
+    slNo?: true
+    schemeServiceId?: true
+  }
+
+  export type SupportiveDocumentSumAggregateInputType = {
+    id?: true
+    slNo?: true
+    schemeServiceId?: true
+  }
+
+  export type SupportiveDocumentMinAggregateInputType = {
+    id?: true
+    slNo?: true
+    documentType?: true
+    validProof?: true
+    isRequired?: true
+    schemeServiceId?: true
+  }
+
+  export type SupportiveDocumentMaxAggregateInputType = {
+    id?: true
+    slNo?: true
+    documentType?: true
+    validProof?: true
+    isRequired?: true
+    schemeServiceId?: true
+  }
+
+  export type SupportiveDocumentCountAggregateInputType = {
+    id?: true
+    slNo?: true
+    documentType?: true
+    validProof?: true
+    isRequired?: true
+    schemeServiceId?: true
+    _all?: true
+  }
+
+  export type SupportiveDocumentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupportiveDocument to aggregate.
+     */
+    where?: SupportiveDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportiveDocuments to fetch.
+     */
+    orderBy?: SupportiveDocumentOrderByWithRelationInput | SupportiveDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SupportiveDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportiveDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportiveDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SupportiveDocuments
+    **/
+    _count?: true | SupportiveDocumentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SupportiveDocumentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SupportiveDocumentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SupportiveDocumentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SupportiveDocumentMaxAggregateInputType
+  }
+
+  export type GetSupportiveDocumentAggregateType<T extends SupportiveDocumentAggregateArgs> = {
+        [P in keyof T & keyof AggregateSupportiveDocument]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSupportiveDocument[P]>
+      : GetScalarType<T[P], AggregateSupportiveDocument[P]>
+  }
+
+
+
+
+  export type SupportiveDocumentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportiveDocumentWhereInput
+    orderBy?: SupportiveDocumentOrderByWithAggregationInput | SupportiveDocumentOrderByWithAggregationInput[]
+    by: SupportiveDocumentScalarFieldEnum[] | SupportiveDocumentScalarFieldEnum
+    having?: SupportiveDocumentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SupportiveDocumentCountAggregateInputType | true
+    _avg?: SupportiveDocumentAvgAggregateInputType
+    _sum?: SupportiveDocumentSumAggregateInputType
+    _min?: SupportiveDocumentMinAggregateInputType
+    _max?: SupportiveDocumentMaxAggregateInputType
+  }
+
+  export type SupportiveDocumentGroupByOutputType = {
+    id: number
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired: boolean
+    schemeServiceId: number
+    _count: SupportiveDocumentCountAggregateOutputType | null
+    _avg: SupportiveDocumentAvgAggregateOutputType | null
+    _sum: SupportiveDocumentSumAggregateOutputType | null
+    _min: SupportiveDocumentMinAggregateOutputType | null
+    _max: SupportiveDocumentMaxAggregateOutputType | null
+  }
+
+  type GetSupportiveDocumentGroupByPayload<T extends SupportiveDocumentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SupportiveDocumentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SupportiveDocumentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SupportiveDocumentGroupByOutputType[P]>
+            : GetScalarType<T[P], SupportiveDocumentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SupportiveDocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slNo?: boolean
+    documentType?: boolean
+    validProof?: boolean
+    isRequired?: boolean
+    schemeServiceId?: boolean
+    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supportiveDocument"]>
+
+  export type SupportiveDocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slNo?: boolean
+    documentType?: boolean
+    validProof?: boolean
+    isRequired?: boolean
+    schemeServiceId?: boolean
+    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supportiveDocument"]>
+
+  export type SupportiveDocumentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slNo?: boolean
+    documentType?: boolean
+    validProof?: boolean
+    isRequired?: boolean
+    schemeServiceId?: boolean
+    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supportiveDocument"]>
+
+  export type SupportiveDocumentSelectScalar = {
+    id?: boolean
+    slNo?: boolean
+    documentType?: boolean
+    validProof?: boolean
+    isRequired?: boolean
+    schemeServiceId?: boolean
+  }
+
+  export type SupportiveDocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slNo" | "documentType" | "validProof" | "isRequired" | "schemeServiceId", ExtArgs["result"]["supportiveDocument"]>
+  export type SupportiveDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
+  }
+  export type SupportiveDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
+  }
+  export type SupportiveDocumentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
+  }
+
+  export type $SupportiveDocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SupportiveDocument"
+    objects: {
+      schemeService: Prisma.$SchemeServicePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      slNo: number
+      documentType: string
+      validProof: string
+      isRequired: boolean
+      schemeServiceId: number
+    }, ExtArgs["result"]["supportiveDocument"]>
+    composites: {}
+  }
+
+  type SupportiveDocumentGetPayload<S extends boolean | null | undefined | SupportiveDocumentDefaultArgs> = $Result.GetResult<Prisma.$SupportiveDocumentPayload, S>
+
+  type SupportiveDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SupportiveDocumentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SupportiveDocumentCountAggregateInputType | true
+    }
+
+  export interface SupportiveDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SupportiveDocument'], meta: { name: 'SupportiveDocument' } }
+    /**
+     * Find zero or one SupportiveDocument that matches the filter.
+     * @param {SupportiveDocumentFindUniqueArgs} args - Arguments to find a SupportiveDocument
+     * @example
+     * // Get one SupportiveDocument
+     * const supportiveDocument = await prisma.supportiveDocument.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SupportiveDocumentFindUniqueArgs>(args: SelectSubset<T, SupportiveDocumentFindUniqueArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SupportiveDocument that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SupportiveDocumentFindUniqueOrThrowArgs} args - Arguments to find a SupportiveDocument
+     * @example
+     * // Get one SupportiveDocument
+     * const supportiveDocument = await prisma.supportiveDocument.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SupportiveDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, SupportiveDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SupportiveDocument that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportiveDocumentFindFirstArgs} args - Arguments to find a SupportiveDocument
+     * @example
+     * // Get one SupportiveDocument
+     * const supportiveDocument = await prisma.supportiveDocument.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SupportiveDocumentFindFirstArgs>(args?: SelectSubset<T, SupportiveDocumentFindFirstArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SupportiveDocument that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportiveDocumentFindFirstOrThrowArgs} args - Arguments to find a SupportiveDocument
+     * @example
+     * // Get one SupportiveDocument
+     * const supportiveDocument = await prisma.supportiveDocument.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SupportiveDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, SupportiveDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SupportiveDocuments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportiveDocumentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SupportiveDocuments
+     * const supportiveDocuments = await prisma.supportiveDocument.findMany()
+     * 
+     * // Get first 10 SupportiveDocuments
+     * const supportiveDocuments = await prisma.supportiveDocument.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const supportiveDocumentWithIdOnly = await prisma.supportiveDocument.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SupportiveDocumentFindManyArgs>(args?: SelectSubset<T, SupportiveDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SupportiveDocument.
+     * @param {SupportiveDocumentCreateArgs} args - Arguments to create a SupportiveDocument.
+     * @example
+     * // Create one SupportiveDocument
+     * const SupportiveDocument = await prisma.supportiveDocument.create({
+     *   data: {
+     *     // ... data to create a SupportiveDocument
+     *   }
+     * })
+     * 
+     */
+    create<T extends SupportiveDocumentCreateArgs>(args: SelectSubset<T, SupportiveDocumentCreateArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SupportiveDocuments.
+     * @param {SupportiveDocumentCreateManyArgs} args - Arguments to create many SupportiveDocuments.
+     * @example
+     * // Create many SupportiveDocuments
+     * const supportiveDocument = await prisma.supportiveDocument.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SupportiveDocumentCreateManyArgs>(args?: SelectSubset<T, SupportiveDocumentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SupportiveDocuments and returns the data saved in the database.
+     * @param {SupportiveDocumentCreateManyAndReturnArgs} args - Arguments to create many SupportiveDocuments.
+     * @example
+     * // Create many SupportiveDocuments
+     * const supportiveDocument = await prisma.supportiveDocument.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SupportiveDocuments and only return the `id`
+     * const supportiveDocumentWithIdOnly = await prisma.supportiveDocument.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SupportiveDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, SupportiveDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SupportiveDocument.
+     * @param {SupportiveDocumentDeleteArgs} args - Arguments to delete one SupportiveDocument.
+     * @example
+     * // Delete one SupportiveDocument
+     * const SupportiveDocument = await prisma.supportiveDocument.delete({
+     *   where: {
+     *     // ... filter to delete one SupportiveDocument
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SupportiveDocumentDeleteArgs>(args: SelectSubset<T, SupportiveDocumentDeleteArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SupportiveDocument.
+     * @param {SupportiveDocumentUpdateArgs} args - Arguments to update one SupportiveDocument.
+     * @example
+     * // Update one SupportiveDocument
+     * const supportiveDocument = await prisma.supportiveDocument.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SupportiveDocumentUpdateArgs>(args: SelectSubset<T, SupportiveDocumentUpdateArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SupportiveDocuments.
+     * @param {SupportiveDocumentDeleteManyArgs} args - Arguments to filter SupportiveDocuments to delete.
+     * @example
+     * // Delete a few SupportiveDocuments
+     * const { count } = await prisma.supportiveDocument.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SupportiveDocumentDeleteManyArgs>(args?: SelectSubset<T, SupportiveDocumentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupportiveDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportiveDocumentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SupportiveDocuments
+     * const supportiveDocument = await prisma.supportiveDocument.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SupportiveDocumentUpdateManyArgs>(args: SelectSubset<T, SupportiveDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupportiveDocuments and returns the data updated in the database.
+     * @param {SupportiveDocumentUpdateManyAndReturnArgs} args - Arguments to update many SupportiveDocuments.
+     * @example
+     * // Update many SupportiveDocuments
+     * const supportiveDocument = await prisma.supportiveDocument.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SupportiveDocuments and only return the `id`
+     * const supportiveDocumentWithIdOnly = await prisma.supportiveDocument.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SupportiveDocumentUpdateManyAndReturnArgs>(args: SelectSubset<T, SupportiveDocumentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SupportiveDocument.
+     * @param {SupportiveDocumentUpsertArgs} args - Arguments to update or create a SupportiveDocument.
+     * @example
+     * // Update or create a SupportiveDocument
+     * const supportiveDocument = await prisma.supportiveDocument.upsert({
+     *   create: {
+     *     // ... data to create a SupportiveDocument
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SupportiveDocument we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SupportiveDocumentUpsertArgs>(args: SelectSubset<T, SupportiveDocumentUpsertArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SupportiveDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportiveDocumentCountArgs} args - Arguments to filter SupportiveDocuments to count.
+     * @example
+     * // Count the number of SupportiveDocuments
+     * const count = await prisma.supportiveDocument.count({
+     *   where: {
+     *     // ... the filter for the SupportiveDocuments we want to count
+     *   }
+     * })
+    **/
+    count<T extends SupportiveDocumentCountArgs>(
+      args?: Subset<T, SupportiveDocumentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SupportiveDocumentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SupportiveDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportiveDocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SupportiveDocumentAggregateArgs>(args: Subset<T, SupportiveDocumentAggregateArgs>): Prisma.PrismaPromise<GetSupportiveDocumentAggregateType<T>>
+
+    /**
+     * Group by SupportiveDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportiveDocumentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SupportiveDocumentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SupportiveDocumentGroupByArgs['orderBy'] }
+        : { orderBy?: SupportiveDocumentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SupportiveDocumentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSupportiveDocumentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SupportiveDocument model
+   */
+  readonly fields: SupportiveDocumentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SupportiveDocument.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SupportiveDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    schemeService<T extends SchemeServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SchemeServiceDefaultArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SupportiveDocument model
+   */
+  interface SupportiveDocumentFieldRefs {
+    readonly id: FieldRef<"SupportiveDocument", 'Int'>
+    readonly slNo: FieldRef<"SupportiveDocument", 'Int'>
+    readonly documentType: FieldRef<"SupportiveDocument", 'String'>
+    readonly validProof: FieldRef<"SupportiveDocument", 'String'>
+    readonly isRequired: FieldRef<"SupportiveDocument", 'Boolean'>
+    readonly schemeServiceId: FieldRef<"SupportiveDocument", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SupportiveDocument findUnique
+   */
+  export type SupportiveDocumentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportiveDocument
+     */
+    select?: SupportiveDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportiveDocument
+     */
+    omit?: SupportiveDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportiveDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportiveDocument to fetch.
+     */
+    where: SupportiveDocumentWhereUniqueInput
+  }
+
+  /**
+   * SupportiveDocument findUniqueOrThrow
+   */
+  export type SupportiveDocumentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportiveDocument
+     */
+    select?: SupportiveDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportiveDocument
+     */
+    omit?: SupportiveDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportiveDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportiveDocument to fetch.
+     */
+    where: SupportiveDocumentWhereUniqueInput
+  }
+
+  /**
+   * SupportiveDocument findFirst
+   */
+  export type SupportiveDocumentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportiveDocument
+     */
+    select?: SupportiveDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportiveDocument
+     */
+    omit?: SupportiveDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportiveDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportiveDocument to fetch.
+     */
+    where?: SupportiveDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportiveDocuments to fetch.
+     */
+    orderBy?: SupportiveDocumentOrderByWithRelationInput | SupportiveDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupportiveDocuments.
+     */
+    cursor?: SupportiveDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportiveDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportiveDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportiveDocuments.
+     */
+    distinct?: SupportiveDocumentScalarFieldEnum | SupportiveDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * SupportiveDocument findFirstOrThrow
+   */
+  export type SupportiveDocumentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportiveDocument
+     */
+    select?: SupportiveDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportiveDocument
+     */
+    omit?: SupportiveDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportiveDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportiveDocument to fetch.
+     */
+    where?: SupportiveDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportiveDocuments to fetch.
+     */
+    orderBy?: SupportiveDocumentOrderByWithRelationInput | SupportiveDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupportiveDocuments.
+     */
+    cursor?: SupportiveDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportiveDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportiveDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportiveDocuments.
+     */
+    distinct?: SupportiveDocumentScalarFieldEnum | SupportiveDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * SupportiveDocument findMany
+   */
+  export type SupportiveDocumentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportiveDocument
+     */
+    select?: SupportiveDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportiveDocument
+     */
+    omit?: SupportiveDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportiveDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportiveDocuments to fetch.
+     */
+    where?: SupportiveDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportiveDocuments to fetch.
+     */
+    orderBy?: SupportiveDocumentOrderByWithRelationInput | SupportiveDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SupportiveDocuments.
+     */
+    cursor?: SupportiveDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportiveDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportiveDocuments.
+     */
+    skip?: number
+    distinct?: SupportiveDocumentScalarFieldEnum | SupportiveDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * SupportiveDocument create
+   */
+  export type SupportiveDocumentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportiveDocument
+     */
+    select?: SupportiveDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportiveDocument
+     */
+    omit?: SupportiveDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportiveDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SupportiveDocument.
+     */
+    data: XOR<SupportiveDocumentCreateInput, SupportiveDocumentUncheckedCreateInput>
+  }
+
+  /**
+   * SupportiveDocument createMany
+   */
+  export type SupportiveDocumentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SupportiveDocuments.
+     */
+    data: SupportiveDocumentCreateManyInput | SupportiveDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SupportiveDocument createManyAndReturn
+   */
+  export type SupportiveDocumentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportiveDocument
+     */
+    select?: SupportiveDocumentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportiveDocument
+     */
+    omit?: SupportiveDocumentOmit<ExtArgs> | null
+    /**
+     * The data used to create many SupportiveDocuments.
+     */
+    data: SupportiveDocumentCreateManyInput | SupportiveDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportiveDocumentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupportiveDocument update
+   */
+  export type SupportiveDocumentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportiveDocument
+     */
+    select?: SupportiveDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportiveDocument
+     */
+    omit?: SupportiveDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportiveDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SupportiveDocument.
+     */
+    data: XOR<SupportiveDocumentUpdateInput, SupportiveDocumentUncheckedUpdateInput>
+    /**
+     * Choose, which SupportiveDocument to update.
+     */
+    where: SupportiveDocumentWhereUniqueInput
+  }
+
+  /**
+   * SupportiveDocument updateMany
+   */
+  export type SupportiveDocumentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SupportiveDocuments.
+     */
+    data: XOR<SupportiveDocumentUpdateManyMutationInput, SupportiveDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which SupportiveDocuments to update
+     */
+    where?: SupportiveDocumentWhereInput
+    /**
+     * Limit how many SupportiveDocuments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SupportiveDocument updateManyAndReturn
+   */
+  export type SupportiveDocumentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportiveDocument
+     */
+    select?: SupportiveDocumentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportiveDocument
+     */
+    omit?: SupportiveDocumentOmit<ExtArgs> | null
+    /**
+     * The data used to update SupportiveDocuments.
+     */
+    data: XOR<SupportiveDocumentUpdateManyMutationInput, SupportiveDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which SupportiveDocuments to update
+     */
+    where?: SupportiveDocumentWhereInput
+    /**
+     * Limit how many SupportiveDocuments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportiveDocumentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupportiveDocument upsert
+   */
+  export type SupportiveDocumentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportiveDocument
+     */
+    select?: SupportiveDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportiveDocument
+     */
+    omit?: SupportiveDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportiveDocumentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SupportiveDocument to update in case it exists.
+     */
+    where: SupportiveDocumentWhereUniqueInput
+    /**
+     * In case the SupportiveDocument found by the `where` argument doesn't exist, create a new SupportiveDocument with this data.
+     */
+    create: XOR<SupportiveDocumentCreateInput, SupportiveDocumentUncheckedCreateInput>
+    /**
+     * In case the SupportiveDocument was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SupportiveDocumentUpdateInput, SupportiveDocumentUncheckedUpdateInput>
+  }
+
+  /**
+   * SupportiveDocument delete
+   */
+  export type SupportiveDocumentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportiveDocument
+     */
+    select?: SupportiveDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportiveDocument
+     */
+    omit?: SupportiveDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportiveDocumentInclude<ExtArgs> | null
+    /**
+     * Filter which SupportiveDocument to delete.
+     */
+    where: SupportiveDocumentWhereUniqueInput
+  }
+
+  /**
+   * SupportiveDocument deleteMany
+   */
+  export type SupportiveDocumentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupportiveDocuments to delete
+     */
+    where?: SupportiveDocumentWhereInput
+    /**
+     * Limit how many SupportiveDocuments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SupportiveDocument without action
+   */
+  export type SupportiveDocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportiveDocument
+     */
+    select?: SupportiveDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportiveDocument
+     */
+    omit?: SupportiveDocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportiveDocumentInclude<ExtArgs> | null
   }
 
 
@@ -4490,6 +7372,9 @@ export namespace Prisma {
     offlineAddress: string | null
     status: string | null
     isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    adminId: number | null
     processNew: string | null
     processUpdate: string | null
     processLost: string | null
@@ -4498,9 +7383,6 @@ export namespace Prisma {
     docUpdate: string | null
     docLost: string | null
     docSurrender: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    adminId: number | null
   }
 
   export type CertificateServiceMaxAggregateOutputType = {
@@ -4513,6 +7395,9 @@ export namespace Prisma {
     offlineAddress: string | null
     status: string | null
     isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    adminId: number | null
     processNew: string | null
     processUpdate: string | null
     processLost: string | null
@@ -4521,9 +7406,6 @@ export namespace Prisma {
     docUpdate: string | null
     docLost: string | null
     docSurrender: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    adminId: number | null
   }
 
   export type CertificateServiceCountAggregateOutputType = {
@@ -4532,15 +7414,17 @@ export namespace Prisma {
     summary: number
     type: number
     targetAudience: number
-    eligibilityDetails: number
-    certificateDetails: number
-    applicationProcess: number
-    requiredDocuments: number
     applicationMode: number
     onlineUrl: number
     offlineAddress: number
     status: number
     isActive: number
+    createdAt: number
+    updatedAt: number
+    adminId: number
+    eligibilityDetails: number
+    certificateDetails: number
+    processDetails: number
     processNew: number
     processUpdate: number
     processLost: number
@@ -4549,9 +7433,6 @@ export namespace Prisma {
     docUpdate: number
     docLost: number
     docSurrender: number
-    createdAt: number
-    updatedAt: number
-    adminId: number
     _all: number
   }
 
@@ -4576,6 +7457,9 @@ export namespace Prisma {
     offlineAddress?: true
     status?: true
     isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    adminId?: true
     processNew?: true
     processUpdate?: true
     processLost?: true
@@ -4584,9 +7468,6 @@ export namespace Prisma {
     docUpdate?: true
     docLost?: true
     docSurrender?: true
-    createdAt?: true
-    updatedAt?: true
-    adminId?: true
   }
 
   export type CertificateServiceMaxAggregateInputType = {
@@ -4599,6 +7480,9 @@ export namespace Prisma {
     offlineAddress?: true
     status?: true
     isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    adminId?: true
     processNew?: true
     processUpdate?: true
     processLost?: true
@@ -4607,9 +7491,6 @@ export namespace Prisma {
     docUpdate?: true
     docLost?: true
     docSurrender?: true
-    createdAt?: true
-    updatedAt?: true
-    adminId?: true
   }
 
   export type CertificateServiceCountAggregateInputType = {
@@ -4618,15 +7499,17 @@ export namespace Prisma {
     summary?: true
     type?: true
     targetAudience?: true
-    eligibilityDetails?: true
-    certificateDetails?: true
-    applicationProcess?: true
-    requiredDocuments?: true
     applicationMode?: true
     onlineUrl?: true
     offlineAddress?: true
     status?: true
     isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    adminId?: true
+    eligibilityDetails?: true
+    certificateDetails?: true
+    processDetails?: true
     processNew?: true
     processUpdate?: true
     processLost?: true
@@ -4635,9 +7518,6 @@ export namespace Prisma {
     docUpdate?: true
     docLost?: true
     docSurrender?: true
-    createdAt?: true
-    updatedAt?: true
-    adminId?: true
     _all?: true
   }
 
@@ -4733,15 +7613,17 @@ export namespace Prisma {
     summary: string
     type: string | null
     targetAudience: string[]
-    eligibilityDetails: string[]
-    certificateDetails: string[]
-    applicationProcess: string[]
-    requiredDocuments: string[]
     applicationMode: string
     onlineUrl: string | null
     offlineAddress: string | null
     status: string
     isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    adminId: number
+    eligibilityDetails: string[]
+    certificateDetails: string[]
+    processDetails: string[]
     processNew: string | null
     processUpdate: string | null
     processLost: string | null
@@ -4750,9 +7632,6 @@ export namespace Prisma {
     docUpdate: string | null
     docLost: string | null
     docSurrender: string | null
-    createdAt: Date
-    updatedAt: Date
-    adminId: number
     _count: CertificateServiceCountAggregateOutputType | null
     _avg: CertificateServiceAvgAggregateOutputType | null
     _sum: CertificateServiceSumAggregateOutputType | null
@@ -4780,15 +7659,17 @@ export namespace Prisma {
     summary?: boolean
     type?: boolean
     targetAudience?: boolean
-    eligibilityDetails?: boolean
-    certificateDetails?: boolean
-    applicationProcess?: boolean
-    requiredDocuments?: boolean
     applicationMode?: boolean
     onlineUrl?: boolean
     offlineAddress?: boolean
     status?: boolean
     isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    adminId?: boolean
+    eligibilityDetails?: boolean
+    certificateDetails?: boolean
+    processDetails?: boolean
     processNew?: boolean
     processUpdate?: boolean
     processLost?: boolean
@@ -4797,9 +7678,6 @@ export namespace Prisma {
     docUpdate?: boolean
     docLost?: boolean
     docSurrender?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    adminId?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
     contacts?: boolean | CertificateService$contactsArgs<ExtArgs>
     documents?: boolean | CertificateService$documentsArgs<ExtArgs>
@@ -4814,15 +7692,17 @@ export namespace Prisma {
     summary?: boolean
     type?: boolean
     targetAudience?: boolean
-    eligibilityDetails?: boolean
-    certificateDetails?: boolean
-    applicationProcess?: boolean
-    requiredDocuments?: boolean
     applicationMode?: boolean
     onlineUrl?: boolean
     offlineAddress?: boolean
     status?: boolean
     isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    adminId?: boolean
+    eligibilityDetails?: boolean
+    certificateDetails?: boolean
+    processDetails?: boolean
     processNew?: boolean
     processUpdate?: boolean
     processLost?: boolean
@@ -4831,9 +7711,34 @@ export namespace Prisma {
     docUpdate?: boolean
     docLost?: boolean
     docSurrender?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateService"]>
+
+  export type CertificateServiceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    summary?: boolean
+    type?: boolean
+    targetAudience?: boolean
+    applicationMode?: boolean
+    onlineUrl?: boolean
+    offlineAddress?: boolean
+    status?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     adminId?: boolean
+    eligibilityDetails?: boolean
+    certificateDetails?: boolean
+    processDetails?: boolean
+    processNew?: boolean
+    processUpdate?: boolean
+    processLost?: boolean
+    processSurrender?: boolean
+    docNew?: boolean
+    docUpdate?: boolean
+    docLost?: boolean
+    docSurrender?: boolean
     admin?: boolean | AdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["certificateService"]>
 
@@ -4843,15 +7748,17 @@ export namespace Prisma {
     summary?: boolean
     type?: boolean
     targetAudience?: boolean
-    eligibilityDetails?: boolean
-    certificateDetails?: boolean
-    applicationProcess?: boolean
-    requiredDocuments?: boolean
     applicationMode?: boolean
     onlineUrl?: boolean
     offlineAddress?: boolean
     status?: boolean
     isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    adminId?: boolean
+    eligibilityDetails?: boolean
+    certificateDetails?: boolean
+    processDetails?: boolean
     processNew?: boolean
     processUpdate?: boolean
     processLost?: boolean
@@ -4860,11 +7767,9 @@ export namespace Prisma {
     docUpdate?: boolean
     docLost?: boolean
     docSurrender?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    adminId?: boolean
   }
 
+  export type CertificateServiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "summary" | "type" | "targetAudience" | "applicationMode" | "onlineUrl" | "offlineAddress" | "status" | "isActive" | "createdAt" | "updatedAt" | "adminId" | "eligibilityDetails" | "certificateDetails" | "processDetails" | "processNew" | "processUpdate" | "processLost" | "processSurrender" | "docNew" | "docUpdate" | "docLost" | "docSurrender", ExtArgs["result"]["certificateService"]>
   export type CertificateServiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | AdminDefaultArgs<ExtArgs>
     contacts?: boolean | CertificateService$contactsArgs<ExtArgs>
@@ -4874,6 +7779,9 @@ export namespace Prisma {
     _count?: boolean | CertificateServiceCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CertificateServiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+  }
+  export type CertificateServiceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | AdminDefaultArgs<ExtArgs>
   }
 
@@ -4892,15 +7800,17 @@ export namespace Prisma {
       summary: string
       type: string | null
       targetAudience: string[]
-      eligibilityDetails: string[]
-      certificateDetails: string[]
-      applicationProcess: string[]
-      requiredDocuments: string[]
       applicationMode: string
       onlineUrl: string | null
       offlineAddress: string | null
       status: string
       isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+      adminId: number
+      eligibilityDetails: string[]
+      certificateDetails: string[]
+      processDetails: string[]
       processNew: string | null
       processUpdate: string | null
       processLost: string | null
@@ -4909,21 +7819,18 @@ export namespace Prisma {
       docUpdate: string | null
       docLost: string | null
       docSurrender: string | null
-      createdAt: Date
-      updatedAt: Date
-      adminId: number
     }, ExtArgs["result"]["certificateService"]>
     composites: {}
   }
 
   type CertificateServiceGetPayload<S extends boolean | null | undefined | CertificateServiceDefaultArgs> = $Result.GetResult<Prisma.$CertificateServicePayload, S>
 
-  type CertificateServiceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<CertificateServiceFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type CertificateServiceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CertificateServiceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: CertificateServiceCountAggregateInputType | true
     }
 
-  export interface CertificateServiceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface CertificateServiceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CertificateService'], meta: { name: 'CertificateService' } }
     /**
      * Find zero or one CertificateService that matches the filter.
@@ -4936,10 +7843,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends CertificateServiceFindUniqueArgs>(args: SelectSubset<T, CertificateServiceFindUniqueArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends CertificateServiceFindUniqueArgs>(args: SelectSubset<T, CertificateServiceFindUniqueArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one CertificateService that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one CertificateService that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {CertificateServiceFindUniqueOrThrowArgs} args - Arguments to find a CertificateService
      * @example
@@ -4950,7 +7857,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends CertificateServiceFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateServiceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends CertificateServiceFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateServiceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first CertificateService that matches the filter.
@@ -4965,7 +7872,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends CertificateServiceFindFirstArgs>(args?: SelectSubset<T, CertificateServiceFindFirstArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends CertificateServiceFindFirstArgs>(args?: SelectSubset<T, CertificateServiceFindFirstArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first CertificateService that matches the filter or
@@ -4981,7 +7888,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends CertificateServiceFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateServiceFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends CertificateServiceFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateServiceFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more CertificateServices that matches the filter.
@@ -4999,7 +7906,7 @@ export namespace Prisma {
      * const certificateServiceWithIdOnly = await prisma.certificateService.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends CertificateServiceFindManyArgs>(args?: SelectSubset<T, CertificateServiceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findMany">>
+    findMany<T extends CertificateServiceFindManyArgs>(args?: SelectSubset<T, CertificateServiceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a CertificateService.
@@ -5013,7 +7920,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends CertificateServiceCreateArgs>(args: SelectSubset<T, CertificateServiceCreateArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends CertificateServiceCreateArgs>(args: SelectSubset<T, CertificateServiceCreateArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many CertificateServices.
@@ -5041,7 +7948,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many CertificateServices and only return the `id`
-     * const certificateServiceWithIdOnly = await prisma.certificateService.createManyAndReturn({ 
+     * const certificateServiceWithIdOnly = await prisma.certificateService.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -5051,7 +7958,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends CertificateServiceCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateServiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends CertificateServiceCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateServiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a CertificateService.
@@ -5065,7 +7972,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends CertificateServiceDeleteArgs>(args: SelectSubset<T, CertificateServiceDeleteArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends CertificateServiceDeleteArgs>(args: SelectSubset<T, CertificateServiceDeleteArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one CertificateService.
@@ -5082,7 +7989,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends CertificateServiceUpdateArgs>(args: SelectSubset<T, CertificateServiceUpdateArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends CertificateServiceUpdateArgs>(args: SelectSubset<T, CertificateServiceUpdateArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more CertificateServices.
@@ -5118,6 +8025,36 @@ export namespace Prisma {
     updateMany<T extends CertificateServiceUpdateManyArgs>(args: SelectSubset<T, CertificateServiceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more CertificateServices and returns the data updated in the database.
+     * @param {CertificateServiceUpdateManyAndReturnArgs} args - Arguments to update many CertificateServices.
+     * @example
+     * // Update many CertificateServices
+     * const certificateService = await prisma.certificateService.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CertificateServices and only return the `id`
+     * const certificateServiceWithIdOnly = await prisma.certificateService.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CertificateServiceUpdateManyAndReturnArgs>(args: SelectSubset<T, CertificateServiceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one CertificateService.
      * @param {CertificateServiceUpsertArgs} args - Arguments to update or create a CertificateService.
      * @example
@@ -5134,7 +8071,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends CertificateServiceUpsertArgs>(args: SelectSubset<T, CertificateServiceUpsertArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends CertificateServiceUpsertArgs>(args: SelectSubset<T, CertificateServiceUpsertArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -5274,13 +8211,13 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CertificateServiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__CertificateServiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    admin<T extends AdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminDefaultArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    contacts<T extends CertificateService$contactsArgs<ExtArgs> = {}>(args?: Subset<T, CertificateService$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findMany"> | Null>
-    documents<T extends CertificateService$documentsArgs<ExtArgs> = {}>(args?: Subset<T, CertificateService$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findMany"> | Null>
-    processSteps<T extends CertificateService$processStepsArgs<ExtArgs> = {}>(args?: Subset<T, CertificateService$processStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findMany"> | Null>
-    eligibilityItems<T extends CertificateService$eligibilityItemsArgs<ExtArgs> = {}>(args?: Subset<T, CertificateService$eligibilityItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findMany"> | Null>
+    admin<T extends AdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminDefaultArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    contacts<T extends CertificateService$contactsArgs<ExtArgs> = {}>(args?: Subset<T, CertificateService$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    documents<T extends CertificateService$documentsArgs<ExtArgs> = {}>(args?: Subset<T, CertificateService$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    processSteps<T extends CertificateService$processStepsArgs<ExtArgs> = {}>(args?: Subset<T, CertificateService$processStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    eligibilityItems<T extends CertificateService$eligibilityItemsArgs<ExtArgs> = {}>(args?: Subset<T, CertificateService$eligibilityItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5308,22 +8245,24 @@ export namespace Prisma {
 
   /**
    * Fields of the CertificateService model
-   */ 
+   */
   interface CertificateServiceFieldRefs {
     readonly id: FieldRef<"CertificateService", 'Int'>
     readonly name: FieldRef<"CertificateService", 'String'>
     readonly summary: FieldRef<"CertificateService", 'String'>
     readonly type: FieldRef<"CertificateService", 'String'>
     readonly targetAudience: FieldRef<"CertificateService", 'String[]'>
-    readonly eligibilityDetails: FieldRef<"CertificateService", 'String[]'>
-    readonly certificateDetails: FieldRef<"CertificateService", 'String[]'>
-    readonly applicationProcess: FieldRef<"CertificateService", 'String[]'>
-    readonly requiredDocuments: FieldRef<"CertificateService", 'String[]'>
     readonly applicationMode: FieldRef<"CertificateService", 'String'>
     readonly onlineUrl: FieldRef<"CertificateService", 'String'>
     readonly offlineAddress: FieldRef<"CertificateService", 'String'>
     readonly status: FieldRef<"CertificateService", 'String'>
     readonly isActive: FieldRef<"CertificateService", 'Boolean'>
+    readonly createdAt: FieldRef<"CertificateService", 'DateTime'>
+    readonly updatedAt: FieldRef<"CertificateService", 'DateTime'>
+    readonly adminId: FieldRef<"CertificateService", 'Int'>
+    readonly eligibilityDetails: FieldRef<"CertificateService", 'String[]'>
+    readonly certificateDetails: FieldRef<"CertificateService", 'String[]'>
+    readonly processDetails: FieldRef<"CertificateService", 'String[]'>
     readonly processNew: FieldRef<"CertificateService", 'String'>
     readonly processUpdate: FieldRef<"CertificateService", 'String'>
     readonly processLost: FieldRef<"CertificateService", 'String'>
@@ -5332,9 +8271,6 @@ export namespace Prisma {
     readonly docUpdate: FieldRef<"CertificateService", 'String'>
     readonly docLost: FieldRef<"CertificateService", 'String'>
     readonly docSurrender: FieldRef<"CertificateService", 'String'>
-    readonly createdAt: FieldRef<"CertificateService", 'DateTime'>
-    readonly updatedAt: FieldRef<"CertificateService", 'DateTime'>
-    readonly adminId: FieldRef<"CertificateService", 'Int'>
   }
     
 
@@ -5347,6 +8283,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateService
      */
     select?: CertificateServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateService
+     */
+    omit?: CertificateServiceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -5366,6 +8306,10 @@ export namespace Prisma {
      */
     select?: CertificateServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateService
+     */
+    omit?: CertificateServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateServiceInclude<ExtArgs> | null
@@ -5383,6 +8327,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateService
      */
     select?: CertificateServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateService
+     */
+    omit?: CertificateServiceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -5432,6 +8380,10 @@ export namespace Prisma {
      */
     select?: CertificateServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateService
+     */
+    omit?: CertificateServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateServiceInclude<ExtArgs> | null
@@ -5480,6 +8432,10 @@ export namespace Prisma {
      */
     select?: CertificateServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateService
+     */
+    omit?: CertificateServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateServiceInclude<ExtArgs> | null
@@ -5523,6 +8479,10 @@ export namespace Prisma {
      */
     select?: CertificateServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateService
+     */
+    omit?: CertificateServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateServiceInclude<ExtArgs> | null
@@ -5552,6 +8512,10 @@ export namespace Prisma {
      */
     select?: CertificateServiceSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateService
+     */
+    omit?: CertificateServiceOmit<ExtArgs> | null
+    /**
      * The data used to create many CertificateServices.
      */
     data: CertificateServiceCreateManyInput | CertificateServiceCreateManyInput[]
@@ -5570,6 +8534,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateService
      */
     select?: CertificateServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateService
+     */
+    omit?: CertificateServiceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -5596,6 +8564,40 @@ export namespace Prisma {
      * Filter which CertificateServices to update
      */
     where?: CertificateServiceWhereInput
+    /**
+     * Limit how many CertificateServices to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CertificateService updateManyAndReturn
+   */
+  export type CertificateServiceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateService
+     */
+    select?: CertificateServiceSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateService
+     */
+    omit?: CertificateServiceOmit<ExtArgs> | null
+    /**
+     * The data used to update CertificateServices.
+     */
+    data: XOR<CertificateServiceUpdateManyMutationInput, CertificateServiceUncheckedUpdateManyInput>
+    /**
+     * Filter which CertificateServices to update
+     */
+    where?: CertificateServiceWhereInput
+    /**
+     * Limit how many CertificateServices to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateServiceIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5606,6 +8608,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateService
      */
     select?: CertificateServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateService
+     */
+    omit?: CertificateServiceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -5633,6 +8639,10 @@ export namespace Prisma {
      */
     select?: CertificateServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateService
+     */
+    omit?: CertificateServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateServiceInclude<ExtArgs> | null
@@ -5650,6 +8660,10 @@ export namespace Prisma {
      * Filter which CertificateServices to delete
      */
     where?: CertificateServiceWhereInput
+    /**
+     * Limit how many CertificateServices to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -5660,6 +8674,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateContact
      */
     select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateContact
+     */
+    omit?: CertificateContactOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -5681,6 +8699,10 @@ export namespace Prisma {
      */
     select?: CertificateDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateDocument
+     */
+    omit?: CertificateDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateDocumentInclude<ExtArgs> | null
@@ -5700,6 +8722,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateProcessStep
      */
     select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateProcessStep
+     */
+    omit?: CertificateProcessStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -5721,6 +8747,10 @@ export namespace Prisma {
      */
     select?: CertificateEligibilitySelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateEligibility
+     */
+    omit?: CertificateEligibilityOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateEligibilityInclude<ExtArgs> | null
@@ -5740,6 +8770,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateService
      */
     select?: CertificateServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateService
+     */
+    omit?: CertificateServiceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -6015,6 +9049,21 @@ export namespace Prisma {
     certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["certificateContact"]>
 
+  export type CertificateContactSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    serviceName?: boolean
+    district?: boolean
+    subDistrict?: boolean
+    block?: boolean
+    name?: boolean
+    designation?: boolean
+    contact?: boolean
+    email?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateContact"]>
+
   export type CertificateContactSelectScalar = {
     id?: boolean
     serviceName?: boolean
@@ -6029,10 +9078,14 @@ export namespace Prisma {
     certificateServiceId?: boolean
   }
 
+  export type CertificateContactOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serviceName" | "district" | "subDistrict" | "block" | "name" | "designation" | "contact" | "email" | "applicationType" | "certificateServiceId", ExtArgs["result"]["certificateContact"]>
   export type CertificateContactInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
   }
   export type CertificateContactIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }
+  export type CertificateContactIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
   }
 
@@ -6059,12 +9112,12 @@ export namespace Prisma {
 
   type CertificateContactGetPayload<S extends boolean | null | undefined | CertificateContactDefaultArgs> = $Result.GetResult<Prisma.$CertificateContactPayload, S>
 
-  type CertificateContactCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<CertificateContactFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type CertificateContactCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CertificateContactFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: CertificateContactCountAggregateInputType | true
     }
 
-  export interface CertificateContactDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface CertificateContactDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CertificateContact'], meta: { name: 'CertificateContact' } }
     /**
      * Find zero or one CertificateContact that matches the filter.
@@ -6077,10 +9130,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends CertificateContactFindUniqueArgs>(args: SelectSubset<T, CertificateContactFindUniqueArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends CertificateContactFindUniqueArgs>(args: SelectSubset<T, CertificateContactFindUniqueArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one CertificateContact that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one CertificateContact that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {CertificateContactFindUniqueOrThrowArgs} args - Arguments to find a CertificateContact
      * @example
@@ -6091,7 +9144,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends CertificateContactFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateContactFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends CertificateContactFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateContactFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first CertificateContact that matches the filter.
@@ -6106,7 +9159,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends CertificateContactFindFirstArgs>(args?: SelectSubset<T, CertificateContactFindFirstArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends CertificateContactFindFirstArgs>(args?: SelectSubset<T, CertificateContactFindFirstArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first CertificateContact that matches the filter or
@@ -6122,7 +9175,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends CertificateContactFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateContactFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends CertificateContactFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateContactFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more CertificateContacts that matches the filter.
@@ -6140,7 +9193,7 @@ export namespace Prisma {
      * const certificateContactWithIdOnly = await prisma.certificateContact.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends CertificateContactFindManyArgs>(args?: SelectSubset<T, CertificateContactFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends CertificateContactFindManyArgs>(args?: SelectSubset<T, CertificateContactFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a CertificateContact.
@@ -6154,7 +9207,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends CertificateContactCreateArgs>(args: SelectSubset<T, CertificateContactCreateArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends CertificateContactCreateArgs>(args: SelectSubset<T, CertificateContactCreateArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many CertificateContacts.
@@ -6182,7 +9235,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many CertificateContacts and only return the `id`
-     * const certificateContactWithIdOnly = await prisma.certificateContact.createManyAndReturn({ 
+     * const certificateContactWithIdOnly = await prisma.certificateContact.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -6192,7 +9245,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends CertificateContactCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateContactCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends CertificateContactCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateContactCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a CertificateContact.
@@ -6206,7 +9259,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends CertificateContactDeleteArgs>(args: SelectSubset<T, CertificateContactDeleteArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends CertificateContactDeleteArgs>(args: SelectSubset<T, CertificateContactDeleteArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one CertificateContact.
@@ -6223,7 +9276,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends CertificateContactUpdateArgs>(args: SelectSubset<T, CertificateContactUpdateArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends CertificateContactUpdateArgs>(args: SelectSubset<T, CertificateContactUpdateArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more CertificateContacts.
@@ -6259,6 +9312,36 @@ export namespace Prisma {
     updateMany<T extends CertificateContactUpdateManyArgs>(args: SelectSubset<T, CertificateContactUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more CertificateContacts and returns the data updated in the database.
+     * @param {CertificateContactUpdateManyAndReturnArgs} args - Arguments to update many CertificateContacts.
+     * @example
+     * // Update many CertificateContacts
+     * const certificateContact = await prisma.certificateContact.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CertificateContacts and only return the `id`
+     * const certificateContactWithIdOnly = await prisma.certificateContact.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CertificateContactUpdateManyAndReturnArgs>(args: SelectSubset<T, CertificateContactUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one CertificateContact.
      * @param {CertificateContactUpsertArgs} args - Arguments to update or create a CertificateContact.
      * @example
@@ -6275,7 +9358,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends CertificateContactUpsertArgs>(args: SelectSubset<T, CertificateContactUpsertArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends CertificateContactUpsertArgs>(args: SelectSubset<T, CertificateContactUpsertArgs<ExtArgs>>): Prisma__CertificateContactClient<$Result.GetResult<Prisma.$CertificateContactPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -6415,9 +9498,9 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CertificateContactClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__CertificateContactClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    certificateService<T extends CertificateServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateServiceDefaultArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    certificateService<T extends CertificateServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateServiceDefaultArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6445,7 +9528,7 @@ export namespace Prisma {
 
   /**
    * Fields of the CertificateContact model
-   */ 
+   */
   interface CertificateContactFieldRefs {
     readonly id: FieldRef<"CertificateContact", 'Int'>
     readonly serviceName: FieldRef<"CertificateContact", 'String'>
@@ -6471,6 +9554,10 @@ export namespace Prisma {
      */
     select?: CertificateContactSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateContact
+     */
+    omit?: CertificateContactOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateContactInclude<ExtArgs> | null
@@ -6489,6 +9576,10 @@ export namespace Prisma {
      */
     select?: CertificateContactSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateContact
+     */
+    omit?: CertificateContactOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateContactInclude<ExtArgs> | null
@@ -6506,6 +9597,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateContact
      */
     select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateContact
+     */
+    omit?: CertificateContactOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -6555,6 +9650,10 @@ export namespace Prisma {
      */
     select?: CertificateContactSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateContact
+     */
+    omit?: CertificateContactOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateContactInclude<ExtArgs> | null
@@ -6603,6 +9702,10 @@ export namespace Prisma {
      */
     select?: CertificateContactSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateContact
+     */
+    omit?: CertificateContactOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateContactInclude<ExtArgs> | null
@@ -6646,6 +9749,10 @@ export namespace Prisma {
      */
     select?: CertificateContactSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateContact
+     */
+    omit?: CertificateContactOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateContactInclude<ExtArgs> | null
@@ -6675,6 +9782,10 @@ export namespace Prisma {
      */
     select?: CertificateContactSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateContact
+     */
+    omit?: CertificateContactOmit<ExtArgs> | null
+    /**
      * The data used to create many CertificateContacts.
      */
     data: CertificateContactCreateManyInput | CertificateContactCreateManyInput[]
@@ -6693,6 +9804,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateContact
      */
     select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateContact
+     */
+    omit?: CertificateContactOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -6719,6 +9834,40 @@ export namespace Prisma {
      * Filter which CertificateContacts to update
      */
     where?: CertificateContactWhereInput
+    /**
+     * Limit how many CertificateContacts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CertificateContact updateManyAndReturn
+   */
+  export type CertificateContactUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateContact
+     */
+    select?: CertificateContactSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateContact
+     */
+    omit?: CertificateContactOmit<ExtArgs> | null
+    /**
+     * The data used to update CertificateContacts.
+     */
+    data: XOR<CertificateContactUpdateManyMutationInput, CertificateContactUncheckedUpdateManyInput>
+    /**
+     * Filter which CertificateContacts to update
+     */
+    where?: CertificateContactWhereInput
+    /**
+     * Limit how many CertificateContacts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateContactIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6729,6 +9878,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateContact
      */
     select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateContact
+     */
+    omit?: CertificateContactOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -6756,6 +9909,10 @@ export namespace Prisma {
      */
     select?: CertificateContactSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateContact
+     */
+    omit?: CertificateContactOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateContactInclude<ExtArgs> | null
@@ -6773,6 +9930,10 @@ export namespace Prisma {
      * Filter which CertificateContacts to delete
      */
     where?: CertificateContactWhereInput
+    /**
+     * Limit how many CertificateContacts to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -6783,6 +9944,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateContact
      */
     select?: CertificateContactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateContact
+     */
+    omit?: CertificateContactOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -7026,6 +10191,17 @@ export namespace Prisma {
     certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["certificateDocument"]>
 
+  export type CertificateDocumentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slNo?: boolean
+    documentType?: boolean
+    validProof?: boolean
+    isRequired?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateDocument"]>
+
   export type CertificateDocumentSelectScalar = {
     id?: boolean
     slNo?: boolean
@@ -7036,10 +10212,14 @@ export namespace Prisma {
     certificateServiceId?: boolean
   }
 
+  export type CertificateDocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slNo" | "documentType" | "validProof" | "isRequired" | "applicationType" | "certificateServiceId", ExtArgs["result"]["certificateDocument"]>
   export type CertificateDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
   }
   export type CertificateDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }
+  export type CertificateDocumentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
   }
 
@@ -7062,12 +10242,12 @@ export namespace Prisma {
 
   type CertificateDocumentGetPayload<S extends boolean | null | undefined | CertificateDocumentDefaultArgs> = $Result.GetResult<Prisma.$CertificateDocumentPayload, S>
 
-  type CertificateDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<CertificateDocumentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type CertificateDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CertificateDocumentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: CertificateDocumentCountAggregateInputType | true
     }
 
-  export interface CertificateDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface CertificateDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CertificateDocument'], meta: { name: 'CertificateDocument' } }
     /**
      * Find zero or one CertificateDocument that matches the filter.
@@ -7080,10 +10260,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends CertificateDocumentFindUniqueArgs>(args: SelectSubset<T, CertificateDocumentFindUniqueArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends CertificateDocumentFindUniqueArgs>(args: SelectSubset<T, CertificateDocumentFindUniqueArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one CertificateDocument that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one CertificateDocument that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {CertificateDocumentFindUniqueOrThrowArgs} args - Arguments to find a CertificateDocument
      * @example
@@ -7094,7 +10274,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends CertificateDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends CertificateDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first CertificateDocument that matches the filter.
@@ -7109,7 +10289,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends CertificateDocumentFindFirstArgs>(args?: SelectSubset<T, CertificateDocumentFindFirstArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends CertificateDocumentFindFirstArgs>(args?: SelectSubset<T, CertificateDocumentFindFirstArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first CertificateDocument that matches the filter or
@@ -7125,7 +10305,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends CertificateDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends CertificateDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more CertificateDocuments that matches the filter.
@@ -7143,7 +10323,7 @@ export namespace Prisma {
      * const certificateDocumentWithIdOnly = await prisma.certificateDocument.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends CertificateDocumentFindManyArgs>(args?: SelectSubset<T, CertificateDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends CertificateDocumentFindManyArgs>(args?: SelectSubset<T, CertificateDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a CertificateDocument.
@@ -7157,7 +10337,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends CertificateDocumentCreateArgs>(args: SelectSubset<T, CertificateDocumentCreateArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends CertificateDocumentCreateArgs>(args: SelectSubset<T, CertificateDocumentCreateArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many CertificateDocuments.
@@ -7185,7 +10365,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many CertificateDocuments and only return the `id`
-     * const certificateDocumentWithIdOnly = await prisma.certificateDocument.createManyAndReturn({ 
+     * const certificateDocumentWithIdOnly = await prisma.certificateDocument.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -7195,7 +10375,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends CertificateDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends CertificateDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a CertificateDocument.
@@ -7209,7 +10389,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends CertificateDocumentDeleteArgs>(args: SelectSubset<T, CertificateDocumentDeleteArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends CertificateDocumentDeleteArgs>(args: SelectSubset<T, CertificateDocumentDeleteArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one CertificateDocument.
@@ -7226,7 +10406,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends CertificateDocumentUpdateArgs>(args: SelectSubset<T, CertificateDocumentUpdateArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends CertificateDocumentUpdateArgs>(args: SelectSubset<T, CertificateDocumentUpdateArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more CertificateDocuments.
@@ -7262,6 +10442,36 @@ export namespace Prisma {
     updateMany<T extends CertificateDocumentUpdateManyArgs>(args: SelectSubset<T, CertificateDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more CertificateDocuments and returns the data updated in the database.
+     * @param {CertificateDocumentUpdateManyAndReturnArgs} args - Arguments to update many CertificateDocuments.
+     * @example
+     * // Update many CertificateDocuments
+     * const certificateDocument = await prisma.certificateDocument.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CertificateDocuments and only return the `id`
+     * const certificateDocumentWithIdOnly = await prisma.certificateDocument.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CertificateDocumentUpdateManyAndReturnArgs>(args: SelectSubset<T, CertificateDocumentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one CertificateDocument.
      * @param {CertificateDocumentUpsertArgs} args - Arguments to update or create a CertificateDocument.
      * @example
@@ -7278,7 +10488,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends CertificateDocumentUpsertArgs>(args: SelectSubset<T, CertificateDocumentUpsertArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends CertificateDocumentUpsertArgs>(args: SelectSubset<T, CertificateDocumentUpsertArgs<ExtArgs>>): Prisma__CertificateDocumentClient<$Result.GetResult<Prisma.$CertificateDocumentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -7418,9 +10628,9 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CertificateDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__CertificateDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    certificateService<T extends CertificateServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateServiceDefaultArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    certificateService<T extends CertificateServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateServiceDefaultArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7448,7 +10658,7 @@ export namespace Prisma {
 
   /**
    * Fields of the CertificateDocument model
-   */ 
+   */
   interface CertificateDocumentFieldRefs {
     readonly id: FieldRef<"CertificateDocument", 'Int'>
     readonly slNo: FieldRef<"CertificateDocument", 'Int'>
@@ -7470,6 +10680,10 @@ export namespace Prisma {
      */
     select?: CertificateDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateDocument
+     */
+    omit?: CertificateDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateDocumentInclude<ExtArgs> | null
@@ -7488,6 +10702,10 @@ export namespace Prisma {
      */
     select?: CertificateDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateDocument
+     */
+    omit?: CertificateDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateDocumentInclude<ExtArgs> | null
@@ -7505,6 +10723,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateDocument
      */
     select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateDocument
+     */
+    omit?: CertificateDocumentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -7554,6 +10776,10 @@ export namespace Prisma {
      */
     select?: CertificateDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateDocument
+     */
+    omit?: CertificateDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateDocumentInclude<ExtArgs> | null
@@ -7602,6 +10828,10 @@ export namespace Prisma {
      */
     select?: CertificateDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateDocument
+     */
+    omit?: CertificateDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateDocumentInclude<ExtArgs> | null
@@ -7645,6 +10875,10 @@ export namespace Prisma {
      */
     select?: CertificateDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateDocument
+     */
+    omit?: CertificateDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateDocumentInclude<ExtArgs> | null
@@ -7674,6 +10908,10 @@ export namespace Prisma {
      */
     select?: CertificateDocumentSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateDocument
+     */
+    omit?: CertificateDocumentOmit<ExtArgs> | null
+    /**
      * The data used to create many CertificateDocuments.
      */
     data: CertificateDocumentCreateManyInput | CertificateDocumentCreateManyInput[]
@@ -7692,6 +10930,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateDocument
      */
     select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateDocument
+     */
+    omit?: CertificateDocumentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -7718,6 +10960,40 @@ export namespace Prisma {
      * Filter which CertificateDocuments to update
      */
     where?: CertificateDocumentWhereInput
+    /**
+     * Limit how many CertificateDocuments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CertificateDocument updateManyAndReturn
+   */
+  export type CertificateDocumentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateDocument
+     */
+    select?: CertificateDocumentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateDocument
+     */
+    omit?: CertificateDocumentOmit<ExtArgs> | null
+    /**
+     * The data used to update CertificateDocuments.
+     */
+    data: XOR<CertificateDocumentUpdateManyMutationInput, CertificateDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which CertificateDocuments to update
+     */
+    where?: CertificateDocumentWhereInput
+    /**
+     * Limit how many CertificateDocuments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateDocumentIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -7728,6 +11004,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateDocument
      */
     select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateDocument
+     */
+    omit?: CertificateDocumentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -7755,6 +11035,10 @@ export namespace Prisma {
      */
     select?: CertificateDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateDocument
+     */
+    omit?: CertificateDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateDocumentInclude<ExtArgs> | null
@@ -7772,6 +11056,10 @@ export namespace Prisma {
      * Filter which CertificateDocuments to delete
      */
     where?: CertificateDocumentWhereInput
+    /**
+     * Limit how many CertificateDocuments to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -7782,6 +11070,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateDocument
      */
     select?: CertificateDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateDocument
+     */
+    omit?: CertificateDocumentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8007,6 +11299,15 @@ export namespace Prisma {
     certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["certificateProcessStep"]>
 
+  export type CertificateProcessStepSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slNo?: boolean
+    stepDetails?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateProcessStep"]>
+
   export type CertificateProcessStepSelectScalar = {
     id?: boolean
     slNo?: boolean
@@ -8015,10 +11316,14 @@ export namespace Prisma {
     certificateServiceId?: boolean
   }
 
+  export type CertificateProcessStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slNo" | "stepDetails" | "applicationType" | "certificateServiceId", ExtArgs["result"]["certificateProcessStep"]>
   export type CertificateProcessStepInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
   }
   export type CertificateProcessStepIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }
+  export type CertificateProcessStepIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
   }
 
@@ -8039,12 +11344,12 @@ export namespace Prisma {
 
   type CertificateProcessStepGetPayload<S extends boolean | null | undefined | CertificateProcessStepDefaultArgs> = $Result.GetResult<Prisma.$CertificateProcessStepPayload, S>
 
-  type CertificateProcessStepCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<CertificateProcessStepFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type CertificateProcessStepCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CertificateProcessStepFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: CertificateProcessStepCountAggregateInputType | true
     }
 
-  export interface CertificateProcessStepDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface CertificateProcessStepDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CertificateProcessStep'], meta: { name: 'CertificateProcessStep' } }
     /**
      * Find zero or one CertificateProcessStep that matches the filter.
@@ -8057,10 +11362,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends CertificateProcessStepFindUniqueArgs>(args: SelectSubset<T, CertificateProcessStepFindUniqueArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends CertificateProcessStepFindUniqueArgs>(args: SelectSubset<T, CertificateProcessStepFindUniqueArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one CertificateProcessStep that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one CertificateProcessStep that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {CertificateProcessStepFindUniqueOrThrowArgs} args - Arguments to find a CertificateProcessStep
      * @example
@@ -8071,7 +11376,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends CertificateProcessStepFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateProcessStepFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends CertificateProcessStepFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateProcessStepFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first CertificateProcessStep that matches the filter.
@@ -8086,7 +11391,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends CertificateProcessStepFindFirstArgs>(args?: SelectSubset<T, CertificateProcessStepFindFirstArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends CertificateProcessStepFindFirstArgs>(args?: SelectSubset<T, CertificateProcessStepFindFirstArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first CertificateProcessStep that matches the filter or
@@ -8102,7 +11407,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends CertificateProcessStepFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateProcessStepFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends CertificateProcessStepFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateProcessStepFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more CertificateProcessSteps that matches the filter.
@@ -8120,7 +11425,7 @@ export namespace Prisma {
      * const certificateProcessStepWithIdOnly = await prisma.certificateProcessStep.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends CertificateProcessStepFindManyArgs>(args?: SelectSubset<T, CertificateProcessStepFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends CertificateProcessStepFindManyArgs>(args?: SelectSubset<T, CertificateProcessStepFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a CertificateProcessStep.
@@ -8134,7 +11439,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends CertificateProcessStepCreateArgs>(args: SelectSubset<T, CertificateProcessStepCreateArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends CertificateProcessStepCreateArgs>(args: SelectSubset<T, CertificateProcessStepCreateArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many CertificateProcessSteps.
@@ -8162,7 +11467,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many CertificateProcessSteps and only return the `id`
-     * const certificateProcessStepWithIdOnly = await prisma.certificateProcessStep.createManyAndReturn({ 
+     * const certificateProcessStepWithIdOnly = await prisma.certificateProcessStep.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -8172,7 +11477,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends CertificateProcessStepCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateProcessStepCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends CertificateProcessStepCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateProcessStepCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a CertificateProcessStep.
@@ -8186,7 +11491,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends CertificateProcessStepDeleteArgs>(args: SelectSubset<T, CertificateProcessStepDeleteArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends CertificateProcessStepDeleteArgs>(args: SelectSubset<T, CertificateProcessStepDeleteArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one CertificateProcessStep.
@@ -8203,7 +11508,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends CertificateProcessStepUpdateArgs>(args: SelectSubset<T, CertificateProcessStepUpdateArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends CertificateProcessStepUpdateArgs>(args: SelectSubset<T, CertificateProcessStepUpdateArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more CertificateProcessSteps.
@@ -8239,6 +11544,36 @@ export namespace Prisma {
     updateMany<T extends CertificateProcessStepUpdateManyArgs>(args: SelectSubset<T, CertificateProcessStepUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more CertificateProcessSteps and returns the data updated in the database.
+     * @param {CertificateProcessStepUpdateManyAndReturnArgs} args - Arguments to update many CertificateProcessSteps.
+     * @example
+     * // Update many CertificateProcessSteps
+     * const certificateProcessStep = await prisma.certificateProcessStep.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CertificateProcessSteps and only return the `id`
+     * const certificateProcessStepWithIdOnly = await prisma.certificateProcessStep.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CertificateProcessStepUpdateManyAndReturnArgs>(args: SelectSubset<T, CertificateProcessStepUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one CertificateProcessStep.
      * @param {CertificateProcessStepUpsertArgs} args - Arguments to update or create a CertificateProcessStep.
      * @example
@@ -8255,7 +11590,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends CertificateProcessStepUpsertArgs>(args: SelectSubset<T, CertificateProcessStepUpsertArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends CertificateProcessStepUpsertArgs>(args: SelectSubset<T, CertificateProcessStepUpsertArgs<ExtArgs>>): Prisma__CertificateProcessStepClient<$Result.GetResult<Prisma.$CertificateProcessStepPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -8395,9 +11730,9 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CertificateProcessStepClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__CertificateProcessStepClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    certificateService<T extends CertificateServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateServiceDefaultArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    certificateService<T extends CertificateServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateServiceDefaultArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8425,7 +11760,7 @@ export namespace Prisma {
 
   /**
    * Fields of the CertificateProcessStep model
-   */ 
+   */
   interface CertificateProcessStepFieldRefs {
     readonly id: FieldRef<"CertificateProcessStep", 'Int'>
     readonly slNo: FieldRef<"CertificateProcessStep", 'Int'>
@@ -8445,6 +11780,10 @@ export namespace Prisma {
      */
     select?: CertificateProcessStepSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateProcessStep
+     */
+    omit?: CertificateProcessStepOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateProcessStepInclude<ExtArgs> | null
@@ -8463,6 +11802,10 @@ export namespace Prisma {
      */
     select?: CertificateProcessStepSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateProcessStep
+     */
+    omit?: CertificateProcessStepOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateProcessStepInclude<ExtArgs> | null
@@ -8480,6 +11823,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateProcessStep
      */
     select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateProcessStep
+     */
+    omit?: CertificateProcessStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8529,6 +11876,10 @@ export namespace Prisma {
      */
     select?: CertificateProcessStepSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateProcessStep
+     */
+    omit?: CertificateProcessStepOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateProcessStepInclude<ExtArgs> | null
@@ -8577,6 +11928,10 @@ export namespace Prisma {
      */
     select?: CertificateProcessStepSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateProcessStep
+     */
+    omit?: CertificateProcessStepOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateProcessStepInclude<ExtArgs> | null
@@ -8620,6 +11975,10 @@ export namespace Prisma {
      */
     select?: CertificateProcessStepSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateProcessStep
+     */
+    omit?: CertificateProcessStepOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateProcessStepInclude<ExtArgs> | null
@@ -8649,6 +12008,10 @@ export namespace Prisma {
      */
     select?: CertificateProcessStepSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateProcessStep
+     */
+    omit?: CertificateProcessStepOmit<ExtArgs> | null
+    /**
      * The data used to create many CertificateProcessSteps.
      */
     data: CertificateProcessStepCreateManyInput | CertificateProcessStepCreateManyInput[]
@@ -8667,6 +12030,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateProcessStep
      */
     select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateProcessStep
+     */
+    omit?: CertificateProcessStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8693,6 +12060,40 @@ export namespace Prisma {
      * Filter which CertificateProcessSteps to update
      */
     where?: CertificateProcessStepWhereInput
+    /**
+     * Limit how many CertificateProcessSteps to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CertificateProcessStep updateManyAndReturn
+   */
+  export type CertificateProcessStepUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateProcessStep
+     */
+    select?: CertificateProcessStepSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateProcessStep
+     */
+    omit?: CertificateProcessStepOmit<ExtArgs> | null
+    /**
+     * The data used to update CertificateProcessSteps.
+     */
+    data: XOR<CertificateProcessStepUpdateManyMutationInput, CertificateProcessStepUncheckedUpdateManyInput>
+    /**
+     * Filter which CertificateProcessSteps to update
+     */
+    where?: CertificateProcessStepWhereInput
+    /**
+     * Limit how many CertificateProcessSteps to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateProcessStepIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -8703,6 +12104,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateProcessStep
      */
     select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateProcessStep
+     */
+    omit?: CertificateProcessStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8730,6 +12135,10 @@ export namespace Prisma {
      */
     select?: CertificateProcessStepSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateProcessStep
+     */
+    omit?: CertificateProcessStepOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateProcessStepInclude<ExtArgs> | null
@@ -8747,6 +12156,10 @@ export namespace Prisma {
      * Filter which CertificateProcessSteps to delete
      */
     where?: CertificateProcessStepWhereInput
+    /**
+     * Limit how many CertificateProcessSteps to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -8757,6 +12170,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateProcessStep
      */
     select?: CertificateProcessStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateProcessStep
+     */
+    omit?: CertificateProcessStepOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8969,6 +12386,14 @@ export namespace Prisma {
     certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["certificateEligibility"]>
 
+  export type CertificateEligibilitySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eligibilityDetail?: boolean
+    applicationType?: boolean
+    certificateServiceId?: boolean
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["certificateEligibility"]>
+
   export type CertificateEligibilitySelectScalar = {
     id?: boolean
     eligibilityDetail?: boolean
@@ -8976,10 +12401,14 @@ export namespace Prisma {
     certificateServiceId?: boolean
   }
 
+  export type CertificateEligibilityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eligibilityDetail" | "applicationType" | "certificateServiceId", ExtArgs["result"]["certificateEligibility"]>
   export type CertificateEligibilityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
   }
   export type CertificateEligibilityIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
+  }
+  export type CertificateEligibilityIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     certificateService?: boolean | CertificateServiceDefaultArgs<ExtArgs>
   }
 
@@ -8999,12 +12428,12 @@ export namespace Prisma {
 
   type CertificateEligibilityGetPayload<S extends boolean | null | undefined | CertificateEligibilityDefaultArgs> = $Result.GetResult<Prisma.$CertificateEligibilityPayload, S>
 
-  type CertificateEligibilityCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<CertificateEligibilityFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type CertificateEligibilityCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CertificateEligibilityFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: CertificateEligibilityCountAggregateInputType | true
     }
 
-  export interface CertificateEligibilityDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface CertificateEligibilityDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CertificateEligibility'], meta: { name: 'CertificateEligibility' } }
     /**
      * Find zero or one CertificateEligibility that matches the filter.
@@ -9017,10 +12446,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends CertificateEligibilityFindUniqueArgs>(args: SelectSubset<T, CertificateEligibilityFindUniqueArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends CertificateEligibilityFindUniqueArgs>(args: SelectSubset<T, CertificateEligibilityFindUniqueArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one CertificateEligibility that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one CertificateEligibility that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {CertificateEligibilityFindUniqueOrThrowArgs} args - Arguments to find a CertificateEligibility
      * @example
@@ -9031,7 +12460,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends CertificateEligibilityFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateEligibilityFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends CertificateEligibilityFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateEligibilityFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first CertificateEligibility that matches the filter.
@@ -9046,7 +12475,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends CertificateEligibilityFindFirstArgs>(args?: SelectSubset<T, CertificateEligibilityFindFirstArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends CertificateEligibilityFindFirstArgs>(args?: SelectSubset<T, CertificateEligibilityFindFirstArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first CertificateEligibility that matches the filter or
@@ -9062,7 +12491,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends CertificateEligibilityFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateEligibilityFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends CertificateEligibilityFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateEligibilityFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more CertificateEligibilities that matches the filter.
@@ -9080,7 +12509,7 @@ export namespace Prisma {
      * const certificateEligibilityWithIdOnly = await prisma.certificateEligibility.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends CertificateEligibilityFindManyArgs>(args?: SelectSubset<T, CertificateEligibilityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends CertificateEligibilityFindManyArgs>(args?: SelectSubset<T, CertificateEligibilityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a CertificateEligibility.
@@ -9094,7 +12523,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends CertificateEligibilityCreateArgs>(args: SelectSubset<T, CertificateEligibilityCreateArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends CertificateEligibilityCreateArgs>(args: SelectSubset<T, CertificateEligibilityCreateArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many CertificateEligibilities.
@@ -9122,7 +12551,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many CertificateEligibilities and only return the `id`
-     * const certificateEligibilityWithIdOnly = await prisma.certificateEligibility.createManyAndReturn({ 
+     * const certificateEligibilityWithIdOnly = await prisma.certificateEligibility.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -9132,7 +12561,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends CertificateEligibilityCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateEligibilityCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends CertificateEligibilityCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateEligibilityCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a CertificateEligibility.
@@ -9146,7 +12575,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends CertificateEligibilityDeleteArgs>(args: SelectSubset<T, CertificateEligibilityDeleteArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends CertificateEligibilityDeleteArgs>(args: SelectSubset<T, CertificateEligibilityDeleteArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one CertificateEligibility.
@@ -9163,7 +12592,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends CertificateEligibilityUpdateArgs>(args: SelectSubset<T, CertificateEligibilityUpdateArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends CertificateEligibilityUpdateArgs>(args: SelectSubset<T, CertificateEligibilityUpdateArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more CertificateEligibilities.
@@ -9199,6 +12628,36 @@ export namespace Prisma {
     updateMany<T extends CertificateEligibilityUpdateManyArgs>(args: SelectSubset<T, CertificateEligibilityUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more CertificateEligibilities and returns the data updated in the database.
+     * @param {CertificateEligibilityUpdateManyAndReturnArgs} args - Arguments to update many CertificateEligibilities.
+     * @example
+     * // Update many CertificateEligibilities
+     * const certificateEligibility = await prisma.certificateEligibility.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CertificateEligibilities and only return the `id`
+     * const certificateEligibilityWithIdOnly = await prisma.certificateEligibility.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CertificateEligibilityUpdateManyAndReturnArgs>(args: SelectSubset<T, CertificateEligibilityUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one CertificateEligibility.
      * @param {CertificateEligibilityUpsertArgs} args - Arguments to update or create a CertificateEligibility.
      * @example
@@ -9215,7 +12674,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends CertificateEligibilityUpsertArgs>(args: SelectSubset<T, CertificateEligibilityUpsertArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends CertificateEligibilityUpsertArgs>(args: SelectSubset<T, CertificateEligibilityUpsertArgs<ExtArgs>>): Prisma__CertificateEligibilityClient<$Result.GetResult<Prisma.$CertificateEligibilityPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -9355,9 +12814,9 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CertificateEligibilityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__CertificateEligibilityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    certificateService<T extends CertificateServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateServiceDefaultArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    certificateService<T extends CertificateServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateServiceDefaultArgs<ExtArgs>>): Prisma__CertificateServiceClient<$Result.GetResult<Prisma.$CertificateServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9385,7 +12844,7 @@ export namespace Prisma {
 
   /**
    * Fields of the CertificateEligibility model
-   */ 
+   */
   interface CertificateEligibilityFieldRefs {
     readonly id: FieldRef<"CertificateEligibility", 'Int'>
     readonly eligibilityDetail: FieldRef<"CertificateEligibility", 'String'>
@@ -9403,6 +12862,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateEligibility
      */
     select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateEligibility
+     */
+    omit?: CertificateEligibilityOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -9422,6 +12885,10 @@ export namespace Prisma {
      */
     select?: CertificateEligibilitySelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateEligibility
+     */
+    omit?: CertificateEligibilityOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateEligibilityInclude<ExtArgs> | null
@@ -9439,6 +12906,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateEligibility
      */
     select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateEligibility
+     */
+    omit?: CertificateEligibilityOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -9488,6 +12959,10 @@ export namespace Prisma {
      */
     select?: CertificateEligibilitySelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateEligibility
+     */
+    omit?: CertificateEligibilityOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateEligibilityInclude<ExtArgs> | null
@@ -9536,6 +13011,10 @@ export namespace Prisma {
      */
     select?: CertificateEligibilitySelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateEligibility
+     */
+    omit?: CertificateEligibilityOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateEligibilityInclude<ExtArgs> | null
@@ -9579,6 +13058,10 @@ export namespace Prisma {
      */
     select?: CertificateEligibilitySelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateEligibility
+     */
+    omit?: CertificateEligibilityOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateEligibilityInclude<ExtArgs> | null
@@ -9608,6 +13091,10 @@ export namespace Prisma {
      */
     select?: CertificateEligibilitySelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateEligibility
+     */
+    omit?: CertificateEligibilityOmit<ExtArgs> | null
+    /**
      * The data used to create many CertificateEligibilities.
      */
     data: CertificateEligibilityCreateManyInput | CertificateEligibilityCreateManyInput[]
@@ -9626,6 +13113,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateEligibility
      */
     select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateEligibility
+     */
+    omit?: CertificateEligibilityOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -9652,6 +13143,40 @@ export namespace Prisma {
      * Filter which CertificateEligibilities to update
      */
     where?: CertificateEligibilityWhereInput
+    /**
+     * Limit how many CertificateEligibilities to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CertificateEligibility updateManyAndReturn
+   */
+  export type CertificateEligibilityUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CertificateEligibility
+     */
+    select?: CertificateEligibilitySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateEligibility
+     */
+    omit?: CertificateEligibilityOmit<ExtArgs> | null
+    /**
+     * The data used to update CertificateEligibilities.
+     */
+    data: XOR<CertificateEligibilityUpdateManyMutationInput, CertificateEligibilityUncheckedUpdateManyInput>
+    /**
+     * Filter which CertificateEligibilities to update
+     */
+    where?: CertificateEligibilityWhereInput
+    /**
+     * Limit how many CertificateEligibilities to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CertificateEligibilityIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -9662,6 +13187,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateEligibility
      */
     select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateEligibility
+     */
+    omit?: CertificateEligibilityOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -9689,6 +13218,10 @@ export namespace Prisma {
      */
     select?: CertificateEligibilitySelect<ExtArgs> | null
     /**
+     * Omit specific fields from the CertificateEligibility
+     */
+    omit?: CertificateEligibilityOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: CertificateEligibilityInclude<ExtArgs> | null
@@ -9706,6 +13239,10 @@ export namespace Prisma {
      * Filter which CertificateEligibilities to delete
      */
     where?: CertificateEligibilityWhereInput
+    /**
+     * Limit how many CertificateEligibilities to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -9716,6 +13253,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the CertificateEligibility
      */
     select?: CertificateEligibilitySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CertificateEligibility
+     */
+    omit?: CertificateEligibilityOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -10095,6 +13636,34 @@ export namespace Prisma {
     admin?: boolean | AdminDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contactService"]>
 
+  export type ContactServiceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    summary?: boolean
+    type?: boolean
+    targetAudience?: boolean
+    applicationMode?: boolean
+    onlineUrl?: boolean
+    offlineAddress?: boolean
+    status?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    adminId?: boolean
+    eligibilityDetails?: boolean
+    contactDetails?: boolean
+    processDetails?: boolean
+    processNew?: boolean
+    processUpdate?: boolean
+    processLost?: boolean
+    processSurrender?: boolean
+    docNew?: boolean
+    docUpdate?: boolean
+    docLost?: boolean
+    docSurrender?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contactService"]>
+
   export type ContactServiceSelectScalar = {
     id?: boolean
     name?: boolean
@@ -10122,6 +13691,7 @@ export namespace Prisma {
     docSurrender?: boolean
   }
 
+  export type ContactServiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "summary" | "type" | "targetAudience" | "applicationMode" | "onlineUrl" | "offlineAddress" | "status" | "isActive" | "createdAt" | "updatedAt" | "adminId" | "eligibilityDetails" | "contactDetails" | "processDetails" | "processNew" | "processUpdate" | "processLost" | "processSurrender" | "docNew" | "docUpdate" | "docLost" | "docSurrender", ExtArgs["result"]["contactService"]>
   export type ContactServiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | AdminDefaultArgs<ExtArgs>
     contacts?: boolean | ContactService$contactsArgs<ExtArgs>
@@ -10129,6 +13699,9 @@ export namespace Prisma {
     _count?: boolean | ContactServiceCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ContactServiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+  }
+  export type ContactServiceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     admin?: boolean | AdminDefaultArgs<ExtArgs>
   }
 
@@ -10170,12 +13743,12 @@ export namespace Prisma {
 
   type ContactServiceGetPayload<S extends boolean | null | undefined | ContactServiceDefaultArgs> = $Result.GetResult<Prisma.$ContactServicePayload, S>
 
-  type ContactServiceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<ContactServiceFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type ContactServiceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ContactServiceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: ContactServiceCountAggregateInputType | true
     }
 
-  export interface ContactServiceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface ContactServiceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ContactService'], meta: { name: 'ContactService' } }
     /**
      * Find zero or one ContactService that matches the filter.
@@ -10188,10 +13761,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends ContactServiceFindUniqueArgs>(args: SelectSubset<T, ContactServiceFindUniqueArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends ContactServiceFindUniqueArgs>(args: SelectSubset<T, ContactServiceFindUniqueArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one ContactService that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one ContactService that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {ContactServiceFindUniqueOrThrowArgs} args - Arguments to find a ContactService
      * @example
@@ -10202,7 +13775,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends ContactServiceFindUniqueOrThrowArgs>(args: SelectSubset<T, ContactServiceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends ContactServiceFindUniqueOrThrowArgs>(args: SelectSubset<T, ContactServiceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first ContactService that matches the filter.
@@ -10217,7 +13790,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends ContactServiceFindFirstArgs>(args?: SelectSubset<T, ContactServiceFindFirstArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends ContactServiceFindFirstArgs>(args?: SelectSubset<T, ContactServiceFindFirstArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first ContactService that matches the filter or
@@ -10233,7 +13806,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends ContactServiceFindFirstOrThrowArgs>(args?: SelectSubset<T, ContactServiceFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends ContactServiceFindFirstOrThrowArgs>(args?: SelectSubset<T, ContactServiceFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more ContactServices that matches the filter.
@@ -10251,7 +13824,7 @@ export namespace Prisma {
      * const contactServiceWithIdOnly = await prisma.contactService.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends ContactServiceFindManyArgs>(args?: SelectSubset<T, ContactServiceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findMany">>
+    findMany<T extends ContactServiceFindManyArgs>(args?: SelectSubset<T, ContactServiceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a ContactService.
@@ -10265,7 +13838,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends ContactServiceCreateArgs>(args: SelectSubset<T, ContactServiceCreateArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends ContactServiceCreateArgs>(args: SelectSubset<T, ContactServiceCreateArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many ContactServices.
@@ -10293,7 +13866,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many ContactServices and only return the `id`
-     * const contactServiceWithIdOnly = await prisma.contactService.createManyAndReturn({ 
+     * const contactServiceWithIdOnly = await prisma.contactService.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -10303,7 +13876,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends ContactServiceCreateManyAndReturnArgs>(args?: SelectSubset<T, ContactServiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends ContactServiceCreateManyAndReturnArgs>(args?: SelectSubset<T, ContactServiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a ContactService.
@@ -10317,7 +13890,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends ContactServiceDeleteArgs>(args: SelectSubset<T, ContactServiceDeleteArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends ContactServiceDeleteArgs>(args: SelectSubset<T, ContactServiceDeleteArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one ContactService.
@@ -10334,7 +13907,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends ContactServiceUpdateArgs>(args: SelectSubset<T, ContactServiceUpdateArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends ContactServiceUpdateArgs>(args: SelectSubset<T, ContactServiceUpdateArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more ContactServices.
@@ -10370,6 +13943,36 @@ export namespace Prisma {
     updateMany<T extends ContactServiceUpdateManyArgs>(args: SelectSubset<T, ContactServiceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more ContactServices and returns the data updated in the database.
+     * @param {ContactServiceUpdateManyAndReturnArgs} args - Arguments to update many ContactServices.
+     * @example
+     * // Update many ContactServices
+     * const contactService = await prisma.contactService.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ContactServices and only return the `id`
+     * const contactServiceWithIdOnly = await prisma.contactService.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ContactServiceUpdateManyAndReturnArgs>(args: SelectSubset<T, ContactServiceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one ContactService.
      * @param {ContactServiceUpsertArgs} args - Arguments to update or create a ContactService.
      * @example
@@ -10386,7 +13989,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends ContactServiceUpsertArgs>(args: SelectSubset<T, ContactServiceUpsertArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends ContactServiceUpsertArgs>(args: SelectSubset<T, ContactServiceUpsertArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -10526,11 +14129,11 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__ContactServiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__ContactServiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    admin<T extends AdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminDefaultArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    contacts<T extends ContactService$contactsArgs<ExtArgs> = {}>(args?: Subset<T, ContactService$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findMany"> | Null>
-    documents<T extends ContactService$documentsArgs<ExtArgs> = {}>(args?: Subset<T, ContactService$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findMany"> | Null>
+    admin<T extends AdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminDefaultArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    contacts<T extends ContactService$contactsArgs<ExtArgs> = {}>(args?: Subset<T, ContactService$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    documents<T extends ContactService$documentsArgs<ExtArgs> = {}>(args?: Subset<T, ContactService$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10558,7 +14161,7 @@ export namespace Prisma {
 
   /**
    * Fields of the ContactService model
-   */ 
+   */
   interface ContactServiceFieldRefs {
     readonly id: FieldRef<"ContactService", 'Int'>
     readonly name: FieldRef<"ContactService", 'String'>
@@ -10597,6 +14200,10 @@ export namespace Prisma {
      */
     select?: ContactServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactService
+     */
+    omit?: ContactServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceInclude<ExtArgs> | null
@@ -10615,6 +14222,10 @@ export namespace Prisma {
      */
     select?: ContactServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactService
+     */
+    omit?: ContactServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceInclude<ExtArgs> | null
@@ -10632,6 +14243,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ContactService
      */
     select?: ContactServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactService
+     */
+    omit?: ContactServiceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -10681,6 +14296,10 @@ export namespace Prisma {
      */
     select?: ContactServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactService
+     */
+    omit?: ContactServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceInclude<ExtArgs> | null
@@ -10729,6 +14348,10 @@ export namespace Prisma {
      */
     select?: ContactServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactService
+     */
+    omit?: ContactServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceInclude<ExtArgs> | null
@@ -10772,6 +14395,10 @@ export namespace Prisma {
      */
     select?: ContactServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactService
+     */
+    omit?: ContactServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceInclude<ExtArgs> | null
@@ -10801,6 +14428,10 @@ export namespace Prisma {
      */
     select?: ContactServiceSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactService
+     */
+    omit?: ContactServiceOmit<ExtArgs> | null
+    /**
      * The data used to create many ContactServices.
      */
     data: ContactServiceCreateManyInput | ContactServiceCreateManyInput[]
@@ -10819,6 +14450,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ContactService
      */
     select?: ContactServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactService
+     */
+    omit?: ContactServiceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -10845,6 +14480,40 @@ export namespace Prisma {
      * Filter which ContactServices to update
      */
     where?: ContactServiceWhereInput
+    /**
+     * Limit how many ContactServices to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContactService updateManyAndReturn
+   */
+  export type ContactServiceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactService
+     */
+    select?: ContactServiceSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactService
+     */
+    omit?: ContactServiceOmit<ExtArgs> | null
+    /**
+     * The data used to update ContactServices.
+     */
+    data: XOR<ContactServiceUpdateManyMutationInput, ContactServiceUncheckedUpdateManyInput>
+    /**
+     * Filter which ContactServices to update
+     */
+    where?: ContactServiceWhereInput
+    /**
+     * Limit how many ContactServices to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -10855,6 +14524,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ContactService
      */
     select?: ContactServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactService
+     */
+    omit?: ContactServiceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -10882,6 +14555,10 @@ export namespace Prisma {
      */
     select?: ContactServiceSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactService
+     */
+    omit?: ContactServiceOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceInclude<ExtArgs> | null
@@ -10899,6 +14576,10 @@ export namespace Prisma {
      * Filter which ContactServices to delete
      */
     where?: ContactServiceWhereInput
+    /**
+     * Limit how many ContactServices to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -10909,6 +14590,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ContactServiceContact
      */
     select?: ContactServiceContactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactServiceContact
+     */
+    omit?: ContactServiceContactOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -10930,6 +14615,10 @@ export namespace Prisma {
      */
     select?: ContactServiceDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceDocument
+     */
+    omit?: ContactServiceDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceDocumentInclude<ExtArgs> | null
@@ -10949,6 +14638,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ContactService
      */
     select?: ContactServiceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactService
+     */
+    omit?: ContactServiceOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -11199,9 +14892,25 @@ export namespace Prisma {
     email?: boolean
     contactServiceId?: boolean
     contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
+    posts?: boolean | ContactServiceContact$postsArgs<ExtArgs>
+    _count?: boolean | ContactServiceContactCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contactServiceContact"]>
 
   export type ContactServiceContactSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    serviceName?: boolean
+    district?: boolean
+    subDistrict?: boolean
+    block?: boolean
+    name?: boolean
+    designation?: boolean
+    contact?: boolean
+    email?: boolean
+    contactServiceId?: boolean
+    contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contactServiceContact"]>
+
+  export type ContactServiceContactSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     serviceName?: boolean
     district?: boolean
@@ -11228,10 +14937,16 @@ export namespace Prisma {
     contactServiceId?: boolean
   }
 
+  export type ContactServiceContactOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serviceName" | "district" | "subDistrict" | "block" | "name" | "designation" | "contact" | "email" | "contactServiceId", ExtArgs["result"]["contactServiceContact"]>
   export type ContactServiceContactInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
+    posts?: boolean | ContactServiceContact$postsArgs<ExtArgs>
+    _count?: boolean | ContactServiceContactCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ContactServiceContactIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
+  }
+  export type ContactServiceContactIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
   }
 
@@ -11239,6 +14954,7 @@ export namespace Prisma {
     name: "ContactServiceContact"
     objects: {
       contactService: Prisma.$ContactServicePayload<ExtArgs>
+      posts: Prisma.$PostPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -11257,12 +14973,12 @@ export namespace Prisma {
 
   type ContactServiceContactGetPayload<S extends boolean | null | undefined | ContactServiceContactDefaultArgs> = $Result.GetResult<Prisma.$ContactServiceContactPayload, S>
 
-  type ContactServiceContactCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<ContactServiceContactFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type ContactServiceContactCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ContactServiceContactFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: ContactServiceContactCountAggregateInputType | true
     }
 
-  export interface ContactServiceContactDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface ContactServiceContactDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ContactServiceContact'], meta: { name: 'ContactServiceContact' } }
     /**
      * Find zero or one ContactServiceContact that matches the filter.
@@ -11275,10 +14991,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends ContactServiceContactFindUniqueArgs>(args: SelectSubset<T, ContactServiceContactFindUniqueArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends ContactServiceContactFindUniqueArgs>(args: SelectSubset<T, ContactServiceContactFindUniqueArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one ContactServiceContact that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one ContactServiceContact that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {ContactServiceContactFindUniqueOrThrowArgs} args - Arguments to find a ContactServiceContact
      * @example
@@ -11289,7 +15005,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends ContactServiceContactFindUniqueOrThrowArgs>(args: SelectSubset<T, ContactServiceContactFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends ContactServiceContactFindUniqueOrThrowArgs>(args: SelectSubset<T, ContactServiceContactFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first ContactServiceContact that matches the filter.
@@ -11304,7 +15020,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends ContactServiceContactFindFirstArgs>(args?: SelectSubset<T, ContactServiceContactFindFirstArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends ContactServiceContactFindFirstArgs>(args?: SelectSubset<T, ContactServiceContactFindFirstArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first ContactServiceContact that matches the filter or
@@ -11320,7 +15036,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends ContactServiceContactFindFirstOrThrowArgs>(args?: SelectSubset<T, ContactServiceContactFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends ContactServiceContactFindFirstOrThrowArgs>(args?: SelectSubset<T, ContactServiceContactFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more ContactServiceContacts that matches the filter.
@@ -11338,7 +15054,7 @@ export namespace Prisma {
      * const contactServiceContactWithIdOnly = await prisma.contactServiceContact.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends ContactServiceContactFindManyArgs>(args?: SelectSubset<T, ContactServiceContactFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends ContactServiceContactFindManyArgs>(args?: SelectSubset<T, ContactServiceContactFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a ContactServiceContact.
@@ -11352,7 +15068,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends ContactServiceContactCreateArgs>(args: SelectSubset<T, ContactServiceContactCreateArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends ContactServiceContactCreateArgs>(args: SelectSubset<T, ContactServiceContactCreateArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many ContactServiceContacts.
@@ -11380,7 +15096,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many ContactServiceContacts and only return the `id`
-     * const contactServiceContactWithIdOnly = await prisma.contactServiceContact.createManyAndReturn({ 
+     * const contactServiceContactWithIdOnly = await prisma.contactServiceContact.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -11390,7 +15106,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends ContactServiceContactCreateManyAndReturnArgs>(args?: SelectSubset<T, ContactServiceContactCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends ContactServiceContactCreateManyAndReturnArgs>(args?: SelectSubset<T, ContactServiceContactCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a ContactServiceContact.
@@ -11404,7 +15120,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends ContactServiceContactDeleteArgs>(args: SelectSubset<T, ContactServiceContactDeleteArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends ContactServiceContactDeleteArgs>(args: SelectSubset<T, ContactServiceContactDeleteArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one ContactServiceContact.
@@ -11421,7 +15137,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends ContactServiceContactUpdateArgs>(args: SelectSubset<T, ContactServiceContactUpdateArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends ContactServiceContactUpdateArgs>(args: SelectSubset<T, ContactServiceContactUpdateArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more ContactServiceContacts.
@@ -11457,6 +15173,36 @@ export namespace Prisma {
     updateMany<T extends ContactServiceContactUpdateManyArgs>(args: SelectSubset<T, ContactServiceContactUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more ContactServiceContacts and returns the data updated in the database.
+     * @param {ContactServiceContactUpdateManyAndReturnArgs} args - Arguments to update many ContactServiceContacts.
+     * @example
+     * // Update many ContactServiceContacts
+     * const contactServiceContact = await prisma.contactServiceContact.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ContactServiceContacts and only return the `id`
+     * const contactServiceContactWithIdOnly = await prisma.contactServiceContact.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ContactServiceContactUpdateManyAndReturnArgs>(args: SelectSubset<T, ContactServiceContactUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one ContactServiceContact.
      * @param {ContactServiceContactUpsertArgs} args - Arguments to update or create a ContactServiceContact.
      * @example
@@ -11473,7 +15219,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends ContactServiceContactUpsertArgs>(args: SelectSubset<T, ContactServiceContactUpsertArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends ContactServiceContactUpsertArgs>(args: SelectSubset<T, ContactServiceContactUpsertArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -11613,9 +15359,10 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__ContactServiceContactClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__ContactServiceContactClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    contactService<T extends ContactServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactServiceDefaultArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    contactService<T extends ContactServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactServiceDefaultArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    posts<T extends ContactServiceContact$postsArgs<ExtArgs> = {}>(args?: Subset<T, ContactServiceContact$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11643,7 +15390,7 @@ export namespace Prisma {
 
   /**
    * Fields of the ContactServiceContact model
-   */ 
+   */
   interface ContactServiceContactFieldRefs {
     readonly id: FieldRef<"ContactServiceContact", 'Int'>
     readonly serviceName: FieldRef<"ContactServiceContact", 'String'>
@@ -11668,6 +15415,10 @@ export namespace Prisma {
      */
     select?: ContactServiceContactSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceContact
+     */
+    omit?: ContactServiceContactOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceContactInclude<ExtArgs> | null
@@ -11686,6 +15437,10 @@ export namespace Prisma {
      */
     select?: ContactServiceContactSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceContact
+     */
+    omit?: ContactServiceContactOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceContactInclude<ExtArgs> | null
@@ -11703,6 +15458,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ContactServiceContact
      */
     select?: ContactServiceContactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactServiceContact
+     */
+    omit?: ContactServiceContactOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -11752,6 +15511,10 @@ export namespace Prisma {
      */
     select?: ContactServiceContactSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceContact
+     */
+    omit?: ContactServiceContactOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceContactInclude<ExtArgs> | null
@@ -11800,6 +15563,10 @@ export namespace Prisma {
      */
     select?: ContactServiceContactSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceContact
+     */
+    omit?: ContactServiceContactOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceContactInclude<ExtArgs> | null
@@ -11843,6 +15610,10 @@ export namespace Prisma {
      */
     select?: ContactServiceContactSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceContact
+     */
+    omit?: ContactServiceContactOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceContactInclude<ExtArgs> | null
@@ -11872,6 +15643,10 @@ export namespace Prisma {
      */
     select?: ContactServiceContactSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceContact
+     */
+    omit?: ContactServiceContactOmit<ExtArgs> | null
+    /**
      * The data used to create many ContactServiceContacts.
      */
     data: ContactServiceContactCreateManyInput | ContactServiceContactCreateManyInput[]
@@ -11890,6 +15665,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ContactServiceContact
      */
     select?: ContactServiceContactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactServiceContact
+     */
+    omit?: ContactServiceContactOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -11916,6 +15695,40 @@ export namespace Prisma {
      * Filter which ContactServiceContacts to update
      */
     where?: ContactServiceContactWhereInput
+    /**
+     * Limit how many ContactServiceContacts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContactServiceContact updateManyAndReturn
+   */
+  export type ContactServiceContactUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceContact
+     */
+    select?: ContactServiceContactSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactServiceContact
+     */
+    omit?: ContactServiceContactOmit<ExtArgs> | null
+    /**
+     * The data used to update ContactServiceContacts.
+     */
+    data: XOR<ContactServiceContactUpdateManyMutationInput, ContactServiceContactUncheckedUpdateManyInput>
+    /**
+     * Filter which ContactServiceContacts to update
+     */
+    where?: ContactServiceContactWhereInput
+    /**
+     * Limit how many ContactServiceContacts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceContactIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -11926,6 +15739,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ContactServiceContact
      */
     select?: ContactServiceContactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactServiceContact
+     */
+    omit?: ContactServiceContactOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -11953,6 +15770,10 @@ export namespace Prisma {
      */
     select?: ContactServiceContactSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceContact
+     */
+    omit?: ContactServiceContactOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceContactInclude<ExtArgs> | null
@@ -11970,6 +15791,34 @@ export namespace Prisma {
      * Filter which ContactServiceContacts to delete
      */
     where?: ContactServiceContactWhereInput
+    /**
+     * Limit how many ContactServiceContacts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContactServiceContact.posts
+   */
+  export type ContactServiceContact$postsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    where?: PostWhereInput
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
+    cursor?: PostWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
   }
 
   /**
@@ -11980,6 +15829,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ContactServiceContact
      */
     select?: ContactServiceContactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactServiceContact
+     */
+    omit?: ContactServiceContactOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -12214,6 +16067,16 @@ export namespace Prisma {
     contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contactServiceDocument"]>
 
+  export type ContactServiceDocumentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slNo?: boolean
+    documentType?: boolean
+    validProof?: boolean
+    isRequired?: boolean
+    contactServiceId?: boolean
+    contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contactServiceDocument"]>
+
   export type ContactServiceDocumentSelectScalar = {
     id?: boolean
     slNo?: boolean
@@ -12223,10 +16086,14 @@ export namespace Prisma {
     contactServiceId?: boolean
   }
 
+  export type ContactServiceDocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slNo" | "documentType" | "validProof" | "isRequired" | "contactServiceId", ExtArgs["result"]["contactServiceDocument"]>
   export type ContactServiceDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
   }
   export type ContactServiceDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
+  }
+  export type ContactServiceDocumentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     contactService?: boolean | ContactServiceDefaultArgs<ExtArgs>
   }
 
@@ -12248,12 +16115,12 @@ export namespace Prisma {
 
   type ContactServiceDocumentGetPayload<S extends boolean | null | undefined | ContactServiceDocumentDefaultArgs> = $Result.GetResult<Prisma.$ContactServiceDocumentPayload, S>
 
-  type ContactServiceDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<ContactServiceDocumentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type ContactServiceDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ContactServiceDocumentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: ContactServiceDocumentCountAggregateInputType | true
     }
 
-  export interface ContactServiceDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface ContactServiceDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ContactServiceDocument'], meta: { name: 'ContactServiceDocument' } }
     /**
      * Find zero or one ContactServiceDocument that matches the filter.
@@ -12266,10 +16133,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends ContactServiceDocumentFindUniqueArgs>(args: SelectSubset<T, ContactServiceDocumentFindUniqueArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends ContactServiceDocumentFindUniqueArgs>(args: SelectSubset<T, ContactServiceDocumentFindUniqueArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one ContactServiceDocument that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one ContactServiceDocument that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {ContactServiceDocumentFindUniqueOrThrowArgs} args - Arguments to find a ContactServiceDocument
      * @example
@@ -12280,7 +16147,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends ContactServiceDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, ContactServiceDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends ContactServiceDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, ContactServiceDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first ContactServiceDocument that matches the filter.
@@ -12295,7 +16162,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends ContactServiceDocumentFindFirstArgs>(args?: SelectSubset<T, ContactServiceDocumentFindFirstArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends ContactServiceDocumentFindFirstArgs>(args?: SelectSubset<T, ContactServiceDocumentFindFirstArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first ContactServiceDocument that matches the filter or
@@ -12311,7 +16178,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends ContactServiceDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, ContactServiceDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends ContactServiceDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, ContactServiceDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more ContactServiceDocuments that matches the filter.
@@ -12329,7 +16196,7 @@ export namespace Prisma {
      * const contactServiceDocumentWithIdOnly = await prisma.contactServiceDocument.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends ContactServiceDocumentFindManyArgs>(args?: SelectSubset<T, ContactServiceDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends ContactServiceDocumentFindManyArgs>(args?: SelectSubset<T, ContactServiceDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a ContactServiceDocument.
@@ -12343,7 +16210,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends ContactServiceDocumentCreateArgs>(args: SelectSubset<T, ContactServiceDocumentCreateArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends ContactServiceDocumentCreateArgs>(args: SelectSubset<T, ContactServiceDocumentCreateArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many ContactServiceDocuments.
@@ -12371,7 +16238,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many ContactServiceDocuments and only return the `id`
-     * const contactServiceDocumentWithIdOnly = await prisma.contactServiceDocument.createManyAndReturn({ 
+     * const contactServiceDocumentWithIdOnly = await prisma.contactServiceDocument.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -12381,7 +16248,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends ContactServiceDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, ContactServiceDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends ContactServiceDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, ContactServiceDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a ContactServiceDocument.
@@ -12395,7 +16262,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends ContactServiceDocumentDeleteArgs>(args: SelectSubset<T, ContactServiceDocumentDeleteArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends ContactServiceDocumentDeleteArgs>(args: SelectSubset<T, ContactServiceDocumentDeleteArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one ContactServiceDocument.
@@ -12412,7 +16279,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends ContactServiceDocumentUpdateArgs>(args: SelectSubset<T, ContactServiceDocumentUpdateArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends ContactServiceDocumentUpdateArgs>(args: SelectSubset<T, ContactServiceDocumentUpdateArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more ContactServiceDocuments.
@@ -12448,6 +16315,36 @@ export namespace Prisma {
     updateMany<T extends ContactServiceDocumentUpdateManyArgs>(args: SelectSubset<T, ContactServiceDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more ContactServiceDocuments and returns the data updated in the database.
+     * @param {ContactServiceDocumentUpdateManyAndReturnArgs} args - Arguments to update many ContactServiceDocuments.
+     * @example
+     * // Update many ContactServiceDocuments
+     * const contactServiceDocument = await prisma.contactServiceDocument.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ContactServiceDocuments and only return the `id`
+     * const contactServiceDocumentWithIdOnly = await prisma.contactServiceDocument.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ContactServiceDocumentUpdateManyAndReturnArgs>(args: SelectSubset<T, ContactServiceDocumentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one ContactServiceDocument.
      * @param {ContactServiceDocumentUpsertArgs} args - Arguments to update or create a ContactServiceDocument.
      * @example
@@ -12464,7 +16361,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends ContactServiceDocumentUpsertArgs>(args: SelectSubset<T, ContactServiceDocumentUpsertArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends ContactServiceDocumentUpsertArgs>(args: SelectSubset<T, ContactServiceDocumentUpsertArgs<ExtArgs>>): Prisma__ContactServiceDocumentClient<$Result.GetResult<Prisma.$ContactServiceDocumentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -12604,9 +16501,9 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__ContactServiceDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__ContactServiceDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    contactService<T extends ContactServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactServiceDefaultArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    contactService<T extends ContactServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactServiceDefaultArgs<ExtArgs>>): Prisma__ContactServiceClient<$Result.GetResult<Prisma.$ContactServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12634,7 +16531,7 @@ export namespace Prisma {
 
   /**
    * Fields of the ContactServiceDocument model
-   */ 
+   */
   interface ContactServiceDocumentFieldRefs {
     readonly id: FieldRef<"ContactServiceDocument", 'Int'>
     readonly slNo: FieldRef<"ContactServiceDocument", 'Int'>
@@ -12655,6 +16552,10 @@ export namespace Prisma {
      */
     select?: ContactServiceDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceDocument
+     */
+    omit?: ContactServiceDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceDocumentInclude<ExtArgs> | null
@@ -12673,6 +16574,10 @@ export namespace Prisma {
      */
     select?: ContactServiceDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceDocument
+     */
+    omit?: ContactServiceDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceDocumentInclude<ExtArgs> | null
@@ -12690,6 +16595,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ContactServiceDocument
      */
     select?: ContactServiceDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactServiceDocument
+     */
+    omit?: ContactServiceDocumentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -12739,6 +16648,10 @@ export namespace Prisma {
      */
     select?: ContactServiceDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceDocument
+     */
+    omit?: ContactServiceDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceDocumentInclude<ExtArgs> | null
@@ -12787,6 +16700,10 @@ export namespace Prisma {
      */
     select?: ContactServiceDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceDocument
+     */
+    omit?: ContactServiceDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceDocumentInclude<ExtArgs> | null
@@ -12830,6 +16747,10 @@ export namespace Prisma {
      */
     select?: ContactServiceDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceDocument
+     */
+    omit?: ContactServiceDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceDocumentInclude<ExtArgs> | null
@@ -12859,6 +16780,10 @@ export namespace Prisma {
      */
     select?: ContactServiceDocumentSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceDocument
+     */
+    omit?: ContactServiceDocumentOmit<ExtArgs> | null
+    /**
      * The data used to create many ContactServiceDocuments.
      */
     data: ContactServiceDocumentCreateManyInput | ContactServiceDocumentCreateManyInput[]
@@ -12877,6 +16802,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ContactServiceDocument
      */
     select?: ContactServiceDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactServiceDocument
+     */
+    omit?: ContactServiceDocumentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -12903,6 +16832,40 @@ export namespace Prisma {
      * Filter which ContactServiceDocuments to update
      */
     where?: ContactServiceDocumentWhereInput
+    /**
+     * Limit how many ContactServiceDocuments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContactServiceDocument updateManyAndReturn
+   */
+  export type ContactServiceDocumentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactServiceDocument
+     */
+    select?: ContactServiceDocumentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactServiceDocument
+     */
+    omit?: ContactServiceDocumentOmit<ExtArgs> | null
+    /**
+     * The data used to update ContactServiceDocuments.
+     */
+    data: XOR<ContactServiceDocumentUpdateManyMutationInput, ContactServiceDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which ContactServiceDocuments to update
+     */
+    where?: ContactServiceDocumentWhereInput
+    /**
+     * Limit how many ContactServiceDocuments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactServiceDocumentIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -12913,6 +16876,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ContactServiceDocument
      */
     select?: ContactServiceDocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactServiceDocument
+     */
+    omit?: ContactServiceDocumentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -12940,6 +16907,10 @@ export namespace Prisma {
      */
     select?: ContactServiceDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceDocument
+     */
+    omit?: ContactServiceDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceDocumentInclude<ExtArgs> | null
@@ -12957,6 +16928,10 @@ export namespace Prisma {
      * Filter which ContactServiceDocuments to delete
      */
     where?: ContactServiceDocumentWhereInput
+    /**
+     * Limit how many ContactServiceDocuments to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -12968,6 +16943,10 @@ export namespace Prisma {
      */
     select?: ContactServiceDocumentSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the ContactServiceDocument
+     */
+    omit?: ContactServiceDocumentOmit<ExtArgs> | null
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ContactServiceDocumentInclude<ExtArgs> | null
@@ -12975,438 +16954,441 @@ export namespace Prisma {
 
 
   /**
-   * Model Grievance
+   * Model Post
    */
 
-  export type AggregateGrievance = {
-    _count: GrievanceCountAggregateOutputType | null
-    _avg: GrievanceAvgAggregateOutputType | null
-    _sum: GrievanceSumAggregateOutputType | null
-    _min: GrievanceMinAggregateOutputType | null
-    _max: GrievanceMaxAggregateOutputType | null
+  export type AggregatePost = {
+    _count: PostCountAggregateOutputType | null
+    _avg: PostAvgAggregateOutputType | null
+    _sum: PostSumAggregateOutputType | null
+    _min: PostMinAggregateOutputType | null
+    _max: PostMaxAggregateOutputType | null
   }
 
-  export type GrievanceAvgAggregateOutputType = {
+  export type PostAvgAggregateOutputType = {
     id: number | null
+    officeId: number | null
   }
 
-  export type GrievanceSumAggregateOutputType = {
+  export type PostSumAggregateOutputType = {
     id: number | null
+    officeId: number | null
   }
 
-  export type GrievanceMinAggregateOutputType = {
+  export type PostMinAggregateOutputType = {
     id: number | null
-    name: string | null
-    email: string | null
-    phone: string | null
-    subject: string | null
+    postName: string | null
+    rank: string | null
     description: string | null
     department: string | null
-    priority: string | null
     status: string | null
-    source: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    officeId: number | null
   }
 
-  export type GrievanceMaxAggregateOutputType = {
+  export type PostMaxAggregateOutputType = {
     id: number | null
-    name: string | null
-    email: string | null
-    phone: string | null
-    subject: string | null
+    postName: string | null
+    rank: string | null
     description: string | null
     department: string | null
-    priority: string | null
     status: string | null
-    source: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    officeId: number | null
   }
 
-  export type GrievanceCountAggregateOutputType = {
+  export type PostCountAggregateOutputType = {
     id: number
-    name: number
-    email: number
-    phone: number
-    subject: number
+    postName: number
+    rank: number
     description: number
     department: number
-    priority: number
     status: number
-    source: number
     createdAt: number
     updatedAt: number
+    officeId: number
     _all: number
   }
 
 
-  export type GrievanceAvgAggregateInputType = {
+  export type PostAvgAggregateInputType = {
     id?: true
+    officeId?: true
   }
 
-  export type GrievanceSumAggregateInputType = {
+  export type PostSumAggregateInputType = {
     id?: true
+    officeId?: true
   }
 
-  export type GrievanceMinAggregateInputType = {
+  export type PostMinAggregateInputType = {
     id?: true
-    name?: true
-    email?: true
-    phone?: true
-    subject?: true
+    postName?: true
+    rank?: true
     description?: true
     department?: true
-    priority?: true
     status?: true
-    source?: true
     createdAt?: true
     updatedAt?: true
+    officeId?: true
   }
 
-  export type GrievanceMaxAggregateInputType = {
+  export type PostMaxAggregateInputType = {
     id?: true
-    name?: true
-    email?: true
-    phone?: true
-    subject?: true
+    postName?: true
+    rank?: true
     description?: true
     department?: true
-    priority?: true
     status?: true
-    source?: true
     createdAt?: true
     updatedAt?: true
+    officeId?: true
   }
 
-  export type GrievanceCountAggregateInputType = {
+  export type PostCountAggregateInputType = {
     id?: true
-    name?: true
-    email?: true
-    phone?: true
-    subject?: true
+    postName?: true
+    rank?: true
     description?: true
     department?: true
-    priority?: true
     status?: true
-    source?: true
     createdAt?: true
     updatedAt?: true
+    officeId?: true
     _all?: true
   }
 
-  export type GrievanceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PostAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Grievance to aggregate.
+     * Filter which Post to aggregate.
      */
-    where?: GrievanceWhereInput
+    where?: PostWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Grievances to fetch.
+     * Determine the order of Posts to fetch.
      */
-    orderBy?: GrievanceOrderByWithRelationInput | GrievanceOrderByWithRelationInput[]
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: GrievanceWhereUniqueInput
+    cursor?: PostWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Grievances from the position of the cursor.
+     * Take `±n` Posts from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Grievances.
+     * Skip the first `n` Posts.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Grievances
+     * Count returned Posts
     **/
-    _count?: true | GrievanceCountAggregateInputType
+    _count?: true | PostCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: GrievanceAvgAggregateInputType
+    _avg?: PostAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: GrievanceSumAggregateInputType
+    _sum?: PostSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: GrievanceMinAggregateInputType
+    _min?: PostMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: GrievanceMaxAggregateInputType
+    _max?: PostMaxAggregateInputType
   }
 
-  export type GetGrievanceAggregateType<T extends GrievanceAggregateArgs> = {
-        [P in keyof T & keyof AggregateGrievance]: P extends '_count' | 'count'
+  export type GetPostAggregateType<T extends PostAggregateArgs> = {
+        [P in keyof T & keyof AggregatePost]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateGrievance[P]>
-      : GetScalarType<T[P], AggregateGrievance[P]>
+        : GetScalarType<T[P], AggregatePost[P]>
+      : GetScalarType<T[P], AggregatePost[P]>
   }
 
 
 
 
-  export type GrievanceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GrievanceWhereInput
-    orderBy?: GrievanceOrderByWithAggregationInput | GrievanceOrderByWithAggregationInput[]
-    by: GrievanceScalarFieldEnum[] | GrievanceScalarFieldEnum
-    having?: GrievanceScalarWhereWithAggregatesInput
+  export type PostGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostWhereInput
+    orderBy?: PostOrderByWithAggregationInput | PostOrderByWithAggregationInput[]
+    by: PostScalarFieldEnum[] | PostScalarFieldEnum
+    having?: PostScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: GrievanceCountAggregateInputType | true
-    _avg?: GrievanceAvgAggregateInputType
-    _sum?: GrievanceSumAggregateInputType
-    _min?: GrievanceMinAggregateInputType
-    _max?: GrievanceMaxAggregateInputType
+    _count?: PostCountAggregateInputType | true
+    _avg?: PostAvgAggregateInputType
+    _sum?: PostSumAggregateInputType
+    _min?: PostMinAggregateInputType
+    _max?: PostMaxAggregateInputType
   }
 
-  export type GrievanceGroupByOutputType = {
+  export type PostGroupByOutputType = {
     id: number
-    name: string
-    email: string
-    phone: string
-    subject: string
-    description: string
-    department: string
-    priority: string
+    postName: string
+    rank: string
+    description: string | null
+    department: string | null
     status: string
-    source: string
     createdAt: Date
     updatedAt: Date
-    _count: GrievanceCountAggregateOutputType | null
-    _avg: GrievanceAvgAggregateOutputType | null
-    _sum: GrievanceSumAggregateOutputType | null
-    _min: GrievanceMinAggregateOutputType | null
-    _max: GrievanceMaxAggregateOutputType | null
+    officeId: number
+    _count: PostCountAggregateOutputType | null
+    _avg: PostAvgAggregateOutputType | null
+    _sum: PostSumAggregateOutputType | null
+    _min: PostMinAggregateOutputType | null
+    _max: PostMaxAggregateOutputType | null
   }
 
-  type GetGrievanceGroupByPayload<T extends GrievanceGroupByArgs> = Prisma.PrismaPromise<
+  type GetPostGroupByPayload<T extends PostGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<GrievanceGroupByOutputType, T['by']> &
+      PickEnumerable<PostGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof GrievanceGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof PostGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], GrievanceGroupByOutputType[P]>
-            : GetScalarType<T[P], GrievanceGroupByOutputType[P]>
+              : GetScalarType<T[P], PostGroupByOutputType[P]>
+            : GetScalarType<T[P], PostGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type GrievanceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PostSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    email?: boolean
-    phone?: boolean
-    subject?: boolean
+    postName?: boolean
+    rank?: boolean
     description?: boolean
     department?: boolean
-    priority?: boolean
     status?: boolean
-    source?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-  }, ExtArgs["result"]["grievance"]>
+    officeId?: boolean
+    office?: boolean | ContactServiceContactDefaultArgs<ExtArgs>
+    employees?: boolean | Post$employeesArgs<ExtArgs>
+    _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["post"]>
 
-  export type GrievanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PostSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    email?: boolean
-    phone?: boolean
-    subject?: boolean
+    postName?: boolean
+    rank?: boolean
     description?: boolean
     department?: boolean
-    priority?: boolean
     status?: boolean
-    source?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-  }, ExtArgs["result"]["grievance"]>
+    officeId?: boolean
+    office?: boolean | ContactServiceContactDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["post"]>
 
-  export type GrievanceSelectScalar = {
+  export type PostSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
-    email?: boolean
-    phone?: boolean
-    subject?: boolean
+    postName?: boolean
+    rank?: boolean
     description?: boolean
     department?: boolean
-    priority?: boolean
     status?: boolean
-    source?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    officeId?: boolean
+    office?: boolean | ContactServiceContactDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["post"]>
+
+  export type PostSelectScalar = {
+    id?: boolean
+    postName?: boolean
+    rank?: boolean
+    description?: boolean
+    department?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    officeId?: boolean
   }
 
+  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postName" | "rank" | "description" | "department" | "status" | "createdAt" | "updatedAt" | "officeId", ExtArgs["result"]["post"]>
+  export type PostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    office?: boolean | ContactServiceContactDefaultArgs<ExtArgs>
+    employees?: boolean | Post$employeesArgs<ExtArgs>
+    _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PostIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    office?: boolean | ContactServiceContactDefaultArgs<ExtArgs>
+  }
+  export type PostIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    office?: boolean | ContactServiceContactDefaultArgs<ExtArgs>
+  }
 
-  export type $GrievancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Grievance"
-    objects: {}
+  export type $PostPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Post"
+    objects: {
+      office: Prisma.$ContactServiceContactPayload<ExtArgs>
+      employees: Prisma.$EmployeePayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      name: string
-      email: string
-      phone: string
-      subject: string
-      description: string
-      department: string
-      priority: string
+      postName: string
+      rank: string
+      description: string | null
+      department: string | null
       status: string
-      source: string
       createdAt: Date
       updatedAt: Date
-    }, ExtArgs["result"]["grievance"]>
+      officeId: number
+    }, ExtArgs["result"]["post"]>
     composites: {}
   }
 
-  type GrievanceGetPayload<S extends boolean | null | undefined | GrievanceDefaultArgs> = $Result.GetResult<Prisma.$GrievancePayload, S>
+  type PostGetPayload<S extends boolean | null | undefined | PostDefaultArgs> = $Result.GetResult<Prisma.$PostPayload, S>
 
-  type GrievanceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<GrievanceFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: GrievanceCountAggregateInputType | true
+  type PostCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PostFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PostCountAggregateInputType | true
     }
 
-  export interface GrievanceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Grievance'], meta: { name: 'Grievance' } }
+  export interface PostDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Post'], meta: { name: 'Post' } }
     /**
-     * Find zero or one Grievance that matches the filter.
-     * @param {GrievanceFindUniqueArgs} args - Arguments to find a Grievance
+     * Find zero or one Post that matches the filter.
+     * @param {PostFindUniqueArgs} args - Arguments to find a Post
      * @example
-     * // Get one Grievance
-     * const grievance = await prisma.grievance.findUnique({
+     * // Get one Post
+     * const post = await prisma.post.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends GrievanceFindUniqueArgs>(args: SelectSubset<T, GrievanceFindUniqueArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends PostFindUniqueArgs>(args: SelectSubset<T, PostFindUniqueArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Grievance that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one Post that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {GrievanceFindUniqueOrThrowArgs} args - Arguments to find a Grievance
+     * @param {PostFindUniqueOrThrowArgs} args - Arguments to find a Post
      * @example
-     * // Get one Grievance
-     * const grievance = await prisma.grievance.findUniqueOrThrow({
+     * // Get one Post
+     * const post = await prisma.post.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends GrievanceFindUniqueOrThrowArgs>(args: SelectSubset<T, GrievanceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends PostFindUniqueOrThrowArgs>(args: SelectSubset<T, PostFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Grievance that matches the filter.
+     * Find the first Post that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GrievanceFindFirstArgs} args - Arguments to find a Grievance
+     * @param {PostFindFirstArgs} args - Arguments to find a Post
      * @example
-     * // Get one Grievance
-     * const grievance = await prisma.grievance.findFirst({
+     * // Get one Post
+     * const post = await prisma.post.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends GrievanceFindFirstArgs>(args?: SelectSubset<T, GrievanceFindFirstArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends PostFindFirstArgs>(args?: SelectSubset<T, PostFindFirstArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Grievance that matches the filter or
+     * Find the first Post that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GrievanceFindFirstOrThrowArgs} args - Arguments to find a Grievance
+     * @param {PostFindFirstOrThrowArgs} args - Arguments to find a Post
      * @example
-     * // Get one Grievance
-     * const grievance = await prisma.grievance.findFirstOrThrow({
+     * // Get one Post
+     * const post = await prisma.post.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends GrievanceFindFirstOrThrowArgs>(args?: SelectSubset<T, GrievanceFindFirstOrThrowArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends PostFindFirstOrThrowArgs>(args?: SelectSubset<T, PostFindFirstOrThrowArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Grievances that matches the filter.
+     * Find zero or more Posts that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GrievanceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {PostFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Grievances
-     * const grievances = await prisma.grievance.findMany()
+     * // Get all Posts
+     * const posts = await prisma.post.findMany()
      * 
-     * // Get first 10 Grievances
-     * const grievances = await prisma.grievance.findMany({ take: 10 })
+     * // Get first 10 Posts
+     * const posts = await prisma.post.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const grievanceWithIdOnly = await prisma.grievance.findMany({ select: { id: true } })
+     * const postWithIdOnly = await prisma.post.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends GrievanceFindManyArgs>(args?: SelectSubset<T, GrievanceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "findMany">>
+    findMany<T extends PostFindManyArgs>(args?: SelectSubset<T, PostFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Grievance.
-     * @param {GrievanceCreateArgs} args - Arguments to create a Grievance.
+     * Create a Post.
+     * @param {PostCreateArgs} args - Arguments to create a Post.
      * @example
-     * // Create one Grievance
-     * const Grievance = await prisma.grievance.create({
+     * // Create one Post
+     * const Post = await prisma.post.create({
      *   data: {
-     *     // ... data to create a Grievance
+     *     // ... data to create a Post
      *   }
      * })
      * 
      */
-    create<T extends GrievanceCreateArgs>(args: SelectSubset<T, GrievanceCreateArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends PostCreateArgs>(args: SelectSubset<T, PostCreateArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Grievances.
-     * @param {GrievanceCreateManyArgs} args - Arguments to create many Grievances.
+     * Create many Posts.
+     * @param {PostCreateManyArgs} args - Arguments to create many Posts.
      * @example
-     * // Create many Grievances
-     * const grievance = await prisma.grievance.createMany({
+     * // Create many Posts
+     * const post = await prisma.post.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends GrievanceCreateManyArgs>(args?: SelectSubset<T, GrievanceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends PostCreateManyArgs>(args?: SelectSubset<T, PostCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Grievances and returns the data saved in the database.
-     * @param {GrievanceCreateManyAndReturnArgs} args - Arguments to create many Grievances.
+     * Create many Posts and returns the data saved in the database.
+     * @param {PostCreateManyAndReturnArgs} args - Arguments to create many Posts.
      * @example
-     * // Create many Grievances
-     * const grievance = await prisma.grievance.createManyAndReturn({
+     * // Create many Posts
+     * const post = await prisma.post.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Grievances and only return the `id`
-     * const grievanceWithIdOnly = await prisma.grievance.createManyAndReturn({ 
+     * // Create many Posts and only return the `id`
+     * const postWithIdOnly = await prisma.post.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -13416,28 +17398,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends GrievanceCreateManyAndReturnArgs>(args?: SelectSubset<T, GrievanceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends PostCreateManyAndReturnArgs>(args?: SelectSubset<T, PostCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Grievance.
-     * @param {GrievanceDeleteArgs} args - Arguments to delete one Grievance.
+     * Delete a Post.
+     * @param {PostDeleteArgs} args - Arguments to delete one Post.
      * @example
-     * // Delete one Grievance
-     * const Grievance = await prisma.grievance.delete({
+     * // Delete one Post
+     * const Post = await prisma.post.delete({
      *   where: {
-     *     // ... filter to delete one Grievance
+     *     // ... filter to delete one Post
      *   }
      * })
      * 
      */
-    delete<T extends GrievanceDeleteArgs>(args: SelectSubset<T, GrievanceDeleteArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends PostDeleteArgs>(args: SelectSubset<T, PostDeleteArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Grievance.
-     * @param {GrievanceUpdateArgs} args - Arguments to update one Grievance.
+     * Update one Post.
+     * @param {PostUpdateArgs} args - Arguments to update one Post.
      * @example
-     * // Update one Grievance
-     * const grievance = await prisma.grievance.update({
+     * // Update one Post
+     * const post = await prisma.post.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -13447,30 +17429,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends GrievanceUpdateArgs>(args: SelectSubset<T, GrievanceUpdateArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends PostUpdateArgs>(args: SelectSubset<T, PostUpdateArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Grievances.
-     * @param {GrievanceDeleteManyArgs} args - Arguments to filter Grievances to delete.
+     * Delete zero or more Posts.
+     * @param {PostDeleteManyArgs} args - Arguments to filter Posts to delete.
      * @example
-     * // Delete a few Grievances
-     * const { count } = await prisma.grievance.deleteMany({
+     * // Delete a few Posts
+     * const { count } = await prisma.post.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends GrievanceDeleteManyArgs>(args?: SelectSubset<T, GrievanceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends PostDeleteManyArgs>(args?: SelectSubset<T, PostDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Grievances.
+     * Update zero or more Posts.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GrievanceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {PostUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Grievances
-     * const grievance = await prisma.grievance.updateMany({
+     * // Update many Posts
+     * const post = await prisma.post.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -13480,56 +17462,86 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends GrievanceUpdateManyArgs>(args: SelectSubset<T, GrievanceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends PostUpdateManyArgs>(args: SelectSubset<T, PostUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one Grievance.
-     * @param {GrievanceUpsertArgs} args - Arguments to update or create a Grievance.
+     * Update zero or more Posts and returns the data updated in the database.
+     * @param {PostUpdateManyAndReturnArgs} args - Arguments to update many Posts.
      * @example
-     * // Update or create a Grievance
-     * const grievance = await prisma.grievance.upsert({
+     * // Update many Posts
+     * const post = await prisma.post.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Posts and only return the `id`
+     * const postWithIdOnly = await prisma.post.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PostUpdateManyAndReturnArgs>(args: SelectSubset<T, PostUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Post.
+     * @param {PostUpsertArgs} args - Arguments to update or create a Post.
+     * @example
+     * // Update or create a Post
+     * const post = await prisma.post.upsert({
      *   create: {
-     *     // ... data to create a Grievance
+     *     // ... data to create a Post
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Grievance we want to update
+     *     // ... the filter for the Post we want to update
      *   }
      * })
      */
-    upsert<T extends GrievanceUpsertArgs>(args: SelectSubset<T, GrievanceUpsertArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends PostUpsertArgs>(args: SelectSubset<T, PostUpsertArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Grievances.
+     * Count the number of Posts.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GrievanceCountArgs} args - Arguments to filter Grievances to count.
+     * @param {PostCountArgs} args - Arguments to filter Posts to count.
      * @example
-     * // Count the number of Grievances
-     * const count = await prisma.grievance.count({
+     * // Count the number of Posts
+     * const count = await prisma.post.count({
      *   where: {
-     *     // ... the filter for the Grievances we want to count
+     *     // ... the filter for the Posts we want to count
      *   }
      * })
     **/
-    count<T extends GrievanceCountArgs>(
-      args?: Subset<T, GrievanceCountArgs>,
+    count<T extends PostCountArgs>(
+      args?: Subset<T, PostCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], GrievanceCountAggregateOutputType>
+          : GetScalarType<T['select'], PostCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Grievance.
+     * Allows you to perform aggregations operations on a Post.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GrievanceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {PostAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -13549,13 +17561,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends GrievanceAggregateArgs>(args: Subset<T, GrievanceAggregateArgs>): Prisma.PrismaPromise<GetGrievanceAggregateType<T>>
+    aggregate<T extends PostAggregateArgs>(args: Subset<T, PostAggregateArgs>): Prisma.PrismaPromise<GetPostAggregateType<T>>
 
     /**
-     * Group by Grievance.
+     * Group by Post.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GrievanceGroupByArgs} args - Group by arguments.
+     * @param {PostGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -13570,14 +17582,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends GrievanceGroupByArgs,
+      T extends PostGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: GrievanceGroupByArgs['orderBy'] }
-        : { orderBy?: GrievanceGroupByArgs['orderBy'] },
+        ? { orderBy: PostGroupByArgs['orderBy'] }
+        : { orderBy?: PostGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -13626,21 +17638,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, GrievanceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGrievanceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, PostGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPostGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Grievance model
+   * Fields of the Post model
    */
-  readonly fields: GrievanceFieldRefs;
+  readonly fields: PostFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Grievance.
+   * The delegate class that acts as a "Promise-like" for Post.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__GrievanceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__PostClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    office<T extends ContactServiceContactDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactServiceContactDefaultArgs<ExtArgs>>): Prisma__ContactServiceContactClient<$Result.GetResult<Prisma.$ContactServiceContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    employees<T extends Post$employeesArgs<ExtArgs> = {}>(args?: Subset<T, Post$employeesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13667,306 +17681,1644 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Grievance model
-   */ 
-  interface GrievanceFieldRefs {
-    readonly id: FieldRef<"Grievance", 'Int'>
-    readonly name: FieldRef<"Grievance", 'String'>
-    readonly email: FieldRef<"Grievance", 'String'>
-    readonly phone: FieldRef<"Grievance", 'String'>
-    readonly subject: FieldRef<"Grievance", 'String'>
-    readonly description: FieldRef<"Grievance", 'String'>
-    readonly department: FieldRef<"Grievance", 'String'>
-    readonly priority: FieldRef<"Grievance", 'String'>
-    readonly status: FieldRef<"Grievance", 'String'>
-    readonly source: FieldRef<"Grievance", 'String'>
-    readonly createdAt: FieldRef<"Grievance", 'DateTime'>
-    readonly updatedAt: FieldRef<"Grievance", 'DateTime'>
+   * Fields of the Post model
+   */
+  interface PostFieldRefs {
+    readonly id: FieldRef<"Post", 'Int'>
+    readonly postName: FieldRef<"Post", 'String'>
+    readonly rank: FieldRef<"Post", 'String'>
+    readonly description: FieldRef<"Post", 'String'>
+    readonly department: FieldRef<"Post", 'String'>
+    readonly status: FieldRef<"Post", 'String'>
+    readonly createdAt: FieldRef<"Post", 'DateTime'>
+    readonly updatedAt: FieldRef<"Post", 'DateTime'>
+    readonly officeId: FieldRef<"Post", 'Int'>
   }
     
 
   // Custom InputTypes
   /**
-   * Grievance findUnique
+   * Post findUnique
    */
-  export type GrievanceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PostFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Grievance
+     * Select specific fields to fetch from the Post
      */
-    select?: GrievanceSelect<ExtArgs> | null
+    select?: PostSelect<ExtArgs> | null
     /**
-     * Filter, which Grievance to fetch.
+     * Omit specific fields from the Post
      */
-    where: GrievanceWhereUniqueInput
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * Filter, which Post to fetch.
+     */
+    where: PostWhereUniqueInput
   }
 
   /**
-   * Grievance findUniqueOrThrow
+   * Post findUniqueOrThrow
    */
-  export type GrievanceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PostFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Grievance
+     * Select specific fields to fetch from the Post
      */
-    select?: GrievanceSelect<ExtArgs> | null
+    select?: PostSelect<ExtArgs> | null
     /**
-     * Filter, which Grievance to fetch.
+     * Omit specific fields from the Post
      */
-    where: GrievanceWhereUniqueInput
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * Filter, which Post to fetch.
+     */
+    where: PostWhereUniqueInput
   }
 
   /**
-   * Grievance findFirst
+   * Post findFirst
    */
-  export type GrievanceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PostFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Grievance
+     * Select specific fields to fetch from the Post
      */
-    select?: GrievanceSelect<ExtArgs> | null
+    select?: PostSelect<ExtArgs> | null
     /**
-     * Filter, which Grievance to fetch.
+     * Omit specific fields from the Post
      */
-    where?: GrievanceWhereInput
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * Filter, which Post to fetch.
+     */
+    where?: PostWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Grievances to fetch.
+     * Determine the order of Posts to fetch.
      */
-    orderBy?: GrievanceOrderByWithRelationInput | GrievanceOrderByWithRelationInput[]
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Grievances.
+     * Sets the position for searching for Posts.
      */
-    cursor?: GrievanceWhereUniqueInput
+    cursor?: PostWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Grievances from the position of the cursor.
+     * Take `±n` Posts from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Grievances.
+     * Skip the first `n` Posts.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Grievances.
+     * Filter by unique combinations of Posts.
      */
-    distinct?: GrievanceScalarFieldEnum | GrievanceScalarFieldEnum[]
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
   }
 
   /**
-   * Grievance findFirstOrThrow
+   * Post findFirstOrThrow
    */
-  export type GrievanceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PostFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Grievance
+     * Select specific fields to fetch from the Post
      */
-    select?: GrievanceSelect<ExtArgs> | null
+    select?: PostSelect<ExtArgs> | null
     /**
-     * Filter, which Grievance to fetch.
+     * Omit specific fields from the Post
      */
-    where?: GrievanceWhereInput
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * Filter, which Post to fetch.
+     */
+    where?: PostWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Grievances to fetch.
+     * Determine the order of Posts to fetch.
      */
-    orderBy?: GrievanceOrderByWithRelationInput | GrievanceOrderByWithRelationInput[]
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Grievances.
+     * Sets the position for searching for Posts.
      */
-    cursor?: GrievanceWhereUniqueInput
+    cursor?: PostWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Grievances from the position of the cursor.
+     * Take `±n` Posts from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Grievances.
+     * Skip the first `n` Posts.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Grievances.
+     * Filter by unique combinations of Posts.
      */
-    distinct?: GrievanceScalarFieldEnum | GrievanceScalarFieldEnum[]
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
   }
 
   /**
-   * Grievance findMany
+   * Post findMany
    */
-  export type GrievanceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PostFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Grievance
+     * Select specific fields to fetch from the Post
      */
-    select?: GrievanceSelect<ExtArgs> | null
+    select?: PostSelect<ExtArgs> | null
     /**
-     * Filter, which Grievances to fetch.
+     * Omit specific fields from the Post
      */
-    where?: GrievanceWhereInput
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * Filter, which Posts to fetch.
+     */
+    where?: PostWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Grievances to fetch.
+     * Determine the order of Posts to fetch.
      */
-    orderBy?: GrievanceOrderByWithRelationInput | GrievanceOrderByWithRelationInput[]
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Grievances.
+     * Sets the position for listing Posts.
      */
-    cursor?: GrievanceWhereUniqueInput
+    cursor?: PostWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Grievances from the position of the cursor.
+     * Take `±n` Posts from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Grievances.
+     * Skip the first `n` Posts.
      */
     skip?: number
-    distinct?: GrievanceScalarFieldEnum | GrievanceScalarFieldEnum[]
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
   }
 
   /**
-   * Grievance create
+   * Post create
    */
-  export type GrievanceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PostCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Grievance
+     * Select specific fields to fetch from the Post
      */
-    select?: GrievanceSelect<ExtArgs> | null
+    select?: PostSelect<ExtArgs> | null
     /**
-     * The data needed to create a Grievance.
+     * Omit specific fields from the Post
      */
-    data: XOR<GrievanceCreateInput, GrievanceUncheckedCreateInput>
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Post.
+     */
+    data: XOR<PostCreateInput, PostUncheckedCreateInput>
   }
 
   /**
-   * Grievance createMany
+   * Post createMany
    */
-  export type GrievanceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PostCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Grievances.
+     * The data used to create many Posts.
      */
-    data: GrievanceCreateManyInput | GrievanceCreateManyInput[]
+    data: PostCreateManyInput | PostCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Grievance createManyAndReturn
+   * Post createManyAndReturn
    */
-  export type GrievanceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PostCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Grievance
+     * Select specific fields to fetch from the Post
      */
-    select?: GrievanceSelectCreateManyAndReturn<ExtArgs> | null
+    select?: PostSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * The data used to create many Grievances.
+     * Omit specific fields from the Post
      */
-    data: GrievanceCreateManyInput | GrievanceCreateManyInput[]
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * The data used to create many Posts.
+     */
+    data: PostCreateManyInput | PostCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Post update
+   */
+  export type PostUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Post.
+     */
+    data: XOR<PostUpdateInput, PostUncheckedUpdateInput>
+    /**
+     * Choose, which Post to update.
+     */
+    where: PostWhereUniqueInput
+  }
+
+  /**
+   * Post updateMany
+   */
+  export type PostUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Posts.
+     */
+    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyInput>
+    /**
+     * Filter which Posts to update
+     */
+    where?: PostWhereInput
+    /**
+     * Limit how many Posts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Post updateManyAndReturn
+   */
+  export type PostUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * The data used to update Posts.
+     */
+    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyInput>
+    /**
+     * Filter which Posts to update
+     */
+    where?: PostWhereInput
+    /**
+     * Limit how many Posts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Post upsert
+   */
+  export type PostUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Post to update in case it exists.
+     */
+    where: PostWhereUniqueInput
+    /**
+     * In case the Post found by the `where` argument doesn't exist, create a new Post with this data.
+     */
+    create: XOR<PostCreateInput, PostUncheckedCreateInput>
+    /**
+     * In case the Post was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PostUpdateInput, PostUncheckedUpdateInput>
+  }
+
+  /**
+   * Post delete
+   */
+  export type PostDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    /**
+     * Filter which Post to delete.
+     */
+    where: PostWhereUniqueInput
+  }
+
+  /**
+   * Post deleteMany
+   */
+  export type PostDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Posts to delete
+     */
+    where?: PostWhereInput
+    /**
+     * Limit how many Posts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Post.employees
+   */
+  export type Post$employeesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    where?: EmployeeWhereInput
+    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
+    cursor?: EmployeeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
+  }
+
+  /**
+   * Post without action
+   */
+  export type PostDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Employee
+   */
+
+  export type AggregateEmployee = {
+    _count: EmployeeCountAggregateOutputType | null
+    _avg: EmployeeAvgAggregateOutputType | null
+    _sum: EmployeeSumAggregateOutputType | null
+    _min: EmployeeMinAggregateOutputType | null
+    _max: EmployeeMaxAggregateOutputType | null
+  }
+
+  export type EmployeeAvgAggregateOutputType = {
+    id: number | null
+    salary: number | null
+    postId: number | null
+  }
+
+  export type EmployeeSumAggregateOutputType = {
+    id: number | null
+    salary: number | null
+    postId: number | null
+  }
+
+  export type EmployeeMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    email: string | null
+    phone: string | null
+    designation: string | null
+    employeeId: string | null
+    joiningDate: Date | null
+    salary: number | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    postId: number | null
+  }
+
+  export type EmployeeMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    email: string | null
+    phone: string | null
+    designation: string | null
+    employeeId: string | null
+    joiningDate: Date | null
+    salary: number | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    postId: number | null
+  }
+
+  export type EmployeeCountAggregateOutputType = {
+    id: number
+    name: number
+    email: number
+    phone: number
+    designation: number
+    employeeId: number
+    joiningDate: number
+    salary: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    postId: number
+    _all: number
+  }
+
+
+  export type EmployeeAvgAggregateInputType = {
+    id?: true
+    salary?: true
+    postId?: true
+  }
+
+  export type EmployeeSumAggregateInputType = {
+    id?: true
+    salary?: true
+    postId?: true
+  }
+
+  export type EmployeeMinAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    phone?: true
+    designation?: true
+    employeeId?: true
+    joiningDate?: true
+    salary?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    postId?: true
+  }
+
+  export type EmployeeMaxAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    phone?: true
+    designation?: true
+    employeeId?: true
+    joiningDate?: true
+    salary?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    postId?: true
+  }
+
+  export type EmployeeCountAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    phone?: true
+    designation?: true
+    employeeId?: true
+    joiningDate?: true
+    salary?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    postId?: true
+    _all?: true
+  }
+
+  export type EmployeeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Employee to aggregate.
+     */
+    where?: EmployeeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Employees to fetch.
+     */
+    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EmployeeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Employees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Employees.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Employees
+    **/
+    _count?: true | EmployeeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EmployeeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EmployeeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EmployeeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EmployeeMaxAggregateInputType
+  }
+
+  export type GetEmployeeAggregateType<T extends EmployeeAggregateArgs> = {
+        [P in keyof T & keyof AggregateEmployee]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEmployee[P]>
+      : GetScalarType<T[P], AggregateEmployee[P]>
+  }
+
+
+
+
+  export type EmployeeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmployeeWhereInput
+    orderBy?: EmployeeOrderByWithAggregationInput | EmployeeOrderByWithAggregationInput[]
+    by: EmployeeScalarFieldEnum[] | EmployeeScalarFieldEnum
+    having?: EmployeeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EmployeeCountAggregateInputType | true
+    _avg?: EmployeeAvgAggregateInputType
+    _sum?: EmployeeSumAggregateInputType
+    _min?: EmployeeMinAggregateInputType
+    _max?: EmployeeMaxAggregateInputType
+  }
+
+  export type EmployeeGroupByOutputType = {
+    id: number
+    name: string
+    email: string
+    phone: string
+    designation: string
+    employeeId: string | null
+    joiningDate: Date | null
+    salary: number | null
+    status: string
+    createdAt: Date
+    updatedAt: Date
+    postId: number
+    _count: EmployeeCountAggregateOutputType | null
+    _avg: EmployeeAvgAggregateOutputType | null
+    _sum: EmployeeSumAggregateOutputType | null
+    _min: EmployeeMinAggregateOutputType | null
+    _max: EmployeeMaxAggregateOutputType | null
+  }
+
+  type GetEmployeeGroupByPayload<T extends EmployeeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EmployeeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EmployeeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EmployeeGroupByOutputType[P]>
+            : GetScalarType<T[P], EmployeeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EmployeeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    designation?: boolean
+    employeeId?: boolean
+    joiningDate?: boolean
+    salary?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    postId?: boolean
+    post?: boolean | PostDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["employee"]>
+
+  export type EmployeeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    designation?: boolean
+    employeeId?: boolean
+    joiningDate?: boolean
+    salary?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    postId?: boolean
+    post?: boolean | PostDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["employee"]>
+
+  export type EmployeeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    designation?: boolean
+    employeeId?: boolean
+    joiningDate?: boolean
+    salary?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    postId?: boolean
+    post?: boolean | PostDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["employee"]>
+
+  export type EmployeeSelectScalar = {
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    designation?: boolean
+    employeeId?: boolean
+    joiningDate?: boolean
+    salary?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    postId?: boolean
+  }
+
+  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "designation" | "employeeId" | "joiningDate" | "salary" | "status" | "createdAt" | "updatedAt" | "postId", ExtArgs["result"]["employee"]>
+  export type EmployeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    post?: boolean | PostDefaultArgs<ExtArgs>
+  }
+  export type EmployeeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    post?: boolean | PostDefaultArgs<ExtArgs>
+  }
+  export type EmployeeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    post?: boolean | PostDefaultArgs<ExtArgs>
+  }
+
+  export type $EmployeePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Employee"
+    objects: {
+      post: Prisma.$PostPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      email: string
+      phone: string
+      designation: string
+      employeeId: string | null
+      joiningDate: Date | null
+      salary: number | null
+      status: string
+      createdAt: Date
+      updatedAt: Date
+      postId: number
+    }, ExtArgs["result"]["employee"]>
+    composites: {}
+  }
+
+  type EmployeeGetPayload<S extends boolean | null | undefined | EmployeeDefaultArgs> = $Result.GetResult<Prisma.$EmployeePayload, S>
+
+  type EmployeeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EmployeeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EmployeeCountAggregateInputType | true
+    }
+
+  export interface EmployeeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Employee'], meta: { name: 'Employee' } }
+    /**
+     * Find zero or one Employee that matches the filter.
+     * @param {EmployeeFindUniqueArgs} args - Arguments to find a Employee
+     * @example
+     * // Get one Employee
+     * const employee = await prisma.employee.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EmployeeFindUniqueArgs>(args: SelectSubset<T, EmployeeFindUniqueArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Employee that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EmployeeFindUniqueOrThrowArgs} args - Arguments to find a Employee
+     * @example
+     * // Get one Employee
+     * const employee = await prisma.employee.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EmployeeFindUniqueOrThrowArgs>(args: SelectSubset<T, EmployeeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Employee that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeFindFirstArgs} args - Arguments to find a Employee
+     * @example
+     * // Get one Employee
+     * const employee = await prisma.employee.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EmployeeFindFirstArgs>(args?: SelectSubset<T, EmployeeFindFirstArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Employee that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeFindFirstOrThrowArgs} args - Arguments to find a Employee
+     * @example
+     * // Get one Employee
+     * const employee = await prisma.employee.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EmployeeFindFirstOrThrowArgs>(args?: SelectSubset<T, EmployeeFindFirstOrThrowArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Employees that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Employees
+     * const employees = await prisma.employee.findMany()
+     * 
+     * // Get first 10 Employees
+     * const employees = await prisma.employee.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const employeeWithIdOnly = await prisma.employee.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EmployeeFindManyArgs>(args?: SelectSubset<T, EmployeeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Employee.
+     * @param {EmployeeCreateArgs} args - Arguments to create a Employee.
+     * @example
+     * // Create one Employee
+     * const Employee = await prisma.employee.create({
+     *   data: {
+     *     // ... data to create a Employee
+     *   }
+     * })
+     * 
+     */
+    create<T extends EmployeeCreateArgs>(args: SelectSubset<T, EmployeeCreateArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Employees.
+     * @param {EmployeeCreateManyArgs} args - Arguments to create many Employees.
+     * @example
+     * // Create many Employees
+     * const employee = await prisma.employee.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EmployeeCreateManyArgs>(args?: SelectSubset<T, EmployeeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Employees and returns the data saved in the database.
+     * @param {EmployeeCreateManyAndReturnArgs} args - Arguments to create many Employees.
+     * @example
+     * // Create many Employees
+     * const employee = await prisma.employee.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Employees and only return the `id`
+     * const employeeWithIdOnly = await prisma.employee.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EmployeeCreateManyAndReturnArgs>(args?: SelectSubset<T, EmployeeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Employee.
+     * @param {EmployeeDeleteArgs} args - Arguments to delete one Employee.
+     * @example
+     * // Delete one Employee
+     * const Employee = await prisma.employee.delete({
+     *   where: {
+     *     // ... filter to delete one Employee
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EmployeeDeleteArgs>(args: SelectSubset<T, EmployeeDeleteArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Employee.
+     * @param {EmployeeUpdateArgs} args - Arguments to update one Employee.
+     * @example
+     * // Update one Employee
+     * const employee = await prisma.employee.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EmployeeUpdateArgs>(args: SelectSubset<T, EmployeeUpdateArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Employees.
+     * @param {EmployeeDeleteManyArgs} args - Arguments to filter Employees to delete.
+     * @example
+     * // Delete a few Employees
+     * const { count } = await prisma.employee.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EmployeeDeleteManyArgs>(args?: SelectSubset<T, EmployeeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Employees.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Employees
+     * const employee = await prisma.employee.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EmployeeUpdateManyArgs>(args: SelectSubset<T, EmployeeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Employees and returns the data updated in the database.
+     * @param {EmployeeUpdateManyAndReturnArgs} args - Arguments to update many Employees.
+     * @example
+     * // Update many Employees
+     * const employee = await prisma.employee.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Employees and only return the `id`
+     * const employeeWithIdOnly = await prisma.employee.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EmployeeUpdateManyAndReturnArgs>(args: SelectSubset<T, EmployeeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Employee.
+     * @param {EmployeeUpsertArgs} args - Arguments to update or create a Employee.
+     * @example
+     * // Update or create a Employee
+     * const employee = await prisma.employee.upsert({
+     *   create: {
+     *     // ... data to create a Employee
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Employee we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EmployeeUpsertArgs>(args: SelectSubset<T, EmployeeUpsertArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Employees.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeCountArgs} args - Arguments to filter Employees to count.
+     * @example
+     * // Count the number of Employees
+     * const count = await prisma.employee.count({
+     *   where: {
+     *     // ... the filter for the Employees we want to count
+     *   }
+     * })
+    **/
+    count<T extends EmployeeCountArgs>(
+      args?: Subset<T, EmployeeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EmployeeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Employee.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EmployeeAggregateArgs>(args: Subset<T, EmployeeAggregateArgs>): Prisma.PrismaPromise<GetEmployeeAggregateType<T>>
+
+    /**
+     * Group by Employee.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EmployeeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EmployeeGroupByArgs['orderBy'] }
+        : { orderBy?: EmployeeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EmployeeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEmployeeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Employee model
+   */
+  readonly fields: EmployeeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Employee.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EmployeeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    post<T extends PostDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PostDefaultArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Employee model
+   */
+  interface EmployeeFieldRefs {
+    readonly id: FieldRef<"Employee", 'Int'>
+    readonly name: FieldRef<"Employee", 'String'>
+    readonly email: FieldRef<"Employee", 'String'>
+    readonly phone: FieldRef<"Employee", 'String'>
+    readonly designation: FieldRef<"Employee", 'String'>
+    readonly employeeId: FieldRef<"Employee", 'String'>
+    readonly joiningDate: FieldRef<"Employee", 'DateTime'>
+    readonly salary: FieldRef<"Employee", 'Float'>
+    readonly status: FieldRef<"Employee", 'String'>
+    readonly createdAt: FieldRef<"Employee", 'DateTime'>
+    readonly updatedAt: FieldRef<"Employee", 'DateTime'>
+    readonly postId: FieldRef<"Employee", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Employee findUnique
+   */
+  export type EmployeeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which Employee to fetch.
+     */
+    where: EmployeeWhereUniqueInput
+  }
+
+  /**
+   * Employee findUniqueOrThrow
+   */
+  export type EmployeeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which Employee to fetch.
+     */
+    where: EmployeeWhereUniqueInput
+  }
+
+  /**
+   * Employee findFirst
+   */
+  export type EmployeeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which Employee to fetch.
+     */
+    where?: EmployeeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Employees to fetch.
+     */
+    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Employees.
+     */
+    cursor?: EmployeeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Employees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Employees.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Employees.
+     */
+    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
+  }
+
+  /**
+   * Employee findFirstOrThrow
+   */
+  export type EmployeeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which Employee to fetch.
+     */
+    where?: EmployeeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Employees to fetch.
+     */
+    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Employees.
+     */
+    cursor?: EmployeeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Employees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Employees.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Employees.
+     */
+    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
+  }
+
+  /**
+   * Employee findMany
+   */
+  export type EmployeeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which Employees to fetch.
+     */
+    where?: EmployeeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Employees to fetch.
+     */
+    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Employees.
+     */
+    cursor?: EmployeeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Employees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Employees.
+     */
+    skip?: number
+    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
+  }
+
+  /**
+   * Employee create
+   */
+  export type EmployeeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Employee.
+     */
+    data: XOR<EmployeeCreateInput, EmployeeUncheckedCreateInput>
+  }
+
+  /**
+   * Employee createMany
+   */
+  export type EmployeeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Employees.
+     */
+    data: EmployeeCreateManyInput | EmployeeCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Grievance update
+   * Employee createManyAndReturn
    */
-  export type GrievanceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmployeeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Grievance
+     * Select specific fields to fetch from the Employee
      */
-    select?: GrievanceSelect<ExtArgs> | null
+    select?: EmployeeSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * The data needed to update a Grievance.
+     * Omit specific fields from the Employee
      */
-    data: XOR<GrievanceUpdateInput, GrievanceUncheckedUpdateInput>
+    omit?: EmployeeOmit<ExtArgs> | null
     /**
-     * Choose, which Grievance to update.
+     * The data used to create many Employees.
      */
-    where: GrievanceWhereUniqueInput
+    data: EmployeeCreateManyInput | EmployeeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Grievance updateMany
+   * Employee update
    */
-  export type GrievanceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmployeeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Grievances.
+     * Select specific fields to fetch from the Employee
      */
-    data: XOR<GrievanceUpdateManyMutationInput, GrievanceUncheckedUpdateManyInput>
+    select?: EmployeeSelect<ExtArgs> | null
     /**
-     * Filter which Grievances to update
+     * Omit specific fields from the Employee
      */
-    where?: GrievanceWhereInput
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Employee.
+     */
+    data: XOR<EmployeeUpdateInput, EmployeeUncheckedUpdateInput>
+    /**
+     * Choose, which Employee to update.
+     */
+    where: EmployeeWhereUniqueInput
   }
 
   /**
-   * Grievance upsert
+   * Employee updateMany
    */
-  export type GrievanceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmployeeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Grievance
+     * The data used to update Employees.
      */
-    select?: GrievanceSelect<ExtArgs> | null
+    data: XOR<EmployeeUpdateManyMutationInput, EmployeeUncheckedUpdateManyInput>
     /**
-     * The filter to search for the Grievance to update in case it exists.
+     * Filter which Employees to update
      */
-    where: GrievanceWhereUniqueInput
+    where?: EmployeeWhereInput
     /**
-     * In case the Grievance found by the `where` argument doesn't exist, create a new Grievance with this data.
+     * Limit how many Employees to update.
      */
-    create: XOR<GrievanceCreateInput, GrievanceUncheckedCreateInput>
-    /**
-     * In case the Grievance was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<GrievanceUpdateInput, GrievanceUncheckedUpdateInput>
+    limit?: number
   }
 
   /**
-   * Grievance delete
+   * Employee updateManyAndReturn
    */
-  export type GrievanceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmployeeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Grievance
+     * Select specific fields to fetch from the Employee
      */
-    select?: GrievanceSelect<ExtArgs> | null
+    select?: EmployeeSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Filter which Grievance to delete.
+     * Omit specific fields from the Employee
      */
-    where: GrievanceWhereUniqueInput
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * The data used to update Employees.
+     */
+    data: XOR<EmployeeUpdateManyMutationInput, EmployeeUncheckedUpdateManyInput>
+    /**
+     * Filter which Employees to update
+     */
+    where?: EmployeeWhereInput
+    /**
+     * Limit how many Employees to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Grievance deleteMany
+   * Employee upsert
    */
-  export type GrievanceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmployeeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Grievances to delete
+     * Select specific fields to fetch from the Employee
      */
-    where?: GrievanceWhereInput
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Employee to update in case it exists.
+     */
+    where: EmployeeWhereUniqueInput
+    /**
+     * In case the Employee found by the `where` argument doesn't exist, create a new Employee with this data.
+     */
+    create: XOR<EmployeeCreateInput, EmployeeUncheckedCreateInput>
+    /**
+     * In case the Employee was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EmployeeUpdateInput, EmployeeUncheckedUpdateInput>
   }
 
   /**
-   * Grievance without action
+   * Employee delete
    */
-  export type GrievanceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmployeeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Grievance
+     * Select specific fields to fetch from the Employee
      */
-    select?: GrievanceSelect<ExtArgs> | null
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * Filter which Employee to delete.
+     */
+    where: EmployeeWhereUniqueInput
+  }
+
+  /**
+   * Employee deleteMany
+   */
+  export type EmployeeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Employees to delete
+     */
+    where?: EmployeeWhereInput
+    /**
+     * Limit how many Employees to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Employee without action
+   */
+  export type EmployeeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
   }
 
 
@@ -13997,12 +19349,16 @@ export namespace Prisma {
     name: string | null
     email: string | null
     phone: string | null
+    subject: string | null
+    message: string | null
     rating: number | null
-    comment: string | null
-    serviceType: string | null
-    source: string | null
+    category: string | null
+    status: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    resolvedAt: Date | null
+    resolvedBy: string | null
+    adminNotes: string | null
   }
 
   export type FeedbackMaxAggregateOutputType = {
@@ -14010,12 +19366,16 @@ export namespace Prisma {
     name: string | null
     email: string | null
     phone: string | null
+    subject: string | null
+    message: string | null
     rating: number | null
-    comment: string | null
-    serviceType: string | null
-    source: string | null
+    category: string | null
+    status: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    resolvedAt: Date | null
+    resolvedBy: string | null
+    adminNotes: string | null
   }
 
   export type FeedbackCountAggregateOutputType = {
@@ -14023,12 +19383,16 @@ export namespace Prisma {
     name: number
     email: number
     phone: number
+    subject: number
+    message: number
     rating: number
-    comment: number
-    serviceType: number
-    source: number
+    category: number
+    status: number
     createdAt: number
     updatedAt: number
+    resolvedAt: number
+    resolvedBy: number
+    adminNotes: number
     _all: number
   }
 
@@ -14048,12 +19412,16 @@ export namespace Prisma {
     name?: true
     email?: true
     phone?: true
+    subject?: true
+    message?: true
     rating?: true
-    comment?: true
-    serviceType?: true
-    source?: true
+    category?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
+    resolvedAt?: true
+    resolvedBy?: true
+    adminNotes?: true
   }
 
   export type FeedbackMaxAggregateInputType = {
@@ -14061,12 +19429,16 @@ export namespace Prisma {
     name?: true
     email?: true
     phone?: true
+    subject?: true
+    message?: true
     rating?: true
-    comment?: true
-    serviceType?: true
-    source?: true
+    category?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
+    resolvedAt?: true
+    resolvedBy?: true
+    adminNotes?: true
   }
 
   export type FeedbackCountAggregateInputType = {
@@ -14074,12 +19446,16 @@ export namespace Prisma {
     name?: true
     email?: true
     phone?: true
+    subject?: true
+    message?: true
     rating?: true
-    comment?: true
-    serviceType?: true
-    source?: true
+    category?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
+    resolvedAt?: true
+    resolvedBy?: true
+    adminNotes?: true
     _all?: true
   }
 
@@ -14172,14 +19548,18 @@ export namespace Prisma {
   export type FeedbackGroupByOutputType = {
     id: number
     name: string
-    email: string | null
+    email: string
     phone: string | null
-    rating: number
-    comment: string
-    serviceType: string
-    source: string
+    subject: string
+    message: string
+    rating: number | null
+    category: string | null
+    status: string
     createdAt: Date
     updatedAt: Date
+    resolvedAt: Date | null
+    resolvedBy: string | null
+    adminNotes: string | null
     _count: FeedbackCountAggregateOutputType | null
     _avg: FeedbackAvgAggregateOutputType | null
     _sum: FeedbackSumAggregateOutputType | null
@@ -14206,12 +19586,16 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phone?: boolean
+    subject?: boolean
+    message?: boolean
     rating?: boolean
-    comment?: boolean
-    serviceType?: boolean
-    source?: boolean
+    category?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    resolvedAt?: boolean
+    resolvedBy?: boolean
+    adminNotes?: boolean
   }, ExtArgs["result"]["feedback"]>
 
   export type FeedbackSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -14219,12 +19603,33 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phone?: boolean
+    subject?: boolean
+    message?: boolean
     rating?: boolean
-    comment?: boolean
-    serviceType?: boolean
-    source?: boolean
+    category?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    resolvedAt?: boolean
+    resolvedBy?: boolean
+    adminNotes?: boolean
+  }, ExtArgs["result"]["feedback"]>
+
+  export type FeedbackSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    subject?: boolean
+    message?: boolean
+    rating?: boolean
+    category?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    resolvedAt?: boolean
+    resolvedBy?: boolean
+    adminNotes?: boolean
   }, ExtArgs["result"]["feedback"]>
 
   export type FeedbackSelectScalar = {
@@ -14232,14 +19637,19 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phone?: boolean
+    subject?: boolean
+    message?: boolean
     rating?: boolean
-    comment?: boolean
-    serviceType?: boolean
-    source?: boolean
+    category?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    resolvedAt?: boolean
+    resolvedBy?: boolean
+    adminNotes?: boolean
   }
 
+  export type FeedbackOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "subject" | "message" | "rating" | "category" | "status" | "createdAt" | "updatedAt" | "resolvedAt" | "resolvedBy" | "adminNotes", ExtArgs["result"]["feedback"]>
 
   export type $FeedbackPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Feedback"
@@ -14247,26 +19657,30 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
-      email: string | null
+      email: string
       phone: string | null
-      rating: number
-      comment: string
-      serviceType: string
-      source: string
+      subject: string
+      message: string
+      rating: number | null
+      category: string | null
+      status: string
       createdAt: Date
       updatedAt: Date
+      resolvedAt: Date | null
+      resolvedBy: string | null
+      adminNotes: string | null
     }, ExtArgs["result"]["feedback"]>
     composites: {}
   }
 
   type FeedbackGetPayload<S extends boolean | null | undefined | FeedbackDefaultArgs> = $Result.GetResult<Prisma.$FeedbackPayload, S>
 
-  type FeedbackCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<FeedbackFindManyArgs, 'select' | 'include' | 'distinct'> & {
+  type FeedbackCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FeedbackFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
       select?: FeedbackCountAggregateInputType | true
     }
 
-  export interface FeedbackDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+  export interface FeedbackDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
     [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Feedback'], meta: { name: 'Feedback' } }
     /**
      * Find zero or one Feedback that matches the filter.
@@ -14279,10 +19693,10 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUnique<T extends FeedbackFindUniqueArgs>(args: SelectSubset<T, FeedbackFindUniqueArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends FeedbackFindUniqueArgs>(args: SelectSubset<T, FeedbackFindUniqueArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Feedback that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one Feedback that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
      * @param {FeedbackFindUniqueOrThrowArgs} args - Arguments to find a Feedback
      * @example
@@ -14293,7 +19707,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findUniqueOrThrow<T extends FeedbackFindUniqueOrThrowArgs>(args: SelectSubset<T, FeedbackFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends FeedbackFindUniqueOrThrowArgs>(args: SelectSubset<T, FeedbackFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Feedback that matches the filter.
@@ -14308,7 +19722,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirst<T extends FeedbackFindFirstArgs>(args?: SelectSubset<T, FeedbackFindFirstArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends FeedbackFindFirstArgs>(args?: SelectSubset<T, FeedbackFindFirstArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find the first Feedback that matches the filter or
@@ -14324,7 +19738,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    findFirstOrThrow<T extends FeedbackFindFirstOrThrowArgs>(args?: SelectSubset<T, FeedbackFindFirstOrThrowArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends FeedbackFindFirstOrThrowArgs>(args?: SelectSubset<T, FeedbackFindFirstOrThrowArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Find zero or more Feedbacks that matches the filter.
@@ -14342,7 +19756,7 @@ export namespace Prisma {
      * const feedbackWithIdOnly = await prisma.feedback.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends FeedbackFindManyArgs>(args?: SelectSubset<T, FeedbackFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends FeedbackFindManyArgs>(args?: SelectSubset<T, FeedbackFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
      * Create a Feedback.
@@ -14356,7 +19770,7 @@ export namespace Prisma {
      * })
      * 
      */
-    create<T extends FeedbackCreateArgs>(args: SelectSubset<T, FeedbackCreateArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends FeedbackCreateArgs>(args: SelectSubset<T, FeedbackCreateArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Create many Feedbacks.
@@ -14384,7 +19798,7 @@ export namespace Prisma {
      * })
      * 
      * // Create many Feedbacks and only return the `id`
-     * const feedbackWithIdOnly = await prisma.feedback.createManyAndReturn({ 
+     * const feedbackWithIdOnly = await prisma.feedback.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -14394,7 +19808,7 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends FeedbackCreateManyAndReturnArgs>(args?: SelectSubset<T, FeedbackCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends FeedbackCreateManyAndReturnArgs>(args?: SelectSubset<T, FeedbackCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a Feedback.
@@ -14408,7 +19822,7 @@ export namespace Prisma {
      * })
      * 
      */
-    delete<T extends FeedbackDeleteArgs>(args: SelectSubset<T, FeedbackDeleteArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends FeedbackDeleteArgs>(args: SelectSubset<T, FeedbackDeleteArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Update one Feedback.
@@ -14425,7 +19839,7 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends FeedbackUpdateArgs>(args: SelectSubset<T, FeedbackUpdateArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends FeedbackUpdateArgs>(args: SelectSubset<T, FeedbackUpdateArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
      * Delete zero or more Feedbacks.
@@ -14461,6 +19875,36 @@ export namespace Prisma {
     updateMany<T extends FeedbackUpdateManyArgs>(args: SelectSubset<T, FeedbackUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
+     * Update zero or more Feedbacks and returns the data updated in the database.
+     * @param {FeedbackUpdateManyAndReturnArgs} args - Arguments to update many Feedbacks.
+     * @example
+     * // Update many Feedbacks
+     * const feedback = await prisma.feedback.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Feedbacks and only return the `id`
+     * const feedbackWithIdOnly = await prisma.feedback.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FeedbackUpdateManyAndReturnArgs>(args: SelectSubset<T, FeedbackUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
      * Create or update one Feedback.
      * @param {FeedbackUpsertArgs} args - Arguments to update or create a Feedback.
      * @example
@@ -14477,7 +19921,7 @@ export namespace Prisma {
      *   }
      * })
      */
-    upsert<T extends FeedbackUpsertArgs>(args: SelectSubset<T, FeedbackUpsertArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends FeedbackUpsertArgs>(args: SelectSubset<T, FeedbackUpsertArgs<ExtArgs>>): Prisma__FeedbackClient<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -14617,7 +20061,7 @@ export namespace Prisma {
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__FeedbackClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__FeedbackClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -14646,18 +20090,22 @@ export namespace Prisma {
 
   /**
    * Fields of the Feedback model
-   */ 
+   */
   interface FeedbackFieldRefs {
     readonly id: FieldRef<"Feedback", 'Int'>
     readonly name: FieldRef<"Feedback", 'String'>
     readonly email: FieldRef<"Feedback", 'String'>
     readonly phone: FieldRef<"Feedback", 'String'>
+    readonly subject: FieldRef<"Feedback", 'String'>
+    readonly message: FieldRef<"Feedback", 'String'>
     readonly rating: FieldRef<"Feedback", 'Int'>
-    readonly comment: FieldRef<"Feedback", 'String'>
-    readonly serviceType: FieldRef<"Feedback", 'String'>
-    readonly source: FieldRef<"Feedback", 'String'>
+    readonly category: FieldRef<"Feedback", 'String'>
+    readonly status: FieldRef<"Feedback", 'String'>
     readonly createdAt: FieldRef<"Feedback", 'DateTime'>
     readonly updatedAt: FieldRef<"Feedback", 'DateTime'>
+    readonly resolvedAt: FieldRef<"Feedback", 'DateTime'>
+    readonly resolvedBy: FieldRef<"Feedback", 'String'>
+    readonly adminNotes: FieldRef<"Feedback", 'String'>
   }
     
 
@@ -14670,6 +20118,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Feedback
      */
     select?: FeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feedback
+     */
+    omit?: FeedbackOmit<ExtArgs> | null
     /**
      * Filter, which Feedback to fetch.
      */
@@ -14685,6 +20137,10 @@ export namespace Prisma {
      */
     select?: FeedbackSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Feedback
+     */
+    omit?: FeedbackOmit<ExtArgs> | null
+    /**
      * Filter, which Feedback to fetch.
      */
     where: FeedbackWhereUniqueInput
@@ -14698,6 +20154,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Feedback
      */
     select?: FeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feedback
+     */
+    omit?: FeedbackOmit<ExtArgs> | null
     /**
      * Filter, which Feedback to fetch.
      */
@@ -14743,6 +20203,10 @@ export namespace Prisma {
      */
     select?: FeedbackSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Feedback
+     */
+    omit?: FeedbackOmit<ExtArgs> | null
+    /**
      * Filter, which Feedback to fetch.
      */
     where?: FeedbackWhereInput
@@ -14787,6 +20251,10 @@ export namespace Prisma {
      */
     select?: FeedbackSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Feedback
+     */
+    omit?: FeedbackOmit<ExtArgs> | null
+    /**
      * Filter, which Feedbacks to fetch.
      */
     where?: FeedbackWhereInput
@@ -14826,6 +20294,10 @@ export namespace Prisma {
      */
     select?: FeedbackSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Feedback
+     */
+    omit?: FeedbackOmit<ExtArgs> | null
+    /**
      * The data needed to create a Feedback.
      */
     data: XOR<FeedbackCreateInput, FeedbackUncheckedCreateInput>
@@ -14851,6 +20323,10 @@ export namespace Prisma {
      */
     select?: FeedbackSelectCreateManyAndReturn<ExtArgs> | null
     /**
+     * Omit specific fields from the Feedback
+     */
+    omit?: FeedbackOmit<ExtArgs> | null
+    /**
      * The data used to create many Feedbacks.
      */
     data: FeedbackCreateManyInput | FeedbackCreateManyInput[]
@@ -14865,6 +20341,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Feedback
      */
     select?: FeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feedback
+     */
+    omit?: FeedbackOmit<ExtArgs> | null
     /**
      * The data needed to update a Feedback.
      */
@@ -14887,6 +20367,36 @@ export namespace Prisma {
      * Filter which Feedbacks to update
      */
     where?: FeedbackWhereInput
+    /**
+     * Limit how many Feedbacks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Feedback updateManyAndReturn
+   */
+  export type FeedbackUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Feedback
+     */
+    select?: FeedbackSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feedback
+     */
+    omit?: FeedbackOmit<ExtArgs> | null
+    /**
+     * The data used to update Feedbacks.
+     */
+    data: XOR<FeedbackUpdateManyMutationInput, FeedbackUncheckedUpdateManyInput>
+    /**
+     * Filter which Feedbacks to update
+     */
+    where?: FeedbackWhereInput
+    /**
+     * Limit how many Feedbacks to update.
+     */
+    limit?: number
   }
 
   /**
@@ -14897,6 +20407,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Feedback
      */
     select?: FeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feedback
+     */
+    omit?: FeedbackOmit<ExtArgs> | null
     /**
      * The filter to search for the Feedback to update in case it exists.
      */
@@ -14920,6 +20434,10 @@ export namespace Prisma {
      */
     select?: FeedbackSelect<ExtArgs> | null
     /**
+     * Omit specific fields from the Feedback
+     */
+    omit?: FeedbackOmit<ExtArgs> | null
+    /**
      * Filter which Feedback to delete.
      */
     where: FeedbackWhereUniqueInput
@@ -14933,6 +20451,10 @@ export namespace Prisma {
      * Filter which Feedbacks to delete
      */
     where?: FeedbackWhereInput
+    /**
+     * Limit how many Feedbacks to delete.
+     */
+    limit?: number
   }
 
   /**
@@ -14943,434 +20465,518 @@ export namespace Prisma {
      * Select specific fields to fetch from the Feedback
      */
     select?: FeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Feedback
+     */
+    omit?: FeedbackOmit<ExtArgs> | null
   }
 
 
   /**
-   * Model ContactPerson
+   * Model Grievance
    */
 
-  export type AggregateContactPerson = {
-    _count: ContactPersonCountAggregateOutputType | null
-    _avg: ContactPersonAvgAggregateOutputType | null
-    _sum: ContactPersonSumAggregateOutputType | null
-    _min: ContactPersonMinAggregateOutputType | null
-    _max: ContactPersonMaxAggregateOutputType | null
+  export type AggregateGrievance = {
+    _count: GrievanceCountAggregateOutputType | null
+    _avg: GrievanceAvgAggregateOutputType | null
+    _sum: GrievanceSumAggregateOutputType | null
+    _min: GrievanceMinAggregateOutputType | null
+    _max: GrievanceMaxAggregateOutputType | null
   }
 
-  export type ContactPersonAvgAggregateOutputType = {
+  export type GrievanceAvgAggregateOutputType = {
     id: number | null
-    schemeServiceId: number | null
   }
 
-  export type ContactPersonSumAggregateOutputType = {
+  export type GrievanceSumAggregateOutputType = {
     id: number | null
-    schemeServiceId: number | null
   }
 
-  export type ContactPersonMinAggregateOutputType = {
+  export type GrievanceMinAggregateOutputType = {
     id: number | null
-    serviceName: string | null
-    district: string | null
-    subDistrict: string | null
-    block: string | null
     name: string | null
-    designation: string | null
-    contact: string | null
     email: string | null
-    schemeServiceId: number | null
+    phone: string | null
+    address: string | null
+    subject: string | null
+    description: string | null
+    category: string | null
+    priority: string | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    assignedTo: string | null
+    adminNotes: string | null
+    resolvedAt: Date | null
+    trackingId: string | null
   }
 
-  export type ContactPersonMaxAggregateOutputType = {
+  export type GrievanceMaxAggregateOutputType = {
     id: number | null
-    serviceName: string | null
-    district: string | null
-    subDistrict: string | null
-    block: string | null
     name: string | null
-    designation: string | null
-    contact: string | null
     email: string | null
-    schemeServiceId: number | null
+    phone: string | null
+    address: string | null
+    subject: string | null
+    description: string | null
+    category: string | null
+    priority: string | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    assignedTo: string | null
+    adminNotes: string | null
+    resolvedAt: Date | null
+    trackingId: string | null
   }
 
-  export type ContactPersonCountAggregateOutputType = {
+  export type GrievanceCountAggregateOutputType = {
     id: number
-    serviceName: number
-    district: number
-    subDistrict: number
-    block: number
     name: number
-    designation: number
-    contact: number
     email: number
-    schemeServiceId: number
+    phone: number
+    address: number
+    subject: number
+    description: number
+    category: number
+    priority: number
+    status: number
+    attachments: number
+    createdAt: number
+    updatedAt: number
+    assignedTo: number
+    adminNotes: number
+    resolvedAt: number
+    trackingId: number
     _all: number
   }
 
 
-  export type ContactPersonAvgAggregateInputType = {
+  export type GrievanceAvgAggregateInputType = {
     id?: true
-    schemeServiceId?: true
   }
 
-  export type ContactPersonSumAggregateInputType = {
+  export type GrievanceSumAggregateInputType = {
     id?: true
-    schemeServiceId?: true
   }
 
-  export type ContactPersonMinAggregateInputType = {
+  export type GrievanceMinAggregateInputType = {
     id?: true
-    serviceName?: true
-    district?: true
-    subDistrict?: true
-    block?: true
     name?: true
-    designation?: true
-    contact?: true
     email?: true
-    schemeServiceId?: true
+    phone?: true
+    address?: true
+    subject?: true
+    description?: true
+    category?: true
+    priority?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    assignedTo?: true
+    adminNotes?: true
+    resolvedAt?: true
+    trackingId?: true
   }
 
-  export type ContactPersonMaxAggregateInputType = {
+  export type GrievanceMaxAggregateInputType = {
     id?: true
-    serviceName?: true
-    district?: true
-    subDistrict?: true
-    block?: true
     name?: true
-    designation?: true
-    contact?: true
     email?: true
-    schemeServiceId?: true
+    phone?: true
+    address?: true
+    subject?: true
+    description?: true
+    category?: true
+    priority?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    assignedTo?: true
+    adminNotes?: true
+    resolvedAt?: true
+    trackingId?: true
   }
 
-  export type ContactPersonCountAggregateInputType = {
+  export type GrievanceCountAggregateInputType = {
     id?: true
-    serviceName?: true
-    district?: true
-    subDistrict?: true
-    block?: true
     name?: true
-    designation?: true
-    contact?: true
     email?: true
-    schemeServiceId?: true
+    phone?: true
+    address?: true
+    subject?: true
+    description?: true
+    category?: true
+    priority?: true
+    status?: true
+    attachments?: true
+    createdAt?: true
+    updatedAt?: true
+    assignedTo?: true
+    adminNotes?: true
+    resolvedAt?: true
+    trackingId?: true
     _all?: true
   }
 
-  export type ContactPersonAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ContactPerson to aggregate.
+     * Filter which Grievance to aggregate.
      */
-    where?: ContactPersonWhereInput
+    where?: GrievanceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ContactPeople to fetch.
+     * Determine the order of Grievances to fetch.
      */
-    orderBy?: ContactPersonOrderByWithRelationInput | ContactPersonOrderByWithRelationInput[]
+    orderBy?: GrievanceOrderByWithRelationInput | GrievanceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: ContactPersonWhereUniqueInput
+    cursor?: GrievanceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ContactPeople from the position of the cursor.
+     * Take `±n` Grievances from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ContactPeople.
+     * Skip the first `n` Grievances.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned ContactPeople
+     * Count returned Grievances
     **/
-    _count?: true | ContactPersonCountAggregateInputType
+    _count?: true | GrievanceCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: ContactPersonAvgAggregateInputType
+    _avg?: GrievanceAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: ContactPersonSumAggregateInputType
+    _sum?: GrievanceSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: ContactPersonMinAggregateInputType
+    _min?: GrievanceMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: ContactPersonMaxAggregateInputType
+    _max?: GrievanceMaxAggregateInputType
   }
 
-  export type GetContactPersonAggregateType<T extends ContactPersonAggregateArgs> = {
-        [P in keyof T & keyof AggregateContactPerson]: P extends '_count' | 'count'
+  export type GetGrievanceAggregateType<T extends GrievanceAggregateArgs> = {
+        [P in keyof T & keyof AggregateGrievance]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateContactPerson[P]>
-      : GetScalarType<T[P], AggregateContactPerson[P]>
+        : GetScalarType<T[P], AggregateGrievance[P]>
+      : GetScalarType<T[P], AggregateGrievance[P]>
   }
 
 
 
 
-  export type ContactPersonGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ContactPersonWhereInput
-    orderBy?: ContactPersonOrderByWithAggregationInput | ContactPersonOrderByWithAggregationInput[]
-    by: ContactPersonScalarFieldEnum[] | ContactPersonScalarFieldEnum
-    having?: ContactPersonScalarWhereWithAggregatesInput
+  export type GrievanceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GrievanceWhereInput
+    orderBy?: GrievanceOrderByWithAggregationInput | GrievanceOrderByWithAggregationInput[]
+    by: GrievanceScalarFieldEnum[] | GrievanceScalarFieldEnum
+    having?: GrievanceScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: ContactPersonCountAggregateInputType | true
-    _avg?: ContactPersonAvgAggregateInputType
-    _sum?: ContactPersonSumAggregateInputType
-    _min?: ContactPersonMinAggregateInputType
-    _max?: ContactPersonMaxAggregateInputType
+    _count?: GrievanceCountAggregateInputType | true
+    _avg?: GrievanceAvgAggregateInputType
+    _sum?: GrievanceSumAggregateInputType
+    _min?: GrievanceMinAggregateInputType
+    _max?: GrievanceMaxAggregateInputType
   }
 
-  export type ContactPersonGroupByOutputType = {
+  export type GrievanceGroupByOutputType = {
     id: number
-    serviceName: string
-    district: string
-    subDistrict: string
-    block: string
     name: string
-    designation: string
-    contact: string
     email: string
-    schemeServiceId: number
-    _count: ContactPersonCountAggregateOutputType | null
-    _avg: ContactPersonAvgAggregateOutputType | null
-    _sum: ContactPersonSumAggregateOutputType | null
-    _min: ContactPersonMinAggregateOutputType | null
-    _max: ContactPersonMaxAggregateOutputType | null
+    phone: string
+    address: string
+    subject: string
+    description: string
+    category: string | null
+    priority: string
+    status: string
+    attachments: string[]
+    createdAt: Date
+    updatedAt: Date
+    assignedTo: string | null
+    adminNotes: string | null
+    resolvedAt: Date | null
+    trackingId: string
+    _count: GrievanceCountAggregateOutputType | null
+    _avg: GrievanceAvgAggregateOutputType | null
+    _sum: GrievanceSumAggregateOutputType | null
+    _min: GrievanceMinAggregateOutputType | null
+    _max: GrievanceMaxAggregateOutputType | null
   }
 
-  type GetContactPersonGroupByPayload<T extends ContactPersonGroupByArgs> = Prisma.PrismaPromise<
+  type GetGrievanceGroupByPayload<T extends GrievanceGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<ContactPersonGroupByOutputType, T['by']> &
+      PickEnumerable<GrievanceGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof ContactPersonGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof GrievanceGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], ContactPersonGroupByOutputType[P]>
-            : GetScalarType<T[P], ContactPersonGroupByOutputType[P]>
+              : GetScalarType<T[P], GrievanceGroupByOutputType[P]>
+            : GetScalarType<T[P], GrievanceGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type ContactPersonSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type GrievanceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    serviceName?: boolean
-    district?: boolean
-    subDistrict?: boolean
-    block?: boolean
     name?: boolean
-    designation?: boolean
-    contact?: boolean
     email?: boolean
-    schemeServiceId?: boolean
-    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["contactPerson"]>
+    phone?: boolean
+    address?: boolean
+    subject?: boolean
+    description?: boolean
+    category?: boolean
+    priority?: boolean
+    status?: boolean
+    attachments?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    assignedTo?: boolean
+    adminNotes?: boolean
+    resolvedAt?: boolean
+    trackingId?: boolean
+  }, ExtArgs["result"]["grievance"]>
 
-  export type ContactPersonSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type GrievanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    serviceName?: boolean
-    district?: boolean
-    subDistrict?: boolean
-    block?: boolean
     name?: boolean
-    designation?: boolean
-    contact?: boolean
     email?: boolean
-    schemeServiceId?: boolean
-    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["contactPerson"]>
+    phone?: boolean
+    address?: boolean
+    subject?: boolean
+    description?: boolean
+    category?: boolean
+    priority?: boolean
+    status?: boolean
+    attachments?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    assignedTo?: boolean
+    adminNotes?: boolean
+    resolvedAt?: boolean
+    trackingId?: boolean
+  }, ExtArgs["result"]["grievance"]>
 
-  export type ContactPersonSelectScalar = {
+  export type GrievanceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    serviceName?: boolean
-    district?: boolean
-    subDistrict?: boolean
-    block?: boolean
     name?: boolean
-    designation?: boolean
-    contact?: boolean
     email?: boolean
-    schemeServiceId?: boolean
+    phone?: boolean
+    address?: boolean
+    subject?: boolean
+    description?: boolean
+    category?: boolean
+    priority?: boolean
+    status?: boolean
+    attachments?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    assignedTo?: boolean
+    adminNotes?: boolean
+    resolvedAt?: boolean
+    trackingId?: boolean
+  }, ExtArgs["result"]["grievance"]>
+
+  export type GrievanceSelectScalar = {
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    address?: boolean
+    subject?: boolean
+    description?: boolean
+    category?: boolean
+    priority?: boolean
+    status?: boolean
+    attachments?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    assignedTo?: boolean
+    adminNotes?: boolean
+    resolvedAt?: boolean
+    trackingId?: boolean
   }
 
-  export type ContactPersonInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
-  }
-  export type ContactPersonIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
-  }
+  export type GrievanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "address" | "subject" | "description" | "category" | "priority" | "status" | "attachments" | "createdAt" | "updatedAt" | "assignedTo" | "adminNotes" | "resolvedAt" | "trackingId", ExtArgs["result"]["grievance"]>
 
-  export type $ContactPersonPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ContactPerson"
-    objects: {
-      schemeService: Prisma.$SchemeServicePayload<ExtArgs>
-    }
+  export type $GrievancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Grievance"
+    objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      serviceName: string
-      district: string
-      subDistrict: string
-      block: string
       name: string
-      designation: string
-      contact: string
       email: string
-      schemeServiceId: number
-    }, ExtArgs["result"]["contactPerson"]>
+      phone: string
+      address: string
+      subject: string
+      description: string
+      category: string | null
+      priority: string
+      status: string
+      attachments: string[]
+      createdAt: Date
+      updatedAt: Date
+      assignedTo: string | null
+      adminNotes: string | null
+      resolvedAt: Date | null
+      trackingId: string
+    }, ExtArgs["result"]["grievance"]>
     composites: {}
   }
 
-  type ContactPersonGetPayload<S extends boolean | null | undefined | ContactPersonDefaultArgs> = $Result.GetResult<Prisma.$ContactPersonPayload, S>
+  type GrievanceGetPayload<S extends boolean | null | undefined | GrievanceDefaultArgs> = $Result.GetResult<Prisma.$GrievancePayload, S>
 
-  type ContactPersonCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<ContactPersonFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: ContactPersonCountAggregateInputType | true
+  type GrievanceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GrievanceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GrievanceCountAggregateInputType | true
     }
 
-  export interface ContactPersonDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ContactPerson'], meta: { name: 'ContactPerson' } }
+  export interface GrievanceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Grievance'], meta: { name: 'Grievance' } }
     /**
-     * Find zero or one ContactPerson that matches the filter.
-     * @param {ContactPersonFindUniqueArgs} args - Arguments to find a ContactPerson
+     * Find zero or one Grievance that matches the filter.
+     * @param {GrievanceFindUniqueArgs} args - Arguments to find a Grievance
      * @example
-     * // Get one ContactPerson
-     * const contactPerson = await prisma.contactPerson.findUnique({
+     * // Get one Grievance
+     * const grievance = await prisma.grievance.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends ContactPersonFindUniqueArgs>(args: SelectSubset<T, ContactPersonFindUniqueArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends GrievanceFindUniqueArgs>(args: SelectSubset<T, GrievanceFindUniqueArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one ContactPerson that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one Grievance that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {ContactPersonFindUniqueOrThrowArgs} args - Arguments to find a ContactPerson
+     * @param {GrievanceFindUniqueOrThrowArgs} args - Arguments to find a Grievance
      * @example
-     * // Get one ContactPerson
-     * const contactPerson = await prisma.contactPerson.findUniqueOrThrow({
+     * // Get one Grievance
+     * const grievance = await prisma.grievance.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends ContactPersonFindUniqueOrThrowArgs>(args: SelectSubset<T, ContactPersonFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends GrievanceFindUniqueOrThrowArgs>(args: SelectSubset<T, GrievanceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first ContactPerson that matches the filter.
+     * Find the first Grievance that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContactPersonFindFirstArgs} args - Arguments to find a ContactPerson
+     * @param {GrievanceFindFirstArgs} args - Arguments to find a Grievance
      * @example
-     * // Get one ContactPerson
-     * const contactPerson = await prisma.contactPerson.findFirst({
+     * // Get one Grievance
+     * const grievance = await prisma.grievance.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends ContactPersonFindFirstArgs>(args?: SelectSubset<T, ContactPersonFindFirstArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends GrievanceFindFirstArgs>(args?: SelectSubset<T, GrievanceFindFirstArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first ContactPerson that matches the filter or
+     * Find the first Grievance that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContactPersonFindFirstOrThrowArgs} args - Arguments to find a ContactPerson
+     * @param {GrievanceFindFirstOrThrowArgs} args - Arguments to find a Grievance
      * @example
-     * // Get one ContactPerson
-     * const contactPerson = await prisma.contactPerson.findFirstOrThrow({
+     * // Get one Grievance
+     * const grievance = await prisma.grievance.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends ContactPersonFindFirstOrThrowArgs>(args?: SelectSubset<T, ContactPersonFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends GrievanceFindFirstOrThrowArgs>(args?: SelectSubset<T, GrievanceFindFirstOrThrowArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more ContactPeople that matches the filter.
+     * Find zero or more Grievances that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContactPersonFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {GrievanceFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all ContactPeople
-     * const contactPeople = await prisma.contactPerson.findMany()
+     * // Get all Grievances
+     * const grievances = await prisma.grievance.findMany()
      * 
-     * // Get first 10 ContactPeople
-     * const contactPeople = await prisma.contactPerson.findMany({ take: 10 })
+     * // Get first 10 Grievances
+     * const grievances = await prisma.grievance.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const contactPersonWithIdOnly = await prisma.contactPerson.findMany({ select: { id: true } })
+     * const grievanceWithIdOnly = await prisma.grievance.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends ContactPersonFindManyArgs>(args?: SelectSubset<T, ContactPersonFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends GrievanceFindManyArgs>(args?: SelectSubset<T, GrievanceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a ContactPerson.
-     * @param {ContactPersonCreateArgs} args - Arguments to create a ContactPerson.
+     * Create a Grievance.
+     * @param {GrievanceCreateArgs} args - Arguments to create a Grievance.
      * @example
-     * // Create one ContactPerson
-     * const ContactPerson = await prisma.contactPerson.create({
+     * // Create one Grievance
+     * const Grievance = await prisma.grievance.create({
      *   data: {
-     *     // ... data to create a ContactPerson
+     *     // ... data to create a Grievance
      *   }
      * })
      * 
      */
-    create<T extends ContactPersonCreateArgs>(args: SelectSubset<T, ContactPersonCreateArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends GrievanceCreateArgs>(args: SelectSubset<T, GrievanceCreateArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many ContactPeople.
-     * @param {ContactPersonCreateManyArgs} args - Arguments to create many ContactPeople.
+     * Create many Grievances.
+     * @param {GrievanceCreateManyArgs} args - Arguments to create many Grievances.
      * @example
-     * // Create many ContactPeople
-     * const contactPerson = await prisma.contactPerson.createMany({
+     * // Create many Grievances
+     * const grievance = await prisma.grievance.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends ContactPersonCreateManyArgs>(args?: SelectSubset<T, ContactPersonCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends GrievanceCreateManyArgs>(args?: SelectSubset<T, GrievanceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many ContactPeople and returns the data saved in the database.
-     * @param {ContactPersonCreateManyAndReturnArgs} args - Arguments to create many ContactPeople.
+     * Create many Grievances and returns the data saved in the database.
+     * @param {GrievanceCreateManyAndReturnArgs} args - Arguments to create many Grievances.
      * @example
-     * // Create many ContactPeople
-     * const contactPerson = await prisma.contactPerson.createManyAndReturn({
+     * // Create many Grievances
+     * const grievance = await prisma.grievance.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many ContactPeople and only return the `id`
-     * const contactPersonWithIdOnly = await prisma.contactPerson.createManyAndReturn({ 
+     * // Create many Grievances and only return the `id`
+     * const grievanceWithIdOnly = await prisma.grievance.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -15380,28 +20986,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends ContactPersonCreateManyAndReturnArgs>(args?: SelectSubset<T, ContactPersonCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "createManyAndReturn">>
+    createManyAndReturn<T extends GrievanceCreateManyAndReturnArgs>(args?: SelectSubset<T, GrievanceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a ContactPerson.
-     * @param {ContactPersonDeleteArgs} args - Arguments to delete one ContactPerson.
+     * Delete a Grievance.
+     * @param {GrievanceDeleteArgs} args - Arguments to delete one Grievance.
      * @example
-     * // Delete one ContactPerson
-     * const ContactPerson = await prisma.contactPerson.delete({
+     * // Delete one Grievance
+     * const Grievance = await prisma.grievance.delete({
      *   where: {
-     *     // ... filter to delete one ContactPerson
+     *     // ... filter to delete one Grievance
      *   }
      * })
      * 
      */
-    delete<T extends ContactPersonDeleteArgs>(args: SelectSubset<T, ContactPersonDeleteArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends GrievanceDeleteArgs>(args: SelectSubset<T, GrievanceDeleteArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one ContactPerson.
-     * @param {ContactPersonUpdateArgs} args - Arguments to update one ContactPerson.
+     * Update one Grievance.
+     * @param {GrievanceUpdateArgs} args - Arguments to update one Grievance.
      * @example
-     * // Update one ContactPerson
-     * const contactPerson = await prisma.contactPerson.update({
+     * // Update one Grievance
+     * const grievance = await prisma.grievance.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -15411,30 +21017,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends ContactPersonUpdateArgs>(args: SelectSubset<T, ContactPersonUpdateArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends GrievanceUpdateArgs>(args: SelectSubset<T, GrievanceUpdateArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more ContactPeople.
-     * @param {ContactPersonDeleteManyArgs} args - Arguments to filter ContactPeople to delete.
+     * Delete zero or more Grievances.
+     * @param {GrievanceDeleteManyArgs} args - Arguments to filter Grievances to delete.
      * @example
-     * // Delete a few ContactPeople
-     * const { count } = await prisma.contactPerson.deleteMany({
+     * // Delete a few Grievances
+     * const { count } = await prisma.grievance.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends ContactPersonDeleteManyArgs>(args?: SelectSubset<T, ContactPersonDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends GrievanceDeleteManyArgs>(args?: SelectSubset<T, GrievanceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more ContactPeople.
+     * Update zero or more Grievances.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContactPersonUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {GrievanceUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many ContactPeople
-     * const contactPerson = await prisma.contactPerson.updateMany({
+     * // Update many Grievances
+     * const grievance = await prisma.grievance.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -15444,56 +21050,86 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends ContactPersonUpdateManyArgs>(args: SelectSubset<T, ContactPersonUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends GrievanceUpdateManyArgs>(args: SelectSubset<T, GrievanceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one ContactPerson.
-     * @param {ContactPersonUpsertArgs} args - Arguments to update or create a ContactPerson.
+     * Update zero or more Grievances and returns the data updated in the database.
+     * @param {GrievanceUpdateManyAndReturnArgs} args - Arguments to update many Grievances.
      * @example
-     * // Update or create a ContactPerson
-     * const contactPerson = await prisma.contactPerson.upsert({
+     * // Update many Grievances
+     * const grievance = await prisma.grievance.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Grievances and only return the `id`
+     * const grievanceWithIdOnly = await prisma.grievance.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GrievanceUpdateManyAndReturnArgs>(args: SelectSubset<T, GrievanceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Grievance.
+     * @param {GrievanceUpsertArgs} args - Arguments to update or create a Grievance.
+     * @example
+     * // Update or create a Grievance
+     * const grievance = await prisma.grievance.upsert({
      *   create: {
-     *     // ... data to create a ContactPerson
+     *     // ... data to create a Grievance
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the ContactPerson we want to update
+     *     // ... the filter for the Grievance we want to update
      *   }
      * })
      */
-    upsert<T extends ContactPersonUpsertArgs>(args: SelectSubset<T, ContactPersonUpsertArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends GrievanceUpsertArgs>(args: SelectSubset<T, GrievanceUpsertArgs<ExtArgs>>): Prisma__GrievanceClient<$Result.GetResult<Prisma.$GrievancePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of ContactPeople.
+     * Count the number of Grievances.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContactPersonCountArgs} args - Arguments to filter ContactPeople to count.
+     * @param {GrievanceCountArgs} args - Arguments to filter Grievances to count.
      * @example
-     * // Count the number of ContactPeople
-     * const count = await prisma.contactPerson.count({
+     * // Count the number of Grievances
+     * const count = await prisma.grievance.count({
      *   where: {
-     *     // ... the filter for the ContactPeople we want to count
+     *     // ... the filter for the Grievances we want to count
      *   }
      * })
     **/
-    count<T extends ContactPersonCountArgs>(
-      args?: Subset<T, ContactPersonCountArgs>,
+    count<T extends GrievanceCountArgs>(
+      args?: Subset<T, GrievanceCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], ContactPersonCountAggregateOutputType>
+          : GetScalarType<T['select'], GrievanceCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a ContactPerson.
+     * Allows you to perform aggregations operations on a Grievance.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContactPersonAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {GrievanceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -15513,13 +21149,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends ContactPersonAggregateArgs>(args: Subset<T, ContactPersonAggregateArgs>): Prisma.PrismaPromise<GetContactPersonAggregateType<T>>
+    aggregate<T extends GrievanceAggregateArgs>(args: Subset<T, GrievanceAggregateArgs>): Prisma.PrismaPromise<GetGrievanceAggregateType<T>>
 
     /**
-     * Group by ContactPerson.
+     * Group by Grievance.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContactPersonGroupByArgs} args - Group by arguments.
+     * @param {GrievanceGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -15534,14 +21170,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends ContactPersonGroupByArgs,
+      T extends GrievanceGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ContactPersonGroupByArgs['orderBy'] }
-        : { orderBy?: ContactPersonGroupByArgs['orderBy'] },
+        ? { orderBy: GrievanceGroupByArgs['orderBy'] }
+        : { orderBy?: GrievanceGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -15590,22 +21226,21 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, ContactPersonGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetContactPersonGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, GrievanceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGrievanceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the ContactPerson model
+   * Fields of the Grievance model
    */
-  readonly fields: ContactPersonFieldRefs;
+  readonly fields: GrievanceFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for ContactPerson.
+   * The delegate class that acts as a "Promise-like" for Grievance.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__ContactPersonClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__GrievanceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    schemeService<T extends SchemeServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SchemeServiceDefaultArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15632,1335 +21267,389 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the ContactPerson model
-   */ 
-  interface ContactPersonFieldRefs {
-    readonly id: FieldRef<"ContactPerson", 'Int'>
-    readonly serviceName: FieldRef<"ContactPerson", 'String'>
-    readonly district: FieldRef<"ContactPerson", 'String'>
-    readonly subDistrict: FieldRef<"ContactPerson", 'String'>
-    readonly block: FieldRef<"ContactPerson", 'String'>
-    readonly name: FieldRef<"ContactPerson", 'String'>
-    readonly designation: FieldRef<"ContactPerson", 'String'>
-    readonly contact: FieldRef<"ContactPerson", 'String'>
-    readonly email: FieldRef<"ContactPerson", 'String'>
-    readonly schemeServiceId: FieldRef<"ContactPerson", 'Int'>
+   * Fields of the Grievance model
+   */
+  interface GrievanceFieldRefs {
+    readonly id: FieldRef<"Grievance", 'Int'>
+    readonly name: FieldRef<"Grievance", 'String'>
+    readonly email: FieldRef<"Grievance", 'String'>
+    readonly phone: FieldRef<"Grievance", 'String'>
+    readonly address: FieldRef<"Grievance", 'String'>
+    readonly subject: FieldRef<"Grievance", 'String'>
+    readonly description: FieldRef<"Grievance", 'String'>
+    readonly category: FieldRef<"Grievance", 'String'>
+    readonly priority: FieldRef<"Grievance", 'String'>
+    readonly status: FieldRef<"Grievance", 'String'>
+    readonly attachments: FieldRef<"Grievance", 'String[]'>
+    readonly createdAt: FieldRef<"Grievance", 'DateTime'>
+    readonly updatedAt: FieldRef<"Grievance", 'DateTime'>
+    readonly assignedTo: FieldRef<"Grievance", 'String'>
+    readonly adminNotes: FieldRef<"Grievance", 'String'>
+    readonly resolvedAt: FieldRef<"Grievance", 'DateTime'>
+    readonly trackingId: FieldRef<"Grievance", 'String'>
   }
     
 
   // Custom InputTypes
   /**
-   * ContactPerson findUnique
+   * Grievance findUnique
    */
-  export type ContactPersonFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ContactPerson
+     * Select specific fields to fetch from the Grievance
      */
-    select?: ContactPersonSelect<ExtArgs> | null
+    select?: GrievanceSelect<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
+     * Omit specific fields from the Grievance
      */
-    include?: ContactPersonInclude<ExtArgs> | null
+    omit?: GrievanceOmit<ExtArgs> | null
     /**
-     * Filter, which ContactPerson to fetch.
+     * Filter, which Grievance to fetch.
      */
-    where: ContactPersonWhereUniqueInput
+    where: GrievanceWhereUniqueInput
   }
 
   /**
-   * ContactPerson findUniqueOrThrow
+   * Grievance findUniqueOrThrow
    */
-  export type ContactPersonFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ContactPerson
+     * Select specific fields to fetch from the Grievance
      */
-    select?: ContactPersonSelect<ExtArgs> | null
+    select?: GrievanceSelect<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
+     * Omit specific fields from the Grievance
      */
-    include?: ContactPersonInclude<ExtArgs> | null
+    omit?: GrievanceOmit<ExtArgs> | null
     /**
-     * Filter, which ContactPerson to fetch.
+     * Filter, which Grievance to fetch.
      */
-    where: ContactPersonWhereUniqueInput
+    where: GrievanceWhereUniqueInput
   }
 
   /**
-   * ContactPerson findFirst
+   * Grievance findFirst
    */
-  export type ContactPersonFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ContactPerson
+     * Select specific fields to fetch from the Grievance
      */
-    select?: ContactPersonSelect<ExtArgs> | null
+    select?: GrievanceSelect<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
+     * Omit specific fields from the Grievance
      */
-    include?: ContactPersonInclude<ExtArgs> | null
+    omit?: GrievanceOmit<ExtArgs> | null
     /**
-     * Filter, which ContactPerson to fetch.
+     * Filter, which Grievance to fetch.
      */
-    where?: ContactPersonWhereInput
+    where?: GrievanceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ContactPeople to fetch.
+     * Determine the order of Grievances to fetch.
      */
-    orderBy?: ContactPersonOrderByWithRelationInput | ContactPersonOrderByWithRelationInput[]
+    orderBy?: GrievanceOrderByWithRelationInput | GrievanceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ContactPeople.
+     * Sets the position for searching for Grievances.
      */
-    cursor?: ContactPersonWhereUniqueInput
+    cursor?: GrievanceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ContactPeople from the position of the cursor.
+     * Take `±n` Grievances from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ContactPeople.
+     * Skip the first `n` Grievances.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ContactPeople.
+     * Filter by unique combinations of Grievances.
      */
-    distinct?: ContactPersonScalarFieldEnum | ContactPersonScalarFieldEnum[]
+    distinct?: GrievanceScalarFieldEnum | GrievanceScalarFieldEnum[]
   }
 
   /**
-   * ContactPerson findFirstOrThrow
+   * Grievance findFirstOrThrow
    */
-  export type ContactPersonFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ContactPerson
+     * Select specific fields to fetch from the Grievance
      */
-    select?: ContactPersonSelect<ExtArgs> | null
+    select?: GrievanceSelect<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
+     * Omit specific fields from the Grievance
      */
-    include?: ContactPersonInclude<ExtArgs> | null
+    omit?: GrievanceOmit<ExtArgs> | null
     /**
-     * Filter, which ContactPerson to fetch.
+     * Filter, which Grievance to fetch.
      */
-    where?: ContactPersonWhereInput
+    where?: GrievanceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ContactPeople to fetch.
+     * Determine the order of Grievances to fetch.
      */
-    orderBy?: ContactPersonOrderByWithRelationInput | ContactPersonOrderByWithRelationInput[]
+    orderBy?: GrievanceOrderByWithRelationInput | GrievanceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ContactPeople.
+     * Sets the position for searching for Grievances.
      */
-    cursor?: ContactPersonWhereUniqueInput
+    cursor?: GrievanceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ContactPeople from the position of the cursor.
+     * Take `±n` Grievances from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ContactPeople.
+     * Skip the first `n` Grievances.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ContactPeople.
+     * Filter by unique combinations of Grievances.
      */
-    distinct?: ContactPersonScalarFieldEnum | ContactPersonScalarFieldEnum[]
+    distinct?: GrievanceScalarFieldEnum | GrievanceScalarFieldEnum[]
   }
 
   /**
-   * ContactPerson findMany
+   * Grievance findMany
    */
-  export type ContactPersonFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ContactPerson
+     * Select specific fields to fetch from the Grievance
      */
-    select?: ContactPersonSelect<ExtArgs> | null
+    select?: GrievanceSelect<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
+     * Omit specific fields from the Grievance
      */
-    include?: ContactPersonInclude<ExtArgs> | null
+    omit?: GrievanceOmit<ExtArgs> | null
     /**
-     * Filter, which ContactPeople to fetch.
+     * Filter, which Grievances to fetch.
      */
-    where?: ContactPersonWhereInput
+    where?: GrievanceWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ContactPeople to fetch.
+     * Determine the order of Grievances to fetch.
      */
-    orderBy?: ContactPersonOrderByWithRelationInput | ContactPersonOrderByWithRelationInput[]
+    orderBy?: GrievanceOrderByWithRelationInput | GrievanceOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing ContactPeople.
+     * Sets the position for listing Grievances.
      */
-    cursor?: ContactPersonWhereUniqueInput
+    cursor?: GrievanceWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ContactPeople from the position of the cursor.
+     * Take `±n` Grievances from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ContactPeople.
+     * Skip the first `n` Grievances.
      */
     skip?: number
-    distinct?: ContactPersonScalarFieldEnum | ContactPersonScalarFieldEnum[]
+    distinct?: GrievanceScalarFieldEnum | GrievanceScalarFieldEnum[]
   }
 
   /**
-   * ContactPerson create
+   * Grievance create
    */
-  export type ContactPersonCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ContactPerson
+     * Select specific fields to fetch from the Grievance
      */
-    select?: ContactPersonSelect<ExtArgs> | null
+    select?: GrievanceSelect<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
+     * Omit specific fields from the Grievance
      */
-    include?: ContactPersonInclude<ExtArgs> | null
+    omit?: GrievanceOmit<ExtArgs> | null
     /**
-     * The data needed to create a ContactPerson.
+     * The data needed to create a Grievance.
      */
-    data: XOR<ContactPersonCreateInput, ContactPersonUncheckedCreateInput>
+    data: XOR<GrievanceCreateInput, GrievanceUncheckedCreateInput>
   }
 
   /**
-   * ContactPerson createMany
+   * Grievance createMany
    */
-  export type ContactPersonCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many ContactPeople.
+     * The data used to create many Grievances.
      */
-    data: ContactPersonCreateManyInput | ContactPersonCreateManyInput[]
+    data: GrievanceCreateManyInput | GrievanceCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * ContactPerson createManyAndReturn
+   * Grievance createManyAndReturn
    */
-  export type ContactPersonCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ContactPerson
+     * Select specific fields to fetch from the Grievance
      */
-    select?: ContactPersonSelectCreateManyAndReturn<ExtArgs> | null
+    select?: GrievanceSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * The data used to create many ContactPeople.
+     * Omit specific fields from the Grievance
      */
-    data: ContactPersonCreateManyInput | ContactPersonCreateManyInput[]
-    skipDuplicates?: boolean
+    omit?: GrievanceOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
+     * The data used to create many Grievances.
      */
-    include?: ContactPersonIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * ContactPerson update
-   */
-  export type ContactPersonUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContactPerson
-     */
-    select?: ContactPersonSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContactPersonInclude<ExtArgs> | null
-    /**
-     * The data needed to update a ContactPerson.
-     */
-    data: XOR<ContactPersonUpdateInput, ContactPersonUncheckedUpdateInput>
-    /**
-     * Choose, which ContactPerson to update.
-     */
-    where: ContactPersonWhereUniqueInput
-  }
-
-  /**
-   * ContactPerson updateMany
-   */
-  export type ContactPersonUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update ContactPeople.
-     */
-    data: XOR<ContactPersonUpdateManyMutationInput, ContactPersonUncheckedUpdateManyInput>
-    /**
-     * Filter which ContactPeople to update
-     */
-    where?: ContactPersonWhereInput
-  }
-
-  /**
-   * ContactPerson upsert
-   */
-  export type ContactPersonUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContactPerson
-     */
-    select?: ContactPersonSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContactPersonInclude<ExtArgs> | null
-    /**
-     * The filter to search for the ContactPerson to update in case it exists.
-     */
-    where: ContactPersonWhereUniqueInput
-    /**
-     * In case the ContactPerson found by the `where` argument doesn't exist, create a new ContactPerson with this data.
-     */
-    create: XOR<ContactPersonCreateInput, ContactPersonUncheckedCreateInput>
-    /**
-     * In case the ContactPerson was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ContactPersonUpdateInput, ContactPersonUncheckedUpdateInput>
-  }
-
-  /**
-   * ContactPerson delete
-   */
-  export type ContactPersonDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContactPerson
-     */
-    select?: ContactPersonSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContactPersonInclude<ExtArgs> | null
-    /**
-     * Filter which ContactPerson to delete.
-     */
-    where: ContactPersonWhereUniqueInput
-  }
-
-  /**
-   * ContactPerson deleteMany
-   */
-  export type ContactPersonDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ContactPeople to delete
-     */
-    where?: ContactPersonWhereInput
-  }
-
-  /**
-   * ContactPerson without action
-   */
-  export type ContactPersonDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContactPerson
-     */
-    select?: ContactPersonSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContactPersonInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model SupportiveDocument
-   */
-
-  export type AggregateSupportiveDocument = {
-    _count: SupportiveDocumentCountAggregateOutputType | null
-    _avg: SupportiveDocumentAvgAggregateOutputType | null
-    _sum: SupportiveDocumentSumAggregateOutputType | null
-    _min: SupportiveDocumentMinAggregateOutputType | null
-    _max: SupportiveDocumentMaxAggregateOutputType | null
-  }
-
-  export type SupportiveDocumentAvgAggregateOutputType = {
-    id: number | null
-    slNo: number | null
-    schemeServiceId: number | null
-  }
-
-  export type SupportiveDocumentSumAggregateOutputType = {
-    id: number | null
-    slNo: number | null
-    schemeServiceId: number | null
-  }
-
-  export type SupportiveDocumentMinAggregateOutputType = {
-    id: number | null
-    slNo: number | null
-    documentType: string | null
-    validProof: string | null
-    isRequired: boolean | null
-    schemeServiceId: number | null
-  }
-
-  export type SupportiveDocumentMaxAggregateOutputType = {
-    id: number | null
-    slNo: number | null
-    documentType: string | null
-    validProof: string | null
-    isRequired: boolean | null
-    schemeServiceId: number | null
-  }
-
-  export type SupportiveDocumentCountAggregateOutputType = {
-    id: number
-    slNo: number
-    documentType: number
-    validProof: number
-    isRequired: number
-    schemeServiceId: number
-    _all: number
-  }
-
-
-  export type SupportiveDocumentAvgAggregateInputType = {
-    id?: true
-    slNo?: true
-    schemeServiceId?: true
-  }
-
-  export type SupportiveDocumentSumAggregateInputType = {
-    id?: true
-    slNo?: true
-    schemeServiceId?: true
-  }
-
-  export type SupportiveDocumentMinAggregateInputType = {
-    id?: true
-    slNo?: true
-    documentType?: true
-    validProof?: true
-    isRequired?: true
-    schemeServiceId?: true
-  }
-
-  export type SupportiveDocumentMaxAggregateInputType = {
-    id?: true
-    slNo?: true
-    documentType?: true
-    validProof?: true
-    isRequired?: true
-    schemeServiceId?: true
-  }
-
-  export type SupportiveDocumentCountAggregateInputType = {
-    id?: true
-    slNo?: true
-    documentType?: true
-    validProof?: true
-    isRequired?: true
-    schemeServiceId?: true
-    _all?: true
-  }
-
-  export type SupportiveDocumentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which SupportiveDocument to aggregate.
-     */
-    where?: SupportiveDocumentWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SupportiveDocuments to fetch.
-     */
-    orderBy?: SupportiveDocumentOrderByWithRelationInput | SupportiveDocumentOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: SupportiveDocumentWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SupportiveDocuments from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SupportiveDocuments.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned SupportiveDocuments
-    **/
-    _count?: true | SupportiveDocumentCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: SupportiveDocumentAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: SupportiveDocumentSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: SupportiveDocumentMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: SupportiveDocumentMaxAggregateInputType
-  }
-
-  export type GetSupportiveDocumentAggregateType<T extends SupportiveDocumentAggregateArgs> = {
-        [P in keyof T & keyof AggregateSupportiveDocument]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateSupportiveDocument[P]>
-      : GetScalarType<T[P], AggregateSupportiveDocument[P]>
-  }
-
-
-
-
-  export type SupportiveDocumentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SupportiveDocumentWhereInput
-    orderBy?: SupportiveDocumentOrderByWithAggregationInput | SupportiveDocumentOrderByWithAggregationInput[]
-    by: SupportiveDocumentScalarFieldEnum[] | SupportiveDocumentScalarFieldEnum
-    having?: SupportiveDocumentScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: SupportiveDocumentCountAggregateInputType | true
-    _avg?: SupportiveDocumentAvgAggregateInputType
-    _sum?: SupportiveDocumentSumAggregateInputType
-    _min?: SupportiveDocumentMinAggregateInputType
-    _max?: SupportiveDocumentMaxAggregateInputType
-  }
-
-  export type SupportiveDocumentGroupByOutputType = {
-    id: number
-    slNo: number
-    documentType: string
-    validProof: string
-    isRequired: boolean
-    schemeServiceId: number
-    _count: SupportiveDocumentCountAggregateOutputType | null
-    _avg: SupportiveDocumentAvgAggregateOutputType | null
-    _sum: SupportiveDocumentSumAggregateOutputType | null
-    _min: SupportiveDocumentMinAggregateOutputType | null
-    _max: SupportiveDocumentMaxAggregateOutputType | null
-  }
-
-  type GetSupportiveDocumentGroupByPayload<T extends SupportiveDocumentGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<SupportiveDocumentGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof SupportiveDocumentGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], SupportiveDocumentGroupByOutputType[P]>
-            : GetScalarType<T[P], SupportiveDocumentGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type SupportiveDocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    slNo?: boolean
-    documentType?: boolean
-    validProof?: boolean
-    isRequired?: boolean
-    schemeServiceId?: boolean
-    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["supportiveDocument"]>
-
-  export type SupportiveDocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    slNo?: boolean
-    documentType?: boolean
-    validProof?: boolean
-    isRequired?: boolean
-    schemeServiceId?: boolean
-    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["supportiveDocument"]>
-
-  export type SupportiveDocumentSelectScalar = {
-    id?: boolean
-    slNo?: boolean
-    documentType?: boolean
-    validProof?: boolean
-    isRequired?: boolean
-    schemeServiceId?: boolean
-  }
-
-  export type SupportiveDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
-  }
-  export type SupportiveDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    schemeService?: boolean | SchemeServiceDefaultArgs<ExtArgs>
-  }
-
-  export type $SupportiveDocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "SupportiveDocument"
-    objects: {
-      schemeService: Prisma.$SchemeServicePayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      slNo: number
-      documentType: string
-      validProof: string
-      isRequired: boolean
-      schemeServiceId: number
-    }, ExtArgs["result"]["supportiveDocument"]>
-    composites: {}
-  }
-
-  type SupportiveDocumentGetPayload<S extends boolean | null | undefined | SupportiveDocumentDefaultArgs> = $Result.GetResult<Prisma.$SupportiveDocumentPayload, S>
-
-  type SupportiveDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<SupportiveDocumentFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: SupportiveDocumentCountAggregateInputType | true
-    }
-
-  export interface SupportiveDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SupportiveDocument'], meta: { name: 'SupportiveDocument' } }
-    /**
-     * Find zero or one SupportiveDocument that matches the filter.
-     * @param {SupportiveDocumentFindUniqueArgs} args - Arguments to find a SupportiveDocument
-     * @example
-     * // Get one SupportiveDocument
-     * const supportiveDocument = await prisma.supportiveDocument.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends SupportiveDocumentFindUniqueArgs>(args: SelectSubset<T, SupportiveDocumentFindUniqueArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
-
-    /**
-     * Find one SupportiveDocument that matches the filter or throw an error with `error.code='P2025'` 
-     * if no matches were found.
-     * @param {SupportiveDocumentFindUniqueOrThrowArgs} args - Arguments to find a SupportiveDocument
-     * @example
-     * // Get one SupportiveDocument
-     * const supportiveDocument = await prisma.supportiveDocument.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends SupportiveDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, SupportiveDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
-
-    /**
-     * Find the first SupportiveDocument that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SupportiveDocumentFindFirstArgs} args - Arguments to find a SupportiveDocument
-     * @example
-     * // Get one SupportiveDocument
-     * const supportiveDocument = await prisma.supportiveDocument.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends SupportiveDocumentFindFirstArgs>(args?: SelectSubset<T, SupportiveDocumentFindFirstArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
-
-    /**
-     * Find the first SupportiveDocument that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SupportiveDocumentFindFirstOrThrowArgs} args - Arguments to find a SupportiveDocument
-     * @example
-     * // Get one SupportiveDocument
-     * const supportiveDocument = await prisma.supportiveDocument.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends SupportiveDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, SupportiveDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
-
-    /**
-     * Find zero or more SupportiveDocuments that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SupportiveDocumentFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all SupportiveDocuments
-     * const supportiveDocuments = await prisma.supportiveDocument.findMany()
-     * 
-     * // Get first 10 SupportiveDocuments
-     * const supportiveDocuments = await prisma.supportiveDocument.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const supportiveDocumentWithIdOnly = await prisma.supportiveDocument.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends SupportiveDocumentFindManyArgs>(args?: SelectSubset<T, SupportiveDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "findMany">>
-
-    /**
-     * Create a SupportiveDocument.
-     * @param {SupportiveDocumentCreateArgs} args - Arguments to create a SupportiveDocument.
-     * @example
-     * // Create one SupportiveDocument
-     * const SupportiveDocument = await prisma.supportiveDocument.create({
-     *   data: {
-     *     // ... data to create a SupportiveDocument
-     *   }
-     * })
-     * 
-     */
-    create<T extends SupportiveDocumentCreateArgs>(args: SelectSubset<T, SupportiveDocumentCreateArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "create">, never, ExtArgs>
-
-    /**
-     * Create many SupportiveDocuments.
-     * @param {SupportiveDocumentCreateManyArgs} args - Arguments to create many SupportiveDocuments.
-     * @example
-     * // Create many SupportiveDocuments
-     * const supportiveDocument = await prisma.supportiveDocument.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends SupportiveDocumentCreateManyArgs>(args?: SelectSubset<T, SupportiveDocumentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many SupportiveDocuments and returns the data saved in the database.
-     * @param {SupportiveDocumentCreateManyAndReturnArgs} args - Arguments to create many SupportiveDocuments.
-     * @example
-     * // Create many SupportiveDocuments
-     * const supportiveDocument = await prisma.supportiveDocument.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many SupportiveDocuments and only return the `id`
-     * const supportiveDocumentWithIdOnly = await prisma.supportiveDocument.createManyAndReturn({ 
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends SupportiveDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, SupportiveDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "createManyAndReturn">>
-
-    /**
-     * Delete a SupportiveDocument.
-     * @param {SupportiveDocumentDeleteArgs} args - Arguments to delete one SupportiveDocument.
-     * @example
-     * // Delete one SupportiveDocument
-     * const SupportiveDocument = await prisma.supportiveDocument.delete({
-     *   where: {
-     *     // ... filter to delete one SupportiveDocument
-     *   }
-     * })
-     * 
-     */
-    delete<T extends SupportiveDocumentDeleteArgs>(args: SelectSubset<T, SupportiveDocumentDeleteArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
-
-    /**
-     * Update one SupportiveDocument.
-     * @param {SupportiveDocumentUpdateArgs} args - Arguments to update one SupportiveDocument.
-     * @example
-     * // Update one SupportiveDocument
-     * const supportiveDocument = await prisma.supportiveDocument.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends SupportiveDocumentUpdateArgs>(args: SelectSubset<T, SupportiveDocumentUpdateArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "update">, never, ExtArgs>
-
-    /**
-     * Delete zero or more SupportiveDocuments.
-     * @param {SupportiveDocumentDeleteManyArgs} args - Arguments to filter SupportiveDocuments to delete.
-     * @example
-     * // Delete a few SupportiveDocuments
-     * const { count } = await prisma.supportiveDocument.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends SupportiveDocumentDeleteManyArgs>(args?: SelectSubset<T, SupportiveDocumentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more SupportiveDocuments.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SupportiveDocumentUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many SupportiveDocuments
-     * const supportiveDocument = await prisma.supportiveDocument.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends SupportiveDocumentUpdateManyArgs>(args: SelectSubset<T, SupportiveDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one SupportiveDocument.
-     * @param {SupportiveDocumentUpsertArgs} args - Arguments to update or create a SupportiveDocument.
-     * @example
-     * // Update or create a SupportiveDocument
-     * const supportiveDocument = await prisma.supportiveDocument.upsert({
-     *   create: {
-     *     // ... data to create a SupportiveDocument
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the SupportiveDocument we want to update
-     *   }
-     * })
-     */
-    upsert<T extends SupportiveDocumentUpsertArgs>(args: SelectSubset<T, SupportiveDocumentUpsertArgs<ExtArgs>>): Prisma__SupportiveDocumentClient<$Result.GetResult<Prisma.$SupportiveDocumentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
-
-
-    /**
-     * Count the number of SupportiveDocuments.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SupportiveDocumentCountArgs} args - Arguments to filter SupportiveDocuments to count.
-     * @example
-     * // Count the number of SupportiveDocuments
-     * const count = await prisma.supportiveDocument.count({
-     *   where: {
-     *     // ... the filter for the SupportiveDocuments we want to count
-     *   }
-     * })
-    **/
-    count<T extends SupportiveDocumentCountArgs>(
-      args?: Subset<T, SupportiveDocumentCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], SupportiveDocumentCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a SupportiveDocument.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SupportiveDocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends SupportiveDocumentAggregateArgs>(args: Subset<T, SupportiveDocumentAggregateArgs>): Prisma.PrismaPromise<GetSupportiveDocumentAggregateType<T>>
-
-    /**
-     * Group by SupportiveDocument.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SupportiveDocumentGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends SupportiveDocumentGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: SupportiveDocumentGroupByArgs['orderBy'] }
-        : { orderBy?: SupportiveDocumentGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, SupportiveDocumentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSupportiveDocumentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the SupportiveDocument model
-   */
-  readonly fields: SupportiveDocumentFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for SupportiveDocument.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__SupportiveDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    schemeService<T extends SchemeServiceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SchemeServiceDefaultArgs<ExtArgs>>): Prisma__SchemeServiceClient<$Result.GetResult<Prisma.$SchemeServicePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the SupportiveDocument model
-   */ 
-  interface SupportiveDocumentFieldRefs {
-    readonly id: FieldRef<"SupportiveDocument", 'Int'>
-    readonly slNo: FieldRef<"SupportiveDocument", 'Int'>
-    readonly documentType: FieldRef<"SupportiveDocument", 'String'>
-    readonly validProof: FieldRef<"SupportiveDocument", 'String'>
-    readonly isRequired: FieldRef<"SupportiveDocument", 'Boolean'>
-    readonly schemeServiceId: FieldRef<"SupportiveDocument", 'Int'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * SupportiveDocument findUnique
-   */
-  export type SupportiveDocumentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SupportiveDocument
-     */
-    select?: SupportiveDocumentSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SupportiveDocumentInclude<ExtArgs> | null
-    /**
-     * Filter, which SupportiveDocument to fetch.
-     */
-    where: SupportiveDocumentWhereUniqueInput
-  }
-
-  /**
-   * SupportiveDocument findUniqueOrThrow
-   */
-  export type SupportiveDocumentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SupportiveDocument
-     */
-    select?: SupportiveDocumentSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SupportiveDocumentInclude<ExtArgs> | null
-    /**
-     * Filter, which SupportiveDocument to fetch.
-     */
-    where: SupportiveDocumentWhereUniqueInput
-  }
-
-  /**
-   * SupportiveDocument findFirst
-   */
-  export type SupportiveDocumentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SupportiveDocument
-     */
-    select?: SupportiveDocumentSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SupportiveDocumentInclude<ExtArgs> | null
-    /**
-     * Filter, which SupportiveDocument to fetch.
-     */
-    where?: SupportiveDocumentWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SupportiveDocuments to fetch.
-     */
-    orderBy?: SupportiveDocumentOrderByWithRelationInput | SupportiveDocumentOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for SupportiveDocuments.
-     */
-    cursor?: SupportiveDocumentWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SupportiveDocuments from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SupportiveDocuments.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of SupportiveDocuments.
-     */
-    distinct?: SupportiveDocumentScalarFieldEnum | SupportiveDocumentScalarFieldEnum[]
-  }
-
-  /**
-   * SupportiveDocument findFirstOrThrow
-   */
-  export type SupportiveDocumentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SupportiveDocument
-     */
-    select?: SupportiveDocumentSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SupportiveDocumentInclude<ExtArgs> | null
-    /**
-     * Filter, which SupportiveDocument to fetch.
-     */
-    where?: SupportiveDocumentWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SupportiveDocuments to fetch.
-     */
-    orderBy?: SupportiveDocumentOrderByWithRelationInput | SupportiveDocumentOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for SupportiveDocuments.
-     */
-    cursor?: SupportiveDocumentWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SupportiveDocuments from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SupportiveDocuments.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of SupportiveDocuments.
-     */
-    distinct?: SupportiveDocumentScalarFieldEnum | SupportiveDocumentScalarFieldEnum[]
-  }
-
-  /**
-   * SupportiveDocument findMany
-   */
-  export type SupportiveDocumentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SupportiveDocument
-     */
-    select?: SupportiveDocumentSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SupportiveDocumentInclude<ExtArgs> | null
-    /**
-     * Filter, which SupportiveDocuments to fetch.
-     */
-    where?: SupportiveDocumentWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SupportiveDocuments to fetch.
-     */
-    orderBy?: SupportiveDocumentOrderByWithRelationInput | SupportiveDocumentOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing SupportiveDocuments.
-     */
-    cursor?: SupportiveDocumentWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SupportiveDocuments from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SupportiveDocuments.
-     */
-    skip?: number
-    distinct?: SupportiveDocumentScalarFieldEnum | SupportiveDocumentScalarFieldEnum[]
-  }
-
-  /**
-   * SupportiveDocument create
-   */
-  export type SupportiveDocumentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SupportiveDocument
-     */
-    select?: SupportiveDocumentSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SupportiveDocumentInclude<ExtArgs> | null
-    /**
-     * The data needed to create a SupportiveDocument.
-     */
-    data: XOR<SupportiveDocumentCreateInput, SupportiveDocumentUncheckedCreateInput>
-  }
-
-  /**
-   * SupportiveDocument createMany
-   */
-  export type SupportiveDocumentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many SupportiveDocuments.
-     */
-    data: SupportiveDocumentCreateManyInput | SupportiveDocumentCreateManyInput[]
+    data: GrievanceCreateManyInput | GrievanceCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * SupportiveDocument createManyAndReturn
+   * Grievance update
    */
-  export type SupportiveDocumentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SupportiveDocument
+     * Select specific fields to fetch from the Grievance
      */
-    select?: SupportiveDocumentSelectCreateManyAndReturn<ExtArgs> | null
+    select?: GrievanceSelect<ExtArgs> | null
     /**
-     * The data used to create many SupportiveDocuments.
+     * Omit specific fields from the Grievance
      */
-    data: SupportiveDocumentCreateManyInput | SupportiveDocumentCreateManyInput[]
-    skipDuplicates?: boolean
+    omit?: GrievanceOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
+     * The data needed to update a Grievance.
      */
-    include?: SupportiveDocumentIncludeCreateManyAndReturn<ExtArgs> | null
+    data: XOR<GrievanceUpdateInput, GrievanceUncheckedUpdateInput>
+    /**
+     * Choose, which Grievance to update.
+     */
+    where: GrievanceWhereUniqueInput
   }
 
   /**
-   * SupportiveDocument update
+   * Grievance updateMany
    */
-  export type SupportiveDocumentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SupportiveDocument
+     * The data used to update Grievances.
      */
-    select?: SupportiveDocumentSelect<ExtArgs> | null
+    data: XOR<GrievanceUpdateManyMutationInput, GrievanceUncheckedUpdateManyInput>
     /**
-     * Choose, which related nodes to fetch as well
+     * Filter which Grievances to update
      */
-    include?: SupportiveDocumentInclude<ExtArgs> | null
+    where?: GrievanceWhereInput
     /**
-     * The data needed to update a SupportiveDocument.
+     * Limit how many Grievances to update.
      */
-    data: XOR<SupportiveDocumentUpdateInput, SupportiveDocumentUncheckedUpdateInput>
-    /**
-     * Choose, which SupportiveDocument to update.
-     */
-    where: SupportiveDocumentWhereUniqueInput
+    limit?: number
   }
 
   /**
-   * SupportiveDocument updateMany
+   * Grievance updateManyAndReturn
    */
-  export type SupportiveDocumentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update SupportiveDocuments.
+     * Select specific fields to fetch from the Grievance
      */
-    data: XOR<SupportiveDocumentUpdateManyMutationInput, SupportiveDocumentUncheckedUpdateManyInput>
+    select?: GrievanceSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Filter which SupportiveDocuments to update
+     * Omit specific fields from the Grievance
      */
-    where?: SupportiveDocumentWhereInput
+    omit?: GrievanceOmit<ExtArgs> | null
+    /**
+     * The data used to update Grievances.
+     */
+    data: XOR<GrievanceUpdateManyMutationInput, GrievanceUncheckedUpdateManyInput>
+    /**
+     * Filter which Grievances to update
+     */
+    where?: GrievanceWhereInput
+    /**
+     * Limit how many Grievances to update.
+     */
+    limit?: number
   }
 
   /**
-   * SupportiveDocument upsert
+   * Grievance upsert
    */
-  export type SupportiveDocumentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SupportiveDocument
+     * Select specific fields to fetch from the Grievance
      */
-    select?: SupportiveDocumentSelect<ExtArgs> | null
+    select?: GrievanceSelect<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
+     * Omit specific fields from the Grievance
      */
-    include?: SupportiveDocumentInclude<ExtArgs> | null
+    omit?: GrievanceOmit<ExtArgs> | null
     /**
-     * The filter to search for the SupportiveDocument to update in case it exists.
+     * The filter to search for the Grievance to update in case it exists.
      */
-    where: SupportiveDocumentWhereUniqueInput
+    where: GrievanceWhereUniqueInput
     /**
-     * In case the SupportiveDocument found by the `where` argument doesn't exist, create a new SupportiveDocument with this data.
+     * In case the Grievance found by the `where` argument doesn't exist, create a new Grievance with this data.
      */
-    create: XOR<SupportiveDocumentCreateInput, SupportiveDocumentUncheckedCreateInput>
+    create: XOR<GrievanceCreateInput, GrievanceUncheckedCreateInput>
     /**
-     * In case the SupportiveDocument was found with the provided `where` argument, update it with this data.
+     * In case the Grievance was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<SupportiveDocumentUpdateInput, SupportiveDocumentUncheckedUpdateInput>
+    update: XOR<GrievanceUpdateInput, GrievanceUncheckedUpdateInput>
   }
 
   /**
-   * SupportiveDocument delete
+   * Grievance delete
    */
-  export type SupportiveDocumentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SupportiveDocument
+     * Select specific fields to fetch from the Grievance
      */
-    select?: SupportiveDocumentSelect<ExtArgs> | null
+    select?: GrievanceSelect<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
+     * Omit specific fields from the Grievance
      */
-    include?: SupportiveDocumentInclude<ExtArgs> | null
+    omit?: GrievanceOmit<ExtArgs> | null
     /**
-     * Filter which SupportiveDocument to delete.
+     * Filter which Grievance to delete.
      */
-    where: SupportiveDocumentWhereUniqueInput
+    where: GrievanceWhereUniqueInput
   }
 
   /**
-   * SupportiveDocument deleteMany
+   * Grievance deleteMany
    */
-  export type SupportiveDocumentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which SupportiveDocuments to delete
+     * Filter which Grievances to delete
      */
-    where?: SupportiveDocumentWhereInput
+    where?: GrievanceWhereInput
+    /**
+     * Limit how many Grievances to delete.
+     */
+    limit?: number
   }
 
   /**
-   * SupportiveDocument without action
+   * Grievance without action
    */
-  export type SupportiveDocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GrievanceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SupportiveDocument
+     * Select specific fields to fetch from the Grievance
      */
-    select?: SupportiveDocumentSelect<ExtArgs> | null
+    select?: GrievanceSelect<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
+     * Omit specific fields from the Grievance
      */
-    include?: SupportiveDocumentInclude<ExtArgs> | null
+    omit?: GrievanceOmit<ExtArgs> | null
   }
 
 
@@ -16981,8 +21670,8 @@ export namespace Prisma {
   export const AdminScalarFieldEnum: {
     id: 'id',
     email: 'email',
-    name: 'name',
     password: 'password',
+    name: 'name',
     role: 'role',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -17002,12 +21691,12 @@ export namespace Prisma {
     offlineAddress: 'offlineAddress',
     status: 'status',
     isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    adminId: 'adminId',
     eligibilityDetails: 'eligibilityDetails',
     schemeDetails: 'schemeDetails',
     processDetails: 'processDetails',
-    benefitDetails: 'benefitDetails',
-    applicationProcess: 'applicationProcess',
-    requiredDocuments: 'requiredDocuments',
     processNew: 'processNew',
     processUpdate: 'processUpdate',
     processLost: 'processLost',
@@ -17015,13 +21704,38 @@ export namespace Prisma {
     docNew: 'docNew',
     docUpdate: 'docUpdate',
     docLost: 'docLost',
-    docSurrender: 'docSurrender',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    adminId: 'adminId'
+    docSurrender: 'docSurrender'
   };
 
   export type SchemeServiceScalarFieldEnum = (typeof SchemeServiceScalarFieldEnum)[keyof typeof SchemeServiceScalarFieldEnum]
+
+
+  export const ContactPersonScalarFieldEnum: {
+    id: 'id',
+    serviceName: 'serviceName',
+    district: 'district',
+    subDistrict: 'subDistrict',
+    block: 'block',
+    name: 'name',
+    designation: 'designation',
+    contact: 'contact',
+    email: 'email',
+    schemeServiceId: 'schemeServiceId'
+  };
+
+  export type ContactPersonScalarFieldEnum = (typeof ContactPersonScalarFieldEnum)[keyof typeof ContactPersonScalarFieldEnum]
+
+
+  export const SupportiveDocumentScalarFieldEnum: {
+    id: 'id',
+    slNo: 'slNo',
+    documentType: 'documentType',
+    validProof: 'validProof',
+    isRequired: 'isRequired',
+    schemeServiceId: 'schemeServiceId'
+  };
+
+  export type SupportiveDocumentScalarFieldEnum = (typeof SupportiveDocumentScalarFieldEnum)[keyof typeof SupportiveDocumentScalarFieldEnum]
 
 
   export const CertificateServiceScalarFieldEnum: {
@@ -17030,15 +21744,17 @@ export namespace Prisma {
     summary: 'summary',
     type: 'type',
     targetAudience: 'targetAudience',
-    eligibilityDetails: 'eligibilityDetails',
-    certificateDetails: 'certificateDetails',
-    applicationProcess: 'applicationProcess',
-    requiredDocuments: 'requiredDocuments',
     applicationMode: 'applicationMode',
     onlineUrl: 'onlineUrl',
     offlineAddress: 'offlineAddress',
     status: 'status',
     isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    adminId: 'adminId',
+    eligibilityDetails: 'eligibilityDetails',
+    certificateDetails: 'certificateDetails',
+    processDetails: 'processDetails',
     processNew: 'processNew',
     processUpdate: 'processUpdate',
     processLost: 'processLost',
@@ -17046,10 +21762,7 @@ export namespace Prisma {
     docNew: 'docNew',
     docUpdate: 'docUpdate',
     docLost: 'docLost',
-    docSurrender: 'docSurrender',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    adminId: 'adminId'
+    docSurrender: 'docSurrender'
   };
 
   export type CertificateServiceScalarFieldEnum = (typeof CertificateServiceScalarFieldEnum)[keyof typeof CertificateServiceScalarFieldEnum]
@@ -17164,22 +21877,37 @@ export namespace Prisma {
   export type ContactServiceDocumentScalarFieldEnum = (typeof ContactServiceDocumentScalarFieldEnum)[keyof typeof ContactServiceDocumentScalarFieldEnum]
 
 
-  export const GrievanceScalarFieldEnum: {
+  export const PostScalarFieldEnum: {
+    id: 'id',
+    postName: 'postName',
+    rank: 'rank',
+    description: 'description',
+    department: 'department',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    officeId: 'officeId'
+  };
+
+  export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
+
+
+  export const EmployeeScalarFieldEnum: {
     id: 'id',
     name: 'name',
     email: 'email',
     phone: 'phone',
-    subject: 'subject',
-    description: 'description',
-    department: 'department',
-    priority: 'priority',
+    designation: 'designation',
+    employeeId: 'employeeId',
+    joiningDate: 'joiningDate',
+    salary: 'salary',
     status: 'status',
-    source: 'source',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    postId: 'postId'
   };
 
-  export type GrievanceScalarFieldEnum = (typeof GrievanceScalarFieldEnum)[keyof typeof GrievanceScalarFieldEnum]
+  export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
 
 
   export const FeedbackScalarFieldEnum: {
@@ -17187,43 +21915,42 @@ export namespace Prisma {
     name: 'name',
     email: 'email',
     phone: 'phone',
+    subject: 'subject',
+    message: 'message',
     rating: 'rating',
-    comment: 'comment',
-    serviceType: 'serviceType',
-    source: 'source',
+    category: 'category',
+    status: 'status',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    resolvedAt: 'resolvedAt',
+    resolvedBy: 'resolvedBy',
+    adminNotes: 'adminNotes'
   };
 
   export type FeedbackScalarFieldEnum = (typeof FeedbackScalarFieldEnum)[keyof typeof FeedbackScalarFieldEnum]
 
 
-  export const ContactPersonScalarFieldEnum: {
+  export const GrievanceScalarFieldEnum: {
     id: 'id',
-    serviceName: 'serviceName',
-    district: 'district',
-    subDistrict: 'subDistrict',
-    block: 'block',
     name: 'name',
-    designation: 'designation',
-    contact: 'contact',
     email: 'email',
-    schemeServiceId: 'schemeServiceId'
+    phone: 'phone',
+    address: 'address',
+    subject: 'subject',
+    description: 'description',
+    category: 'category',
+    priority: 'priority',
+    status: 'status',
+    attachments: 'attachments',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    assignedTo: 'assignedTo',
+    adminNotes: 'adminNotes',
+    resolvedAt: 'resolvedAt',
+    trackingId: 'trackingId'
   };
 
-  export type ContactPersonScalarFieldEnum = (typeof ContactPersonScalarFieldEnum)[keyof typeof ContactPersonScalarFieldEnum]
-
-
-  export const SupportiveDocumentScalarFieldEnum: {
-    id: 'id',
-    slNo: 'slNo',
-    documentType: 'documentType',
-    validProof: 'validProof',
-    isRequired: 'isRequired',
-    schemeServiceId: 'schemeServiceId'
-  };
-
-  export type SupportiveDocumentScalarFieldEnum = (typeof SupportiveDocumentScalarFieldEnum)[keyof typeof SupportiveDocumentScalarFieldEnum]
+  export type GrievanceScalarFieldEnum = (typeof GrievanceScalarFieldEnum)[keyof typeof GrievanceScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -17251,7 +21978,7 @@ export namespace Prisma {
 
 
   /**
-   * Field references 
+   * Field references
    */
 
 
@@ -17327,8 +22054,8 @@ export namespace Prisma {
     NOT?: AdminWhereInput | AdminWhereInput[]
     id?: IntFilter<"Admin"> | number
     email?: StringFilter<"Admin"> | string
-    name?: StringFilter<"Admin"> | string
     password?: StringFilter<"Admin"> | string
+    name?: StringFilter<"Admin"> | string
     role?: StringFilter<"Admin"> | string
     createdAt?: DateTimeFilter<"Admin"> | Date | string
     updatedAt?: DateTimeFilter<"Admin"> | Date | string
@@ -17340,8 +22067,8 @@ export namespace Prisma {
   export type AdminOrderByWithRelationInput = {
     id?: SortOrder
     email?: SortOrder
-    name?: SortOrder
     password?: SortOrder
+    name?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -17356,8 +22083,8 @@ export namespace Prisma {
     AND?: AdminWhereInput | AdminWhereInput[]
     OR?: AdminWhereInput[]
     NOT?: AdminWhereInput | AdminWhereInput[]
-    name?: StringFilter<"Admin"> | string
     password?: StringFilter<"Admin"> | string
+    name?: StringFilter<"Admin"> | string
     role?: StringFilter<"Admin"> | string
     createdAt?: DateTimeFilter<"Admin"> | Date | string
     updatedAt?: DateTimeFilter<"Admin"> | Date | string
@@ -17369,8 +22096,8 @@ export namespace Prisma {
   export type AdminOrderByWithAggregationInput = {
     id?: SortOrder
     email?: SortOrder
-    name?: SortOrder
     password?: SortOrder
+    name?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -17387,8 +22114,8 @@ export namespace Prisma {
     NOT?: AdminScalarWhereWithAggregatesInput | AdminScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Admin"> | number
     email?: StringWithAggregatesFilter<"Admin"> | string
-    name?: StringWithAggregatesFilter<"Admin"> | string
     password?: StringWithAggregatesFilter<"Admin"> | string
+    name?: StringWithAggregatesFilter<"Admin"> | string
     role?: StringWithAggregatesFilter<"Admin"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Admin"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Admin"> | Date | string
@@ -17408,12 +22135,12 @@ export namespace Prisma {
     offlineAddress?: StringNullableFilter<"SchemeService"> | string | null
     status?: StringFilter<"SchemeService"> | string
     isActive?: BoolFilter<"SchemeService"> | boolean
+    createdAt?: DateTimeFilter<"SchemeService"> | Date | string
+    updatedAt?: DateTimeFilter<"SchemeService"> | Date | string
+    adminId?: IntFilter<"SchemeService"> | number
     eligibilityDetails?: StringNullableListFilter<"SchemeService">
     schemeDetails?: StringNullableListFilter<"SchemeService">
     processDetails?: StringNullableListFilter<"SchemeService">
-    benefitDetails?: StringNullableListFilter<"SchemeService">
-    applicationProcess?: StringNullableListFilter<"SchemeService">
-    requiredDocuments?: StringNullableListFilter<"SchemeService">
     processNew?: StringNullableFilter<"SchemeService"> | string | null
     processUpdate?: StringNullableFilter<"SchemeService"> | string | null
     processLost?: StringNullableFilter<"SchemeService"> | string | null
@@ -17422,10 +22149,7 @@ export namespace Prisma {
     docUpdate?: StringNullableFilter<"SchemeService"> | string | null
     docLost?: StringNullableFilter<"SchemeService"> | string | null
     docSurrender?: StringNullableFilter<"SchemeService"> | string | null
-    createdAt?: DateTimeFilter<"SchemeService"> | Date | string
-    updatedAt?: DateTimeFilter<"SchemeService"> | Date | string
-    adminId?: IntFilter<"SchemeService"> | number
-    admin?: XOR<AdminRelationFilter, AdminWhereInput>
+    admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
     contacts?: ContactPersonListRelationFilter
     documents?: SupportiveDocumentListRelationFilter
   }
@@ -17441,12 +22165,12 @@ export namespace Prisma {
     offlineAddress?: SortOrderInput | SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    adminId?: SortOrder
     eligibilityDetails?: SortOrder
     schemeDetails?: SortOrder
     processDetails?: SortOrder
-    benefitDetails?: SortOrder
-    applicationProcess?: SortOrder
-    requiredDocuments?: SortOrder
     processNew?: SortOrderInput | SortOrder
     processUpdate?: SortOrderInput | SortOrder
     processLost?: SortOrderInput | SortOrder
@@ -17455,9 +22179,6 @@ export namespace Prisma {
     docUpdate?: SortOrderInput | SortOrder
     docLost?: SortOrderInput | SortOrder
     docSurrender?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    adminId?: SortOrder
     admin?: AdminOrderByWithRelationInput
     contacts?: ContactPersonOrderByRelationAggregateInput
     documents?: SupportiveDocumentOrderByRelationAggregateInput
@@ -17477,12 +22198,12 @@ export namespace Prisma {
     offlineAddress?: StringNullableFilter<"SchemeService"> | string | null
     status?: StringFilter<"SchemeService"> | string
     isActive?: BoolFilter<"SchemeService"> | boolean
+    createdAt?: DateTimeFilter<"SchemeService"> | Date | string
+    updatedAt?: DateTimeFilter<"SchemeService"> | Date | string
+    adminId?: IntFilter<"SchemeService"> | number
     eligibilityDetails?: StringNullableListFilter<"SchemeService">
     schemeDetails?: StringNullableListFilter<"SchemeService">
     processDetails?: StringNullableListFilter<"SchemeService">
-    benefitDetails?: StringNullableListFilter<"SchemeService">
-    applicationProcess?: StringNullableListFilter<"SchemeService">
-    requiredDocuments?: StringNullableListFilter<"SchemeService">
     processNew?: StringNullableFilter<"SchemeService"> | string | null
     processUpdate?: StringNullableFilter<"SchemeService"> | string | null
     processLost?: StringNullableFilter<"SchemeService"> | string | null
@@ -17491,10 +22212,7 @@ export namespace Prisma {
     docUpdate?: StringNullableFilter<"SchemeService"> | string | null
     docLost?: StringNullableFilter<"SchemeService"> | string | null
     docSurrender?: StringNullableFilter<"SchemeService"> | string | null
-    createdAt?: DateTimeFilter<"SchemeService"> | Date | string
-    updatedAt?: DateTimeFilter<"SchemeService"> | Date | string
-    adminId?: IntFilter<"SchemeService"> | number
-    admin?: XOR<AdminRelationFilter, AdminWhereInput>
+    admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
     contacts?: ContactPersonListRelationFilter
     documents?: SupportiveDocumentListRelationFilter
   }, "id">
@@ -17510,12 +22228,12 @@ export namespace Prisma {
     offlineAddress?: SortOrderInput | SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    adminId?: SortOrder
     eligibilityDetails?: SortOrder
     schemeDetails?: SortOrder
     processDetails?: SortOrder
-    benefitDetails?: SortOrder
-    applicationProcess?: SortOrder
-    requiredDocuments?: SortOrder
     processNew?: SortOrderInput | SortOrder
     processUpdate?: SortOrderInput | SortOrder
     processLost?: SortOrderInput | SortOrder
@@ -17524,9 +22242,6 @@ export namespace Prisma {
     docUpdate?: SortOrderInput | SortOrder
     docLost?: SortOrderInput | SortOrder
     docSurrender?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    adminId?: SortOrder
     _count?: SchemeServiceCountOrderByAggregateInput
     _avg?: SchemeServiceAvgOrderByAggregateInput
     _max?: SchemeServiceMaxOrderByAggregateInput
@@ -17548,12 +22263,12 @@ export namespace Prisma {
     offlineAddress?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
     status?: StringWithAggregatesFilter<"SchemeService"> | string
     isActive?: BoolWithAggregatesFilter<"SchemeService"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"SchemeService"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SchemeService"> | Date | string
+    adminId?: IntWithAggregatesFilter<"SchemeService"> | number
     eligibilityDetails?: StringNullableListFilter<"SchemeService">
     schemeDetails?: StringNullableListFilter<"SchemeService">
     processDetails?: StringNullableListFilter<"SchemeService">
-    benefitDetails?: StringNullableListFilter<"SchemeService">
-    applicationProcess?: StringNullableListFilter<"SchemeService">
-    requiredDocuments?: StringNullableListFilter<"SchemeService">
     processNew?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
     processUpdate?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
     processLost?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
@@ -17562,9 +22277,150 @@ export namespace Prisma {
     docUpdate?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
     docLost?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
     docSurrender?: StringNullableWithAggregatesFilter<"SchemeService"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"SchemeService"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"SchemeService"> | Date | string
-    adminId?: IntWithAggregatesFilter<"SchemeService"> | number
+  }
+
+  export type ContactPersonWhereInput = {
+    AND?: ContactPersonWhereInput | ContactPersonWhereInput[]
+    OR?: ContactPersonWhereInput[]
+    NOT?: ContactPersonWhereInput | ContactPersonWhereInput[]
+    id?: IntFilter<"ContactPerson"> | number
+    serviceName?: StringFilter<"ContactPerson"> | string
+    district?: StringFilter<"ContactPerson"> | string
+    subDistrict?: StringFilter<"ContactPerson"> | string
+    block?: StringFilter<"ContactPerson"> | string
+    name?: StringFilter<"ContactPerson"> | string
+    designation?: StringFilter<"ContactPerson"> | string
+    contact?: StringFilter<"ContactPerson"> | string
+    email?: StringFilter<"ContactPerson"> | string
+    schemeServiceId?: IntFilter<"ContactPerson"> | number
+    schemeService?: XOR<SchemeServiceScalarRelationFilter, SchemeServiceWhereInput>
+  }
+
+  export type ContactPersonOrderByWithRelationInput = {
+    id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
+    name?: SortOrder
+    designation?: SortOrder
+    contact?: SortOrder
+    email?: SortOrder
+    schemeServiceId?: SortOrder
+    schemeService?: SchemeServiceOrderByWithRelationInput
+  }
+
+  export type ContactPersonWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: ContactPersonWhereInput | ContactPersonWhereInput[]
+    OR?: ContactPersonWhereInput[]
+    NOT?: ContactPersonWhereInput | ContactPersonWhereInput[]
+    serviceName?: StringFilter<"ContactPerson"> | string
+    district?: StringFilter<"ContactPerson"> | string
+    subDistrict?: StringFilter<"ContactPerson"> | string
+    block?: StringFilter<"ContactPerson"> | string
+    name?: StringFilter<"ContactPerson"> | string
+    designation?: StringFilter<"ContactPerson"> | string
+    contact?: StringFilter<"ContactPerson"> | string
+    email?: StringFilter<"ContactPerson"> | string
+    schemeServiceId?: IntFilter<"ContactPerson"> | number
+    schemeService?: XOR<SchemeServiceScalarRelationFilter, SchemeServiceWhereInput>
+  }, "id">
+
+  export type ContactPersonOrderByWithAggregationInput = {
+    id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
+    name?: SortOrder
+    designation?: SortOrder
+    contact?: SortOrder
+    email?: SortOrder
+    schemeServiceId?: SortOrder
+    _count?: ContactPersonCountOrderByAggregateInput
+    _avg?: ContactPersonAvgOrderByAggregateInput
+    _max?: ContactPersonMaxOrderByAggregateInput
+    _min?: ContactPersonMinOrderByAggregateInput
+    _sum?: ContactPersonSumOrderByAggregateInput
+  }
+
+  export type ContactPersonScalarWhereWithAggregatesInput = {
+    AND?: ContactPersonScalarWhereWithAggregatesInput | ContactPersonScalarWhereWithAggregatesInput[]
+    OR?: ContactPersonScalarWhereWithAggregatesInput[]
+    NOT?: ContactPersonScalarWhereWithAggregatesInput | ContactPersonScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"ContactPerson"> | number
+    serviceName?: StringWithAggregatesFilter<"ContactPerson"> | string
+    district?: StringWithAggregatesFilter<"ContactPerson"> | string
+    subDistrict?: StringWithAggregatesFilter<"ContactPerson"> | string
+    block?: StringWithAggregatesFilter<"ContactPerson"> | string
+    name?: StringWithAggregatesFilter<"ContactPerson"> | string
+    designation?: StringWithAggregatesFilter<"ContactPerson"> | string
+    contact?: StringWithAggregatesFilter<"ContactPerson"> | string
+    email?: StringWithAggregatesFilter<"ContactPerson"> | string
+    schemeServiceId?: IntWithAggregatesFilter<"ContactPerson"> | number
+  }
+
+  export type SupportiveDocumentWhereInput = {
+    AND?: SupportiveDocumentWhereInput | SupportiveDocumentWhereInput[]
+    OR?: SupportiveDocumentWhereInput[]
+    NOT?: SupportiveDocumentWhereInput | SupportiveDocumentWhereInput[]
+    id?: IntFilter<"SupportiveDocument"> | number
+    slNo?: IntFilter<"SupportiveDocument"> | number
+    documentType?: StringFilter<"SupportiveDocument"> | string
+    validProof?: StringFilter<"SupportiveDocument"> | string
+    isRequired?: BoolFilter<"SupportiveDocument"> | boolean
+    schemeServiceId?: IntFilter<"SupportiveDocument"> | number
+    schemeService?: XOR<SchemeServiceScalarRelationFilter, SchemeServiceWhereInput>
+  }
+
+  export type SupportiveDocumentOrderByWithRelationInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    schemeServiceId?: SortOrder
+    schemeService?: SchemeServiceOrderByWithRelationInput
+  }
+
+  export type SupportiveDocumentWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: SupportiveDocumentWhereInput | SupportiveDocumentWhereInput[]
+    OR?: SupportiveDocumentWhereInput[]
+    NOT?: SupportiveDocumentWhereInput | SupportiveDocumentWhereInput[]
+    slNo?: IntFilter<"SupportiveDocument"> | number
+    documentType?: StringFilter<"SupportiveDocument"> | string
+    validProof?: StringFilter<"SupportiveDocument"> | string
+    isRequired?: BoolFilter<"SupportiveDocument"> | boolean
+    schemeServiceId?: IntFilter<"SupportiveDocument"> | number
+    schemeService?: XOR<SchemeServiceScalarRelationFilter, SchemeServiceWhereInput>
+  }, "id">
+
+  export type SupportiveDocumentOrderByWithAggregationInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    schemeServiceId?: SortOrder
+    _count?: SupportiveDocumentCountOrderByAggregateInput
+    _avg?: SupportiveDocumentAvgOrderByAggregateInput
+    _max?: SupportiveDocumentMaxOrderByAggregateInput
+    _min?: SupportiveDocumentMinOrderByAggregateInput
+    _sum?: SupportiveDocumentSumOrderByAggregateInput
+  }
+
+  export type SupportiveDocumentScalarWhereWithAggregatesInput = {
+    AND?: SupportiveDocumentScalarWhereWithAggregatesInput | SupportiveDocumentScalarWhereWithAggregatesInput[]
+    OR?: SupportiveDocumentScalarWhereWithAggregatesInput[]
+    NOT?: SupportiveDocumentScalarWhereWithAggregatesInput | SupportiveDocumentScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"SupportiveDocument"> | number
+    slNo?: IntWithAggregatesFilter<"SupportiveDocument"> | number
+    documentType?: StringWithAggregatesFilter<"SupportiveDocument"> | string
+    validProof?: StringWithAggregatesFilter<"SupportiveDocument"> | string
+    isRequired?: BoolWithAggregatesFilter<"SupportiveDocument"> | boolean
+    schemeServiceId?: IntWithAggregatesFilter<"SupportiveDocument"> | number
   }
 
   export type CertificateServiceWhereInput = {
@@ -17576,15 +22432,17 @@ export namespace Prisma {
     summary?: StringFilter<"CertificateService"> | string
     type?: StringNullableFilter<"CertificateService"> | string | null
     targetAudience?: StringNullableListFilter<"CertificateService">
-    eligibilityDetails?: StringNullableListFilter<"CertificateService">
-    certificateDetails?: StringNullableListFilter<"CertificateService">
-    applicationProcess?: StringNullableListFilter<"CertificateService">
-    requiredDocuments?: StringNullableListFilter<"CertificateService">
     applicationMode?: StringFilter<"CertificateService"> | string
     onlineUrl?: StringNullableFilter<"CertificateService"> | string | null
     offlineAddress?: StringNullableFilter<"CertificateService"> | string | null
     status?: StringFilter<"CertificateService"> | string
     isActive?: BoolFilter<"CertificateService"> | boolean
+    createdAt?: DateTimeFilter<"CertificateService"> | Date | string
+    updatedAt?: DateTimeFilter<"CertificateService"> | Date | string
+    adminId?: IntFilter<"CertificateService"> | number
+    eligibilityDetails?: StringNullableListFilter<"CertificateService">
+    certificateDetails?: StringNullableListFilter<"CertificateService">
+    processDetails?: StringNullableListFilter<"CertificateService">
     processNew?: StringNullableFilter<"CertificateService"> | string | null
     processUpdate?: StringNullableFilter<"CertificateService"> | string | null
     processLost?: StringNullableFilter<"CertificateService"> | string | null
@@ -17593,10 +22451,7 @@ export namespace Prisma {
     docUpdate?: StringNullableFilter<"CertificateService"> | string | null
     docLost?: StringNullableFilter<"CertificateService"> | string | null
     docSurrender?: StringNullableFilter<"CertificateService"> | string | null
-    createdAt?: DateTimeFilter<"CertificateService"> | Date | string
-    updatedAt?: DateTimeFilter<"CertificateService"> | Date | string
-    adminId?: IntFilter<"CertificateService"> | number
-    admin?: XOR<AdminRelationFilter, AdminWhereInput>
+    admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
     contacts?: CertificateContactListRelationFilter
     documents?: CertificateDocumentListRelationFilter
     processSteps?: CertificateProcessStepListRelationFilter
@@ -17609,15 +22464,17 @@ export namespace Prisma {
     summary?: SortOrder
     type?: SortOrderInput | SortOrder
     targetAudience?: SortOrder
-    eligibilityDetails?: SortOrder
-    certificateDetails?: SortOrder
-    applicationProcess?: SortOrder
-    requiredDocuments?: SortOrder
     applicationMode?: SortOrder
     onlineUrl?: SortOrderInput | SortOrder
     offlineAddress?: SortOrderInput | SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    adminId?: SortOrder
+    eligibilityDetails?: SortOrder
+    certificateDetails?: SortOrder
+    processDetails?: SortOrder
     processNew?: SortOrderInput | SortOrder
     processUpdate?: SortOrderInput | SortOrder
     processLost?: SortOrderInput | SortOrder
@@ -17626,9 +22483,6 @@ export namespace Prisma {
     docUpdate?: SortOrderInput | SortOrder
     docLost?: SortOrderInput | SortOrder
     docSurrender?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    adminId?: SortOrder
     admin?: AdminOrderByWithRelationInput
     contacts?: CertificateContactOrderByRelationAggregateInput
     documents?: CertificateDocumentOrderByRelationAggregateInput
@@ -17645,15 +22499,17 @@ export namespace Prisma {
     summary?: StringFilter<"CertificateService"> | string
     type?: StringNullableFilter<"CertificateService"> | string | null
     targetAudience?: StringNullableListFilter<"CertificateService">
-    eligibilityDetails?: StringNullableListFilter<"CertificateService">
-    certificateDetails?: StringNullableListFilter<"CertificateService">
-    applicationProcess?: StringNullableListFilter<"CertificateService">
-    requiredDocuments?: StringNullableListFilter<"CertificateService">
     applicationMode?: StringFilter<"CertificateService"> | string
     onlineUrl?: StringNullableFilter<"CertificateService"> | string | null
     offlineAddress?: StringNullableFilter<"CertificateService"> | string | null
     status?: StringFilter<"CertificateService"> | string
     isActive?: BoolFilter<"CertificateService"> | boolean
+    createdAt?: DateTimeFilter<"CertificateService"> | Date | string
+    updatedAt?: DateTimeFilter<"CertificateService"> | Date | string
+    adminId?: IntFilter<"CertificateService"> | number
+    eligibilityDetails?: StringNullableListFilter<"CertificateService">
+    certificateDetails?: StringNullableListFilter<"CertificateService">
+    processDetails?: StringNullableListFilter<"CertificateService">
     processNew?: StringNullableFilter<"CertificateService"> | string | null
     processUpdate?: StringNullableFilter<"CertificateService"> | string | null
     processLost?: StringNullableFilter<"CertificateService"> | string | null
@@ -17662,10 +22518,7 @@ export namespace Prisma {
     docUpdate?: StringNullableFilter<"CertificateService"> | string | null
     docLost?: StringNullableFilter<"CertificateService"> | string | null
     docSurrender?: StringNullableFilter<"CertificateService"> | string | null
-    createdAt?: DateTimeFilter<"CertificateService"> | Date | string
-    updatedAt?: DateTimeFilter<"CertificateService"> | Date | string
-    adminId?: IntFilter<"CertificateService"> | number
-    admin?: XOR<AdminRelationFilter, AdminWhereInput>
+    admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
     contacts?: CertificateContactListRelationFilter
     documents?: CertificateDocumentListRelationFilter
     processSteps?: CertificateProcessStepListRelationFilter
@@ -17678,15 +22531,17 @@ export namespace Prisma {
     summary?: SortOrder
     type?: SortOrderInput | SortOrder
     targetAudience?: SortOrder
-    eligibilityDetails?: SortOrder
-    certificateDetails?: SortOrder
-    applicationProcess?: SortOrder
-    requiredDocuments?: SortOrder
     applicationMode?: SortOrder
     onlineUrl?: SortOrderInput | SortOrder
     offlineAddress?: SortOrderInput | SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    adminId?: SortOrder
+    eligibilityDetails?: SortOrder
+    certificateDetails?: SortOrder
+    processDetails?: SortOrder
     processNew?: SortOrderInput | SortOrder
     processUpdate?: SortOrderInput | SortOrder
     processLost?: SortOrderInput | SortOrder
@@ -17695,9 +22550,6 @@ export namespace Prisma {
     docUpdate?: SortOrderInput | SortOrder
     docLost?: SortOrderInput | SortOrder
     docSurrender?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    adminId?: SortOrder
     _count?: CertificateServiceCountOrderByAggregateInput
     _avg?: CertificateServiceAvgOrderByAggregateInput
     _max?: CertificateServiceMaxOrderByAggregateInput
@@ -17714,15 +22566,17 @@ export namespace Prisma {
     summary?: StringWithAggregatesFilter<"CertificateService"> | string
     type?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
     targetAudience?: StringNullableListFilter<"CertificateService">
-    eligibilityDetails?: StringNullableListFilter<"CertificateService">
-    certificateDetails?: StringNullableListFilter<"CertificateService">
-    applicationProcess?: StringNullableListFilter<"CertificateService">
-    requiredDocuments?: StringNullableListFilter<"CertificateService">
     applicationMode?: StringWithAggregatesFilter<"CertificateService"> | string
     onlineUrl?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
     offlineAddress?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
     status?: StringWithAggregatesFilter<"CertificateService"> | string
     isActive?: BoolWithAggregatesFilter<"CertificateService"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"CertificateService"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CertificateService"> | Date | string
+    adminId?: IntWithAggregatesFilter<"CertificateService"> | number
+    eligibilityDetails?: StringNullableListFilter<"CertificateService">
+    certificateDetails?: StringNullableListFilter<"CertificateService">
+    processDetails?: StringNullableListFilter<"CertificateService">
     processNew?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
     processUpdate?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
     processLost?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
@@ -17731,9 +22585,6 @@ export namespace Prisma {
     docUpdate?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
     docLost?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
     docSurrender?: StringNullableWithAggregatesFilter<"CertificateService"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"CertificateService"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"CertificateService"> | Date | string
-    adminId?: IntWithAggregatesFilter<"CertificateService"> | number
   }
 
   export type CertificateContactWhereInput = {
@@ -17751,7 +22602,7 @@ export namespace Prisma {
     email?: StringFilter<"CertificateContact"> | string
     applicationType?: StringFilter<"CertificateContact"> | string
     certificateServiceId?: IntFilter<"CertificateContact"> | number
-    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+    certificateService?: XOR<CertificateServiceScalarRelationFilter, CertificateServiceWhereInput>
   }
 
   export type CertificateContactOrderByWithRelationInput = {
@@ -17784,7 +22635,7 @@ export namespace Prisma {
     email?: StringFilter<"CertificateContact"> | string
     applicationType?: StringFilter<"CertificateContact"> | string
     certificateServiceId?: IntFilter<"CertificateContact"> | number
-    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+    certificateService?: XOR<CertificateServiceScalarRelationFilter, CertificateServiceWhereInput>
   }, "id">
 
   export type CertificateContactOrderByWithAggregationInput = {
@@ -17834,7 +22685,7 @@ export namespace Prisma {
     isRequired?: BoolFilter<"CertificateDocument"> | boolean
     applicationType?: StringFilter<"CertificateDocument"> | string
     certificateServiceId?: IntFilter<"CertificateDocument"> | number
-    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+    certificateService?: XOR<CertificateServiceScalarRelationFilter, CertificateServiceWhereInput>
   }
 
   export type CertificateDocumentOrderByWithRelationInput = {
@@ -17859,7 +22710,7 @@ export namespace Prisma {
     isRequired?: BoolFilter<"CertificateDocument"> | boolean
     applicationType?: StringFilter<"CertificateDocument"> | string
     certificateServiceId?: IntFilter<"CertificateDocument"> | number
-    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+    certificateService?: XOR<CertificateServiceScalarRelationFilter, CertificateServiceWhereInput>
   }, "id">
 
   export type CertificateDocumentOrderByWithAggregationInput = {
@@ -17899,7 +22750,7 @@ export namespace Prisma {
     stepDetails?: StringFilter<"CertificateProcessStep"> | string
     applicationType?: StringFilter<"CertificateProcessStep"> | string
     certificateServiceId?: IntFilter<"CertificateProcessStep"> | number
-    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+    certificateService?: XOR<CertificateServiceScalarRelationFilter, CertificateServiceWhereInput>
   }
 
   export type CertificateProcessStepOrderByWithRelationInput = {
@@ -17920,7 +22771,7 @@ export namespace Prisma {
     stepDetails?: StringFilter<"CertificateProcessStep"> | string
     applicationType?: StringFilter<"CertificateProcessStep"> | string
     certificateServiceId?: IntFilter<"CertificateProcessStep"> | number
-    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+    certificateService?: XOR<CertificateServiceScalarRelationFilter, CertificateServiceWhereInput>
   }, "id">
 
   export type CertificateProcessStepOrderByWithAggregationInput = {
@@ -17955,7 +22806,7 @@ export namespace Prisma {
     eligibilityDetail?: StringFilter<"CertificateEligibility"> | string
     applicationType?: StringFilter<"CertificateEligibility"> | string
     certificateServiceId?: IntFilter<"CertificateEligibility"> | number
-    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+    certificateService?: XOR<CertificateServiceScalarRelationFilter, CertificateServiceWhereInput>
   }
 
   export type CertificateEligibilityOrderByWithRelationInput = {
@@ -17974,7 +22825,7 @@ export namespace Prisma {
     eligibilityDetail?: StringFilter<"CertificateEligibility"> | string
     applicationType?: StringFilter<"CertificateEligibility"> | string
     certificateServiceId?: IntFilter<"CertificateEligibility"> | number
-    certificateService?: XOR<CertificateServiceRelationFilter, CertificateServiceWhereInput>
+    certificateService?: XOR<CertificateServiceScalarRelationFilter, CertificateServiceWhereInput>
   }, "id">
 
   export type CertificateEligibilityOrderByWithAggregationInput = {
@@ -18027,7 +22878,7 @@ export namespace Prisma {
     docUpdate?: StringNullableFilter<"ContactService"> | string | null
     docLost?: StringNullableFilter<"ContactService"> | string | null
     docSurrender?: StringNullableFilter<"ContactService"> | string | null
-    admin?: XOR<AdminRelationFilter, AdminWhereInput>
+    admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
     contacts?: ContactServiceContactListRelationFilter
     documents?: ContactServiceDocumentListRelationFilter
   }
@@ -18090,7 +22941,7 @@ export namespace Prisma {
     docUpdate?: StringNullableFilter<"ContactService"> | string | null
     docLost?: StringNullableFilter<"ContactService"> | string | null
     docSurrender?: StringNullableFilter<"ContactService"> | string | null
-    admin?: XOR<AdminRelationFilter, AdminWhereInput>
+    admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
     contacts?: ContactServiceContactListRelationFilter
     documents?: ContactServiceDocumentListRelationFilter
   }, "id">
@@ -18171,7 +23022,8 @@ export namespace Prisma {
     contact?: StringFilter<"ContactServiceContact"> | string
     email?: StringFilter<"ContactServiceContact"> | string
     contactServiceId?: IntFilter<"ContactServiceContact"> | number
-    contactService?: XOR<ContactServiceRelationFilter, ContactServiceWhereInput>
+    contactService?: XOR<ContactServiceScalarRelationFilter, ContactServiceWhereInput>
+    posts?: PostListRelationFilter
   }
 
   export type ContactServiceContactOrderByWithRelationInput = {
@@ -18186,6 +23038,7 @@ export namespace Prisma {
     email?: SortOrder
     contactServiceId?: SortOrder
     contactService?: ContactServiceOrderByWithRelationInput
+    posts?: PostOrderByRelationAggregateInput
   }
 
   export type ContactServiceContactWhereUniqueInput = Prisma.AtLeast<{
@@ -18202,7 +23055,8 @@ export namespace Prisma {
     contact?: StringFilter<"ContactServiceContact"> | string
     email?: StringFilter<"ContactServiceContact"> | string
     contactServiceId?: IntFilter<"ContactServiceContact"> | number
-    contactService?: XOR<ContactServiceRelationFilter, ContactServiceWhereInput>
+    contactService?: XOR<ContactServiceScalarRelationFilter, ContactServiceWhereInput>
+    posts?: PostListRelationFilter
   }, "id">
 
   export type ContactServiceContactOrderByWithAggregationInput = {
@@ -18249,7 +23103,7 @@ export namespace Prisma {
     validProof?: StringFilter<"ContactServiceDocument"> | string
     isRequired?: BoolFilter<"ContactServiceDocument"> | boolean
     contactServiceId?: IntFilter<"ContactServiceDocument"> | number
-    contactService?: XOR<ContactServiceRelationFilter, ContactServiceWhereInput>
+    contactService?: XOR<ContactServiceScalarRelationFilter, ContactServiceWhereInput>
   }
 
   export type ContactServiceDocumentOrderByWithRelationInput = {
@@ -18272,7 +23126,7 @@ export namespace Prisma {
     validProof?: StringFilter<"ContactServiceDocument"> | string
     isRequired?: BoolFilter<"ContactServiceDocument"> | boolean
     contactServiceId?: IntFilter<"ContactServiceDocument"> | number
-    contactService?: XOR<ContactServiceRelationFilter, ContactServiceWhereInput>
+    contactService?: XOR<ContactServiceScalarRelationFilter, ContactServiceWhereInput>
   }, "id">
 
   export type ContactServiceDocumentOrderByWithAggregationInput = {
@@ -18301,6 +23155,277 @@ export namespace Prisma {
     contactServiceId?: IntWithAggregatesFilter<"ContactServiceDocument"> | number
   }
 
+  export type PostWhereInput = {
+    AND?: PostWhereInput | PostWhereInput[]
+    OR?: PostWhereInput[]
+    NOT?: PostWhereInput | PostWhereInput[]
+    id?: IntFilter<"Post"> | number
+    postName?: StringFilter<"Post"> | string
+    rank?: StringFilter<"Post"> | string
+    description?: StringNullableFilter<"Post"> | string | null
+    department?: StringNullableFilter<"Post"> | string | null
+    status?: StringFilter<"Post"> | string
+    createdAt?: DateTimeFilter<"Post"> | Date | string
+    updatedAt?: DateTimeFilter<"Post"> | Date | string
+    officeId?: IntFilter<"Post"> | number
+    office?: XOR<ContactServiceContactScalarRelationFilter, ContactServiceContactWhereInput>
+    employees?: EmployeeListRelationFilter
+  }
+
+  export type PostOrderByWithRelationInput = {
+    id?: SortOrder
+    postName?: SortOrder
+    rank?: SortOrder
+    description?: SortOrderInput | SortOrder
+    department?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    officeId?: SortOrder
+    office?: ContactServiceContactOrderByWithRelationInput
+    employees?: EmployeeOrderByRelationAggregateInput
+  }
+
+  export type PostWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: PostWhereInput | PostWhereInput[]
+    OR?: PostWhereInput[]
+    NOT?: PostWhereInput | PostWhereInput[]
+    postName?: StringFilter<"Post"> | string
+    rank?: StringFilter<"Post"> | string
+    description?: StringNullableFilter<"Post"> | string | null
+    department?: StringNullableFilter<"Post"> | string | null
+    status?: StringFilter<"Post"> | string
+    createdAt?: DateTimeFilter<"Post"> | Date | string
+    updatedAt?: DateTimeFilter<"Post"> | Date | string
+    officeId?: IntFilter<"Post"> | number
+    office?: XOR<ContactServiceContactScalarRelationFilter, ContactServiceContactWhereInput>
+    employees?: EmployeeListRelationFilter
+  }, "id">
+
+  export type PostOrderByWithAggregationInput = {
+    id?: SortOrder
+    postName?: SortOrder
+    rank?: SortOrder
+    description?: SortOrderInput | SortOrder
+    department?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    officeId?: SortOrder
+    _count?: PostCountOrderByAggregateInput
+    _avg?: PostAvgOrderByAggregateInput
+    _max?: PostMaxOrderByAggregateInput
+    _min?: PostMinOrderByAggregateInput
+    _sum?: PostSumOrderByAggregateInput
+  }
+
+  export type PostScalarWhereWithAggregatesInput = {
+    AND?: PostScalarWhereWithAggregatesInput | PostScalarWhereWithAggregatesInput[]
+    OR?: PostScalarWhereWithAggregatesInput[]
+    NOT?: PostScalarWhereWithAggregatesInput | PostScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Post"> | number
+    postName?: StringWithAggregatesFilter<"Post"> | string
+    rank?: StringWithAggregatesFilter<"Post"> | string
+    description?: StringNullableWithAggregatesFilter<"Post"> | string | null
+    department?: StringNullableWithAggregatesFilter<"Post"> | string | null
+    status?: StringWithAggregatesFilter<"Post"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
+    officeId?: IntWithAggregatesFilter<"Post"> | number
+  }
+
+  export type EmployeeWhereInput = {
+    AND?: EmployeeWhereInput | EmployeeWhereInput[]
+    OR?: EmployeeWhereInput[]
+    NOT?: EmployeeWhereInput | EmployeeWhereInput[]
+    id?: IntFilter<"Employee"> | number
+    name?: StringFilter<"Employee"> | string
+    email?: StringFilter<"Employee"> | string
+    phone?: StringFilter<"Employee"> | string
+    designation?: StringFilter<"Employee"> | string
+    employeeId?: StringNullableFilter<"Employee"> | string | null
+    joiningDate?: DateTimeNullableFilter<"Employee"> | Date | string | null
+    salary?: FloatNullableFilter<"Employee"> | number | null
+    status?: StringFilter<"Employee"> | string
+    createdAt?: DateTimeFilter<"Employee"> | Date | string
+    updatedAt?: DateTimeFilter<"Employee"> | Date | string
+    postId?: IntFilter<"Employee"> | number
+    post?: XOR<PostScalarRelationFilter, PostWhereInput>
+  }
+
+  export type EmployeeOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    designation?: SortOrder
+    employeeId?: SortOrderInput | SortOrder
+    joiningDate?: SortOrderInput | SortOrder
+    salary?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    postId?: SortOrder
+    post?: PostOrderByWithRelationInput
+  }
+
+  export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: EmployeeWhereInput | EmployeeWhereInput[]
+    OR?: EmployeeWhereInput[]
+    NOT?: EmployeeWhereInput | EmployeeWhereInput[]
+    name?: StringFilter<"Employee"> | string
+    email?: StringFilter<"Employee"> | string
+    phone?: StringFilter<"Employee"> | string
+    designation?: StringFilter<"Employee"> | string
+    employeeId?: StringNullableFilter<"Employee"> | string | null
+    joiningDate?: DateTimeNullableFilter<"Employee"> | Date | string | null
+    salary?: FloatNullableFilter<"Employee"> | number | null
+    status?: StringFilter<"Employee"> | string
+    createdAt?: DateTimeFilter<"Employee"> | Date | string
+    updatedAt?: DateTimeFilter<"Employee"> | Date | string
+    postId?: IntFilter<"Employee"> | number
+    post?: XOR<PostScalarRelationFilter, PostWhereInput>
+  }, "id">
+
+  export type EmployeeOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    designation?: SortOrder
+    employeeId?: SortOrderInput | SortOrder
+    joiningDate?: SortOrderInput | SortOrder
+    salary?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    postId?: SortOrder
+    _count?: EmployeeCountOrderByAggregateInput
+    _avg?: EmployeeAvgOrderByAggregateInput
+    _max?: EmployeeMaxOrderByAggregateInput
+    _min?: EmployeeMinOrderByAggregateInput
+    _sum?: EmployeeSumOrderByAggregateInput
+  }
+
+  export type EmployeeScalarWhereWithAggregatesInput = {
+    AND?: EmployeeScalarWhereWithAggregatesInput | EmployeeScalarWhereWithAggregatesInput[]
+    OR?: EmployeeScalarWhereWithAggregatesInput[]
+    NOT?: EmployeeScalarWhereWithAggregatesInput | EmployeeScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Employee"> | number
+    name?: StringWithAggregatesFilter<"Employee"> | string
+    email?: StringWithAggregatesFilter<"Employee"> | string
+    phone?: StringWithAggregatesFilter<"Employee"> | string
+    designation?: StringWithAggregatesFilter<"Employee"> | string
+    employeeId?: StringNullableWithAggregatesFilter<"Employee"> | string | null
+    joiningDate?: DateTimeNullableWithAggregatesFilter<"Employee"> | Date | string | null
+    salary?: FloatNullableWithAggregatesFilter<"Employee"> | number | null
+    status?: StringWithAggregatesFilter<"Employee"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Employee"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Employee"> | Date | string
+    postId?: IntWithAggregatesFilter<"Employee"> | number
+  }
+
+  export type FeedbackWhereInput = {
+    AND?: FeedbackWhereInput | FeedbackWhereInput[]
+    OR?: FeedbackWhereInput[]
+    NOT?: FeedbackWhereInput | FeedbackWhereInput[]
+    id?: IntFilter<"Feedback"> | number
+    name?: StringFilter<"Feedback"> | string
+    email?: StringFilter<"Feedback"> | string
+    phone?: StringNullableFilter<"Feedback"> | string | null
+    subject?: StringFilter<"Feedback"> | string
+    message?: StringFilter<"Feedback"> | string
+    rating?: IntNullableFilter<"Feedback"> | number | null
+    category?: StringNullableFilter<"Feedback"> | string | null
+    status?: StringFilter<"Feedback"> | string
+    createdAt?: DateTimeFilter<"Feedback"> | Date | string
+    updatedAt?: DateTimeFilter<"Feedback"> | Date | string
+    resolvedAt?: DateTimeNullableFilter<"Feedback"> | Date | string | null
+    resolvedBy?: StringNullableFilter<"Feedback"> | string | null
+    adminNotes?: StringNullableFilter<"Feedback"> | string | null
+  }
+
+  export type FeedbackOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrderInput | SortOrder
+    subject?: SortOrder
+    message?: SortOrder
+    rating?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
+    resolvedBy?: SortOrderInput | SortOrder
+    adminNotes?: SortOrderInput | SortOrder
+  }
+
+  export type FeedbackWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: FeedbackWhereInput | FeedbackWhereInput[]
+    OR?: FeedbackWhereInput[]
+    NOT?: FeedbackWhereInput | FeedbackWhereInput[]
+    name?: StringFilter<"Feedback"> | string
+    email?: StringFilter<"Feedback"> | string
+    phone?: StringNullableFilter<"Feedback"> | string | null
+    subject?: StringFilter<"Feedback"> | string
+    message?: StringFilter<"Feedback"> | string
+    rating?: IntNullableFilter<"Feedback"> | number | null
+    category?: StringNullableFilter<"Feedback"> | string | null
+    status?: StringFilter<"Feedback"> | string
+    createdAt?: DateTimeFilter<"Feedback"> | Date | string
+    updatedAt?: DateTimeFilter<"Feedback"> | Date | string
+    resolvedAt?: DateTimeNullableFilter<"Feedback"> | Date | string | null
+    resolvedBy?: StringNullableFilter<"Feedback"> | string | null
+    adminNotes?: StringNullableFilter<"Feedback"> | string | null
+  }, "id">
+
+  export type FeedbackOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrderInput | SortOrder
+    subject?: SortOrder
+    message?: SortOrder
+    rating?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
+    resolvedBy?: SortOrderInput | SortOrder
+    adminNotes?: SortOrderInput | SortOrder
+    _count?: FeedbackCountOrderByAggregateInput
+    _avg?: FeedbackAvgOrderByAggregateInput
+    _max?: FeedbackMaxOrderByAggregateInput
+    _min?: FeedbackMinOrderByAggregateInput
+    _sum?: FeedbackSumOrderByAggregateInput
+  }
+
+  export type FeedbackScalarWhereWithAggregatesInput = {
+    AND?: FeedbackScalarWhereWithAggregatesInput | FeedbackScalarWhereWithAggregatesInput[]
+    OR?: FeedbackScalarWhereWithAggregatesInput[]
+    NOT?: FeedbackScalarWhereWithAggregatesInput | FeedbackScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Feedback"> | number
+    name?: StringWithAggregatesFilter<"Feedback"> | string
+    email?: StringWithAggregatesFilter<"Feedback"> | string
+    phone?: StringNullableWithAggregatesFilter<"Feedback"> | string | null
+    subject?: StringWithAggregatesFilter<"Feedback"> | string
+    message?: StringWithAggregatesFilter<"Feedback"> | string
+    rating?: IntNullableWithAggregatesFilter<"Feedback"> | number | null
+    category?: StringNullableWithAggregatesFilter<"Feedback"> | string | null
+    status?: StringWithAggregatesFilter<"Feedback"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Feedback"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Feedback"> | Date | string
+    resolvedAt?: DateTimeNullableWithAggregatesFilter<"Feedback"> | Date | string | null
+    resolvedBy?: StringNullableWithAggregatesFilter<"Feedback"> | string | null
+    adminNotes?: StringNullableWithAggregatesFilter<"Feedback"> | string | null
+  }
+
   export type GrievanceWhereInput = {
     AND?: GrievanceWhereInput | GrievanceWhereInput[]
     OR?: GrievanceWhereInput[]
@@ -18309,14 +23434,19 @@ export namespace Prisma {
     name?: StringFilter<"Grievance"> | string
     email?: StringFilter<"Grievance"> | string
     phone?: StringFilter<"Grievance"> | string
+    address?: StringFilter<"Grievance"> | string
     subject?: StringFilter<"Grievance"> | string
     description?: StringFilter<"Grievance"> | string
-    department?: StringFilter<"Grievance"> | string
+    category?: StringNullableFilter<"Grievance"> | string | null
     priority?: StringFilter<"Grievance"> | string
     status?: StringFilter<"Grievance"> | string
-    source?: StringFilter<"Grievance"> | string
+    attachments?: StringNullableListFilter<"Grievance">
     createdAt?: DateTimeFilter<"Grievance"> | Date | string
     updatedAt?: DateTimeFilter<"Grievance"> | Date | string
+    assignedTo?: StringNullableFilter<"Grievance"> | string | null
+    adminNotes?: StringNullableFilter<"Grievance"> | string | null
+    resolvedAt?: DateTimeNullableFilter<"Grievance"> | Date | string | null
+    trackingId?: StringFilter<"Grievance"> | string
   }
 
   export type GrievanceOrderByWithRelationInput = {
@@ -18324,47 +23454,62 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    address?: SortOrder
     subject?: SortOrder
     description?: SortOrder
-    department?: SortOrder
+    category?: SortOrderInput | SortOrder
     priority?: SortOrder
     status?: SortOrder
-    source?: SortOrder
+    attachments?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    assignedTo?: SortOrderInput | SortOrder
+    adminNotes?: SortOrderInput | SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
+    trackingId?: SortOrder
   }
 
   export type GrievanceWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    trackingId?: string
     AND?: GrievanceWhereInput | GrievanceWhereInput[]
     OR?: GrievanceWhereInput[]
     NOT?: GrievanceWhereInput | GrievanceWhereInput[]
     name?: StringFilter<"Grievance"> | string
     email?: StringFilter<"Grievance"> | string
     phone?: StringFilter<"Grievance"> | string
+    address?: StringFilter<"Grievance"> | string
     subject?: StringFilter<"Grievance"> | string
     description?: StringFilter<"Grievance"> | string
-    department?: StringFilter<"Grievance"> | string
+    category?: StringNullableFilter<"Grievance"> | string | null
     priority?: StringFilter<"Grievance"> | string
     status?: StringFilter<"Grievance"> | string
-    source?: StringFilter<"Grievance"> | string
+    attachments?: StringNullableListFilter<"Grievance">
     createdAt?: DateTimeFilter<"Grievance"> | Date | string
     updatedAt?: DateTimeFilter<"Grievance"> | Date | string
-  }, "id">
+    assignedTo?: StringNullableFilter<"Grievance"> | string | null
+    adminNotes?: StringNullableFilter<"Grievance"> | string | null
+    resolvedAt?: DateTimeNullableFilter<"Grievance"> | Date | string | null
+  }, "id" | "trackingId">
 
   export type GrievanceOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    address?: SortOrder
     subject?: SortOrder
     description?: SortOrder
-    department?: SortOrder
+    category?: SortOrderInput | SortOrder
     priority?: SortOrder
     status?: SortOrder
-    source?: SortOrder
+    attachments?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    assignedTo?: SortOrderInput | SortOrder
+    adminNotes?: SortOrderInput | SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
+    trackingId?: SortOrder
     _count?: GrievanceCountOrderByAggregateInput
     _avg?: GrievanceAvgOrderByAggregateInput
     _max?: GrievanceMaxOrderByAggregateInput
@@ -18380,243 +23525,25 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Grievance"> | string
     email?: StringWithAggregatesFilter<"Grievance"> | string
     phone?: StringWithAggregatesFilter<"Grievance"> | string
+    address?: StringWithAggregatesFilter<"Grievance"> | string
     subject?: StringWithAggregatesFilter<"Grievance"> | string
     description?: StringWithAggregatesFilter<"Grievance"> | string
-    department?: StringWithAggregatesFilter<"Grievance"> | string
+    category?: StringNullableWithAggregatesFilter<"Grievance"> | string | null
     priority?: StringWithAggregatesFilter<"Grievance"> | string
     status?: StringWithAggregatesFilter<"Grievance"> | string
-    source?: StringWithAggregatesFilter<"Grievance"> | string
+    attachments?: StringNullableListFilter<"Grievance">
     createdAt?: DateTimeWithAggregatesFilter<"Grievance"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Grievance"> | Date | string
-  }
-
-  export type FeedbackWhereInput = {
-    AND?: FeedbackWhereInput | FeedbackWhereInput[]
-    OR?: FeedbackWhereInput[]
-    NOT?: FeedbackWhereInput | FeedbackWhereInput[]
-    id?: IntFilter<"Feedback"> | number
-    name?: StringFilter<"Feedback"> | string
-    email?: StringNullableFilter<"Feedback"> | string | null
-    phone?: StringNullableFilter<"Feedback"> | string | null
-    rating?: IntFilter<"Feedback"> | number
-    comment?: StringFilter<"Feedback"> | string
-    serviceType?: StringFilter<"Feedback"> | string
-    source?: StringFilter<"Feedback"> | string
-    createdAt?: DateTimeFilter<"Feedback"> | Date | string
-    updatedAt?: DateTimeFilter<"Feedback"> | Date | string
-  }
-
-  export type FeedbackOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    email?: SortOrderInput | SortOrder
-    phone?: SortOrderInput | SortOrder
-    rating?: SortOrder
-    comment?: SortOrder
-    serviceType?: SortOrder
-    source?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type FeedbackWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: FeedbackWhereInput | FeedbackWhereInput[]
-    OR?: FeedbackWhereInput[]
-    NOT?: FeedbackWhereInput | FeedbackWhereInput[]
-    name?: StringFilter<"Feedback"> | string
-    email?: StringNullableFilter<"Feedback"> | string | null
-    phone?: StringNullableFilter<"Feedback"> | string | null
-    rating?: IntFilter<"Feedback"> | number
-    comment?: StringFilter<"Feedback"> | string
-    serviceType?: StringFilter<"Feedback"> | string
-    source?: StringFilter<"Feedback"> | string
-    createdAt?: DateTimeFilter<"Feedback"> | Date | string
-    updatedAt?: DateTimeFilter<"Feedback"> | Date | string
-  }, "id">
-
-  export type FeedbackOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    email?: SortOrderInput | SortOrder
-    phone?: SortOrderInput | SortOrder
-    rating?: SortOrder
-    comment?: SortOrder
-    serviceType?: SortOrder
-    source?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: FeedbackCountOrderByAggregateInput
-    _avg?: FeedbackAvgOrderByAggregateInput
-    _max?: FeedbackMaxOrderByAggregateInput
-    _min?: FeedbackMinOrderByAggregateInput
-    _sum?: FeedbackSumOrderByAggregateInput
-  }
-
-  export type FeedbackScalarWhereWithAggregatesInput = {
-    AND?: FeedbackScalarWhereWithAggregatesInput | FeedbackScalarWhereWithAggregatesInput[]
-    OR?: FeedbackScalarWhereWithAggregatesInput[]
-    NOT?: FeedbackScalarWhereWithAggregatesInput | FeedbackScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Feedback"> | number
-    name?: StringWithAggregatesFilter<"Feedback"> | string
-    email?: StringNullableWithAggregatesFilter<"Feedback"> | string | null
-    phone?: StringNullableWithAggregatesFilter<"Feedback"> | string | null
-    rating?: IntWithAggregatesFilter<"Feedback"> | number
-    comment?: StringWithAggregatesFilter<"Feedback"> | string
-    serviceType?: StringWithAggregatesFilter<"Feedback"> | string
-    source?: StringWithAggregatesFilter<"Feedback"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"Feedback"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Feedback"> | Date | string
-  }
-
-  export type ContactPersonWhereInput = {
-    AND?: ContactPersonWhereInput | ContactPersonWhereInput[]
-    OR?: ContactPersonWhereInput[]
-    NOT?: ContactPersonWhereInput | ContactPersonWhereInput[]
-    id?: IntFilter<"ContactPerson"> | number
-    serviceName?: StringFilter<"ContactPerson"> | string
-    district?: StringFilter<"ContactPerson"> | string
-    subDistrict?: StringFilter<"ContactPerson"> | string
-    block?: StringFilter<"ContactPerson"> | string
-    name?: StringFilter<"ContactPerson"> | string
-    designation?: StringFilter<"ContactPerson"> | string
-    contact?: StringFilter<"ContactPerson"> | string
-    email?: StringFilter<"ContactPerson"> | string
-    schemeServiceId?: IntFilter<"ContactPerson"> | number
-    schemeService?: XOR<SchemeServiceRelationFilter, SchemeServiceWhereInput>
-  }
-
-  export type ContactPersonOrderByWithRelationInput = {
-    id?: SortOrder
-    serviceName?: SortOrder
-    district?: SortOrder
-    subDistrict?: SortOrder
-    block?: SortOrder
-    name?: SortOrder
-    designation?: SortOrder
-    contact?: SortOrder
-    email?: SortOrder
-    schemeServiceId?: SortOrder
-    schemeService?: SchemeServiceOrderByWithRelationInput
-  }
-
-  export type ContactPersonWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: ContactPersonWhereInput | ContactPersonWhereInput[]
-    OR?: ContactPersonWhereInput[]
-    NOT?: ContactPersonWhereInput | ContactPersonWhereInput[]
-    serviceName?: StringFilter<"ContactPerson"> | string
-    district?: StringFilter<"ContactPerson"> | string
-    subDistrict?: StringFilter<"ContactPerson"> | string
-    block?: StringFilter<"ContactPerson"> | string
-    name?: StringFilter<"ContactPerson"> | string
-    designation?: StringFilter<"ContactPerson"> | string
-    contact?: StringFilter<"ContactPerson"> | string
-    email?: StringFilter<"ContactPerson"> | string
-    schemeServiceId?: IntFilter<"ContactPerson"> | number
-    schemeService?: XOR<SchemeServiceRelationFilter, SchemeServiceWhereInput>
-  }, "id">
-
-  export type ContactPersonOrderByWithAggregationInput = {
-    id?: SortOrder
-    serviceName?: SortOrder
-    district?: SortOrder
-    subDistrict?: SortOrder
-    block?: SortOrder
-    name?: SortOrder
-    designation?: SortOrder
-    contact?: SortOrder
-    email?: SortOrder
-    schemeServiceId?: SortOrder
-    _count?: ContactPersonCountOrderByAggregateInput
-    _avg?: ContactPersonAvgOrderByAggregateInput
-    _max?: ContactPersonMaxOrderByAggregateInput
-    _min?: ContactPersonMinOrderByAggregateInput
-    _sum?: ContactPersonSumOrderByAggregateInput
-  }
-
-  export type ContactPersonScalarWhereWithAggregatesInput = {
-    AND?: ContactPersonScalarWhereWithAggregatesInput | ContactPersonScalarWhereWithAggregatesInput[]
-    OR?: ContactPersonScalarWhereWithAggregatesInput[]
-    NOT?: ContactPersonScalarWhereWithAggregatesInput | ContactPersonScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"ContactPerson"> | number
-    serviceName?: StringWithAggregatesFilter<"ContactPerson"> | string
-    district?: StringWithAggregatesFilter<"ContactPerson"> | string
-    subDistrict?: StringWithAggregatesFilter<"ContactPerson"> | string
-    block?: StringWithAggregatesFilter<"ContactPerson"> | string
-    name?: StringWithAggregatesFilter<"ContactPerson"> | string
-    designation?: StringWithAggregatesFilter<"ContactPerson"> | string
-    contact?: StringWithAggregatesFilter<"ContactPerson"> | string
-    email?: StringWithAggregatesFilter<"ContactPerson"> | string
-    schemeServiceId?: IntWithAggregatesFilter<"ContactPerson"> | number
-  }
-
-  export type SupportiveDocumentWhereInput = {
-    AND?: SupportiveDocumentWhereInput | SupportiveDocumentWhereInput[]
-    OR?: SupportiveDocumentWhereInput[]
-    NOT?: SupportiveDocumentWhereInput | SupportiveDocumentWhereInput[]
-    id?: IntFilter<"SupportiveDocument"> | number
-    slNo?: IntFilter<"SupportiveDocument"> | number
-    documentType?: StringFilter<"SupportiveDocument"> | string
-    validProof?: StringFilter<"SupportiveDocument"> | string
-    isRequired?: BoolFilter<"SupportiveDocument"> | boolean
-    schemeServiceId?: IntFilter<"SupportiveDocument"> | number
-    schemeService?: XOR<SchemeServiceRelationFilter, SchemeServiceWhereInput>
-  }
-
-  export type SupportiveDocumentOrderByWithRelationInput = {
-    id?: SortOrder
-    slNo?: SortOrder
-    documentType?: SortOrder
-    validProof?: SortOrder
-    isRequired?: SortOrder
-    schemeServiceId?: SortOrder
-    schemeService?: SchemeServiceOrderByWithRelationInput
-  }
-
-  export type SupportiveDocumentWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: SupportiveDocumentWhereInput | SupportiveDocumentWhereInput[]
-    OR?: SupportiveDocumentWhereInput[]
-    NOT?: SupportiveDocumentWhereInput | SupportiveDocumentWhereInput[]
-    slNo?: IntFilter<"SupportiveDocument"> | number
-    documentType?: StringFilter<"SupportiveDocument"> | string
-    validProof?: StringFilter<"SupportiveDocument"> | string
-    isRequired?: BoolFilter<"SupportiveDocument"> | boolean
-    schemeServiceId?: IntFilter<"SupportiveDocument"> | number
-    schemeService?: XOR<SchemeServiceRelationFilter, SchemeServiceWhereInput>
-  }, "id">
-
-  export type SupportiveDocumentOrderByWithAggregationInput = {
-    id?: SortOrder
-    slNo?: SortOrder
-    documentType?: SortOrder
-    validProof?: SortOrder
-    isRequired?: SortOrder
-    schemeServiceId?: SortOrder
-    _count?: SupportiveDocumentCountOrderByAggregateInput
-    _avg?: SupportiveDocumentAvgOrderByAggregateInput
-    _max?: SupportiveDocumentMaxOrderByAggregateInput
-    _min?: SupportiveDocumentMinOrderByAggregateInput
-    _sum?: SupportiveDocumentSumOrderByAggregateInput
-  }
-
-  export type SupportiveDocumentScalarWhereWithAggregatesInput = {
-    AND?: SupportiveDocumentScalarWhereWithAggregatesInput | SupportiveDocumentScalarWhereWithAggregatesInput[]
-    OR?: SupportiveDocumentScalarWhereWithAggregatesInput[]
-    NOT?: SupportiveDocumentScalarWhereWithAggregatesInput | SupportiveDocumentScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"SupportiveDocument"> | number
-    slNo?: IntWithAggregatesFilter<"SupportiveDocument"> | number
-    documentType?: StringWithAggregatesFilter<"SupportiveDocument"> | string
-    validProof?: StringWithAggregatesFilter<"SupportiveDocument"> | string
-    isRequired?: BoolWithAggregatesFilter<"SupportiveDocument"> | boolean
-    schemeServiceId?: IntWithAggregatesFilter<"SupportiveDocument"> | number
+    assignedTo?: StringNullableWithAggregatesFilter<"Grievance"> | string | null
+    adminNotes?: StringNullableWithAggregatesFilter<"Grievance"> | string | null
+    resolvedAt?: DateTimeNullableWithAggregatesFilter<"Grievance"> | Date | string | null
+    trackingId?: StringWithAggregatesFilter<"Grievance"> | string
   }
 
   export type AdminCreateInput = {
     email: string
-    name: string
     password: string
+    name: string
     role?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18628,8 +23555,8 @@ export namespace Prisma {
   export type AdminUncheckedCreateInput = {
     id?: number
     email: string
-    name: string
     password: string
+    name: string
     role?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18640,8 +23567,8 @@ export namespace Prisma {
 
   export type AdminUpdateInput = {
     email?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18653,8 +23580,8 @@ export namespace Prisma {
   export type AdminUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18666,8 +23593,8 @@ export namespace Prisma {
   export type AdminCreateManyInput = {
     id?: number
     email: string
-    name: string
     password: string
+    name: string
     role?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18675,8 +23602,8 @@ export namespace Prisma {
 
   export type AdminUpdateManyMutationInput = {
     email?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18685,8 +23612,8 @@ export namespace Prisma {
   export type AdminUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18697,17 +23624,16 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: SchemeServiceCreatetargetAudienceInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
     schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
     processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -18716,8 +23642,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
     admin: AdminCreateNestedOneWithoutSchemeServicesInput
     contacts?: ContactPersonCreateNestedManyWithoutSchemeServiceInput
     documents?: SupportiveDocumentCreateNestedManyWithoutSchemeServiceInput
@@ -18729,17 +23653,17 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: SchemeServiceCreatetargetAudienceInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adminId: number
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
     schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
     processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -18748,9 +23672,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    adminId: number
     contacts?: ContactPersonUncheckedCreateNestedManyWithoutSchemeServiceInput
     documents?: SupportiveDocumentUncheckedCreateNestedManyWithoutSchemeServiceInput
   }
@@ -18765,12 +23686,11 @@ export namespace Prisma {
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
     schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
     processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18779,8 +23699,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: AdminUpdateOneRequiredWithoutSchemeServicesNestedInput
     contacts?: ContactPersonUpdateManyWithoutSchemeServiceNestedInput
     documents?: SupportiveDocumentUpdateManyWithoutSchemeServiceNestedInput
@@ -18797,12 +23715,12 @@ export namespace Prisma {
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
     schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
     processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18811,9 +23729,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    adminId?: IntFieldUpdateOperationsInput | number
     contacts?: ContactPersonUncheckedUpdateManyWithoutSchemeServiceNestedInput
     documents?: SupportiveDocumentUncheckedUpdateManyWithoutSchemeServiceNestedInput
   }
@@ -18824,17 +23739,17 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: SchemeServiceCreatetargetAudienceInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adminId: number
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
     schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
     processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -18843,9 +23758,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    adminId: number
   }
 
   export type SchemeServiceUpdateManyMutationInput = {
@@ -18858,12 +23770,11 @@ export namespace Prisma {
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
     schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
     processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18872,8 +23783,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SchemeServiceUncheckedUpdateManyInput = {
@@ -18887,12 +23796,12 @@ export namespace Prisma {
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
     schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
     processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18901,9 +23810,152 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    adminId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ContactPersonCreateInput = {
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
+    name: string
+    designation: string
+    contact: string
+    email: string
+    schemeService: SchemeServiceCreateNestedOneWithoutContactsInput
+  }
+
+  export type ContactPersonUncheckedCreateInput = {
+    id?: number
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
+    name: string
+    designation: string
+    contact: string
+    email: string
+    schemeServiceId: number
+  }
+
+  export type ContactPersonUpdateInput = {
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    schemeService?: SchemeServiceUpdateOneRequiredWithoutContactsNestedInput
+  }
+
+  export type ContactPersonUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    schemeServiceId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ContactPersonCreateManyInput = {
+    id?: number
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
+    name: string
+    designation: string
+    contact: string
+    email: string
+    schemeServiceId: number
+  }
+
+  export type ContactPersonUpdateManyMutationInput = {
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ContactPersonUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    schemeServiceId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type SupportiveDocumentCreateInput = {
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
+    schemeService: SchemeServiceCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type SupportiveDocumentUncheckedCreateInput = {
+    id?: number
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
+    schemeServiceId: number
+  }
+
+  export type SupportiveDocumentUpdateInput = {
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    schemeService?: SchemeServiceUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type SupportiveDocumentUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    schemeServiceId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type SupportiveDocumentCreateManyInput = {
+    id?: number
+    slNo: number
+    documentType: string
+    validProof: string
+    isRequired?: boolean
+    schemeServiceId: number
+  }
+
+  export type SupportiveDocumentUpdateManyMutationInput = {
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type SupportiveDocumentUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    slNo?: IntFieldUpdateOperationsInput | number
+    documentType?: StringFieldUpdateOperationsInput | string
+    validProof?: StringFieldUpdateOperationsInput | string
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    schemeServiceId?: IntFieldUpdateOperationsInput | number
   }
 
   export type CertificateServiceCreateInput = {
@@ -18911,15 +23963,16 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceCreateprocessDetailsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -18928,8 +23981,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
     admin: AdminCreateNestedOneWithoutCertificateServicesInput
     contacts?: CertificateContactCreateNestedManyWithoutCertificateServiceInput
     documents?: CertificateDocumentCreateNestedManyWithoutCertificateServiceInput
@@ -18943,15 +23994,17 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adminId: number
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceCreateprocessDetailsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -18960,9 +24013,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    adminId: number
     contacts?: CertificateContactUncheckedCreateNestedManyWithoutCertificateServiceInput
     documents?: CertificateDocumentUncheckedCreateNestedManyWithoutCertificateServiceInput
     processSteps?: CertificateProcessStepUncheckedCreateNestedManyWithoutCertificateServiceInput
@@ -18974,15 +24024,16 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18991,8 +24042,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: AdminUpdateOneRequiredWithoutCertificateServicesNestedInput
     contacts?: CertificateContactUpdateManyWithoutCertificateServiceNestedInput
     documents?: CertificateDocumentUpdateManyWithoutCertificateServiceNestedInput
@@ -19006,15 +24055,17 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19023,9 +24074,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    adminId?: IntFieldUpdateOperationsInput | number
     contacts?: CertificateContactUncheckedUpdateManyWithoutCertificateServiceNestedInput
     documents?: CertificateDocumentUncheckedUpdateManyWithoutCertificateServiceNestedInput
     processSteps?: CertificateProcessStepUncheckedUpdateManyWithoutCertificateServiceNestedInput
@@ -19038,15 +24086,17 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adminId: number
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceCreateprocessDetailsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -19055,9 +24105,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    adminId: number
   }
 
   export type CertificateServiceUpdateManyMutationInput = {
@@ -19065,15 +24112,16 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19082,8 +24130,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CertificateServiceUncheckedUpdateManyInput = {
@@ -19092,15 +24138,17 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19109,9 +24157,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    adminId?: IntFieldUpdateOperationsInput | number
   }
 
   export type CertificateContactCreateInput = {
@@ -19574,6 +24619,7 @@ export namespace Prisma {
     contact: string
     email: string
     contactService: ContactServiceCreateNestedOneWithoutContactsInput
+    posts?: PostCreateNestedManyWithoutOfficeInput
   }
 
   export type ContactServiceContactUncheckedCreateInput = {
@@ -19587,6 +24633,7 @@ export namespace Prisma {
     contact: string
     email: string
     contactServiceId: number
+    posts?: PostUncheckedCreateNestedManyWithoutOfficeInput
   }
 
   export type ContactServiceContactUpdateInput = {
@@ -19599,6 +24646,7 @@ export namespace Prisma {
     contact?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     contactService?: ContactServiceUpdateOneRequiredWithoutContactsNestedInput
+    posts?: PostUpdateManyWithoutOfficeNestedInput
   }
 
   export type ContactServiceContactUncheckedUpdateInput = {
@@ -19612,6 +24660,7 @@ export namespace Prisma {
     contact?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     contactServiceId?: IntFieldUpdateOperationsInput | number
+    posts?: PostUncheckedUpdateManyWithoutOfficeNestedInput
   }
 
   export type ContactServiceContactCreateManyInput = {
@@ -19710,18 +24759,324 @@ export namespace Prisma {
     contactServiceId?: IntFieldUpdateOperationsInput | number
   }
 
+  export type PostCreateInput = {
+    postName: string
+    rank: string
+    description?: string | null
+    department?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    office: ContactServiceContactCreateNestedOneWithoutPostsInput
+    employees?: EmployeeCreateNestedManyWithoutPostInput
+  }
+
+  export type PostUncheckedCreateInput = {
+    id?: number
+    postName: string
+    rank: string
+    description?: string | null
+    department?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    officeId: number
+    employees?: EmployeeUncheckedCreateNestedManyWithoutPostInput
+  }
+
+  export type PostUpdateInput = {
+    postName?: StringFieldUpdateOperationsInput | string
+    rank?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    office?: ContactServiceContactUpdateOneRequiredWithoutPostsNestedInput
+    employees?: EmployeeUpdateManyWithoutPostNestedInput
+  }
+
+  export type PostUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    postName?: StringFieldUpdateOperationsInput | string
+    rank?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    officeId?: IntFieldUpdateOperationsInput | number
+    employees?: EmployeeUncheckedUpdateManyWithoutPostNestedInput
+  }
+
+  export type PostCreateManyInput = {
+    id?: number
+    postName: string
+    rank: string
+    description?: string | null
+    department?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    officeId: number
+  }
+
+  export type PostUpdateManyMutationInput = {
+    postName?: StringFieldUpdateOperationsInput | string
+    rank?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PostUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    postName?: StringFieldUpdateOperationsInput | string
+    rank?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    officeId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type EmployeeCreateInput = {
+    name: string
+    email: string
+    phone: string
+    designation: string
+    employeeId?: string | null
+    joiningDate?: Date | string | null
+    salary?: number | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    post: PostCreateNestedOneWithoutEmployeesInput
+  }
+
+  export type EmployeeUncheckedCreateInput = {
+    id?: number
+    name: string
+    email: string
+    phone: string
+    designation: string
+    employeeId?: string | null
+    joiningDate?: Date | string | null
+    salary?: number | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    postId: number
+  }
+
+  export type EmployeeUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    joiningDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    salary?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    post?: PostUpdateOneRequiredWithoutEmployeesNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    joiningDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    salary?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    postId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type EmployeeCreateManyInput = {
+    id?: number
+    name: string
+    email: string
+    phone: string
+    designation: string
+    employeeId?: string | null
+    joiningDate?: Date | string | null
+    salary?: number | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    postId: number
+  }
+
+  export type EmployeeUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    joiningDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    salary?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmployeeUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    joiningDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    salary?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    postId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type FeedbackCreateInput = {
+    name: string
+    email: string
+    phone?: string | null
+    subject: string
+    message: string
+    rating?: number | null
+    category?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    resolvedAt?: Date | string | null
+    resolvedBy?: string | null
+    adminNotes?: string | null
+  }
+
+  export type FeedbackUncheckedCreateInput = {
+    id?: number
+    name: string
+    email: string
+    phone?: string | null
+    subject: string
+    message: string
+    rating?: number | null
+    category?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    resolvedAt?: Date | string | null
+    resolvedBy?: string | null
+    adminNotes?: string | null
+  }
+
+  export type FeedbackUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resolvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FeedbackUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resolvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FeedbackCreateManyInput = {
+    id?: number
+    name: string
+    email: string
+    phone?: string | null
+    subject: string
+    message: string
+    rating?: number | null
+    category?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    resolvedAt?: Date | string | null
+    resolvedBy?: string | null
+    adminNotes?: string | null
+  }
+
+  export type FeedbackUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resolvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FeedbackUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    rating?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resolvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type GrievanceCreateInput = {
     name: string
     email: string
     phone: string
+    address: string
     subject: string
     description: string
-    department: string
+    category?: string | null
     priority?: string
     status?: string
-    source?: string
+    attachments?: GrievanceCreateattachmentsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    assignedTo?: string | null
+    adminNotes?: string | null
+    resolvedAt?: Date | string | null
+    trackingId: string
   }
 
   export type GrievanceUncheckedCreateInput = {
@@ -19729,28 +25084,38 @@ export namespace Prisma {
     name: string
     email: string
     phone: string
+    address: string
     subject: string
     description: string
-    department: string
+    category?: string | null
     priority?: string
     status?: string
-    source?: string
+    attachments?: GrievanceCreateattachmentsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    assignedTo?: string | null
+    adminNotes?: string | null
+    resolvedAt?: Date | string | null
+    trackingId: string
   }
 
   export type GrievanceUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    department?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
+    attachments?: GrievanceUpdateattachmentsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignedTo?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    trackingId?: StringFieldUpdateOperationsInput | string
   }
 
   export type GrievanceUncheckedUpdateInput = {
@@ -19758,14 +25123,19 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    department?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
+    attachments?: GrievanceUpdateattachmentsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignedTo?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    trackingId?: StringFieldUpdateOperationsInput | string
   }
 
   export type GrievanceCreateManyInput = {
@@ -19773,28 +25143,38 @@ export namespace Prisma {
     name: string
     email: string
     phone: string
+    address: string
     subject: string
     description: string
-    department: string
+    category?: string | null
     priority?: string
     status?: string
-    source?: string
+    attachments?: GrievanceCreateattachmentsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    assignedTo?: string | null
+    adminNotes?: string | null
+    resolvedAt?: Date | string | null
+    trackingId: string
   }
 
   export type GrievanceUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    department?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
+    attachments?: GrievanceUpdateattachmentsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignedTo?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    trackingId?: StringFieldUpdateOperationsInput | string
   }
 
   export type GrievanceUncheckedUpdateManyInput = {
@@ -19802,248 +25182,19 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    department?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
+    attachments?: GrievanceUpdateattachmentsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FeedbackCreateInput = {
-    name: string
-    email?: string | null
-    phone?: string | null
-    rating?: number
-    comment: string
-    serviceType: string
-    source?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type FeedbackUncheckedCreateInput = {
-    id?: number
-    name: string
-    email?: string | null
-    phone?: string | null
-    rating?: number
-    comment: string
-    serviceType: string
-    source?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type FeedbackUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: StringFieldUpdateOperationsInput | string
-    serviceType?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FeedbackUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: StringFieldUpdateOperationsInput | string
-    serviceType?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FeedbackCreateManyInput = {
-    id?: number
-    name: string
-    email?: string | null
-    phone?: string | null
-    rating?: number
-    comment: string
-    serviceType: string
-    source?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type FeedbackUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: StringFieldUpdateOperationsInput | string
-    serviceType?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type FeedbackUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: IntFieldUpdateOperationsInput | number
-    comment?: StringFieldUpdateOperationsInput | string
-    serviceType?: StringFieldUpdateOperationsInput | string
-    source?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ContactPersonCreateInput = {
-    serviceName: string
-    district: string
-    subDistrict: string
-    block: string
-    name: string
-    designation: string
-    contact: string
-    email: string
-    schemeService: SchemeServiceCreateNestedOneWithoutContactsInput
-  }
-
-  export type ContactPersonUncheckedCreateInput = {
-    id?: number
-    serviceName: string
-    district: string
-    subDistrict: string
-    block: string
-    name: string
-    designation: string
-    contact: string
-    email: string
-    schemeServiceId: number
-  }
-
-  export type ContactPersonUpdateInput = {
-    serviceName?: StringFieldUpdateOperationsInput | string
-    district?: StringFieldUpdateOperationsInput | string
-    subDistrict?: StringFieldUpdateOperationsInput | string
-    block?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    designation?: StringFieldUpdateOperationsInput | string
-    contact?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    schemeService?: SchemeServiceUpdateOneRequiredWithoutContactsNestedInput
-  }
-
-  export type ContactPersonUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    serviceName?: StringFieldUpdateOperationsInput | string
-    district?: StringFieldUpdateOperationsInput | string
-    subDistrict?: StringFieldUpdateOperationsInput | string
-    block?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    designation?: StringFieldUpdateOperationsInput | string
-    contact?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    schemeServiceId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type ContactPersonCreateManyInput = {
-    id?: number
-    serviceName: string
-    district: string
-    subDistrict: string
-    block: string
-    name: string
-    designation: string
-    contact: string
-    email: string
-    schemeServiceId: number
-  }
-
-  export type ContactPersonUpdateManyMutationInput = {
-    serviceName?: StringFieldUpdateOperationsInput | string
-    district?: StringFieldUpdateOperationsInput | string
-    subDistrict?: StringFieldUpdateOperationsInput | string
-    block?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    designation?: StringFieldUpdateOperationsInput | string
-    contact?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ContactPersonUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    serviceName?: StringFieldUpdateOperationsInput | string
-    district?: StringFieldUpdateOperationsInput | string
-    subDistrict?: StringFieldUpdateOperationsInput | string
-    block?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    designation?: StringFieldUpdateOperationsInput | string
-    contact?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    schemeServiceId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type SupportiveDocumentCreateInput = {
-    slNo: number
-    documentType: string
-    validProof: string
-    isRequired?: boolean
-    schemeService: SchemeServiceCreateNestedOneWithoutDocumentsInput
-  }
-
-  export type SupportiveDocumentUncheckedCreateInput = {
-    id?: number
-    slNo: number
-    documentType: string
-    validProof: string
-    isRequired?: boolean
-    schemeServiceId: number
-  }
-
-  export type SupportiveDocumentUpdateInput = {
-    slNo?: IntFieldUpdateOperationsInput | number
-    documentType?: StringFieldUpdateOperationsInput | string
-    validProof?: StringFieldUpdateOperationsInput | string
-    isRequired?: BoolFieldUpdateOperationsInput | boolean
-    schemeService?: SchemeServiceUpdateOneRequiredWithoutDocumentsNestedInput
-  }
-
-  export type SupportiveDocumentUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    slNo?: IntFieldUpdateOperationsInput | number
-    documentType?: StringFieldUpdateOperationsInput | string
-    validProof?: StringFieldUpdateOperationsInput | string
-    isRequired?: BoolFieldUpdateOperationsInput | boolean
-    schemeServiceId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type SupportiveDocumentCreateManyInput = {
-    id?: number
-    slNo: number
-    documentType: string
-    validProof: string
-    isRequired?: boolean
-    schemeServiceId: number
-  }
-
-  export type SupportiveDocumentUpdateManyMutationInput = {
-    slNo?: IntFieldUpdateOperationsInput | number
-    documentType?: StringFieldUpdateOperationsInput | string
-    validProof?: StringFieldUpdateOperationsInput | string
-    isRequired?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type SupportiveDocumentUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    slNo?: IntFieldUpdateOperationsInput | number
-    documentType?: StringFieldUpdateOperationsInput | string
-    validProof?: StringFieldUpdateOperationsInput | string
-    isRequired?: BoolFieldUpdateOperationsInput | boolean
-    schemeServiceId?: IntFieldUpdateOperationsInput | number
+    assignedTo?: NullableStringFieldUpdateOperationsInput | string | null
+    adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    trackingId?: StringFieldUpdateOperationsInput | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -20116,8 +25267,8 @@ export namespace Prisma {
   export type AdminCountOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
-    name?: SortOrder
     password?: SortOrder
+    name?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -20130,8 +25281,8 @@ export namespace Prisma {
   export type AdminMaxOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
-    name?: SortOrder
     password?: SortOrder
+    name?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -20140,8 +25291,8 @@ export namespace Prisma {
   export type AdminMinOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
-    name?: SortOrder
     password?: SortOrder
+    name?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -20227,7 +25378,7 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type AdminRelationFilter = {
+  export type AdminScalarRelationFilter = {
     is?: AdminWhereInput
     isNot?: AdminWhereInput
   }
@@ -20268,12 +25419,12 @@ export namespace Prisma {
     offlineAddress?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    adminId?: SortOrder
     eligibilityDetails?: SortOrder
     schemeDetails?: SortOrder
     processDetails?: SortOrder
-    benefitDetails?: SortOrder
-    applicationProcess?: SortOrder
-    requiredDocuments?: SortOrder
     processNew?: SortOrder
     processUpdate?: SortOrder
     processLost?: SortOrder
@@ -20282,9 +25433,6 @@ export namespace Prisma {
     docUpdate?: SortOrder
     docLost?: SortOrder
     docSurrender?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    adminId?: SortOrder
   }
 
   export type SchemeServiceAvgOrderByAggregateInput = {
@@ -20302,6 +25450,9 @@ export namespace Prisma {
     offlineAddress?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    adminId?: SortOrder
     processNew?: SortOrder
     processUpdate?: SortOrder
     processLost?: SortOrder
@@ -20310,9 +25461,6 @@ export namespace Prisma {
     docUpdate?: SortOrder
     docLost?: SortOrder
     docSurrender?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    adminId?: SortOrder
   }
 
   export type SchemeServiceMinOrderByAggregateInput = {
@@ -20325,6 +25473,9 @@ export namespace Prisma {
     offlineAddress?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    adminId?: SortOrder
     processNew?: SortOrder
     processUpdate?: SortOrder
     processLost?: SortOrder
@@ -20333,9 +25484,6 @@ export namespace Prisma {
     docUpdate?: SortOrder
     docLost?: SortOrder
     docSurrender?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    adminId?: SortOrder
   }
 
   export type SchemeServiceSumOrderByAggregateInput = {
@@ -20367,6 +25515,99 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type SchemeServiceScalarRelationFilter = {
+    is?: SchemeServiceWhereInput
+    isNot?: SchemeServiceWhereInput
+  }
+
+  export type ContactPersonCountOrderByAggregateInput = {
+    id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
+    name?: SortOrder
+    designation?: SortOrder
+    contact?: SortOrder
+    email?: SortOrder
+    schemeServiceId?: SortOrder
+  }
+
+  export type ContactPersonAvgOrderByAggregateInput = {
+    id?: SortOrder
+    schemeServiceId?: SortOrder
+  }
+
+  export type ContactPersonMaxOrderByAggregateInput = {
+    id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
+    name?: SortOrder
+    designation?: SortOrder
+    contact?: SortOrder
+    email?: SortOrder
+    schemeServiceId?: SortOrder
+  }
+
+  export type ContactPersonMinOrderByAggregateInput = {
+    id?: SortOrder
+    serviceName?: SortOrder
+    district?: SortOrder
+    subDistrict?: SortOrder
+    block?: SortOrder
+    name?: SortOrder
+    designation?: SortOrder
+    contact?: SortOrder
+    email?: SortOrder
+    schemeServiceId?: SortOrder
+  }
+
+  export type ContactPersonSumOrderByAggregateInput = {
+    id?: SortOrder
+    schemeServiceId?: SortOrder
+  }
+
+  export type SupportiveDocumentCountOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    schemeServiceId?: SortOrder
+  }
+
+  export type SupportiveDocumentAvgOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    schemeServiceId?: SortOrder
+  }
+
+  export type SupportiveDocumentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    schemeServiceId?: SortOrder
+  }
+
+  export type SupportiveDocumentMinOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    documentType?: SortOrder
+    validProof?: SortOrder
+    isRequired?: SortOrder
+    schemeServiceId?: SortOrder
+  }
+
+  export type SupportiveDocumentSumOrderByAggregateInput = {
+    id?: SortOrder
+    slNo?: SortOrder
+    schemeServiceId?: SortOrder
   }
 
   export type CertificateContactListRelationFilter = {
@@ -20415,15 +25656,17 @@ export namespace Prisma {
     summary?: SortOrder
     type?: SortOrder
     targetAudience?: SortOrder
-    eligibilityDetails?: SortOrder
-    certificateDetails?: SortOrder
-    applicationProcess?: SortOrder
-    requiredDocuments?: SortOrder
     applicationMode?: SortOrder
     onlineUrl?: SortOrder
     offlineAddress?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    adminId?: SortOrder
+    eligibilityDetails?: SortOrder
+    certificateDetails?: SortOrder
+    processDetails?: SortOrder
     processNew?: SortOrder
     processUpdate?: SortOrder
     processLost?: SortOrder
@@ -20432,9 +25675,6 @@ export namespace Prisma {
     docUpdate?: SortOrder
     docLost?: SortOrder
     docSurrender?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    adminId?: SortOrder
   }
 
   export type CertificateServiceAvgOrderByAggregateInput = {
@@ -20452,6 +25692,9 @@ export namespace Prisma {
     offlineAddress?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    adminId?: SortOrder
     processNew?: SortOrder
     processUpdate?: SortOrder
     processLost?: SortOrder
@@ -20460,9 +25703,6 @@ export namespace Prisma {
     docUpdate?: SortOrder
     docLost?: SortOrder
     docSurrender?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    adminId?: SortOrder
   }
 
   export type CertificateServiceMinOrderByAggregateInput = {
@@ -20475,6 +25715,9 @@ export namespace Prisma {
     offlineAddress?: SortOrder
     status?: SortOrder
     isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    adminId?: SortOrder
     processNew?: SortOrder
     processUpdate?: SortOrder
     processLost?: SortOrder
@@ -20483,9 +25726,6 @@ export namespace Prisma {
     docUpdate?: SortOrder
     docLost?: SortOrder
     docSurrender?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    adminId?: SortOrder
   }
 
   export type CertificateServiceSumOrderByAggregateInput = {
@@ -20493,7 +25733,7 @@ export namespace Prisma {
     adminId?: SortOrder
   }
 
-  export type CertificateServiceRelationFilter = {
+  export type CertificateServiceScalarRelationFilter = {
     is?: CertificateServiceWhereInput
     isNot?: CertificateServiceWhereInput
   }
@@ -20762,9 +26002,19 @@ export namespace Prisma {
     adminId?: SortOrder
   }
 
-  export type ContactServiceRelationFilter = {
+  export type ContactServiceScalarRelationFilter = {
     is?: ContactServiceWhereInput
     isNot?: ContactServiceWhereInput
+  }
+
+  export type PostListRelationFilter = {
+    every?: PostWhereInput
+    some?: PostWhereInput
+    none?: PostWhereInput
+  }
+
+  export type PostOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type ContactServiceContactCountOrderByAggregateInput = {
@@ -20855,57 +26105,190 @@ export namespace Prisma {
     contactServiceId?: SortOrder
   }
 
-  export type GrievanceCountOrderByAggregateInput = {
+  export type ContactServiceContactScalarRelationFilter = {
+    is?: ContactServiceContactWhereInput
+    isNot?: ContactServiceContactWhereInput
+  }
+
+  export type EmployeeListRelationFilter = {
+    every?: EmployeeWhereInput
+    some?: EmployeeWhereInput
+    none?: EmployeeWhereInput
+  }
+
+  export type EmployeeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PostCountOrderByAggregateInput = {
+    id?: SortOrder
+    postName?: SortOrder
+    rank?: SortOrder
+    description?: SortOrder
+    department?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    officeId?: SortOrder
+  }
+
+  export type PostAvgOrderByAggregateInput = {
+    id?: SortOrder
+    officeId?: SortOrder
+  }
+
+  export type PostMaxOrderByAggregateInput = {
+    id?: SortOrder
+    postName?: SortOrder
+    rank?: SortOrder
+    description?: SortOrder
+    department?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    officeId?: SortOrder
+  }
+
+  export type PostMinOrderByAggregateInput = {
+    id?: SortOrder
+    postName?: SortOrder
+    rank?: SortOrder
+    description?: SortOrder
+    department?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    officeId?: SortOrder
+  }
+
+  export type PostSumOrderByAggregateInput = {
+    id?: SortOrder
+    officeId?: SortOrder
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type PostScalarRelationFilter = {
+    is?: PostWhereInput
+    isNot?: PostWhereInput
+  }
+
+  export type EmployeeCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
-    subject?: SortOrder
-    description?: SortOrder
-    department?: SortOrder
-    priority?: SortOrder
+    designation?: SortOrder
+    employeeId?: SortOrder
+    joiningDate?: SortOrder
+    salary?: SortOrder
     status?: SortOrder
-    source?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    postId?: SortOrder
   }
 
-  export type GrievanceAvgOrderByAggregateInput = {
+  export type EmployeeAvgOrderByAggregateInput = {
     id?: SortOrder
+    salary?: SortOrder
+    postId?: SortOrder
   }
 
-  export type GrievanceMaxOrderByAggregateInput = {
+  export type EmployeeMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
-    subject?: SortOrder
-    description?: SortOrder
-    department?: SortOrder
-    priority?: SortOrder
+    designation?: SortOrder
+    employeeId?: SortOrder
+    joiningDate?: SortOrder
+    salary?: SortOrder
     status?: SortOrder
-    source?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    postId?: SortOrder
   }
 
-  export type GrievanceMinOrderByAggregateInput = {
+  export type EmployeeMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
-    subject?: SortOrder
-    description?: SortOrder
-    department?: SortOrder
-    priority?: SortOrder
+    designation?: SortOrder
+    employeeId?: SortOrder
+    joiningDate?: SortOrder
+    salary?: SortOrder
     status?: SortOrder
-    source?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    postId?: SortOrder
   }
 
-  export type GrievanceSumOrderByAggregateInput = {
+  export type EmployeeSumOrderByAggregateInput = {
     id?: SortOrder
+    salary?: SortOrder
+    postId?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type FeedbackCountOrderByAggregateInput = {
@@ -20913,12 +26296,16 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    subject?: SortOrder
+    message?: SortOrder
     rating?: SortOrder
-    comment?: SortOrder
-    serviceType?: SortOrder
-    source?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    resolvedAt?: SortOrder
+    resolvedBy?: SortOrder
+    adminNotes?: SortOrder
   }
 
   export type FeedbackAvgOrderByAggregateInput = {
@@ -20931,12 +26318,16 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    subject?: SortOrder
+    message?: SortOrder
     rating?: SortOrder
-    comment?: SortOrder
-    serviceType?: SortOrder
-    source?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    resolvedAt?: SortOrder
+    resolvedBy?: SortOrder
+    adminNotes?: SortOrder
   }
 
   export type FeedbackMinOrderByAggregateInput = {
@@ -20944,12 +26335,16 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    subject?: SortOrder
+    message?: SortOrder
     rating?: SortOrder
-    comment?: SortOrder
-    serviceType?: SortOrder
-    source?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    resolvedAt?: SortOrder
+    resolvedBy?: SortOrder
+    adminNotes?: SortOrder
   }
 
   export type FeedbackSumOrderByAggregateInput = {
@@ -20957,97 +26352,86 @@ export namespace Prisma {
     rating?: SortOrder
   }
 
-  export type SchemeServiceRelationFilter = {
-    is?: SchemeServiceWhereInput
-    isNot?: SchemeServiceWhereInput
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type ContactPersonCountOrderByAggregateInput = {
+  export type GrievanceCountOrderByAggregateInput = {
     id?: SortOrder
-    serviceName?: SortOrder
-    district?: SortOrder
-    subDistrict?: SortOrder
-    block?: SortOrder
     name?: SortOrder
-    designation?: SortOrder
-    contact?: SortOrder
     email?: SortOrder
-    schemeServiceId?: SortOrder
+    phone?: SortOrder
+    address?: SortOrder
+    subject?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    attachments?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    assignedTo?: SortOrder
+    adminNotes?: SortOrder
+    resolvedAt?: SortOrder
+    trackingId?: SortOrder
   }
 
-  export type ContactPersonAvgOrderByAggregateInput = {
+  export type GrievanceAvgOrderByAggregateInput = {
     id?: SortOrder
-    schemeServiceId?: SortOrder
   }
 
-  export type ContactPersonMaxOrderByAggregateInput = {
+  export type GrievanceMaxOrderByAggregateInput = {
     id?: SortOrder
-    serviceName?: SortOrder
-    district?: SortOrder
-    subDistrict?: SortOrder
-    block?: SortOrder
     name?: SortOrder
-    designation?: SortOrder
-    contact?: SortOrder
     email?: SortOrder
-    schemeServiceId?: SortOrder
+    phone?: SortOrder
+    address?: SortOrder
+    subject?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    assignedTo?: SortOrder
+    adminNotes?: SortOrder
+    resolvedAt?: SortOrder
+    trackingId?: SortOrder
   }
 
-  export type ContactPersonMinOrderByAggregateInput = {
+  export type GrievanceMinOrderByAggregateInput = {
     id?: SortOrder
-    serviceName?: SortOrder
-    district?: SortOrder
-    subDistrict?: SortOrder
-    block?: SortOrder
     name?: SortOrder
-    designation?: SortOrder
-    contact?: SortOrder
     email?: SortOrder
-    schemeServiceId?: SortOrder
+    phone?: SortOrder
+    address?: SortOrder
+    subject?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    assignedTo?: SortOrder
+    adminNotes?: SortOrder
+    resolvedAt?: SortOrder
+    trackingId?: SortOrder
   }
 
-  export type ContactPersonSumOrderByAggregateInput = {
+  export type GrievanceSumOrderByAggregateInput = {
     id?: SortOrder
-    schemeServiceId?: SortOrder
-  }
-
-  export type SupportiveDocumentCountOrderByAggregateInput = {
-    id?: SortOrder
-    slNo?: SortOrder
-    documentType?: SortOrder
-    validProof?: SortOrder
-    isRequired?: SortOrder
-    schemeServiceId?: SortOrder
-  }
-
-  export type SupportiveDocumentAvgOrderByAggregateInput = {
-    id?: SortOrder
-    slNo?: SortOrder
-    schemeServiceId?: SortOrder
-  }
-
-  export type SupportiveDocumentMaxOrderByAggregateInput = {
-    id?: SortOrder
-    slNo?: SortOrder
-    documentType?: SortOrder
-    validProof?: SortOrder
-    isRequired?: SortOrder
-    schemeServiceId?: SortOrder
-  }
-
-  export type SupportiveDocumentMinOrderByAggregateInput = {
-    id?: SortOrder
-    slNo?: SortOrder
-    documentType?: SortOrder
-    validProof?: SortOrder
-    isRequired?: SortOrder
-    schemeServiceId?: SortOrder
-  }
-
-  export type SupportiveDocumentSumOrderByAggregateInput = {
-    id?: SortOrder
-    slNo?: SortOrder
-    schemeServiceId?: SortOrder
   }
 
   export type SchemeServiceCreateNestedManyWithoutAdminInput = {
@@ -21208,18 +26592,6 @@ export namespace Prisma {
     set: string[]
   }
 
-  export type SchemeServiceCreatebenefitDetailsInput = {
-    set: string[]
-  }
-
-  export type SchemeServiceCreateapplicationProcessInput = {
-    set: string[]
-  }
-
-  export type SchemeServiceCreaterequiredDocumentsInput = {
-    set: string[]
-  }
-
   export type AdminCreateNestedOneWithoutSchemeServicesInput = {
     create?: XOR<AdminCreateWithoutSchemeServicesInput, AdminUncheckedCreateWithoutSchemeServicesInput>
     connectOrCreate?: AdminCreateOrConnectWithoutSchemeServicesInput
@@ -21278,21 +26650,6 @@ export namespace Prisma {
   }
 
   export type SchemeServiceUpdateprocessDetailsInput = {
-    set?: string[]
-    push?: string | string[]
-  }
-
-  export type SchemeServiceUpdatebenefitDetailsInput = {
-    set?: string[]
-    push?: string | string[]
-  }
-
-  export type SchemeServiceUpdateapplicationProcessInput = {
-    set?: string[]
-    push?: string | string[]
-  }
-
-  export type SchemeServiceUpdaterequiredDocumentsInput = {
     set?: string[]
     push?: string | string[]
   }
@@ -21361,6 +26718,34 @@ export namespace Prisma {
     deleteMany?: SupportiveDocumentScalarWhereInput | SupportiveDocumentScalarWhereInput[]
   }
 
+  export type SchemeServiceCreateNestedOneWithoutContactsInput = {
+    create?: XOR<SchemeServiceCreateWithoutContactsInput, SchemeServiceUncheckedCreateWithoutContactsInput>
+    connectOrCreate?: SchemeServiceCreateOrConnectWithoutContactsInput
+    connect?: SchemeServiceWhereUniqueInput
+  }
+
+  export type SchemeServiceUpdateOneRequiredWithoutContactsNestedInput = {
+    create?: XOR<SchemeServiceCreateWithoutContactsInput, SchemeServiceUncheckedCreateWithoutContactsInput>
+    connectOrCreate?: SchemeServiceCreateOrConnectWithoutContactsInput
+    upsert?: SchemeServiceUpsertWithoutContactsInput
+    connect?: SchemeServiceWhereUniqueInput
+    update?: XOR<XOR<SchemeServiceUpdateToOneWithWhereWithoutContactsInput, SchemeServiceUpdateWithoutContactsInput>, SchemeServiceUncheckedUpdateWithoutContactsInput>
+  }
+
+  export type SchemeServiceCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<SchemeServiceCreateWithoutDocumentsInput, SchemeServiceUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: SchemeServiceCreateOrConnectWithoutDocumentsInput
+    connect?: SchemeServiceWhereUniqueInput
+  }
+
+  export type SchemeServiceUpdateOneRequiredWithoutDocumentsNestedInput = {
+    create?: XOR<SchemeServiceCreateWithoutDocumentsInput, SchemeServiceUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: SchemeServiceCreateOrConnectWithoutDocumentsInput
+    upsert?: SchemeServiceUpsertWithoutDocumentsInput
+    connect?: SchemeServiceWhereUniqueInput
+    update?: XOR<XOR<SchemeServiceUpdateToOneWithWhereWithoutDocumentsInput, SchemeServiceUpdateWithoutDocumentsInput>, SchemeServiceUncheckedUpdateWithoutDocumentsInput>
+  }
+
   export type CertificateServiceCreatetargetAudienceInput = {
     set: string[]
   }
@@ -21373,11 +26758,7 @@ export namespace Prisma {
     set: string[]
   }
 
-  export type CertificateServiceCreateapplicationProcessInput = {
-    set: string[]
-  }
-
-  export type CertificateServiceCreaterequiredDocumentsInput = {
+  export type CertificateServiceCreateprocessDetailsInput = {
     set: string[]
   }
 
@@ -21458,12 +26839,7 @@ export namespace Prisma {
     push?: string | string[]
   }
 
-  export type CertificateServiceUpdateapplicationProcessInput = {
-    set?: string[]
-    push?: string | string[]
-  }
-
-  export type CertificateServiceUpdaterequiredDocumentsInput = {
+  export type CertificateServiceUpdateprocessDetailsInput = {
     set?: string[]
     push?: string | string[]
   }
@@ -21784,12 +27160,54 @@ export namespace Prisma {
     connect?: ContactServiceWhereUniqueInput
   }
 
+  export type PostCreateNestedManyWithoutOfficeInput = {
+    create?: XOR<PostCreateWithoutOfficeInput, PostUncheckedCreateWithoutOfficeInput> | PostCreateWithoutOfficeInput[] | PostUncheckedCreateWithoutOfficeInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutOfficeInput | PostCreateOrConnectWithoutOfficeInput[]
+    createMany?: PostCreateManyOfficeInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
+  export type PostUncheckedCreateNestedManyWithoutOfficeInput = {
+    create?: XOR<PostCreateWithoutOfficeInput, PostUncheckedCreateWithoutOfficeInput> | PostCreateWithoutOfficeInput[] | PostUncheckedCreateWithoutOfficeInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutOfficeInput | PostCreateOrConnectWithoutOfficeInput[]
+    createMany?: PostCreateManyOfficeInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
   export type ContactServiceUpdateOneRequiredWithoutContactsNestedInput = {
     create?: XOR<ContactServiceCreateWithoutContactsInput, ContactServiceUncheckedCreateWithoutContactsInput>
     connectOrCreate?: ContactServiceCreateOrConnectWithoutContactsInput
     upsert?: ContactServiceUpsertWithoutContactsInput
     connect?: ContactServiceWhereUniqueInput
     update?: XOR<XOR<ContactServiceUpdateToOneWithWhereWithoutContactsInput, ContactServiceUpdateWithoutContactsInput>, ContactServiceUncheckedUpdateWithoutContactsInput>
+  }
+
+  export type PostUpdateManyWithoutOfficeNestedInput = {
+    create?: XOR<PostCreateWithoutOfficeInput, PostUncheckedCreateWithoutOfficeInput> | PostCreateWithoutOfficeInput[] | PostUncheckedCreateWithoutOfficeInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutOfficeInput | PostCreateOrConnectWithoutOfficeInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutOfficeInput | PostUpsertWithWhereUniqueWithoutOfficeInput[]
+    createMany?: PostCreateManyOfficeInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutOfficeInput | PostUpdateWithWhereUniqueWithoutOfficeInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutOfficeInput | PostUpdateManyWithWhereWithoutOfficeInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
+  export type PostUncheckedUpdateManyWithoutOfficeNestedInput = {
+    create?: XOR<PostCreateWithoutOfficeInput, PostUncheckedCreateWithoutOfficeInput> | PostCreateWithoutOfficeInput[] | PostUncheckedCreateWithoutOfficeInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutOfficeInput | PostCreateOrConnectWithoutOfficeInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutOfficeInput | PostUpsertWithWhereUniqueWithoutOfficeInput[]
+    createMany?: PostCreateManyOfficeInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutOfficeInput | PostUpdateWithWhereUniqueWithoutOfficeInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutOfficeInput | PostUpdateManyWithWhereWithoutOfficeInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
   export type ContactServiceCreateNestedOneWithoutDocumentsInput = {
@@ -21806,32 +27224,103 @@ export namespace Prisma {
     update?: XOR<XOR<ContactServiceUpdateToOneWithWhereWithoutDocumentsInput, ContactServiceUpdateWithoutDocumentsInput>, ContactServiceUncheckedUpdateWithoutDocumentsInput>
   }
 
-  export type SchemeServiceCreateNestedOneWithoutContactsInput = {
-    create?: XOR<SchemeServiceCreateWithoutContactsInput, SchemeServiceUncheckedCreateWithoutContactsInput>
-    connectOrCreate?: SchemeServiceCreateOrConnectWithoutContactsInput
-    connect?: SchemeServiceWhereUniqueInput
+  export type ContactServiceContactCreateNestedOneWithoutPostsInput = {
+    create?: XOR<ContactServiceContactCreateWithoutPostsInput, ContactServiceContactUncheckedCreateWithoutPostsInput>
+    connectOrCreate?: ContactServiceContactCreateOrConnectWithoutPostsInput
+    connect?: ContactServiceContactWhereUniqueInput
   }
 
-  export type SchemeServiceUpdateOneRequiredWithoutContactsNestedInput = {
-    create?: XOR<SchemeServiceCreateWithoutContactsInput, SchemeServiceUncheckedCreateWithoutContactsInput>
-    connectOrCreate?: SchemeServiceCreateOrConnectWithoutContactsInput
-    upsert?: SchemeServiceUpsertWithoutContactsInput
-    connect?: SchemeServiceWhereUniqueInput
-    update?: XOR<XOR<SchemeServiceUpdateToOneWithWhereWithoutContactsInput, SchemeServiceUpdateWithoutContactsInput>, SchemeServiceUncheckedUpdateWithoutContactsInput>
+  export type EmployeeCreateNestedManyWithoutPostInput = {
+    create?: XOR<EmployeeCreateWithoutPostInput, EmployeeUncheckedCreateWithoutPostInput> | EmployeeCreateWithoutPostInput[] | EmployeeUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: EmployeeCreateOrConnectWithoutPostInput | EmployeeCreateOrConnectWithoutPostInput[]
+    createMany?: EmployeeCreateManyPostInputEnvelope
+    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
   }
 
-  export type SchemeServiceCreateNestedOneWithoutDocumentsInput = {
-    create?: XOR<SchemeServiceCreateWithoutDocumentsInput, SchemeServiceUncheckedCreateWithoutDocumentsInput>
-    connectOrCreate?: SchemeServiceCreateOrConnectWithoutDocumentsInput
-    connect?: SchemeServiceWhereUniqueInput
+  export type EmployeeUncheckedCreateNestedManyWithoutPostInput = {
+    create?: XOR<EmployeeCreateWithoutPostInput, EmployeeUncheckedCreateWithoutPostInput> | EmployeeCreateWithoutPostInput[] | EmployeeUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: EmployeeCreateOrConnectWithoutPostInput | EmployeeCreateOrConnectWithoutPostInput[]
+    createMany?: EmployeeCreateManyPostInputEnvelope
+    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
   }
 
-  export type SchemeServiceUpdateOneRequiredWithoutDocumentsNestedInput = {
-    create?: XOR<SchemeServiceCreateWithoutDocumentsInput, SchemeServiceUncheckedCreateWithoutDocumentsInput>
-    connectOrCreate?: SchemeServiceCreateOrConnectWithoutDocumentsInput
-    upsert?: SchemeServiceUpsertWithoutDocumentsInput
-    connect?: SchemeServiceWhereUniqueInput
-    update?: XOR<XOR<SchemeServiceUpdateToOneWithWhereWithoutDocumentsInput, SchemeServiceUpdateWithoutDocumentsInput>, SchemeServiceUncheckedUpdateWithoutDocumentsInput>
+  export type ContactServiceContactUpdateOneRequiredWithoutPostsNestedInput = {
+    create?: XOR<ContactServiceContactCreateWithoutPostsInput, ContactServiceContactUncheckedCreateWithoutPostsInput>
+    connectOrCreate?: ContactServiceContactCreateOrConnectWithoutPostsInput
+    upsert?: ContactServiceContactUpsertWithoutPostsInput
+    connect?: ContactServiceContactWhereUniqueInput
+    update?: XOR<XOR<ContactServiceContactUpdateToOneWithWhereWithoutPostsInput, ContactServiceContactUpdateWithoutPostsInput>, ContactServiceContactUncheckedUpdateWithoutPostsInput>
+  }
+
+  export type EmployeeUpdateManyWithoutPostNestedInput = {
+    create?: XOR<EmployeeCreateWithoutPostInput, EmployeeUncheckedCreateWithoutPostInput> | EmployeeCreateWithoutPostInput[] | EmployeeUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: EmployeeCreateOrConnectWithoutPostInput | EmployeeCreateOrConnectWithoutPostInput[]
+    upsert?: EmployeeUpsertWithWhereUniqueWithoutPostInput | EmployeeUpsertWithWhereUniqueWithoutPostInput[]
+    createMany?: EmployeeCreateManyPostInputEnvelope
+    set?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    disconnect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    delete?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    update?: EmployeeUpdateWithWhereUniqueWithoutPostInput | EmployeeUpdateWithWhereUniqueWithoutPostInput[]
+    updateMany?: EmployeeUpdateManyWithWhereWithoutPostInput | EmployeeUpdateManyWithWhereWithoutPostInput[]
+    deleteMany?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
+  }
+
+  export type EmployeeUncheckedUpdateManyWithoutPostNestedInput = {
+    create?: XOR<EmployeeCreateWithoutPostInput, EmployeeUncheckedCreateWithoutPostInput> | EmployeeCreateWithoutPostInput[] | EmployeeUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: EmployeeCreateOrConnectWithoutPostInput | EmployeeCreateOrConnectWithoutPostInput[]
+    upsert?: EmployeeUpsertWithWhereUniqueWithoutPostInput | EmployeeUpsertWithWhereUniqueWithoutPostInput[]
+    createMany?: EmployeeCreateManyPostInputEnvelope
+    set?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    disconnect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    delete?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    update?: EmployeeUpdateWithWhereUniqueWithoutPostInput | EmployeeUpdateWithWhereUniqueWithoutPostInput[]
+    updateMany?: EmployeeUpdateManyWithWhereWithoutPostInput | EmployeeUpdateManyWithWhereWithoutPostInput[]
+    deleteMany?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
+  }
+
+  export type PostCreateNestedOneWithoutEmployeesInput = {
+    create?: XOR<PostCreateWithoutEmployeesInput, PostUncheckedCreateWithoutEmployeesInput>
+    connectOrCreate?: PostCreateOrConnectWithoutEmployeesInput
+    connect?: PostWhereUniqueInput
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type PostUpdateOneRequiredWithoutEmployeesNestedInput = {
+    create?: XOR<PostCreateWithoutEmployeesInput, PostUncheckedCreateWithoutEmployeesInput>
+    connectOrCreate?: PostCreateOrConnectWithoutEmployeesInput
+    upsert?: PostUpsertWithoutEmployeesInput
+    connect?: PostWhereUniqueInput
+    update?: XOR<XOR<PostUpdateToOneWithWhereWithoutEmployeesInput, PostUpdateWithoutEmployeesInput>, PostUncheckedUpdateWithoutEmployeesInput>
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type GrievanceCreateattachmentsInput = {
+    set: string[]
+  }
+
+  export type GrievanceUpdateattachmentsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -21983,22 +27472,89 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type SchemeServiceCreateWithoutAdminInput = {
     name: string
     summary: string
     type?: string | null
     targetAudience?: SchemeServiceCreatetargetAudienceInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
     schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
     processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -22007,8 +27563,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
     contacts?: ContactPersonCreateNestedManyWithoutSchemeServiceInput
     documents?: SupportiveDocumentCreateNestedManyWithoutSchemeServiceInput
   }
@@ -22019,17 +27573,16 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: SchemeServiceCreatetargetAudienceInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
     schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
     processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -22038,8 +27591,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
     contacts?: ContactPersonUncheckedCreateNestedManyWithoutSchemeServiceInput
     documents?: SupportiveDocumentUncheckedCreateNestedManyWithoutSchemeServiceInput
   }
@@ -22059,15 +27610,16 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceCreateprocessDetailsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -22076,8 +27628,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
     contacts?: CertificateContactCreateNestedManyWithoutCertificateServiceInput
     documents?: CertificateDocumentCreateNestedManyWithoutCertificateServiceInput
     processSteps?: CertificateProcessStepCreateNestedManyWithoutCertificateServiceInput
@@ -22090,15 +27640,16 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceCreateprocessDetailsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -22107,8 +27658,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
     contacts?: CertificateContactUncheckedCreateNestedManyWithoutCertificateServiceInput
     documents?: CertificateDocumentUncheckedCreateNestedManyWithoutCertificateServiceInput
     processSteps?: CertificateProcessStepUncheckedCreateNestedManyWithoutCertificateServiceInput
@@ -22220,12 +27769,12 @@ export namespace Prisma {
     offlineAddress?: StringNullableFilter<"SchemeService"> | string | null
     status?: StringFilter<"SchemeService"> | string
     isActive?: BoolFilter<"SchemeService"> | boolean
+    createdAt?: DateTimeFilter<"SchemeService"> | Date | string
+    updatedAt?: DateTimeFilter<"SchemeService"> | Date | string
+    adminId?: IntFilter<"SchemeService"> | number
     eligibilityDetails?: StringNullableListFilter<"SchemeService">
     schemeDetails?: StringNullableListFilter<"SchemeService">
     processDetails?: StringNullableListFilter<"SchemeService">
-    benefitDetails?: StringNullableListFilter<"SchemeService">
-    applicationProcess?: StringNullableListFilter<"SchemeService">
-    requiredDocuments?: StringNullableListFilter<"SchemeService">
     processNew?: StringNullableFilter<"SchemeService"> | string | null
     processUpdate?: StringNullableFilter<"SchemeService"> | string | null
     processLost?: StringNullableFilter<"SchemeService"> | string | null
@@ -22234,9 +27783,6 @@ export namespace Prisma {
     docUpdate?: StringNullableFilter<"SchemeService"> | string | null
     docLost?: StringNullableFilter<"SchemeService"> | string | null
     docSurrender?: StringNullableFilter<"SchemeService"> | string | null
-    createdAt?: DateTimeFilter<"SchemeService"> | Date | string
-    updatedAt?: DateTimeFilter<"SchemeService"> | Date | string
-    adminId?: IntFilter<"SchemeService"> | number
   }
 
   export type CertificateServiceUpsertWithWhereUniqueWithoutAdminInput = {
@@ -22264,15 +27810,17 @@ export namespace Prisma {
     summary?: StringFilter<"CertificateService"> | string
     type?: StringNullableFilter<"CertificateService"> | string | null
     targetAudience?: StringNullableListFilter<"CertificateService">
-    eligibilityDetails?: StringNullableListFilter<"CertificateService">
-    certificateDetails?: StringNullableListFilter<"CertificateService">
-    applicationProcess?: StringNullableListFilter<"CertificateService">
-    requiredDocuments?: StringNullableListFilter<"CertificateService">
     applicationMode?: StringFilter<"CertificateService"> | string
     onlineUrl?: StringNullableFilter<"CertificateService"> | string | null
     offlineAddress?: StringNullableFilter<"CertificateService"> | string | null
     status?: StringFilter<"CertificateService"> | string
     isActive?: BoolFilter<"CertificateService"> | boolean
+    createdAt?: DateTimeFilter<"CertificateService"> | Date | string
+    updatedAt?: DateTimeFilter<"CertificateService"> | Date | string
+    adminId?: IntFilter<"CertificateService"> | number
+    eligibilityDetails?: StringNullableListFilter<"CertificateService">
+    certificateDetails?: StringNullableListFilter<"CertificateService">
+    processDetails?: StringNullableListFilter<"CertificateService">
     processNew?: StringNullableFilter<"CertificateService"> | string | null
     processUpdate?: StringNullableFilter<"CertificateService"> | string | null
     processLost?: StringNullableFilter<"CertificateService"> | string | null
@@ -22281,9 +27829,6 @@ export namespace Prisma {
     docUpdate?: StringNullableFilter<"CertificateService"> | string | null
     docLost?: StringNullableFilter<"CertificateService"> | string | null
     docSurrender?: StringNullableFilter<"CertificateService"> | string | null
-    createdAt?: DateTimeFilter<"CertificateService"> | Date | string
-    updatedAt?: DateTimeFilter<"CertificateService"> | Date | string
-    adminId?: IntFilter<"CertificateService"> | number
   }
 
   export type ContactServiceUpsertWithWhereUniqueWithoutAdminInput = {
@@ -22334,8 +27879,8 @@ export namespace Prisma {
 
   export type AdminCreateWithoutSchemeServicesInput = {
     email: string
-    name: string
     password: string
+    name: string
     role?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -22346,8 +27891,8 @@ export namespace Prisma {
   export type AdminUncheckedCreateWithoutSchemeServicesInput = {
     id?: number
     email: string
-    name: string
     password: string
+    name: string
     role?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -22431,8 +27976,8 @@ export namespace Prisma {
 
   export type AdminUpdateWithoutSchemeServicesInput = {
     email?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22443,8 +27988,8 @@ export namespace Prisma {
   export type AdminUncheckedUpdateWithoutSchemeServicesInput = {
     id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22512,10 +28057,262 @@ export namespace Prisma {
     schemeServiceId?: IntFilter<"SupportiveDocument"> | number
   }
 
+  export type SchemeServiceCreateWithoutContactsInput = {
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: SchemeServiceCreatetargetAudienceInput | string[]
+    applicationMode: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
+    status?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    admin: AdminCreateNestedOneWithoutSchemeServicesInput
+    documents?: SupportiveDocumentCreateNestedManyWithoutSchemeServiceInput
+  }
+
+  export type SchemeServiceUncheckedCreateWithoutContactsInput = {
+    id?: number
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: SchemeServiceCreatetargetAudienceInput | string[]
+    applicationMode: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
+    status?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adminId: number
+    eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    documents?: SupportiveDocumentUncheckedCreateNestedManyWithoutSchemeServiceInput
+  }
+
+  export type SchemeServiceCreateOrConnectWithoutContactsInput = {
+    where: SchemeServiceWhereUniqueInput
+    create: XOR<SchemeServiceCreateWithoutContactsInput, SchemeServiceUncheckedCreateWithoutContactsInput>
+  }
+
+  export type SchemeServiceUpsertWithoutContactsInput = {
+    update: XOR<SchemeServiceUpdateWithoutContactsInput, SchemeServiceUncheckedUpdateWithoutContactsInput>
+    create: XOR<SchemeServiceCreateWithoutContactsInput, SchemeServiceUncheckedCreateWithoutContactsInput>
+    where?: SchemeServiceWhereInput
+  }
+
+  export type SchemeServiceUpdateToOneWithWhereWithoutContactsInput = {
+    where?: SchemeServiceWhereInput
+    data: XOR<SchemeServiceUpdateWithoutContactsInput, SchemeServiceUncheckedUpdateWithoutContactsInput>
+  }
+
+  export type SchemeServiceUpdateWithoutContactsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: SchemeServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    admin?: AdminUpdateOneRequiredWithoutSchemeServicesNestedInput
+    documents?: SupportiveDocumentUpdateManyWithoutSchemeServiceNestedInput
+  }
+
+  export type SchemeServiceUncheckedUpdateWithoutContactsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: SchemeServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
+    eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    documents?: SupportiveDocumentUncheckedUpdateManyWithoutSchemeServiceNestedInput
+  }
+
+  export type SchemeServiceCreateWithoutDocumentsInput = {
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: SchemeServiceCreatetargetAudienceInput | string[]
+    applicationMode: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
+    status?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    admin: AdminCreateNestedOneWithoutSchemeServicesInput
+    contacts?: ContactPersonCreateNestedManyWithoutSchemeServiceInput
+  }
+
+  export type SchemeServiceUncheckedCreateWithoutDocumentsInput = {
+    id?: number
+    name: string
+    summary: string
+    type?: string | null
+    targetAudience?: SchemeServiceCreatetargetAudienceInput | string[]
+    applicationMode: string
+    onlineUrl?: string | null
+    offlineAddress?: string | null
+    status?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adminId: number
+    eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
+    processNew?: string | null
+    processUpdate?: string | null
+    processLost?: string | null
+    processSurrender?: string | null
+    docNew?: string | null
+    docUpdate?: string | null
+    docLost?: string | null
+    docSurrender?: string | null
+    contacts?: ContactPersonUncheckedCreateNestedManyWithoutSchemeServiceInput
+  }
+
+  export type SchemeServiceCreateOrConnectWithoutDocumentsInput = {
+    where: SchemeServiceWhereUniqueInput
+    create: XOR<SchemeServiceCreateWithoutDocumentsInput, SchemeServiceUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type SchemeServiceUpsertWithoutDocumentsInput = {
+    update: XOR<SchemeServiceUpdateWithoutDocumentsInput, SchemeServiceUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<SchemeServiceCreateWithoutDocumentsInput, SchemeServiceUncheckedCreateWithoutDocumentsInput>
+    where?: SchemeServiceWhereInput
+  }
+
+  export type SchemeServiceUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: SchemeServiceWhereInput
+    data: XOR<SchemeServiceUpdateWithoutDocumentsInput, SchemeServiceUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type SchemeServiceUpdateWithoutDocumentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: SchemeServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    admin?: AdminUpdateOneRequiredWithoutSchemeServicesNestedInput
+    contacts?: ContactPersonUpdateManyWithoutSchemeServiceNestedInput
+  }
+
+  export type SchemeServiceUncheckedUpdateWithoutDocumentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    type?: NullableStringFieldUpdateOperationsInput | string | null
+    targetAudience?: SchemeServiceUpdatetargetAudienceInput | string[]
+    applicationMode?: StringFieldUpdateOperationsInput | string
+    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
+    eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
+    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
+    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
+    processNew?: NullableStringFieldUpdateOperationsInput | string | null
+    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    processLost?: NullableStringFieldUpdateOperationsInput | string | null
+    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    docNew?: NullableStringFieldUpdateOperationsInput | string | null
+    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
+    docLost?: NullableStringFieldUpdateOperationsInput | string | null
+    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
+    contacts?: ContactPersonUncheckedUpdateManyWithoutSchemeServiceNestedInput
+  }
+
   export type AdminCreateWithoutCertificateServicesInput = {
     email: string
-    name: string
     password: string
+    name: string
     role?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -22526,8 +28323,8 @@ export namespace Prisma {
   export type AdminUncheckedCreateWithoutCertificateServicesInput = {
     id?: number
     email: string
-    name: string
     password: string
+    name: string
     role?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -22659,8 +28456,8 @@ export namespace Prisma {
 
   export type AdminUpdateWithoutCertificateServicesInput = {
     email?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22671,8 +28468,8 @@ export namespace Prisma {
   export type AdminUncheckedUpdateWithoutCertificateServicesInput = {
     id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22800,15 +28597,16 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceCreateprocessDetailsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -22817,8 +28615,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
     admin: AdminCreateNestedOneWithoutCertificateServicesInput
     documents?: CertificateDocumentCreateNestedManyWithoutCertificateServiceInput
     processSteps?: CertificateProcessStepCreateNestedManyWithoutCertificateServiceInput
@@ -22831,15 +28627,17 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adminId: number
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceCreateprocessDetailsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -22848,9 +28646,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    adminId: number
     documents?: CertificateDocumentUncheckedCreateNestedManyWithoutCertificateServiceInput
     processSteps?: CertificateProcessStepUncheckedCreateNestedManyWithoutCertificateServiceInput
     eligibilityItems?: CertificateEligibilityUncheckedCreateNestedManyWithoutCertificateServiceInput
@@ -22877,15 +28672,16 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -22894,8 +28690,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: AdminUpdateOneRequiredWithoutCertificateServicesNestedInput
     documents?: CertificateDocumentUpdateManyWithoutCertificateServiceNestedInput
     processSteps?: CertificateProcessStepUpdateManyWithoutCertificateServiceNestedInput
@@ -22908,15 +28702,17 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -22925,9 +28721,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    adminId?: IntFieldUpdateOperationsInput | number
     documents?: CertificateDocumentUncheckedUpdateManyWithoutCertificateServiceNestedInput
     processSteps?: CertificateProcessStepUncheckedUpdateManyWithoutCertificateServiceNestedInput
     eligibilityItems?: CertificateEligibilityUncheckedUpdateManyWithoutCertificateServiceNestedInput
@@ -22938,15 +28731,16 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceCreateprocessDetailsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -22955,8 +28749,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
     admin: AdminCreateNestedOneWithoutCertificateServicesInput
     contacts?: CertificateContactCreateNestedManyWithoutCertificateServiceInput
     processSteps?: CertificateProcessStepCreateNestedManyWithoutCertificateServiceInput
@@ -22969,15 +28761,17 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adminId: number
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceCreateprocessDetailsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -22986,9 +28780,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    adminId: number
     contacts?: CertificateContactUncheckedCreateNestedManyWithoutCertificateServiceInput
     processSteps?: CertificateProcessStepUncheckedCreateNestedManyWithoutCertificateServiceInput
     eligibilityItems?: CertificateEligibilityUncheckedCreateNestedManyWithoutCertificateServiceInput
@@ -23015,15 +28806,16 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23032,8 +28824,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: AdminUpdateOneRequiredWithoutCertificateServicesNestedInput
     contacts?: CertificateContactUpdateManyWithoutCertificateServiceNestedInput
     processSteps?: CertificateProcessStepUpdateManyWithoutCertificateServiceNestedInput
@@ -23046,15 +28836,17 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23063,9 +28855,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    adminId?: IntFieldUpdateOperationsInput | number
     contacts?: CertificateContactUncheckedUpdateManyWithoutCertificateServiceNestedInput
     processSteps?: CertificateProcessStepUncheckedUpdateManyWithoutCertificateServiceNestedInput
     eligibilityItems?: CertificateEligibilityUncheckedUpdateManyWithoutCertificateServiceNestedInput
@@ -23076,15 +28865,16 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceCreateprocessDetailsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -23093,8 +28883,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
     admin: AdminCreateNestedOneWithoutCertificateServicesInput
     contacts?: CertificateContactCreateNestedManyWithoutCertificateServiceInput
     documents?: CertificateDocumentCreateNestedManyWithoutCertificateServiceInput
@@ -23107,15 +28895,17 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adminId: number
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceCreateprocessDetailsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -23124,9 +28914,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    adminId: number
     contacts?: CertificateContactUncheckedCreateNestedManyWithoutCertificateServiceInput
     documents?: CertificateDocumentUncheckedCreateNestedManyWithoutCertificateServiceInput
     eligibilityItems?: CertificateEligibilityUncheckedCreateNestedManyWithoutCertificateServiceInput
@@ -23153,15 +28940,16 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23170,8 +28958,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: AdminUpdateOneRequiredWithoutCertificateServicesNestedInput
     contacts?: CertificateContactUpdateManyWithoutCertificateServiceNestedInput
     documents?: CertificateDocumentUpdateManyWithoutCertificateServiceNestedInput
@@ -23184,15 +28970,17 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23201,9 +28989,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    adminId?: IntFieldUpdateOperationsInput | number
     contacts?: CertificateContactUncheckedUpdateManyWithoutCertificateServiceNestedInput
     documents?: CertificateDocumentUncheckedUpdateManyWithoutCertificateServiceNestedInput
     eligibilityItems?: CertificateEligibilityUncheckedUpdateManyWithoutCertificateServiceNestedInput
@@ -23214,15 +28999,16 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceCreateprocessDetailsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -23231,8 +29017,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
     admin: AdminCreateNestedOneWithoutCertificateServicesInput
     contacts?: CertificateContactCreateNestedManyWithoutCertificateServiceInput
     documents?: CertificateDocumentCreateNestedManyWithoutCertificateServiceInput
@@ -23245,15 +29029,17 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    adminId: number
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceCreateprocessDetailsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -23262,9 +29048,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    adminId: number
     contacts?: CertificateContactUncheckedCreateNestedManyWithoutCertificateServiceInput
     documents?: CertificateDocumentUncheckedCreateNestedManyWithoutCertificateServiceInput
     processSteps?: CertificateProcessStepUncheckedCreateNestedManyWithoutCertificateServiceInput
@@ -23291,15 +29074,16 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23308,8 +29092,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     admin?: AdminUpdateOneRequiredWithoutCertificateServicesNestedInput
     contacts?: CertificateContactUpdateManyWithoutCertificateServiceNestedInput
     documents?: CertificateDocumentUpdateManyWithoutCertificateServiceNestedInput
@@ -23322,15 +29104,17 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    adminId?: IntFieldUpdateOperationsInput | number
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23339,9 +29123,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    adminId?: IntFieldUpdateOperationsInput | number
     contacts?: CertificateContactUncheckedUpdateManyWithoutCertificateServiceNestedInput
     documents?: CertificateDocumentUncheckedUpdateManyWithoutCertificateServiceNestedInput
     processSteps?: CertificateProcessStepUncheckedUpdateManyWithoutCertificateServiceNestedInput
@@ -23349,8 +29130,8 @@ export namespace Prisma {
 
   export type AdminCreateWithoutContactServicesInput = {
     email: string
-    name: string
     password: string
+    name: string
     role?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23361,8 +29142,8 @@ export namespace Prisma {
   export type AdminUncheckedCreateWithoutContactServicesInput = {
     id?: number
     email: string
-    name: string
     password: string
+    name: string
     role?: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23384,6 +29165,7 @@ export namespace Prisma {
     designation: string
     contact: string
     email: string
+    posts?: PostCreateNestedManyWithoutOfficeInput
   }
 
   export type ContactServiceContactUncheckedCreateWithoutContactServiceInput = {
@@ -23396,6 +29178,7 @@ export namespace Prisma {
     designation: string
     contact: string
     email: string
+    posts?: PostUncheckedCreateNestedManyWithoutOfficeInput
   }
 
   export type ContactServiceContactCreateOrConnectWithoutContactServiceInput = {
@@ -23446,8 +29229,8 @@ export namespace Prisma {
 
   export type AdminUpdateWithoutContactServicesInput = {
     email?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23458,8 +29241,8 @@ export namespace Prisma {
   export type AdminUncheckedUpdateWithoutContactServicesInput = {
     id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23587,6 +29370,39 @@ export namespace Prisma {
     create: XOR<ContactServiceCreateWithoutContactsInput, ContactServiceUncheckedCreateWithoutContactsInput>
   }
 
+  export type PostCreateWithoutOfficeInput = {
+    postName: string
+    rank: string
+    description?: string | null
+    department?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    employees?: EmployeeCreateNestedManyWithoutPostInput
+  }
+
+  export type PostUncheckedCreateWithoutOfficeInput = {
+    id?: number
+    postName: string
+    rank: string
+    description?: string | null
+    department?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    employees?: EmployeeUncheckedCreateNestedManyWithoutPostInput
+  }
+
+  export type PostCreateOrConnectWithoutOfficeInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutOfficeInput, PostUncheckedCreateWithoutOfficeInput>
+  }
+
+  export type PostCreateManyOfficeInputEnvelope = {
+    data: PostCreateManyOfficeInput | PostCreateManyOfficeInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ContactServiceUpsertWithoutContactsInput = {
     update: XOR<ContactServiceUpdateWithoutContactsInput, ContactServiceUncheckedUpdateWithoutContactsInput>
     create: XOR<ContactServiceCreateWithoutContactsInput, ContactServiceUncheckedCreateWithoutContactsInput>
@@ -23651,6 +29467,37 @@ export namespace Prisma {
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     documents?: ContactServiceDocumentUncheckedUpdateManyWithoutContactServiceNestedInput
+  }
+
+  export type PostUpsertWithWhereUniqueWithoutOfficeInput = {
+    where: PostWhereUniqueInput
+    update: XOR<PostUpdateWithoutOfficeInput, PostUncheckedUpdateWithoutOfficeInput>
+    create: XOR<PostCreateWithoutOfficeInput, PostUncheckedCreateWithoutOfficeInput>
+  }
+
+  export type PostUpdateWithWhereUniqueWithoutOfficeInput = {
+    where: PostWhereUniqueInput
+    data: XOR<PostUpdateWithoutOfficeInput, PostUncheckedUpdateWithoutOfficeInput>
+  }
+
+  export type PostUpdateManyWithWhereWithoutOfficeInput = {
+    where: PostScalarWhereInput
+    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutOfficeInput>
+  }
+
+  export type PostScalarWhereInput = {
+    AND?: PostScalarWhereInput | PostScalarWhereInput[]
+    OR?: PostScalarWhereInput[]
+    NOT?: PostScalarWhereInput | PostScalarWhereInput[]
+    id?: IntFilter<"Post"> | number
+    postName?: StringFilter<"Post"> | string
+    rank?: StringFilter<"Post"> | string
+    description?: StringNullableFilter<"Post"> | string | null
+    department?: StringNullableFilter<"Post"> | string | null
+    status?: StringFilter<"Post"> | string
+    createdAt?: DateTimeFilter<"Post"> | Date | string
+    updatedAt?: DateTimeFilter<"Post"> | Date | string
+    officeId?: IntFilter<"Post"> | number
   }
 
   export type ContactServiceCreateWithoutDocumentsInput = {
@@ -23779,280 +29626,203 @@ export namespace Prisma {
     contacts?: ContactServiceContactUncheckedUpdateManyWithoutContactServiceNestedInput
   }
 
-  export type SchemeServiceCreateWithoutContactsInput = {
+  export type ContactServiceContactCreateWithoutPostsInput = {
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
     name: string
-    summary: string
-    type?: string | null
-    targetAudience?: SchemeServiceCreatetargetAudienceInput | string[]
-    applicationMode?: string
-    onlineUrl?: string | null
-    offlineAddress?: string | null
-    status?: string
-    isActive?: boolean
-    eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
-    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
-    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
-    processNew?: string | null
-    processUpdate?: string | null
-    processLost?: string | null
-    processSurrender?: string | null
-    docNew?: string | null
-    docUpdate?: string | null
-    docLost?: string | null
-    docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    admin: AdminCreateNestedOneWithoutSchemeServicesInput
-    documents?: SupportiveDocumentCreateNestedManyWithoutSchemeServiceInput
+    designation: string
+    contact: string
+    email: string
+    contactService: ContactServiceCreateNestedOneWithoutContactsInput
   }
 
-  export type SchemeServiceUncheckedCreateWithoutContactsInput = {
+  export type ContactServiceContactUncheckedCreateWithoutPostsInput = {
+    id?: number
+    serviceName: string
+    district: string
+    subDistrict: string
+    block: string
+    name: string
+    designation: string
+    contact: string
+    email: string
+    contactServiceId: number
+  }
+
+  export type ContactServiceContactCreateOrConnectWithoutPostsInput = {
+    where: ContactServiceContactWhereUniqueInput
+    create: XOR<ContactServiceContactCreateWithoutPostsInput, ContactServiceContactUncheckedCreateWithoutPostsInput>
+  }
+
+  export type EmployeeCreateWithoutPostInput = {
+    name: string
+    email: string
+    phone: string
+    designation: string
+    employeeId?: string | null
+    joiningDate?: Date | string | null
+    salary?: number | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmployeeUncheckedCreateWithoutPostInput = {
     id?: number
     name: string
-    summary: string
-    type?: string | null
-    targetAudience?: SchemeServiceCreatetargetAudienceInput | string[]
-    applicationMode?: string
-    onlineUrl?: string | null
-    offlineAddress?: string | null
+    email: string
+    phone: string
+    designation: string
+    employeeId?: string | null
+    joiningDate?: Date | string | null
+    salary?: number | null
     status?: string
-    isActive?: boolean
-    eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
-    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
-    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
-    processNew?: string | null
-    processUpdate?: string | null
-    processLost?: string | null
-    processSurrender?: string | null
-    docNew?: string | null
-    docUpdate?: string | null
-    docLost?: string | null
-    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    adminId: number
-    documents?: SupportiveDocumentUncheckedCreateNestedManyWithoutSchemeServiceInput
   }
 
-  export type SchemeServiceCreateOrConnectWithoutContactsInput = {
-    where: SchemeServiceWhereUniqueInput
-    create: XOR<SchemeServiceCreateWithoutContactsInput, SchemeServiceUncheckedCreateWithoutContactsInput>
+  export type EmployeeCreateOrConnectWithoutPostInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutPostInput, EmployeeUncheckedCreateWithoutPostInput>
   }
 
-  export type SchemeServiceUpsertWithoutContactsInput = {
-    update: XOR<SchemeServiceUpdateWithoutContactsInput, SchemeServiceUncheckedUpdateWithoutContactsInput>
-    create: XOR<SchemeServiceCreateWithoutContactsInput, SchemeServiceUncheckedCreateWithoutContactsInput>
-    where?: SchemeServiceWhereInput
+  export type EmployeeCreateManyPostInputEnvelope = {
+    data: EmployeeCreateManyPostInput | EmployeeCreateManyPostInput[]
+    skipDuplicates?: boolean
   }
 
-  export type SchemeServiceUpdateToOneWithWhereWithoutContactsInput = {
-    where?: SchemeServiceWhereInput
-    data: XOR<SchemeServiceUpdateWithoutContactsInput, SchemeServiceUncheckedUpdateWithoutContactsInput>
+  export type ContactServiceContactUpsertWithoutPostsInput = {
+    update: XOR<ContactServiceContactUpdateWithoutPostsInput, ContactServiceContactUncheckedUpdateWithoutPostsInput>
+    create: XOR<ContactServiceContactCreateWithoutPostsInput, ContactServiceContactUncheckedCreateWithoutPostsInput>
+    where?: ContactServiceContactWhereInput
   }
 
-  export type SchemeServiceUpdateWithoutContactsInput = {
+  export type ContactServiceContactUpdateToOneWithWhereWithoutPostsInput = {
+    where?: ContactServiceContactWhereInput
+    data: XOR<ContactServiceContactUpdateWithoutPostsInput, ContactServiceContactUncheckedUpdateWithoutPostsInput>
+  }
+
+  export type ContactServiceContactUpdateWithoutPostsInput = {
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    summary?: StringFieldUpdateOperationsInput | string
-    type?: NullableStringFieldUpdateOperationsInput | string | null
-    targetAudience?: SchemeServiceUpdatetargetAudienceInput | string[]
-    applicationMode?: StringFieldUpdateOperationsInput | string
-    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
-    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
-    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
-    processNew?: NullableStringFieldUpdateOperationsInput | string | null
-    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
-    processLost?: NullableStringFieldUpdateOperationsInput | string | null
-    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    docNew?: NullableStringFieldUpdateOperationsInput | string | null
-    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
-    docLost?: NullableStringFieldUpdateOperationsInput | string | null
-    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    admin?: AdminUpdateOneRequiredWithoutSchemeServicesNestedInput
-    documents?: SupportiveDocumentUpdateManyWithoutSchemeServiceNestedInput
+    designation?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    contactService?: ContactServiceUpdateOneRequiredWithoutContactsNestedInput
   }
 
-  export type SchemeServiceUncheckedUpdateWithoutContactsInput = {
+  export type ContactServiceContactUncheckedUpdateWithoutPostsInput = {
     id?: IntFieldUpdateOperationsInput | number
+    serviceName?: StringFieldUpdateOperationsInput | string
+    district?: StringFieldUpdateOperationsInput | string
+    subDistrict?: StringFieldUpdateOperationsInput | string
+    block?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    summary?: StringFieldUpdateOperationsInput | string
-    type?: NullableStringFieldUpdateOperationsInput | string | null
-    targetAudience?: SchemeServiceUpdatetargetAudienceInput | string[]
-    applicationMode?: StringFieldUpdateOperationsInput | string
-    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
-    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
-    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
-    processNew?: NullableStringFieldUpdateOperationsInput | string | null
-    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
-    processLost?: NullableStringFieldUpdateOperationsInput | string | null
-    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    docNew?: NullableStringFieldUpdateOperationsInput | string | null
-    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
-    docLost?: NullableStringFieldUpdateOperationsInput | string | null
-    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    adminId?: IntFieldUpdateOperationsInput | number
-    documents?: SupportiveDocumentUncheckedUpdateManyWithoutSchemeServiceNestedInput
+    designation?: StringFieldUpdateOperationsInput | string
+    contact?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    contactServiceId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type SchemeServiceCreateWithoutDocumentsInput = {
-    name: string
-    summary: string
-    type?: string | null
-    targetAudience?: SchemeServiceCreatetargetAudienceInput | string[]
-    applicationMode?: string
-    onlineUrl?: string | null
-    offlineAddress?: string | null
+  export type EmployeeUpsertWithWhereUniqueWithoutPostInput = {
+    where: EmployeeWhereUniqueInput
+    update: XOR<EmployeeUpdateWithoutPostInput, EmployeeUncheckedUpdateWithoutPostInput>
+    create: XOR<EmployeeCreateWithoutPostInput, EmployeeUncheckedCreateWithoutPostInput>
+  }
+
+  export type EmployeeUpdateWithWhereUniqueWithoutPostInput = {
+    where: EmployeeWhereUniqueInput
+    data: XOR<EmployeeUpdateWithoutPostInput, EmployeeUncheckedUpdateWithoutPostInput>
+  }
+
+  export type EmployeeUpdateManyWithWhereWithoutPostInput = {
+    where: EmployeeScalarWhereInput
+    data: XOR<EmployeeUpdateManyMutationInput, EmployeeUncheckedUpdateManyWithoutPostInput>
+  }
+
+  export type EmployeeScalarWhereInput = {
+    AND?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
+    OR?: EmployeeScalarWhereInput[]
+    NOT?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
+    id?: IntFilter<"Employee"> | number
+    name?: StringFilter<"Employee"> | string
+    email?: StringFilter<"Employee"> | string
+    phone?: StringFilter<"Employee"> | string
+    designation?: StringFilter<"Employee"> | string
+    employeeId?: StringNullableFilter<"Employee"> | string | null
+    joiningDate?: DateTimeNullableFilter<"Employee"> | Date | string | null
+    salary?: FloatNullableFilter<"Employee"> | number | null
+    status?: StringFilter<"Employee"> | string
+    createdAt?: DateTimeFilter<"Employee"> | Date | string
+    updatedAt?: DateTimeFilter<"Employee"> | Date | string
+    postId?: IntFilter<"Employee"> | number
+  }
+
+  export type PostCreateWithoutEmployeesInput = {
+    postName: string
+    rank: string
+    description?: string | null
+    department?: string | null
     status?: string
-    isActive?: boolean
-    eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
-    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
-    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
-    processNew?: string | null
-    processUpdate?: string | null
-    processLost?: string | null
-    processSurrender?: string | null
-    docNew?: string | null
-    docUpdate?: string | null
-    docLost?: string | null
-    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    admin: AdminCreateNestedOneWithoutSchemeServicesInput
-    contacts?: ContactPersonCreateNestedManyWithoutSchemeServiceInput
+    office: ContactServiceContactCreateNestedOneWithoutPostsInput
   }
 
-  export type SchemeServiceUncheckedCreateWithoutDocumentsInput = {
+  export type PostUncheckedCreateWithoutEmployeesInput = {
     id?: number
-    name: string
-    summary: string
-    type?: string | null
-    targetAudience?: SchemeServiceCreatetargetAudienceInput | string[]
-    applicationMode?: string
-    onlineUrl?: string | null
-    offlineAddress?: string | null
+    postName: string
+    rank: string
+    description?: string | null
+    department?: string | null
     status?: string
-    isActive?: boolean
-    eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
-    schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
-    processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
-    processNew?: string | null
-    processUpdate?: string | null
-    processLost?: string | null
-    processSurrender?: string | null
-    docNew?: string | null
-    docUpdate?: string | null
-    docLost?: string | null
-    docSurrender?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    adminId: number
-    contacts?: ContactPersonUncheckedCreateNestedManyWithoutSchemeServiceInput
+    officeId: number
   }
 
-  export type SchemeServiceCreateOrConnectWithoutDocumentsInput = {
-    where: SchemeServiceWhereUniqueInput
-    create: XOR<SchemeServiceCreateWithoutDocumentsInput, SchemeServiceUncheckedCreateWithoutDocumentsInput>
+  export type PostCreateOrConnectWithoutEmployeesInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutEmployeesInput, PostUncheckedCreateWithoutEmployeesInput>
   }
 
-  export type SchemeServiceUpsertWithoutDocumentsInput = {
-    update: XOR<SchemeServiceUpdateWithoutDocumentsInput, SchemeServiceUncheckedUpdateWithoutDocumentsInput>
-    create: XOR<SchemeServiceCreateWithoutDocumentsInput, SchemeServiceUncheckedCreateWithoutDocumentsInput>
-    where?: SchemeServiceWhereInput
+  export type PostUpsertWithoutEmployeesInput = {
+    update: XOR<PostUpdateWithoutEmployeesInput, PostUncheckedUpdateWithoutEmployeesInput>
+    create: XOR<PostCreateWithoutEmployeesInput, PostUncheckedCreateWithoutEmployeesInput>
+    where?: PostWhereInput
   }
 
-  export type SchemeServiceUpdateToOneWithWhereWithoutDocumentsInput = {
-    where?: SchemeServiceWhereInput
-    data: XOR<SchemeServiceUpdateWithoutDocumentsInput, SchemeServiceUncheckedUpdateWithoutDocumentsInput>
+  export type PostUpdateToOneWithWhereWithoutEmployeesInput = {
+    where?: PostWhereInput
+    data: XOR<PostUpdateWithoutEmployeesInput, PostUncheckedUpdateWithoutEmployeesInput>
   }
 
-  export type SchemeServiceUpdateWithoutDocumentsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    summary?: StringFieldUpdateOperationsInput | string
-    type?: NullableStringFieldUpdateOperationsInput | string | null
-    targetAudience?: SchemeServiceUpdatetargetAudienceInput | string[]
-    applicationMode?: StringFieldUpdateOperationsInput | string
-    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+  export type PostUpdateWithoutEmployeesInput = {
+    postName?: StringFieldUpdateOperationsInput | string
+    rank?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
-    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
-    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
-    processNew?: NullableStringFieldUpdateOperationsInput | string | null
-    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
-    processLost?: NullableStringFieldUpdateOperationsInput | string | null
-    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    docNew?: NullableStringFieldUpdateOperationsInput | string | null
-    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
-    docLost?: NullableStringFieldUpdateOperationsInput | string | null
-    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    admin?: AdminUpdateOneRequiredWithoutSchemeServicesNestedInput
-    contacts?: ContactPersonUpdateManyWithoutSchemeServiceNestedInput
+    office?: ContactServiceContactUpdateOneRequiredWithoutPostsNestedInput
   }
 
-  export type SchemeServiceUncheckedUpdateWithoutDocumentsInput = {
+  export type PostUncheckedUpdateWithoutEmployeesInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    summary?: StringFieldUpdateOperationsInput | string
-    type?: NullableStringFieldUpdateOperationsInput | string | null
-    targetAudience?: SchemeServiceUpdatetargetAudienceInput | string[]
-    applicationMode?: StringFieldUpdateOperationsInput | string
-    onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    postName?: StringFieldUpdateOperationsInput | string
+    rank?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
-    schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
-    processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
-    processNew?: NullableStringFieldUpdateOperationsInput | string | null
-    processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
-    processLost?: NullableStringFieldUpdateOperationsInput | string | null
-    processSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    docNew?: NullableStringFieldUpdateOperationsInput | string | null
-    docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
-    docLost?: NullableStringFieldUpdateOperationsInput | string | null
-    docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    adminId?: IntFieldUpdateOperationsInput | number
-    contacts?: ContactPersonUncheckedUpdateManyWithoutSchemeServiceNestedInput
+    officeId?: IntFieldUpdateOperationsInput | number
   }
 
   export type SchemeServiceCreateManyAdminInput = {
@@ -24061,17 +29831,16 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: SchemeServiceCreatetargetAudienceInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
     eligibilityDetails?: SchemeServiceCreateeligibilityDetailsInput | string[]
     schemeDetails?: SchemeServiceCreateschemeDetailsInput | string[]
     processDetails?: SchemeServiceCreateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceCreatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceCreaterequiredDocumentsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -24080,8 +29849,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type CertificateServiceCreateManyAdminInput = {
@@ -24090,15 +29857,16 @@ export namespace Prisma {
     summary: string
     type?: string | null
     targetAudience?: CertificateServiceCreatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceCreateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceCreaterequiredDocumentsInput | string[]
-    applicationMode?: string
+    applicationMode: string
     onlineUrl?: string | null
     offlineAddress?: string | null
     status?: string
     isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    eligibilityDetails?: CertificateServiceCreateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceCreatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceCreateprocessDetailsInput | string[]
     processNew?: string | null
     processUpdate?: string | null
     processLost?: string | null
@@ -24107,8 +29875,6 @@ export namespace Prisma {
     docUpdate?: string | null
     docLost?: string | null
     docSurrender?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type ContactServiceCreateManyAdminInput = {
@@ -24147,12 +29913,11 @@ export namespace Prisma {
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
     schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
     processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24161,8 +29926,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contacts?: ContactPersonUpdateManyWithoutSchemeServiceNestedInput
     documents?: SupportiveDocumentUpdateManyWithoutSchemeServiceNestedInput
   }
@@ -24178,12 +29941,11 @@ export namespace Prisma {
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
     schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
     processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24192,8 +29954,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contacts?: ContactPersonUncheckedUpdateManyWithoutSchemeServiceNestedInput
     documents?: SupportiveDocumentUncheckedUpdateManyWithoutSchemeServiceNestedInput
   }
@@ -24209,12 +29969,11 @@ export namespace Prisma {
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eligibilityDetails?: SchemeServiceUpdateeligibilityDetailsInput | string[]
     schemeDetails?: SchemeServiceUpdateschemeDetailsInput | string[]
     processDetails?: SchemeServiceUpdateprocessDetailsInput | string[]
-    benefitDetails?: SchemeServiceUpdatebenefitDetailsInput | string[]
-    applicationProcess?: SchemeServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: SchemeServiceUpdaterequiredDocumentsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24223,8 +29982,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CertificateServiceUpdateWithoutAdminInput = {
@@ -24232,15 +29989,16 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24249,8 +30007,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contacts?: CertificateContactUpdateManyWithoutCertificateServiceNestedInput
     documents?: CertificateDocumentUpdateManyWithoutCertificateServiceNestedInput
     processSteps?: CertificateProcessStepUpdateManyWithoutCertificateServiceNestedInput
@@ -24263,15 +30019,16 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24280,8 +30037,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     contacts?: CertificateContactUncheckedUpdateManyWithoutCertificateServiceNestedInput
     documents?: CertificateDocumentUncheckedUpdateManyWithoutCertificateServiceNestedInput
     processSteps?: CertificateProcessStepUncheckedUpdateManyWithoutCertificateServiceNestedInput
@@ -24294,15 +30049,16 @@ export namespace Prisma {
     summary?: StringFieldUpdateOperationsInput | string
     type?: NullableStringFieldUpdateOperationsInput | string | null
     targetAudience?: CertificateServiceUpdatetargetAudienceInput | string[]
-    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
-    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
-    applicationProcess?: CertificateServiceUpdateapplicationProcessInput | string[]
-    requiredDocuments?: CertificateServiceUpdaterequiredDocumentsInput | string[]
     applicationMode?: StringFieldUpdateOperationsInput | string
     onlineUrl?: NullableStringFieldUpdateOperationsInput | string | null
     offlineAddress?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    eligibilityDetails?: CertificateServiceUpdateeligibilityDetailsInput | string[]
+    certificateDetails?: CertificateServiceUpdatecertificateDetailsInput | string[]
+    processDetails?: CertificateServiceUpdateprocessDetailsInput | string[]
     processNew?: NullableStringFieldUpdateOperationsInput | string | null
     processUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     processLost?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24311,8 +30067,6 @@ export namespace Prisma {
     docUpdate?: NullableStringFieldUpdateOperationsInput | string | null
     docLost?: NullableStringFieldUpdateOperationsInput | string | null
     docSurrender?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ContactServiceUpdateWithoutAdminInput = {
@@ -24639,6 +30393,7 @@ export namespace Prisma {
     designation?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    posts?: PostUpdateManyWithoutOfficeNestedInput
   }
 
   export type ContactServiceContactUncheckedUpdateWithoutContactServiceInput = {
@@ -24651,6 +30406,7 @@ export namespace Prisma {
     designation?: StringFieldUpdateOperationsInput | string
     contact?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    posts?: PostUncheckedUpdateManyWithoutOfficeNestedInput
   }
 
   export type ContactServiceContactUncheckedUpdateManyWithoutContactServiceInput = {
@@ -24688,83 +30444,107 @@ export namespace Prisma {
     isRequired?: BoolFieldUpdateOperationsInput | boolean
   }
 
+  export type PostCreateManyOfficeInput = {
+    id?: number
+    postName: string
+    rank: string
+    description?: string | null
+    department?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PostUpdateWithoutOfficeInput = {
+    postName?: StringFieldUpdateOperationsInput | string
+    rank?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    employees?: EmployeeUpdateManyWithoutPostNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutOfficeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    postName?: StringFieldUpdateOperationsInput | string
+    rank?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    employees?: EmployeeUncheckedUpdateManyWithoutPostNestedInput
+  }
+
+  export type PostUncheckedUpdateManyWithoutOfficeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    postName?: StringFieldUpdateOperationsInput | string
+    rank?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmployeeCreateManyPostInput = {
+    id?: number
+    name: string
+    email: string
+    phone: string
+    designation: string
+    employeeId?: string | null
+    joiningDate?: Date | string | null
+    salary?: number | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmployeeUpdateWithoutPostInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    joiningDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    salary?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmployeeUncheckedUpdateWithoutPostInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    joiningDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    salary?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmployeeUncheckedUpdateManyWithoutPostInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    designation?: StringFieldUpdateOperationsInput | string
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    joiningDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    salary?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
 
 
-  /**
-   * Aliases for legacy arg types
-   */
-    /**
-     * @deprecated Use AdminCountOutputTypeDefaultArgs instead
-     */
-    export type AdminCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AdminCountOutputTypeDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use SchemeServiceCountOutputTypeDefaultArgs instead
-     */
-    export type SchemeServiceCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SchemeServiceCountOutputTypeDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use CertificateServiceCountOutputTypeDefaultArgs instead
-     */
-    export type CertificateServiceCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CertificateServiceCountOutputTypeDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use ContactServiceCountOutputTypeDefaultArgs instead
-     */
-    export type ContactServiceCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ContactServiceCountOutputTypeDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use AdminDefaultArgs instead
-     */
-    export type AdminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AdminDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use SchemeServiceDefaultArgs instead
-     */
-    export type SchemeServiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SchemeServiceDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use CertificateServiceDefaultArgs instead
-     */
-    export type CertificateServiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CertificateServiceDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use CertificateContactDefaultArgs instead
-     */
-    export type CertificateContactArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CertificateContactDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use CertificateDocumentDefaultArgs instead
-     */
-    export type CertificateDocumentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CertificateDocumentDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use CertificateProcessStepDefaultArgs instead
-     */
-    export type CertificateProcessStepArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CertificateProcessStepDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use CertificateEligibilityDefaultArgs instead
-     */
-    export type CertificateEligibilityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CertificateEligibilityDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use ContactServiceDefaultArgs instead
-     */
-    export type ContactServiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ContactServiceDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use ContactServiceContactDefaultArgs instead
-     */
-    export type ContactServiceContactArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ContactServiceContactDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use ContactServiceDocumentDefaultArgs instead
-     */
-    export type ContactServiceDocumentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ContactServiceDocumentDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use GrievanceDefaultArgs instead
-     */
-    export type GrievanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = GrievanceDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use FeedbackDefaultArgs instead
-     */
-    export type FeedbackArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FeedbackDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use ContactPersonDefaultArgs instead
-     */
-    export type ContactPersonArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ContactPersonDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use SupportiveDocumentDefaultArgs instead
-     */
-    export type SupportiveDocumentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupportiveDocumentDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

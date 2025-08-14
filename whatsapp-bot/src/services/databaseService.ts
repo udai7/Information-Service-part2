@@ -42,9 +42,6 @@ export class DatabaseService {
           eligibilityDetails: true,
           schemeDetails: true,
           processDetails: true,
-          benefitDetails: true,
-          applicationProcess: true,
-          requiredDocuments: true,
           processNew: true,
           processUpdate: true,
           processLost: true,
@@ -91,9 +88,6 @@ export class DatabaseService {
         eligibilityDetails: scheme.eligibilityDetails,
         schemeDetails: scheme.schemeDetails,
         processDetails: scheme.processDetails,
-        benefitDetails: scheme.benefitDetails,
-        applicationProcess: scheme.applicationProcess,
-        requiredDocuments: scheme.requiredDocuments,
         processNew: scheme.processNew,
         processUpdate: scheme.processUpdate,
         processLost: scheme.processLost,
@@ -125,9 +119,8 @@ export class DatabaseService {
           offlineAddress: true,
           isActive: true,
           eligibilityDetails: true,
-          benefitDetails: true,
-          applicationProcess: true,
-          requiredDocuments: true,
+          schemeDetails: true,
+          processDetails: true,
         },
       });
 
@@ -143,9 +136,8 @@ export class DatabaseService {
         offlineAddress: scheme.offlineAddress || undefined,
         isActive: scheme.isActive || false,
         eligibilityDetails: scheme.eligibilityDetails,
-        benefitDetails: scheme.benefitDetails,
-        applicationProcess: scheme.applicationProcess,
-        requiredDocuments: scheme.requiredDocuments,
+        schemeDetails: scheme.schemeDetails,
+        processDetails: scheme.processDetails,
       };
     } catch (error) {
       console.error("Error fetching scheme by ID:", error);
@@ -173,8 +165,7 @@ export class DatabaseService {
           isActive: true,
           eligibilityDetails: true,
           certificateDetails: true,
-          applicationProcess: true,
-          requiredDocuments: true,
+          processDetails: true,
           processNew: true,
           processUpdate: true,
           processLost: true,
@@ -274,8 +265,6 @@ export class DatabaseService {
           isActive: true,
           eligibilityDetails: true,
           certificateDetails: true,
-          applicationProcess: true,
-          requiredDocuments: true,
           processNew: true,
           processUpdate: true,
           processLost: true,
@@ -340,8 +329,6 @@ export class DatabaseService {
         isActive: certificate.isActive || false,
         eligibilityDetails: certificate.eligibilityDetails,
         certificateDetails: certificate.certificateDetails,
-        applicationProcess: certificate.applicationProcess,
-        requiredDocuments: certificate.requiredDocuments,
         processNew: certificate.processNew || undefined,
         processUpdate: certificate.processUpdate || undefined,
         processLost: certificate.processLost || undefined,
@@ -350,10 +337,6 @@ export class DatabaseService {
         docUpdate: certificate.docUpdate || undefined,
         docLost: certificate.docLost || undefined,
         docSurrender: certificate.docSurrender || undefined,
-        contacts: certificate.contacts,
-        documents: certificate.documents,
-        processSteps: certificate.processSteps,
-        eligibilityItems: certificate.eligibilityItems,
       };
     } catch (error) {
       console.error("Error fetching certificate by ID:", error);
@@ -427,22 +410,24 @@ export class DatabaseService {
   // Grievance Services
   async submitGrievance(grievanceData: GrievanceInput): Promise<string> {
     try {
+      // Generate a unique tracking ID
+      const timestamp = Date.now().toString();
+      const trackingId = `GRV-${timestamp.slice(-8)}`;
+
       const grievance = await this.prisma.grievance.create({
         data: {
+          trackingId: trackingId,
           name: grievanceData.name,
           email: grievanceData.email,
           phone: grievanceData.phone,
+          address: grievanceData.address || "", // Provide default for required field
           subject: grievanceData.subject,
           description: grievanceData.description,
-          department: grievanceData.department,
           priority: grievanceData.priority,
           status: "pending", // Use "pending" as per schema
-          source: "whatsapp",
         },
       });
 
-      // Create a tracking ID from the grievance ID
-      const trackingId = `GRV-${grievance.id.toString().padStart(6, "0")}`;
       return trackingId;
     } catch (error) {
       console.error("Error submitting grievance:", error);
@@ -453,18 +438,24 @@ export class DatabaseService {
   // Feedback Services
   async submitFeedback(feedbackData: FeedbackInput): Promise<boolean> {
     try {
-      await this.prisma.feedback.create({
+      console.log("📝 Submitting feedback:", feedbackData);
+
+      const result = await this.prisma.feedback.create({
         data: {
           name: feedbackData.name,
-          email: feedbackData.email || null,
-          phone: feedbackData.phone || null,
-          comment: feedbackData.comment,
+          email:
+            feedbackData.email ||
+            `${feedbackData.name
+              .toLowerCase()
+              .replace(/\s+/g, "")}@whatsapp.user`,
+          phone: feedbackData.phone,
+          message: feedbackData.comment, // Set message field for admin panel display
           rating: feedbackData.rating,
-          serviceType: feedbackData.serviceType,
-          source: "whatsapp",
+          subject: `Feedback from ${feedbackData.name}`, // Set subject
         },
       });
 
+      console.log("✅ Feedback submitted successfully:", result.id);
       return true;
     } catch (error) {
       console.error("Error submitting feedback:", error);
