@@ -159,6 +159,35 @@ export class DatabaseService {
         },
       });
 
+      console.log(
+        `📊 WhatsApp Bot - Found ${schemes.length} schemes for type "${type}"`,
+      );
+
+      const result = schemes.map((scheme: any) => ({
+        id: scheme.id,
+        name: scheme.name,
+        summary: scheme.summary,
+        type: scheme.type,
+        targetAudience: scheme.targetAudience,
+        applicationMode: scheme.applicationMode,
+        onlineUrl: scheme.onlineUrl || undefined,
+        offlineAddress: scheme.offlineAddress || undefined,
+        isActive: scheme.isActive || false,
+        eligibilityDetails: scheme.eligibilityDetails,
+        schemeDetails: scheme.schemeDetails,
+        processDetails: scheme.processDetails,
+        processNew: scheme.processNew,
+        processUpdate: scheme.processUpdate,
+        processLost: scheme.processLost,
+        processSurrender: scheme.processSurrender,
+        docNew: scheme.docNew,
+        docUpdate: scheme.docUpdate,
+        docLost: scheme.docLost,
+        docSurrender: scheme.docSurrender,
+        contacts: scheme.contacts,
+        documents: scheme.documents,
+      }));
+
       return schemes.map((scheme: any) => ({
         id: scheme.id,
         name: scheme.name,
@@ -421,6 +450,11 @@ export class DatabaseService {
         docUpdate: certificate.docUpdate || undefined,
         docLost: certificate.docLost || undefined,
         docSurrender: certificate.docSurrender || undefined,
+        // Include the related data arrays
+        contacts: certificate.contacts || [],
+        documents: certificate.documents || [],
+        processSteps: certificate.processSteps || [],
+        eligibilityItems: certificate.eligibilityItems || [],
       };
     } catch (error) {
       console.error("Error fetching certificate by ID:", error);

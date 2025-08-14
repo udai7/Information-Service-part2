@@ -360,21 +360,36 @@ export class MessageHandler {
       "Housing",
     ];
 
+    // Map display names to database values
+    const typeMapping: { [key: string]: string } = {
+      "All Types": "All Types",
+      "Central Government": "Central",
+      "State Government": "State",
+      "Social Welfare": "Social Welfare",
+      Education: "Education",
+      Healthcare: "Healthcare",
+      Agriculture: "Agriculture",
+      Employment: "Employment",
+      Housing: "Housing",
+    };
+
     try {
       if (typeIndex >= 0 && typeIndex < schemeTypes.length) {
-        const selectedType = schemeTypes[typeIndex];
+        const selectedDisplayType = schemeTypes[typeIndex];
+        const selectedDatabaseType = typeMapping[selectedDisplayType];
 
         // Store the selected type in session context
         this.sessionManager.setServiceContext(
           phoneNumber,
           "scheme",
-          selectedType,
+          selectedDisplayType,
         );
         this.sessionManager.setCurrentMenu(phoneNumber, "schemes_list");
 
         return await this.sendSchemesListByType(
           phoneNumber,
-          selectedType,
+          selectedDatabaseType,
+          selectedDisplayType,
           session.language,
         );
       } else {
@@ -396,25 +411,26 @@ export class MessageHandler {
 
   private async sendSchemesListByType(
     phoneNumber: string,
-    selectedType: string,
+    selectedDatabaseType: string,
+    selectedDisplayType: string,
     language: "en" | "bn",
   ): Promise<string> {
     try {
       let schemes;
 
-      if (selectedType === "All Types") {
+      if (selectedDatabaseType === "All Types") {
         schemes = await this.databaseService.getActiveSchemeServices();
       } else {
         schemes = await this.databaseService.getSchemeServicesByType(
-          selectedType,
+          selectedDatabaseType,
         );
       }
 
       const title = translationService.translate("schemes.title", language);
-      const subtitle = `${selectedType} Schemes:`;
+      const subtitle = `${selectedDisplayType} Schemes:`;
 
       if (schemes.length === 0) {
-        const noSchemes = `No schemes present in this category: ${selectedType}`;
+        const noSchemes = `No schemes present in this category: ${selectedDisplayType}`;
         return await this.sendResponse(
           phoneNumber,
           `${title}\n\n${noSchemes}\n\n⬅️ ${translationService.translate(
@@ -452,7 +468,31 @@ export class MessageHandler {
     const schemeIndex = parseInt(messageText) - 1;
 
     try {
-      const schemes = await this.databaseService.getActiveSchemeServices();
+      // Get the current filter context to determine which schemes to show
+      const selectedDisplayType = session.context?.serviceId || "All Types";
+
+      let schemes;
+      if (selectedDisplayType === "All Types") {
+        schemes = await this.databaseService.getActiveSchemeServices();
+      } else {
+        // Map display type to database type
+        const typeMapping: { [key: string]: string } = {
+          "Central Government": "Central",
+          "State Government": "State",
+          "Social Welfare": "Social Welfare",
+          Education: "Education",
+          Healthcare: "Healthcare",
+          Agriculture: "Agriculture",
+          Employment: "Employment",
+          Housing: "Housing",
+        };
+
+        const selectedDatabaseType =
+          typeMapping[selectedDisplayType] || selectedDisplayType;
+        schemes = await this.databaseService.getSchemeServicesByType(
+          selectedDatabaseType,
+        );
+      }
 
       if (schemeIndex >= 0 && schemeIndex < schemes.length) {
         const scheme = schemes[schemeIndex];
@@ -782,9 +822,9 @@ export class MessageHandler {
     // Ask user to select application type for detailed information
     message += `🎯 Select Application Type for Detailed Information:\n\n`;
     message += `1️⃣ 🆕 New Application\n`;
-    message += `2️⃣ 🔄 Update/Renewal\n`;
-    message += `3️⃣ 🔍 Lost Certificate\n`;
-    message += `4️⃣ 📤 Surrender Certificate\n\n`;
+    message += `2️⃣ 🔄 Update Application\n`;
+    message += `3️⃣ 🔍 Lost Application\n`;
+    message += `4️⃣ 📤 Surrender Application\n\n`;
 
     message += `⬅️ ${translationService.translate(
       "navigation.back",
@@ -805,9 +845,9 @@ export class MessageHandler {
   ): Promise<string> {
     const applicationTypes = [
       "New Application",
-      "Update/Renewal",
-      "Lost Certificate",
-      "Surrender Certificate",
+      "Update Application",
+      "Lost Application",
+      "Surrender Application",
     ];
     const appTypeIndex = parseInt(messageText) - 1;
 
@@ -988,13 +1028,13 @@ export class MessageHandler {
       case "New Application":
         processInfo = certificate.processNew || "";
         break;
-      case "Update/Renewal":
+      case "Update Application":
         processInfo = certificate.processUpdate || "";
         break;
-      case "Lost Certificate":
+      case "Lost Application":
         processInfo = certificate.processLost || "";
         break;
-      case "Surrender Certificate":
+      case "Surrender Application":
         processInfo = certificate.processSurrender || "";
         break;
     }
