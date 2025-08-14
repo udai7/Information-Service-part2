@@ -407,6 +407,34 @@ export class DatabaseService {
     }
   }
 
+  async getContactServiceWithOfficeStructure(id: number): Promise<any | null> {
+    try {
+      const contact = await this.prisma.contactService.findUnique({
+        where: { id, isActive: true },
+        include: {
+          contacts: {
+            include: {
+              posts: {
+                include: {
+                  employees: true,
+                },
+                orderBy: { createdAt: "desc" },
+              },
+            },
+          },
+        },
+      });
+
+      return contact;
+    } catch (error) {
+      console.error(
+        "Error fetching contact service with office structure:",
+        error,
+      );
+      throw error;
+    }
+  }
+
   // Grievance Services
   async submitGrievance(grievanceData: GrievanceInput): Promise<string> {
     try {

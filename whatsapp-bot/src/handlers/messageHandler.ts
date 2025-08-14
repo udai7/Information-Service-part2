@@ -984,6 +984,13 @@ export class MessageHandler {
 
       if (contactIndex >= 0 && contactIndex < contacts.length) {
         const contact = contacts[contactIndex];
+
+        // Get detailed office structure with posts and employees
+        const detailedContact =
+          await this.databaseService.getContactServiceWithOfficeStructure(
+            contact.id,
+          );
+
         this.sessionManager.setServiceContext(
           phoneNumber,
           "contact",
@@ -992,7 +999,7 @@ export class MessageHandler {
         this.sessionManager.setCurrentMenu(phoneNumber, "contact_details");
         return await this.sendContactDetails(
           phoneNumber,
-          contact,
+          detailedContact || contact,
           session.language,
         );
       } else {
@@ -1022,25 +1029,139 @@ export class MessageHandler {
       language,
     );
 
-    let message = `📞 ${contact.serviceName}\n\n`;
-    message += `📍 ${translations.district} ${contact.district}\n`;
-    message += `📍 ${translations.block} ${contact.block}\n`;
+    let message = `📞 ${contact.serviceName || contact.name}\n\n`;
 
-    if (contact.officeAddress) {
-      message += `🏢 ${translations.office} ${contact.officeAddress}\n`;
+    if (contact.summary) {
+      message += `� ${contact.summary}\n\n`;
     }
 
-    message += "\n👥 Contact Information:\n";
-
+    // Display office structure with posts and employees
     if (contact.contacts && contact.contacts.length > 0) {
-      contact.contacts.forEach((contactPerson: any, index: number) => {
-        message += `\n${index + 1}. ${contactPerson.name}\n`;
-        message += `   ${translations.designation} ${contactPerson.designation}\n`;
-        message += `   📞 ${contactPerson.contact}\n`;
-        if (contactPerson.email) {
-          message += `   ✉️ ${contactPerson.email}\n`;
+      message += `🏢 ${
+        language === "en" ? "Office Structure:" : "অফিস কাঠামো:"
+      }\n\n`;
+
+      contact.contacts.forEach((office: any, officeIndex: number) => {
+        message += `📍 ${officeIndex + 1}. ${office.name}\n`;
+        message += `   ${translations.district} ${office.district || "N/A"}\n`;
+        message += `   ${translations.block} ${office.block || "N/A"}\n`;
+
+        if (office.subDistrict) {
+          message += `   📍 ${
+            language === "en" ? "Sub-District:" : "উপজেলা:"
+          } ${office.subDistrict}\n`;
         }
+
+        // Display posts and employees for this office
+        if (office.posts && office.posts.length > 0) {
+          message += `\n   👥 ${
+            language === "en" ? "Posts & Employees:" : "পদ এবং কর্মচারী:"
+          }\n`;
+
+          office.posts.forEach((post: any, postIndex: number) => {
+            message += `\n   ${postIndex + 1}. � ${post.postName}\n`;
+            message += `      🏅 ${language === "en" ? "Rank:" : "পদবী:"} ${
+              post.rank
+            }\n`;
+
+            if (post.department) {
+              message += `      🏛️ ${
+                language === "en" ? "Department:" : "বিভাগ:"
+              } ${post.department}\n`;
+            }
+
+            // Display employees for this post
+            if (post.employees && post.employees.length > 0) {
+              message += `      👤 ${
+                language === "en" ? "Employees:" : "কর্মচারী:"
+              } (${post.employees.length})\n`;
+
+              post.employees.forEach((employee: any, empIndex: number) => {
+                message += `\n      ${empIndex + 1}. 👨‍💼 ${employee.name}\n`;
+                message += `         💼 ${employee.designation}\n`;
+                message += `         📞 ${employee.phone}\n`;
+                if (employee.email) {
+                  message += `         ✉️ ${employee.email}\n`;
+                }
+                message += `         📊 ${
+                  language === "en" ? "Status:" : "অবস্থা:"
+                } ${
+                  employee.status === "active"
+                    ? "✅ Active"
+                    : employee.status === "inactive"
+                    ? "❌ Inactive"
+                    : "🟡 On Leave"
+                }\n`;
+              });
+            } else {
+              message += `      👤 ${
+                language === "en"
+                  ? "No employees assigned"
+                  : "কোন কর্মচারী নিযুক্ত নেই"
+              }\n`;
+            }
+          });
+        } else {
+          message += `\n   📋 ${
+            language === "en"
+              ? "No posts created yet"
+              : "এখনো কোন পদ তৈরি হয়নি"
+          }\n`;
+        }
+
+        // Basic contact info fallback
+        if (office.contact) {
+          message += `\n   📞 ${
+            language === "en" ? "Office Contact:" : "অফিস যোগাযোগ:"
+          } ${office.contact}\n`;
+        }
+        if (office.email) {
+          message += `   ✉️ ${
+            language === "en" ? "Office Email:" : "অফিস ইমেইল:"
+          } ${office.email}\n`;
+        }
+
+        message += "\n" + "─".repeat(40) + "\n";
       });
+    } else {
+      // Fallback to basic contact display
+      message += `📍 ${translations.district} ${contact.district || "N/A"}\n`;
+      message += `📍 ${translations.block} ${contact.block || "N/A"}\n`;
+
+      if (contact.officeAddress) {
+        message += `🏢 ${translations.office} ${contact.officeAddress}\n`;
+      }
+
+      message += "\n👥 Contact Information:\n";
+      message += `\n1. ${
+        language === "en" ? "General Contact" : "সাধারণ যোগাযোগ"
+      }\n`;
+      message += `   ${translations.designation} ${
+        language === "en" ? "Information Desk" : "তথ্য ডেস্ক"
+      }\n`;
+      message += `   📞 ${contact.contact || "N/A"}\n`;
+      if (contact.email) {
+        message += `   ✉️ ${contact.email}\n`;
+      }
+    }
+
+    // Application mode and URLs
+    if (contact.applicationMode) {
+      message += `\n🔧 ${
+        language === "en" ? "Application Mode:" : "আবেদনের পদ্ধতি:"
+      } ${contact.applicationMode}\n`;
+    }
+
+    if (contact.onlineUrl) {
+      message += `🌐 ${
+        language === "en" ? "Online Application:" : "অনলাইন আবেদন:"
+      } ${contact.onlineUrl}\n`;
+    }
+
+    if (contact.offlineAddress) {
+      message += `🏢 ${
+        language === "en" ? "Offline Address:" : "অফলাইন ঠিকানা:"
+      } ${contact.offlineAddress}\n`;
     }
 
     message += `\n⬅️ ${translationService.translate(
