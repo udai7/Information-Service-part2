@@ -117,23 +117,6 @@ export class MessageHandler {
         );
 
       case "contacts_list":
-        return await this.sendContactTypesList(phoneNumber, session.language);
-
-      case "contact_type_selection":
-        return await this.handleContactTypeSelection(
-          phoneNumber,
-          messageText,
-          session,
-        );
-
-      case "contact_location_selection":
-        return await this.handleContactLocationSelection(
-          phoneNumber,
-          messageText,
-          session,
-        );
-
-      case "filtered_contacts_list":
         return await this.handleContactsMenu(phoneNumber, messageText, session);
 
       case "contact_details":
@@ -381,19 +364,21 @@ export class MessageHandler {
     const typeMapping: { [key: string]: string } = {
       "All Types": "All Types",
       "Central Government": "Central",
-      "State Government": "State",
+      "State Government": "State", 
       "Social Welfare": "Social Welfare",
-      Education: "Education",
-      Healthcare: "Healthcare",
-      Agriculture: "Agriculture",
-      Employment: "Employment",
-      Housing: "Housing",
+      "Education": "Education",
+      "Healthcare": "Healthcare",
+      "Agriculture": "Agriculture",
+      "Employment": "Employment",
+      "Housing": "Housing",
     };
 
     try {
       if (typeIndex >= 0 && typeIndex < schemeTypes.length) {
         const selectedDisplayType = schemeTypes[typeIndex];
         const selectedDatabaseType = typeMapping[selectedDisplayType];
+
+        console.log(`🎯 User selected: "${selectedDisplayType}" -> Database type: "${selectedDatabaseType}"`);
 
         // Store the selected type in session context
         this.sessionManager.setServiceContext(
@@ -485,31 +470,7 @@ export class MessageHandler {
     const schemeIndex = parseInt(messageText) - 1;
 
     try {
-      // Get the current filter context to determine which schemes to show
-      const selectedDisplayType = session.context?.serviceId || "All Types";
-
-      let schemes;
-      if (selectedDisplayType === "All Types") {
-        schemes = await this.databaseService.getActiveSchemeServices();
-      } else {
-        // Map display type to database type
-        const typeMapping: { [key: string]: string } = {
-          "Central Government": "Central",
-          "State Government": "State",
-          "Social Welfare": "Social Welfare",
-          Education: "Education",
-          Healthcare: "Healthcare",
-          Agriculture: "Agriculture",
-          Employment: "Employment",
-          Housing: "Housing",
-        };
-
-        const selectedDatabaseType =
-          typeMapping[selectedDisplayType] || selectedDisplayType;
-        schemes = await this.databaseService.getSchemeServicesByType(
-          selectedDatabaseType,
-        );
-      }
+      const schemes = await this.databaseService.getActiveSchemeServices();
 
       if (schemeIndex >= 0 && schemeIndex < schemes.length) {
         const scheme = schemes[schemeIndex];
@@ -839,9 +800,9 @@ export class MessageHandler {
     // Ask user to select application type for detailed information
     message += `🎯 Select Application Type for Detailed Information:\n\n`;
     message += `1️⃣ 🆕 New Application\n`;
-    message += `2️⃣ 🔄 Update Application\n`;
-    message += `3️⃣ 🔍 Lost Application\n`;
-    message += `4️⃣ 📤 Surrender Application\n\n`;
+    message += `2️⃣ 🔄 Update/Renewal\n`;
+    message += `3️⃣ 🔍 Lost Certificate\n`;
+    message += `4️⃣ 📤 Surrender Certificate\n\n`;
 
     message += `⬅️ ${translationService.translate(
       "navigation.back",
@@ -862,9 +823,9 @@ export class MessageHandler {
   ): Promise<string> {
     const applicationTypes = [
       "New Application",
-      "Update Application",
-      "Lost Application",
-      "Surrender Application",
+      "Update/Renewal",
+      "Lost Certificate",
+      "Surrender Certificate",
     ];
     const appTypeIndex = parseInt(messageText) - 1;
 
@@ -1045,13 +1006,13 @@ export class MessageHandler {
       case "New Application":
         processInfo = certificate.processNew || "";
         break;
-      case "Update Application":
+      case "Update/Renewal":
         processInfo = certificate.processUpdate || "";
         break;
-      case "Lost Application":
+      case "Lost Certificate":
         processInfo = certificate.processLost || "";
         break;
-      case "Surrender Application":
+      case "Surrender Certificate":
         processInfo = certificate.processSurrender || "";
         break;
     }
@@ -1130,88 +1091,12 @@ export class MessageHandler {
     return await this.sendResponse(phoneNumber, message);
   }
 
-  private async sendContactTypesList(
-    phoneNumber: string,
-    language: "en" | "bn",
-  ): Promise<string> {
-    try {
-      const title = translationService.translate("contacts.title", language);
-      const typeSelectionMsg = translationService.translate(
-        "contacts.selectType",
-        language,
-      );
-
-      let message = `${title}\n\n${typeSelectionMsg}\n\n`;
-      message += `1️⃣ 🚨 Emergency Contacts\n`;
-      message += `2️⃣ 📞 Regular Contacts\n\n`;
-
-      message += `⬅️ ${translationService.translate(
-        "navigation.back",
-        language,
-      )}`;
-
-      // Set menu context for contact type selection
-      this.sessionManager.setCurrentMenu(phoneNumber, "contact_type_selection");
-
-      return await this.sendResponse(phoneNumber, message);
-    } catch (error) {
-      console.error("Error showing contact types:", error);
-      const errorMsg = translationService.translate("common.error", language);
-      return await this.sendResponse(phoneNumber, errorMsg);
-    }
-  }
-
-  private async sendContactLocationsList(
-    phoneNumber: string,
-    language: "en" | "bn",
-    contactType: string,
-  ): Promise<string> {
-    try {
-      const title = translationService.translate("contacts.title", language);
-      const locationSelectionMsg = translationService.translate(
-        "contacts.selectLocation",
-        language,
-      );
-
-      let message = `${title}\n\n${locationSelectionMsg}\n\n`;
-      message += `1️⃣ 🏛️ State Government\n`;
-      message += `2️⃣ 🏢 District Offices\n\n`;
-
-      message += `⬅️ ${translationService.translate(
-        "navigation.back",
-        language,
-      )}`;
-
-      // Set menu context for location selection with contact type
-      this.sessionManager.setCurrentMenu(
-        phoneNumber,
-        "contact_location_selection",
-      );
-      this.sessionManager.setServiceContext(
-        phoneNumber,
-        "contact_type",
-        contactType,
-      );
-
-      return await this.sendResponse(phoneNumber, message);
-    } catch (error) {
-      console.error("Error showing contact locations:", error);
-      const errorMsg = translationService.translate("common.error", language);
-      return await this.sendResponse(phoneNumber, errorMsg);
-    }
-  }
-
   private async sendContactsList(
     phoneNumber: string,
     language: "en" | "bn",
-    contactType?: string,
-    locationType?: string,
   ): Promise<string> {
     try {
-      const contacts = await this.databaseService.getActiveContactServices(
-        contactType,
-        locationType,
-      );
+      const contacts = await this.databaseService.getActiveContactServices();
       const title = translationService.translate("contacts.title", language);
       const subtitle = translationService.translate(
         "contacts.subtitle",
@@ -1293,81 +1178,6 @@ export class MessageHandler {
         session.language,
       );
       return await this.sendResponse(phoneNumber, errorMsg);
-    }
-  }
-
-  private async handleContactTypeSelection(
-    phoneNumber: string,
-    messageText: string,
-    session: UserSession,
-  ): Promise<string> {
-    if (messageText === "⬅️" || messageText.toLowerCase() === "back") {
-      this.sessionManager.setCurrentMenu(phoneNumber, "main_menu");
-      return await this.sendMainMenu(phoneNumber, session.language);
-    }
-
-    const choice = parseInt(messageText);
-
-    if (choice === 1) {
-      // Emergency contacts
-      return await this.sendContactLocationsList(
-        phoneNumber,
-        session.language,
-        "Emergency",
-      );
-    } else if (choice === 2) {
-      // Regular contacts
-      return await this.sendContactLocationsList(
-        phoneNumber,
-        session.language,
-        "Regular",
-      );
-    } else {
-      const invalidMsg = translationService.translate(
-        "common.invalidOption",
-        session.language,
-      );
-      return await this.sendResponse(phoneNumber, invalidMsg);
-    }
-  }
-
-  private async handleContactLocationSelection(
-    phoneNumber: string,
-    messageText: string,
-    session: UserSession,
-  ): Promise<string> {
-    if (messageText === "⬅️" || messageText.toLowerCase() === "back") {
-      this.sessionManager.setCurrentMenu(phoneNumber, "contact_type_selection");
-      return await this.sendContactTypesList(phoneNumber, session.language);
-    }
-
-    const choice = parseInt(messageText);
-    const contactType = session.context?.serviceId; // The contact type was stored as serviceId
-
-    if (choice === 1) {
-      // State Government contacts
-      this.sessionManager.setCurrentMenu(phoneNumber, "filtered_contacts_list");
-      return await this.sendContactsList(
-        phoneNumber,
-        session.language,
-        contactType,
-        "State",
-      );
-    } else if (choice === 2) {
-      // District contacts
-      this.sessionManager.setCurrentMenu(phoneNumber, "filtered_contacts_list");
-      return await this.sendContactsList(
-        phoneNumber,
-        session.language,
-        contactType,
-        "District",
-      );
-    } else {
-      const invalidMsg = translationService.translate(
-        "common.invalidOption",
-        session.language,
-      );
-      return await this.sendResponse(phoneNumber, invalidMsg);
     }
   }
 
@@ -1865,9 +1675,6 @@ export class MessageHandler {
       case "schemes_list":
       case "certificates_list":
       case "contacts_list":
-      case "contact_type_selection":
-      case "contact_location_selection":
-      case "filtered_contacts_list":
       case "grievance_form":
       case "feedback_form":
         this.sessionManager.resetToMainMenu(phoneNumber);
