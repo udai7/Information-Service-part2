@@ -68,19 +68,40 @@ export interface ServiceData {
   offlineAddress?: string;
   isActive: boolean;
   eligibilityDetails?: string[];
+  schemeDetails?: string[];
+  processDetails?: string[];
   benefitDetails?: string[];
   certificateDetails?: string[];
   applicationProcess?: string[];
   requiredDocuments?: string[];
+
+  // Process flows
+  processNew?: string;
+  processUpdate?: string;
+  processLost?: string;
+  processSurrender?: string;
+
+  // Document requirements
+  docNew?: string;
+  docUpdate?: string;
+  docLost?: string;
+  docSurrender?: string;
+
+  // Related entities
+  contacts?: any[];
+  documents?: any[];
+  processSteps?: any[];
+  eligibilityItems?: any[];
 }
 
 export interface GrievanceInput {
   name: string;
   email: string;
   phone: string;
+  address?: string;
   subject: string;
   description: string;
-  department: string;
+  department?: string;
   priority: "low" | "medium" | "high";
 }
 
@@ -91,4 +112,5 @@ export interface FeedbackInput {
   rating: number;
   comment: string;
   serviceType: string;
+  source?: string;
 }

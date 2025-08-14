@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../../prisma/generated/prisma";
 import { ServiceData, GrievanceInput, FeedbackInput } from "../types";
 
 export class DatabaseService {
@@ -33,15 +33,45 @@ export class DatabaseService {
           id: true,
           name: true,
           summary: true,
+          type: true,
           targetAudience: true,
           applicationMode: true,
           onlineUrl: true,
           offlineAddress: true,
           isActive: true,
           eligibilityDetails: true,
-          benefitDetails: true,
-          applicationProcess: true,
-          requiredDocuments: true,
+          schemeDetails: true,
+          processDetails: true,
+          processNew: true,
+          processUpdate: true,
+          processLost: true,
+          processSurrender: true,
+          docNew: true,
+          docUpdate: true,
+          docLost: true,
+          docSurrender: true,
+          contacts: {
+            select: {
+              id: true,
+              name: true,
+              designation: true,
+              contact: true,
+              email: true,
+              serviceName: true,
+              district: true,
+              subDistrict: true,
+              block: true,
+            },
+          },
+          documents: {
+            select: {
+              id: true,
+              slNo: true,
+              documentType: true,
+              validProof: true,
+              isRequired: true,
+            },
+          },
         },
       });
 
@@ -49,15 +79,25 @@ export class DatabaseService {
         id: scheme.id,
         name: scheme.name,
         summary: scheme.summary,
+        type: scheme.type,
         targetAudience: scheme.targetAudience,
         applicationMode: scheme.applicationMode,
         onlineUrl: scheme.onlineUrl || undefined,
         offlineAddress: scheme.offlineAddress || undefined,
         isActive: scheme.isActive || false,
         eligibilityDetails: scheme.eligibilityDetails,
-        benefitDetails: scheme.benefitDetails,
-        applicationProcess: scheme.applicationProcess,
-        requiredDocuments: scheme.requiredDocuments,
+        schemeDetails: scheme.schemeDetails,
+        processDetails: scheme.processDetails,
+        processNew: scheme.processNew,
+        processUpdate: scheme.processUpdate,
+        processLost: scheme.processLost,
+        processSurrender: scheme.processSurrender,
+        docNew: scheme.docNew,
+        docUpdate: scheme.docUpdate,
+        docLost: scheme.docLost,
+        docSurrender: scheme.docSurrender,
+        contacts: scheme.contacts,
+        documents: scheme.documents,
       }));
     } catch (error) {
       console.error("Error fetching scheme services:", error);
@@ -79,9 +119,8 @@ export class DatabaseService {
           offlineAddress: true,
           isActive: true,
           eligibilityDetails: true,
-          benefitDetails: true,
-          applicationProcess: true,
-          requiredDocuments: true,
+          schemeDetails: true,
+          processDetails: true,
         },
       });
 
@@ -97,9 +136,8 @@ export class DatabaseService {
         offlineAddress: scheme.offlineAddress || undefined,
         isActive: scheme.isActive || false,
         eligibilityDetails: scheme.eligibilityDetails,
-        benefitDetails: scheme.benefitDetails,
-        applicationProcess: scheme.applicationProcess,
-        requiredDocuments: scheme.requiredDocuments,
+        schemeDetails: scheme.schemeDetails,
+        processDetails: scheme.processDetails,
       };
     } catch (error) {
       console.error("Error fetching scheme by ID:", error);
@@ -119,6 +157,7 @@ export class DatabaseService {
           id: true,
           name: true,
           summary: true,
+          type: true,
           targetAudience: true,
           applicationMode: true,
           onlineUrl: true,
@@ -126,8 +165,54 @@ export class DatabaseService {
           isActive: true,
           eligibilityDetails: true,
           certificateDetails: true,
-          applicationProcess: true,
-          requiredDocuments: true,
+          processDetails: true,
+          processNew: true,
+          processUpdate: true,
+          processLost: true,
+          processSurrender: true,
+          docNew: true,
+          docUpdate: true,
+          docLost: true,
+          docSurrender: true,
+          contacts: {
+            select: {
+              id: true,
+              serviceName: true,
+              district: true,
+              subDistrict: true,
+              block: true,
+              name: true,
+              designation: true,
+              contact: true,
+              email: true,
+              applicationType: true,
+            },
+          },
+          documents: {
+            select: {
+              id: true,
+              slNo: true,
+              documentType: true,
+              validProof: true,
+              isRequired: true,
+              applicationType: true,
+            },
+          },
+          processSteps: {
+            select: {
+              id: true,
+              slNo: true,
+              stepDetails: true,
+              applicationType: true,
+            },
+          },
+          eligibilityItems: {
+            select: {
+              id: true,
+              eligibilityDetail: true,
+              applicationType: true,
+            },
+          },
         },
       });
 
@@ -135,6 +220,7 @@ export class DatabaseService {
         id: cert.id,
         name: cert.name,
         summary: cert.summary,
+        type: cert.type,
         targetAudience: cert.targetAudience,
         applicationMode: cert.applicationMode,
         onlineUrl: cert.onlineUrl || undefined,
@@ -144,6 +230,18 @@ export class DatabaseService {
         certificateDetails: cert.certificateDetails,
         applicationProcess: cert.applicationProcess,
         requiredDocuments: cert.requiredDocuments,
+        processNew: cert.processNew,
+        processUpdate: cert.processUpdate,
+        processLost: cert.processLost,
+        processSurrender: cert.processSurrender,
+        docNew: cert.docNew,
+        docUpdate: cert.docUpdate,
+        docLost: cert.docLost,
+        docSurrender: cert.docSurrender,
+        contacts: cert.contacts,
+        documents: cert.documents,
+        processSteps: cert.processSteps,
+        eligibilityItems: cert.eligibilityItems,
       }));
     } catch (error) {
       console.error("Error fetching certificate services:", error);
@@ -159,6 +257,7 @@ export class DatabaseService {
           id: true,
           name: true,
           summary: true,
+          type: true,
           targetAudience: true,
           applicationMode: true,
           onlineUrl: true,
@@ -166,8 +265,53 @@ export class DatabaseService {
           isActive: true,
           eligibilityDetails: true,
           certificateDetails: true,
-          applicationProcess: true,
-          requiredDocuments: true,
+          processNew: true,
+          processUpdate: true,
+          processLost: true,
+          processSurrender: true,
+          docNew: true,
+          docUpdate: true,
+          docLost: true,
+          docSurrender: true,
+          contacts: {
+            select: {
+              id: true,
+              serviceName: true,
+              district: true,
+              subDistrict: true,
+              block: true,
+              name: true,
+              designation: true,
+              contact: true,
+              email: true,
+              applicationType: true,
+            },
+          },
+          documents: {
+            select: {
+              id: true,
+              slNo: true,
+              documentType: true,
+              validProof: true,
+              isRequired: true,
+              applicationType: true,
+            },
+          },
+          processSteps: {
+            select: {
+              id: true,
+              slNo: true,
+              stepDetails: true,
+              applicationType: true,
+            },
+          },
+          eligibilityItems: {
+            select: {
+              id: true,
+              eligibilityDetail: true,
+              applicationType: true,
+            },
+          },
         },
       });
 
@@ -177,6 +321,7 @@ export class DatabaseService {
         id: certificate.id,
         name: certificate.name,
         summary: certificate.summary,
+        type: certificate.type || undefined,
         targetAudience: certificate.targetAudience,
         applicationMode: certificate.applicationMode,
         onlineUrl: certificate.onlineUrl || undefined,
@@ -184,8 +329,14 @@ export class DatabaseService {
         isActive: certificate.isActive || false,
         eligibilityDetails: certificate.eligibilityDetails,
         certificateDetails: certificate.certificateDetails,
-        applicationProcess: certificate.applicationProcess,
-        requiredDocuments: certificate.requiredDocuments,
+        processNew: certificate.processNew || undefined,
+        processUpdate: certificate.processUpdate || undefined,
+        processLost: certificate.processLost || undefined,
+        processSurrender: certificate.processSurrender || undefined,
+        docNew: certificate.docNew || undefined,
+        docUpdate: certificate.docUpdate || undefined,
+        docLost: certificate.docLost || undefined,
+        docSurrender: certificate.docSurrender || undefined,
       };
     } catch (error) {
       console.error("Error fetching certificate by ID:", error);
@@ -203,10 +354,15 @@ export class DatabaseService {
         },
         select: {
           id: true,
-          name: true, // Changed from serviceName to name to match schema
+          name: true,
           summary: true,
-          offlineAddress: true, // Changed from officeAddress to offlineAddress
+          applicationMode: true,
+          onlineUrl: true,
+          offlineAddress: true,
           isActive: true,
+          eligibilityDetails: true,
+          contactDetails: true,
+          processDetails: true,
           contacts: {
             select: {
               id: true,
@@ -228,7 +384,6 @@ export class DatabaseService {
         serviceName: contact.name, // Map name to serviceName for bot compatibility
         district: contact.contacts[0]?.district || "",
         block: contact.contacts[0]?.block || "",
-        officeAddress: contact.offlineAddress,
       }));
     } catch (error) {
       console.error("Error fetching contact services:", error);
@@ -252,31 +407,52 @@ export class DatabaseService {
     }
   }
 
+  async getContactServiceWithOfficeStructure(id: number): Promise<any | null> {
+    try {
+      const contact = await this.prisma.contactService.findUnique({
+        where: { id, isActive: true },
+        include: {
+          contacts: {
+            include: {
+              posts: {
+                include: {
+                  employees: true,
+                },
+                orderBy: { createdAt: "desc" },
+              },
+            },
+          },
+        },
+      });
+
+      return contact;
+    } catch (error) {
+      console.error(
+        "Error fetching contact service with office structure:",
+        error,
+      );
+      throw error;
+    }
+  }
+
   // Grievance Services
   async submitGrievance(grievanceData: GrievanceInput): Promise<string> {
     try {
-      // Generate tracking ID
-      const trackingId = `GRV-${Date.now()
-        .toString(36)
-        .toUpperCase()}-${Math.random()
-        .toString(36)
-        .substring(2, 8)
-        .toUpperCase()}`;
+      // Generate a unique tracking ID
+      const timestamp = Date.now().toString();
+      const trackingId = `GRV-${timestamp.slice(-8)}`;
 
       const grievance = await this.prisma.grievance.create({
         data: {
+          trackingId: trackingId,
           name: grievanceData.name,
           email: grievanceData.email,
           phone: grievanceData.phone,
-          address: `WhatsApp User - ${grievanceData.phone}`, // Default address
+          address: grievanceData.address || "", // Provide default for required field
           subject: grievanceData.subject,
           description: grievanceData.description,
-          department: grievanceData.department,
           priority: grievanceData.priority,
-          status: "new",
-          source: "whatsapp",
-          trackingId: trackingId,
-          attachments: [],
+          status: "pending", // Use "pending" as per schema
         },
       });
 
@@ -290,21 +466,24 @@ export class DatabaseService {
   // Feedback Services
   async submitFeedback(feedbackData: FeedbackInput): Promise<boolean> {
     try {
-      await this.prisma.feedback.create({
+      console.log("📝 Submitting feedback:", feedbackData);
+
+      const result = await this.prisma.feedback.create({
         data: {
           name: feedbackData.name,
-          email: feedbackData.email || null,
-          phone: feedbackData.phone || null,
-          subject: "WhatsApp Feedback",
-          message: feedbackData.comment || "",
-          comment: feedbackData.comment,
+          email:
+            feedbackData.email ||
+            `${feedbackData.name
+              .toLowerCase()
+              .replace(/\s+/g, "")}@whatsapp.user`,
+          phone: feedbackData.phone,
+          message: feedbackData.comment, // Set message field for admin panel display
           rating: feedbackData.rating,
-          serviceType: feedbackData.serviceType,
-          source: "whatsapp",
-          status: "new",
+          subject: `Feedback from ${feedbackData.name}`, // Set subject
         },
       });
 
+      console.log("✅ Feedback submitted successfully:", result.id);
       return true;
     } catch (error) {
       console.error("Error submitting feedback:", error);

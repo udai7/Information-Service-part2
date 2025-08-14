@@ -40,7 +40,7 @@ export default function UserSchemeService() {
 
   const stats = {
     published: apiSchemeServices.length,
-    active: 0,
+    active: apiSchemeServices.length, // All services in apiSchemeServices are active (published and isActive !== false)
     total: apiSchemeServices.length,
   };
 

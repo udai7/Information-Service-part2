@@ -63,8 +63,12 @@ export class WhatsAppBotService {
 
       console.log(`✅ Text message sent to ${to}`);
       return response.status === 200;
-    } catch (error) {
-      console.error("❌ Error sending text message:", error);
+    } catch (error: any) {
+      console.error("❌ Error sending text message:", error.message);
+      if (error.response) {
+        console.error("❌ Response status:", error.response.status);
+        console.error("❌ Response data:", error.response.data);
+      }
       return false;
     }
   }
