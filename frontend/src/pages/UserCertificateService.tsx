@@ -635,65 +635,6 @@ export default function UserCertificateService() {
                     </div>
                   )}
 
-                {/* Process Details */}
-                {modalCert.processSteps &&
-                  modalCert.processSteps[selectedApplicationType] && (
-                    <div className="mb-6">
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                        <h3 className="text-lg font-semibold text-gray-800">
-                          Application Process for {selectedApplicationType}
-                        </h3>
-                      </div>
-                      <div className="bg-white p-4 rounded-lg shadow-sm">
-                        <ul className="list-disc pl-6 space-y-1">
-                          {modalCert.processSteps[selectedApplicationType].map(
-                            (step: any, idx: number) => (
-                              <li key={idx} className="text-gray-700">
-                                <span className="font-medium text-amber-700">
-                                  {step.slNo}.
-                                </span>{" "}
-                                {step.stepDetails}
-                              </li>
-                            ),
-                          )}
-                        </ul>
-                      </div>
-                    </div>
-                  )}
-
-                {/* Documents */}
-                {modalCert.documents &&
-                  modalCert.documents[selectedApplicationType] && (
-                    <div className="mb-6">
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                        <h3 className="text-lg font-semibold text-gray-800">
-                          Required Documents for {selectedApplicationType}
-                        </h3>
-                      </div>
-                      <div className="bg-white p-4 rounded-lg shadow-sm">
-                        <ul className="list-disc pl-6 space-y-1">
-                          {modalCert.documents[selectedApplicationType].map(
-                            (doc: any, idx: number) => (
-                              <li key={idx} className="text-gray-700">
-                                <span className="font-medium text-orange-700">
-                                  {doc.slNo}.
-                                </span>{" "}
-                                <span className="font-medium text-gray-800">
-                                  {doc.documentType}
-                                </span>{" "}
-                                <span className="text-gray-600">
-                                  - Valid Proof: {doc.validProof}
-                                </span>
-                              </li>
-                            ),
-                          )}
-                        </ul>
-                      </div>
-                    </div>
-                  )}
-
                 {/* Contacts */}
                 {modalCert.contact &&
                   modalCert.contact[selectedApplicationType] && (
