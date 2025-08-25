@@ -567,7 +567,7 @@ export class DatabaseService {
   async getContactServiceWithOfficeStructure(id: number): Promise<any | null> {
     try {
       const contact = await this.prisma.contactService.findUnique({
-        where: { id, isActive: true },
+        where: { id },
         include: {
           contacts: {
             include: {
@@ -581,6 +581,11 @@ export class DatabaseService {
           },
         },
       });
+
+      // Check if contact exists and is active
+      if (!contact || !contact.isActive) {
+        return null;
+      }
 
       return contact;
     } catch (error) {
