@@ -143,6 +143,21 @@ export class MessageHandler {
           session,
         );
 
+      case "contact_office_details":
+        if (messageText === "⬅️" || messageText.toLowerCase() === "back") {
+          this.sessionManager.setCurrentMenu(phoneNumber, "contacts_list");
+          return await this.sendContactServicesList(
+            phoneNumber,
+            session.language,
+          );
+        } else {
+          const invalidMsg = translationService.translate(
+            "common.invalidOption",
+            session.language,
+          );
+          return await this.sendResponse(phoneNumber, invalidMsg);
+        }
+
       case "contact_details":
         return await this.handleContactDetails(
           phoneNumber,
@@ -1045,8 +1060,43 @@ export class MessageHandler {
 
     if (processInfo && processInfo.trim()) {
       message += `📋 Application Process:\n${processInfo}\n\n`;
+    } else if (
+      certificate.applicationProcess &&
+      certificate.applicationProcess.length > 0
+    ) {
+      // Fallback to general application process steps
+      message += `📋 Application Process:\n`;
+      certificate.applicationProcess.forEach((step: string, index: number) => {
+        message += `${index + 1}. ${step}\n`;
+      });
+      message += "\n";
+    } else if (
+      certificate.processDetails &&
+      certificate.processDetails.length > 0
+    ) {
+      // Fallback to process details
+      message += `📋 Application Process:\n`;
+      certificate.processDetails.forEach((detail: string, index: number) => {
+        message += `${index + 1}. ${detail}\n`;
+      });
+      message += "\n";
     } else {
-      message += `📋 Application Process:\n❌ No data available\n\n`;
+      // Check if there are processSteps for this application type
+      const applicationProcessSteps = certificate.processSteps?.filter(
+        (step: any) => step.applicationType === applicationType,
+      );
+
+      if (applicationProcessSteps && applicationProcessSteps.length > 0) {
+        message += `📋 Application Process:\n`;
+        applicationProcessSteps
+          .sort((a: any, b: any) => a.slNo - b.slNo)
+          .forEach((step: any) => {
+            message += `${step.slNo}. ${step.stepDetails}\n`;
+          });
+        message += "\n";
+      } else {
+        message += `📋 Application Process:\n❌ No data available\n\n`;
+      }
     }
 
     // Contact Information based on application type
@@ -1281,11 +1331,11 @@ export class MessageHandler {
           selectedService.id.toString(),
         );
 
-        // Now show Emergency/Regular options for this service
-        return await this.sendContactTypesList(
+        // Directly show all offices and employees for this service
+        return await this.sendAllOfficeDetails(
           phoneNumber,
           session.language,
-          selectedService,
+          selectedService.id.toString(),
         );
       } else {
         const invalidMsg = translationService.translate(
@@ -1538,6 +1588,80 @@ export class MessageHandler {
       return await this.sendResponse(phoneNumber, message);
     } catch (error) {
       console.error("Error showing office details:", error);
+      const errorMsg = translationService.translate("common.error", language);
+      return await this.sendResponse(phoneNumber, errorMsg);
+    }
+  }
+
+  private async sendAllOfficeDetails(
+    phoneNumber: string,
+    language: "en" | "bn",
+    serviceId: string,
+  ): Promise<string> {
+    try {
+      // Get the office details with posts and employees
+      const officeDetails =
+        await this.databaseService.getContactServiceWithOfficeStructure(
+          parseInt(serviceId),
+        );
+
+      const title = translationService.translate("contacts.title", language);
+      let message = `${title}\n\n`;
+
+      if (
+        officeDetails &&
+        officeDetails.contacts &&
+        officeDetails.contacts.length > 0
+      ) {
+        message += `📋 ${officeDetails.name}\n\n`;
+
+        officeDetails.contacts.forEach((office: any, index: number) => {
+          message += `🏢 **${office.name || officeDetails.name}**\n`;
+          message += `📍 ${office.district} - ${office.block}\n\n`;
+
+          // Display posts and employees for this office
+          if (office.posts && office.posts.length > 0) {
+            office.posts.forEach((post: any, postIndex: number) => {
+              message += `🎯 **${post.postName}**\n`;
+              message += `   Rank: ${post.rank || "N/A"}\n`;
+
+              // Display employees for this post
+              if (post.employees && post.employees.length > 0) {
+                message += `   👥 Employees:\n`;
+                post.employees.forEach((employee: any, empIndex: number) => {
+                  message += `   • ${employee.name || "Not published"}\n`;
+                  message += `     📞 ${employee.phone || "N/A"}\n`;
+                  message += `     ✉️ ${employee.email || "N/A"}\n`;
+                  message += `     🏷️ ${employee.designation || "N/A"}\n`;
+                  if (empIndex < post.employees.length - 1) message += `\n`;
+                });
+              } else {
+                message += `   👥 No employees assigned\n`;
+              }
+              message += `\n`;
+            });
+          } else {
+            message += `   No posts available\n\n`;
+          }
+
+          if (index < officeDetails.contacts.length - 1) {
+            message += `\n`;
+          }
+        });
+      } else {
+        message += `No office details available\n\n`;
+      }
+
+      message += `⬅️ ${translationService.translate(
+        "navigation.back",
+        language,
+      )}`;
+
+      this.sessionManager.setCurrentMenu(phoneNumber, "contact_office_details");
+
+      return await this.sendResponse(phoneNumber, message);
+    } catch (error) {
+      console.error("Error showing all office details:", error);
       const errorMsg = translationService.translate("common.error", language);
       return await this.sendResponse(phoneNumber, errorMsg);
     }

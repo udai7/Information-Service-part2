@@ -378,6 +378,7 @@ export class DatabaseService {
           isActive: true,
           eligibilityDetails: true,
           certificateDetails: true,
+          processDetails: true,
           processNew: true,
           processUpdate: true,
           processLost: true,
@@ -451,10 +452,10 @@ export class DatabaseService {
         docLost: certificate.docLost || undefined,
         docSurrender: certificate.docSurrender || undefined,
         // Include the related data arrays
-        contacts: certificate.contacts || [],
-        documents: certificate.documents || [],
-        processSteps: certificate.processSteps || [],
-        eligibilityItems: certificate.eligibilityItems || [],
+        contacts: (certificate as any).contacts || [],
+        documents: (certificate as any).documents || [],
+        processSteps: (certificate as any).processSteps || [],
+        eligibilityItems: (certificate as any).eligibilityItems || [],
       };
     } catch (error) {
       console.error("Error fetching certificate by ID:", error);
