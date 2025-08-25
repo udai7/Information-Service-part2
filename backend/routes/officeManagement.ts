@@ -27,7 +27,7 @@ router.get(
       // Find office by name
       const office = await prisma.contactServiceContact.findFirst({
         where: {
-          id: officeId
+          id: officeId,
         },
       });
 
@@ -329,6 +329,74 @@ router.put(
       res.status(500).json({
         success: false,
         message: "Failed to update employee",
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  },
+);
+
+// PUT /api/offices/:officeId/posts/:postId - Update post
+router.put(
+  "/:officeId/posts/:postId",
+  authenticateAdmin,
+  [
+    param("officeId").isInt().withMessage("Office ID must be a valid integer"),
+    param("postId").isInt().withMessage("Post ID must be a valid integer"),
+    body("postName").notEmpty().withMessage("Post name is required"),
+    body("rank").notEmpty().withMessage("Rank is required"),
+  ],
+  async (req: Request, res: Response) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          success: false,
+          message: "Validation failed",
+          errors: errors.array(),
+        });
+      }
+
+      const officeId = parseInt(req.params.officeId);
+      const postId = parseInt(req.params.postId);
+      const { postName, rank } = req.body;
+
+      // Check if the post exists and belongs to the office
+      const existingPost = await prisma.post.findFirst({
+        where: {
+          id: postId,
+          officeId: officeId,
+        },
+      });
+
+      if (!existingPost) {
+        return res.status(404).json({
+          success: false,
+          message: "Post not found in this office",
+        });
+      }
+
+      // Update the post
+      const updatedPost = await prisma.post.update({
+        where: { id: postId },
+        data: {
+          postName,
+          rank,
+        },
+        include: {
+          employees: true,
+        },
+      });
+
+      res.json({
+        success: true,
+        post: updatedPost,
+        message: "Post updated successfully",
+      });
+    } catch (error) {
+      console.error("Error updating post:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to update post",
         error: error instanceof Error ? error.message : "Unknown error",
       });
     }

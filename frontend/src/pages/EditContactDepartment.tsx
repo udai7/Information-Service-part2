@@ -96,6 +96,7 @@ export default function EditContactDepartment() {
               if (individualService.contacts) {
                 const mappedOffices = individualService.contacts.map(
                   (contact) => ({
+                    id: contact.id, // Preserve the contact ID for deletion
                     officeName: contact.name,
                     level: contact.designation,
                     officePinCode: contact.contact,
@@ -122,6 +123,7 @@ export default function EditContactDepartment() {
           // Map contacts to office format for display
           if (contactService.contacts) {
             const mappedOffices = contactService.contacts.map((contact) => ({
+              id: contact.id, // Preserve the contact ID for deletion
               officeName: contact.name,
               level: contact.designation,
               officePinCode: contact.contact,
@@ -140,7 +142,9 @@ export default function EditContactDepartment() {
           );
           toast({
             title: "Error",
-            description: `Contact service not found with ID: ${id}. Available IDs: ${response.contactServices?.map((s) => s.id).join(", ") || "none"}`,
+            description: `Contact service not found with ID: ${id}. Available IDs: ${
+              response.contactServices?.map((s) => s.id).join(", ") || "none"
+            }`,
             variant: "destructive",
           });
           navigate("/admin-contact-service");
@@ -205,7 +209,9 @@ export default function EditContactDepartment() {
 
       toast({
         title: "Error",
-        description: `Please fill in all required fields (${missingFields.join(", ")})`,
+        description: `Please fill in all required fields (${missingFields.join(
+          ", ",
+        )})`,
         variant: "destructive",
       });
       return;
@@ -260,6 +266,7 @@ export default function EditContactDepartment() {
         // Update the offices display by mapping the updated contacts
         if (updatedService.contacts) {
           const mappedOffices = updatedService.contacts.map((contact: any) => ({
+            id: contact.id, // Preserve the contact ID for deletion
             officeName: contact.name,
             level: contact.designation,
             officePinCode: contact.contact,
@@ -291,46 +298,58 @@ export default function EditContactDepartment() {
       console.error("Error adding office:", error);
       toast({
         title: "Error",
-        description: `Failed to add office: ${error?.message || "Unknown error"}`,
+        description: `Failed to add office: ${
+          error?.message || "Unknown error"
+        }`,
         variant: "destructive",
       });
     }
   };
 
-  const handleToggleOfficeStatus = async (index: number) => {
+  const handleDeleteOffice = async (index: number) => {
     if (!currentService) return;
 
-    const updatedOffices = offices.map((office, i) =>
-      i === index
-        ? {
-            ...office,
-            status: office.status === "active" ? "inactive" : "active",
-          }
-        : office,
+    const officeToDelete = offices[index];
+    if (!officeToDelete.id) {
+      toast({
+        title: "Error",
+        description: "Office ID not found",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Confirm deletion
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete the office "${officeToDelete.officeName}"? This action cannot be undone.`,
     );
-    setOffices(updatedOffices);
+
+    if (!confirmDelete) {
+      return;
+    }
 
     try {
-      const updateData = {
-        ...currentService,
-        status: updatedOffices[index].status,
-      };
+      // Delete the contact from the database
+      await apiClient.deleteContactFromService(
+        currentService.id,
+        officeToDelete.id,
+      );
 
-      await apiClient.updateContactService(currentService.id, updateData);
+      // Remove from local state
+      const updatedOffices = offices.filter((_, i) => i !== index);
+      setOffices(updatedOffices);
 
       toast({
         title: "Success",
-        description: "Office status updated successfully",
+        description: "Office deleted successfully",
       });
     } catch (error) {
-      console.error("Error updating office status:", error);
+      console.error("Error deleting office:", error);
       toast({
         title: "Error",
-        description: "Failed to update office status",
+        description: "Failed to delete office",
         variant: "destructive",
       });
-      // Revert the UI change
-      setOffices(offices);
     }
   };
 
@@ -491,12 +510,10 @@ export default function EditContactDepartment() {
                           </Button>
                           <Button
                             size="sm"
-                            variant="outline"
-                            onClick={() => handleToggleOfficeStatus(index)}
+                            variant="destructive"
+                            onClick={() => handleDeleteOffice(index)}
                           >
-                            {office.status === "active"
-                              ? "Deactivate"
-                              : "Activate"}
+                            Delete
                           </Button>
                         </div>
                       </Card>

@@ -530,4 +530,75 @@ router.get("/public/list", async (req: Request, res: Response) => {
   }
 });
 
+// DELETE /api/contact-services/:serviceId/contacts/:contactId - Delete individual contact
+router.delete(
+  "/:serviceId/contacts/:contactId",
+  authenticateAdmin,
+  param("serviceId").isInt().withMessage("Service ID must be a valid integer"),
+  param("contactId").isInt().withMessage("Contact ID must be a valid integer"),
+  async (req: Request, res: Response) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          success: false,
+          message: "Validation failed",
+          errors: errors.array(),
+        });
+      }
+
+      const serviceId = parseInt(req.params.serviceId);
+      const contactId = parseInt(req.params.contactId);
+
+      console.log(`Deleting contact ${contactId} from service ${serviceId}`);
+
+      // Check if the service exists
+      const existingService = await prisma.contactService.findUnique({
+        where: { id: serviceId },
+      });
+
+      if (!existingService) {
+        return res.status(404).json({
+          success: false,
+          message: "Contact service not found",
+        });
+      }
+
+      // Check if the contact exists and belongs to the service
+      const existingContact = await prisma.contactServiceContact.findFirst({
+        where: {
+          id: contactId,
+          contactServiceId: serviceId,
+        },
+      });
+
+      if (!existingContact) {
+        return res.status(404).json({
+          success: false,
+          message: "Contact not found in this service",
+        });
+      }
+
+      // Delete the contact
+      await prisma.contactServiceContact.delete({
+        where: { id: contactId },
+      });
+
+      console.log("Contact deleted successfully");
+
+      res.json({
+        success: true,
+        message: "Contact deleted successfully",
+      });
+    } catch (error) {
+      console.error("Error deleting contact:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to delete contact",
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  },
+);
+
 export default router;
