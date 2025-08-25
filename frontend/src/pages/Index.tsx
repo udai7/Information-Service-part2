@@ -14,7 +14,6 @@ import {
   Zap,
   Users,
   ArrowRight,
-  CheckCircle,
   Globe,
   Award,
   Clock,
