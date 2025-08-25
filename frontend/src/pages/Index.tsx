@@ -61,7 +61,7 @@ export default function Index() {
       icon: <Globe className="h-5 w-5" />,
     },
     {
-      label: "Happy Clients",
+      label: "Grievances Solved",
       value: "10K+",
       icon: <Users className="h-5 w-5" />,
     },
