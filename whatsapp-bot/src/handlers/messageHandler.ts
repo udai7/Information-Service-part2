@@ -146,10 +146,7 @@ export class MessageHandler {
       case "contact_office_details":
         if (messageText === "⬅️" || messageText.toLowerCase() === "back") {
           this.sessionManager.setCurrentMenu(phoneNumber, "contacts_list");
-          return await this.sendContactServicesList(
-            phoneNumber,
-            session.language,
-          );
+          return await this.sendContactServicesList(phoneNumber, session.language);
         } else {
           const invalidMsg = translationService.translate(
             "common.invalidOption",
@@ -1060,20 +1057,14 @@ export class MessageHandler {
 
     if (processInfo && processInfo.trim()) {
       message += `📋 Application Process:\n${processInfo}\n\n`;
-    } else if (
-      certificate.applicationProcess &&
-      certificate.applicationProcess.length > 0
-    ) {
+    } else if (certificate.applicationProcess && certificate.applicationProcess.length > 0) {
       // Fallback to general application process steps
       message += `📋 Application Process:\n`;
       certificate.applicationProcess.forEach((step: string, index: number) => {
         message += `${index + 1}. ${step}\n`;
       });
       message += "\n";
-    } else if (
-      certificate.processDetails &&
-      certificate.processDetails.length > 0
-    ) {
+    } else if (certificate.processDetails && certificate.processDetails.length > 0) {
       // Fallback to process details
       message += `📋 Application Process:\n`;
       certificate.processDetails.forEach((detail: string, index: number) => {
@@ -1081,22 +1072,7 @@ export class MessageHandler {
       });
       message += "\n";
     } else {
-      // Check if there are processSteps for this application type
-      const applicationProcessSteps = certificate.processSteps?.filter(
-        (step: any) => step.applicationType === applicationType,
-      );
-
-      if (applicationProcessSteps && applicationProcessSteps.length > 0) {
-        message += `📋 Application Process:\n`;
-        applicationProcessSteps
-          .sort((a: any, b: any) => a.slNo - b.slNo)
-          .forEach((step: any) => {
-            message += `${step.slNo}. ${step.stepDetails}\n`;
-          });
-        message += "\n";
-      } else {
-        message += `📋 Application Process:\n❌ No data available\n\n`;
-      }
+      message += `📋 Application Process:\n❌ No data available\n\n`;
     }
 
     // Contact Information based on application type

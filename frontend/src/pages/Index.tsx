@@ -375,7 +375,7 @@ export default function Index() {
           </div>
           <div className="border-t border-gray-800 mt-12 pt-8 text-center">
             <p className="text-gray-400 text-lg">
-              &copy; 2024 InfoServices Tripura. All rights reserved. Made with{" "}
+              &copy; 2025 InfoServices Tripura. All rights reserved. Made with{" "}
               <Heart className="inline h-4 w-4 text-red-500 mx-1" />
               for the people of Tripura.
             </p>
