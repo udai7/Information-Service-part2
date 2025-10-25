@@ -468,6 +468,11 @@ export interface CreateEmployeeRequest {
   salary?: number;
 }
 
+export interface UpdatePostRequest {
+  postName: string;
+  rank: string;
+}
+
 export interface UpdateEmployeeRequest {
   name: string;
   email: string;
@@ -513,7 +518,7 @@ export interface UpdateGrievanceRequest {
 
 // API Client Configuration
 export const API_BASE_URL =
-  process.env.NODE_ENV === "production"
+  import.meta.env.MODE === "production"
     ? "https://your-production-api.com/api"
     : "http://localhost:3001/api";
 
@@ -784,6 +789,18 @@ export class ApiClient {
     });
   }
 
+  async deleteContactFromService(
+    serviceId: number,
+    contactId: number,
+  ): Promise<ApiResponse> {
+    return this.makeRequest<ApiResponse>(
+      `/contact-services/${serviceId}/contacts/${contactId}`,
+      {
+        method: "DELETE",
+      },
+    );
+  }
+
   // Office Management API methods
 
   // Get office by name
@@ -830,6 +847,21 @@ export class ApiClient {
       `/offices/${officeId}/posts/${postId}/employees`,
       {
         method: "POST",
+        body: JSON.stringify(data),
+      },
+    );
+  }
+
+  // Update a post
+  async updatePost(
+    officeId: number,
+    postId: number,
+    data: UpdatePostRequest,
+  ): Promise<PostResponse> {
+    return this.makeRequest<PostResponse>(
+      `/offices/${officeId}/posts/${postId}`,
+      {
+        method: "PUT",
         body: JSON.stringify(data),
       },
     );

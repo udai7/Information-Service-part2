@@ -58,6 +58,7 @@ export const englishTranslations = {
   contacts: {
     title: "Contact Directory 📞",
     subtitle: "Government office contacts:",
+    selectService: "Please select a contact service:",
     noContacts: "No contacts found.",
     selectType: "Please select contact type:",
     selectLocation: "Please select location:",

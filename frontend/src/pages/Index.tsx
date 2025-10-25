@@ -14,7 +14,6 @@ import {
   Zap,
   Users,
   ArrowRight,
-  CheckCircle,
   Globe,
   Award,
   Clock,
@@ -61,7 +60,7 @@ export default function Index() {
       icon: <Globe className="h-5 w-5" />,
     },
     {
-      label: "Happy Clients",
+      label: "Grievances Solved",
       value: "10K+",
       icon: <Users className="h-5 w-5" />,
     },
@@ -376,7 +375,7 @@ export default function Index() {
           </div>
           <div className="border-t border-gray-800 mt-12 pt-8 text-center">
             <p className="text-gray-400 text-lg">
-              &copy; 2024 InfoServices Tripura. All rights reserved. Made with{" "}
+              &copy; 2025 InfoServices Tripura. All rights reserved. Made with{" "}
               <Heart className="inline h-4 w-4 text-red-500 mx-1" />
               for the people of Tripura.
             </p>

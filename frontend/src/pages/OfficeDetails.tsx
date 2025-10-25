@@ -54,6 +54,8 @@ const OfficeDetails: React.FC = () => {
   });
   const [showAddEmployeeDialog, setShowAddEmployeeDialog] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
+  const [editingPost, setEditingPost] = useState<Post | null>(null);
+  const [showEditPostDialog, setShowEditPostDialog] = useState(false);
 
   useEffect(() => {
     if (officeName) {
@@ -235,6 +237,38 @@ const OfficeDetails: React.FC = () => {
     );
   };
 
+  const handleEditPost = async () => {
+    if (!editingPost || !officeId) return;
+
+    try {
+      const response = await apiClient.updatePost(officeId, editingPost.id, {
+        postName: editingPost.postName,
+        rank: editingPost.rank,
+      });
+
+      setPosts(
+        posts.map((post) =>
+          post.id === editingPost.id ? { ...post, ...response.post } : post,
+        ),
+      );
+
+      setEditingPost(null);
+      setShowEditPostDialog(false);
+
+      toast({
+        title: "Success",
+        description: "Post updated successfully",
+      });
+    } catch (error) {
+      console.error("Error updating post:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update post",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="flex min-h-screen">
       <div className="flex-1 bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -401,14 +435,25 @@ const OfficeDetails: React.FC = () => {
                             </p>
                           )}
                         </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => toggleExpansion(post.id)}
-                          className="ml-4"
-                        >
-                          {post.isExpanded ? "Collapse" : "Expand"}
-                        </Button>
+                        <div className="flex gap-2 ml-4">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setEditingPost(post);
+                              setShowEditPostDialog(true);
+                            }}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => toggleExpansion(post.id)}
+                          >
+                            {post.isExpanded ? "Collapse" : "Expand"}
+                          </Button>
+                        </div>
                       </div>
                     </CardHeader>
                     {post.isExpanded && (
@@ -685,6 +730,60 @@ const OfficeDetails: React.FC = () => {
               </>
             )}
           </div>
+
+          {/* Edit Post Dialog */}
+          <Dialog
+            open={showEditPostDialog}
+            onOpenChange={setShowEditPostDialog}
+          >
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Edit Post</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="postName">Post Name</Label>
+                  <Input
+                    id="postName"
+                    value={editingPost?.postName || ""}
+                    onChange={(e) =>
+                      setEditingPost(
+                        editingPost
+                          ? { ...editingPost, postName: e.target.value }
+                          : null,
+                      )
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="rank">Rank</Label>
+                  <Input
+                    id="rank"
+                    value={editingPost?.rank || ""}
+                    onChange={(e) =>
+                      setEditingPost(
+                        editingPost
+                          ? { ...editingPost, rank: e.target.value }
+                          : null,
+                      )
+                    }
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowEditPostDialog(false);
+                    setEditingPost(null);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button onClick={handleEditPost}>Update Post</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </div>
