@@ -1,252 +1,304 @@
-# Government Services Platform
+# Government Services Information Platform
 
-A comprehensive full-stack web application for managing government services, built with React, TypeScript, Node.js, Express, and PostgreSQL.
+A comprehensive full-stack web application for managing and accessing government services, schemes, certificates, and grievances. The platform includes a citizen-facing web portal, administrative dashboard, and WhatsApp bot integration for multi-channel service delivery.
 
-## 🏗️ Project Structure
+## 🌟 Features
 
-```
-government-services-platform/
-├── frontend/                 # React frontend application
-│   ├── src/
-│   │   ├── components/       # Reusable UI components
-│   │   ├── contexts/         # React contexts
-│   │   ├── hooks/           # Custom React hooks
-│   │   ├── lib/             # Utility libraries
-│   │   ├── pages/           # Application pages/routes
-│   │   ├── types/           # TypeScript type definitions
-│   │   ├── App.tsx          # Main application component
-│   │   └── global.css       # Global styles
-│   ├── public/              # Static assets
-│   ├── index.html           # HTML entry point
-│   ├── package.json         # Frontend dependencies
-│   ├── vite.config.ts       # Vite configuration
-│   ├── tailwind.config.ts   # Tailwind CSS configuration
-│   └── tsconfig.json        # TypeScript configuration
-│
-├── backend/                 # Express.js backend API
-│   ├── routes/              # API route handlers
-│   ├── shared/              # Shared types and utilities
-│   ├── prisma/              # Database schema and migrations
-│   ├── index.ts             # Express server entry point
-│   ├── package.json         # Backend dependencies
-│   └── tsconfig.json        # TypeScript configuration
-│
-├── package.json             # Root package.json for monorepo scripts
-└── README.md               # This file
-```
+### For Citizens
 
-## 🚀 Quick Start
+- **📋 Scheme Services**: Browse and apply for various government schemes
+- **📜 Certificate Services**: Apply for certificates online (Birth, Death, Caste, Income, etc.)
+- **📞 Contact Services**: Access government office contact information
+- **📝 Feedback & Grievances**: Submit feedback and track grievance status
+- **🚨 Emergency Services**: Quick access to emergency contact numbers
+- **💬 WhatsApp Bot**: Interact with services via WhatsApp in Bengali and English
 
-### Prerequisites
+### For Administrators
 
-- Node.js (v18 or higher)
-- PostgreSQL database
-- npm or yarn package manager
-
-### Installation
-
-1. **Clone the repository**
-
-   ```bash
-   git clone <repository-url>
-   cd government-services-platform
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm run install:all
-   ```
-
-3. **Set up environment variables**
-
-   Create `.env` file in the backend directory:
-
-   ```env
-   DATABASE_URL="postgresql://username:password@localhost:5432/government_services"
-   JWT_SECRET="your-jwt-secret-key"
-   PORT=3001
-   ```
-
-4. **Set up the database**
-
-   ```bash
-   npm run db:generate
-   npm run db:push
-   ```
-
-5. **Start development servers**
-
-   ```bash
-   npm run dev
-   ```
-
-   This will start:
-
-   - Frontend: http://localhost:5173
-   - Backend: http://localhost:3001
-
-## 📝 Available Scripts
-
-### Root Level Commands
-
-- `npm run install:all` - Install dependencies for both frontend and backend
-- `npm run dev` - Start both frontend and backend in development mode
-- `npm run build` - Build both frontend and backend for production
-- `npm run start` - Start the production backend server
-
-### Frontend Commands
-
-- `cd frontend && npm run dev` - Start frontend development server
-- `cd frontend && npm run build` - Build frontend for production
-- `cd frontend && npm run preview` - Preview production build
-
-### Backend Commands
-
-- `cd backend && npm run dev` - Start backend development server
-- `cd backend && npm run build` - Build backend for production
-- `cd backend && npm start` - Start production backend server
-
-### Database Commands
-
-- `npm run db:generate` - Generate Prisma client
-- `npm run db:push` - Push schema changes to database
-- `npm run db:migrate` - Run database migrations
-- `npm run db:studio` - Open Prisma Studio
-
-## 🛠️ Technology Stack
-
-### Frontend
-
-- **React 18** with TypeScript
-- **Vite** for build tooling
-- **Tailwind CSS** for styling
-- **Radix UI** for accessible components
-- **React Router** for navigation
-- **React Query** for server state management
-- **React Hook Form** for form management
-
-### Backend
-
-- **Node.js** with TypeScript
-- **Express.js** web framework
-- **Prisma** ORM with PostgreSQL
-- **JWT** for authentication
-- **Express Validator** for input validation
-- **Bcrypt** for password hashing
-- **Multer** for file uploads
-
-## 🎯 Features
-
-### User Services
-
-- **Scheme Services** - Browse and access government schemes
-- **Certificate Services** - Apply for various certificates
-- **Contact Services** - Find contact information for departments
-- **Emergency Services** - Access emergency contacts and services
-- **Feedback System** - Submit feedback and suggestions
-- **Grievance Portal** - File and track grievances
-
-### Admin Dashboard
-
-- **Service Management** - Create, edit, and manage all services
-- **User Management** - Manage user accounts and permissions
-- **Content Management** - Update service information and documents
-- **Analytics** - View usage statistics and reports
+- **👨‍💼 Admin Dashboard**: Centralized management interface
+- **📊 Service Management**: Create, edit, and manage all services
+- **👥 Application Review**: Review and process certificate applications
+- **📈 Analytics**: View service statistics and user engagement
+- **🔐 Secure Authentication**: Role-based access control with JWT
 
 ### Technical Features
 
-- **Responsive Design** - Works on all device sizes
-- **Authentication & Authorization** - Secure login system
-- **File Upload** - Support for document uploads
-- **Search & Filtering** - Advanced search capabilities
-- **Real-time Updates** - Live data synchronization
+- **🎨 Modern UI**: Built with React, TypeScript, and Tailwind CSS
+- **⚡ Real-time Updates**: Fast and responsive user experience
+- **🔒 Secure**: JWT authentication, input validation, and secure data handling
+- **📱 Responsive Design**: Mobile-first approach for all devices
+- **🌐 Multi-language**: Support for Bengali and English
+- **🐳 Docker Support**: Easy deployment with Docker containers
 
-## 🚀 Deployment
+## 🏗️ Technology Stack
 
-### Building for Production
+### Frontend
 
-1. **Build the applications**
+- **Framework**: React 18 with TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: Radix UI, shadcn/ui
+- **State Management**: React Query (TanStack Query)
+- **Routing**: React Router v6
+- **Build Tool**: Vite
+- **Animations**: Framer Motion
+- **3D Graphics**: Three.js, React Three Fiber
 
-   ```bash
-   npm run build
-   ```
+### Backend
 
-2. **Set up production environment variables**
+- **Runtime**: Node.js
+- **Framework**: Express.js with TypeScript
+- **Database**: PostgreSQL
+- **ORM**: Prisma
+- **Authentication**: JWT (jsonwebtoken), bcryptjs
+- **Validation**: Express Validator, Zod
+- **File Upload**: Multer
 
-   - Configure production database
-   - Set secure JWT secrets
-   - Configure CORS settings
+### WhatsApp Bot
 
-3. **Deploy backend**
+- **Platform**: WhatsApp Business API
+- **Language**: TypeScript
+- **Database**: PostgreSQL (Prisma)
+- **Caching**: Node Cache
+- **Languages**: Bengali, English
 
-   - Upload `backend/dist` folder to your server
-   - Install production dependencies
-   - Set up process manager (PM2 recommended)
+### DevOps
 
-4. **Deploy frontend**
-   - Upload `frontend/dist` folder to your web server
-   - Configure web server (Nginx/Apache) to serve static files
-   - Set up reverse proxy to backend API
+- **Containerization**: Docker, Docker Compose
+- **Web Server**: Nginx (reverse proxy)
+- **Database**: PostgreSQL 15
+- **CI/CD Ready**: Structured for deployment pipelines
 
-### Environment Variables
+## 📁 Project Structure
 
-#### Backend (.env)
+```
+Information-Service-part2/
+├── frontend/                 # React frontend application
+│   ├── src/
+│   │   ├── components/      # Reusable UI components
+│   │   ├── pages/           # Page components
+│   │   ├── contexts/        # React contexts (Auth)
+│   │   ├── hooks/           # Custom React hooks
+│   │   ├── lib/             # Utility functions
+│   │   └── types/           # TypeScript type definitions
+│   └── public/              # Static assets
+├── backend/                  # Express.js backend API
+│   ├── routes/              # API route handlers
+│   │   ├── adminAuth.ts     # Admin authentication
+│   │   ├── schemeService.ts # Scheme management
+│   │   ├── certificateService.ts
+│   │   ├── contactService.ts
+│   │   ├── feedback.ts
+│   │   └── grievance.ts
+│   ├── prisma/              # Database schema and migrations
+│   │   ├── schema.prisma    # Prisma schema
+│   │   └── migrations/      # Database migrations
+│   ├── types/               # TypeScript types
+│   └── shared/              # Shared utilities
+├── whatsapp-bot/            # WhatsApp bot service
+│   ├── src/
+│   │   ├── handlers/        # Message handlers
+│   │   ├── services/        # Business logic
+│   │   ├── translations/    # Multi-language support
+│   │   └── utils/           # Utility functions
+│   └── prisma/              # Bot database schema
+├── docker-compose.yml       # Docker orchestration
+├── Dockerfile               # Container image definition
+└── nginx.conf               # Nginx configuration
 
-```env
-DATABASE_URL="postgresql://user:password@host:port/database"
-JWT_SECRET="your-secure-jwt-secret"
-PORT=3001
-NODE_ENV="production"
-CORS_ORIGIN="https://your-frontend-domain.com"
 ```
 
-## 🔧 Development
+## 🎯 Core Services
 
-### Adding New Features
+### 1. Scheme Services
 
-1. **Backend API Endpoints**
+- Government welfare schemes
+- Eligibility checking
+- Application guidance
+- Online/offline application modes
 
-   - Create route handlers in `backend/routes/`
-   - Add types to `backend/shared/api.ts`
-   - Update database schema if needed
+### 2. Certificate Services
 
-2. **Frontend Components**
-   - Create components in `frontend/src/components/`
-   - Add pages in `frontend/src/pages/`
-   - Update types in `frontend/src/types/`
+- Birth Certificate
+- Death Certificate
+- Caste Certificate
+- Income Certificate
+- Domicile Certificate
+- Character Certificate
+- Application tracking
+- Document upload
 
-### Code Style
+### 3. Contact Services
 
-- Use TypeScript for all new code
-- Follow ESLint and Prettier configurations
-- Use meaningful component and function names
-- Add proper error handling and validation
+- Government office directory
+- Department information
+- Contact details (phone, email, address)
+- Office hours and locations
 
-## 📊 Database Schema
+### 4. Feedback & Grievance System
 
-The application uses PostgreSQL with Prisma ORM. Key entities include:
+- Submit feedback
+- File grievances
+- Track complaint status
+- Admin resolution workflow
 
-- **Admin** - Administrator accounts
-- **SchemeService** - Government schemes
-- **CertificateService** - Certificate services
-- **ContactService** - Department contacts
-- **EmergencyService** - Emergency services
-- **Feedback** - User feedback
-- **Grievance** - User grievances
+### 5. Emergency Services
+
+- Quick access to emergency numbers
+- Police, Fire, Ambulance
+- Helpline numbers
+
+## 🚀 Quick Start
+
+See [SETUP.md](SETUP.md) for detailed setup instructions for:
+
+- Frontend setup
+- Backend setup
+- WhatsApp Bot setup
+- Docker deployment
+
+## 📚 Documentation
+
+- [SETUP.md](SETUP.md) - Complete setup guide for all services
+- [BACKEND_README.md](BACKEND_README.md) - Backend API documentation
+- [DATABASE_SETUP.md](DATABASE_SETUP.md) - Database configuration guide
+- [WHATSAPP_BOT_INTEGRATION.md](WHATSAPP_BOT_INTEGRATION.md) - WhatsApp bot guide
+- [DEPLOYMENT.md](DEPLOYMENT.md) - Deployment instructions
+
+## 🔐 Environment Variables
+
+### Backend (.env)
+
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/government_services"
+JWT_SECRET="your-secret-key"
+PORT=3001
+NODE_ENV=development
+```
+
+### Frontend (.env)
+
+```env
+VITE_API_URL=http://localhost:3001
+```
+
+### WhatsApp Bot (.env)
+
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/government_services"
+WHATSAPP_API_URL="your-whatsapp-api-url"
+WHATSAPP_API_TOKEN="your-api-token"
+PORT=3002
+```
+
+## 🗄️ Database Models
+
+- **Admin**: Administrator accounts
+- **SchemeService**: Government schemes
+- **CertificateService**: Certificate types and applications
+- **CertificateApplication**: User applications
+- **ContactService**: Government office contacts
+- **Feedback**: User feedback
+- **Grievance**: User complaints
+- **WhatsAppUser**: WhatsApp bot users
+- **WhatsAppSession**: Conversation sessions
+
+## 🛣️ API Endpoints
+
+### Authentication
+
+- `POST /api/admin/register` - Register admin
+- `POST /api/admin/login` - Admin login
+- `GET /api/admin/profile` - Get admin profile
+
+### Schemes
+
+- `GET /api/schemes` - List all schemes
+- `POST /api/schemes` - Create scheme (admin)
+- `PUT /api/schemes/:id` - Update scheme (admin)
+- `DELETE /api/schemes/:id` - Delete scheme (admin)
+
+### Certificates
+
+- `GET /api/certificates` - List certificate services
+- `POST /api/certificates/apply` - Submit application
+- `GET /api/certificates/applications` - List applications (admin)
+
+### Contact Services
+
+- `GET /api/contacts` - List all contacts
+- `POST /api/contacts` - Create contact (admin)
+
+### Feedback & Grievances
+
+- `POST /api/feedback` - Submit feedback
+- `POST /api/grievances` - File grievance
+- `GET /api/grievances/:id` - Track grievance status
+
+## 🎨 UI Components
+
+Built with **shadcn/ui** and **Radix UI**:
+
+- Buttons, Cards, Dialogs
+- Forms with validation
+- Tables with sorting and filtering
+- Toasts and notifications
+- Accordions and tabs
+- Dropdowns and selects
+- And many more...
+
+## 🔒 Security Features
+
+- JWT-based authentication
+- Password hashing with bcrypt
+- Input validation and sanitization
+- CORS configuration
+- SQL injection prevention (Prisma)
+- XSS protection
+- Secure file upload handling
+
+## 🌐 Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## 📱 WhatsApp Bot Commands
+
+- **Start**: Initiate conversation
+- **Schemes**: Browse schemes
+- **Certificates**: Apply for certificates
+- **Contact**: Get office contacts
+- **Emergency**: Emergency numbers
+- **Language**: Switch between Bengali/English
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## 📄 License
 
 This project is licensed under the MIT License.
 
+## 👥 Authors
+
+Government Services Platform Development Team
+
+## 🙏 Acknowledgments
+
+- React and TypeScript communities
+- Prisma team
+- shadcn/ui for amazing components
+- All contributors and testers
+
 ## 📞 Support
 
-For questions or support, please contact the development team or create an issue in the repository.
+For support, email support@govservices.com or create an issue in the repository.
+
+---
+
+**Made with ❤️ for better government service delivery**
