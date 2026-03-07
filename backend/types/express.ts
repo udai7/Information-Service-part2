@@ -8,7 +8,14 @@ declare global {
         id: number;
         email: string;
         name: string;
-        role?: string;
+        role: string;
+        isActive: boolean;
+        departmentId?: number | null;
+        department?: {
+          id: number;
+          name: string;
+          code: string;
+        } | null;
       };
     }
   }
@@ -20,5 +27,17 @@ export type RequestHandler = (
   res: Response,
 ) => Promise<void> | void;
 export type AdminRequest = Request & {
-  admin: { id: number; email: string; name: string; role?: string };
+  admin: {
+    id: number;
+    email: string;
+    name: string;
+    role: string;
+    isActive: boolean;
+    departmentId?: number | null;
+    department?: {
+      id: number;
+      name: string;
+      code: string;
+    } | null;
+  };
 };

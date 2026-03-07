@@ -1,11 +1,10 @@
 import express, { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
 import { body, param, validationResult } from "express-validator";
-import { authenticateAdmin } from "./adminAuth";
+import { prisma } from "../lib/prisma";
+import { authenticateAdmin } from "../middleware/auth";
 import "../types/express";
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
 // GET /api/certificate-services - Get all certificate services
 router.get("/", authenticateAdmin, async (req: Request, res: Response) => {

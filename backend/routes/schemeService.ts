@@ -1,11 +1,10 @@
 import express, { Request, Response } from "express";
 import { body, validationResult, param } from "express-validator";
-import { PrismaClient } from "@prisma/client";
-import { authenticateAdmin } from "./adminAuth";
+import { prisma } from "../lib/prisma";
+import { authenticateAdmin } from "../middleware/auth";
 import "../types/express";
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
 // Create new scheme service (basic information)
 router.post(

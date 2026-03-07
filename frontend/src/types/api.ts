@@ -5,6 +5,55 @@ export interface Admin {
   email: string;
   name: string;
   role: string;
+  phone?: string;
+  isActive?: boolean;
+  lastLogin?: string;
+  departmentId?: number | null;
+  department?: Department | null;
+  createdAt: string;
+}
+
+export interface Department {
+  id: number;
+  name: string;
+  code: string;
+  description?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  _count?: {
+    admins: number;
+    schemeServices: number;
+    certificateServices: number;
+    contactServices: number;
+    grievances: number;
+    feedbacks: number;
+  };
+}
+
+export interface AuditLogEntry {
+  id: number;
+  action: string;
+  entity: string;
+  entityId?: number;
+  details?: any;
+  ipAddress?: string;
+  userAgent?: string;
+  adminId?: number;
+  admin?: { id: number; name: string; email: string };
+  createdAt: string;
+}
+
+export interface NotificationEntry {
+  id: number;
+  adminId: number;
+  title: string;
+  message: string;
+  type: string;
+  isRead: boolean;
+  link?: string;
   createdAt: string;
 }
 
@@ -556,28 +605,27 @@ export class ApiClient {
       headers.Authorization = `Bearer ${this.token}`;
     }
 
-    console.log("API Request:", {
-      url,
-      method: options.method || "GET",
-      hasToken: !!this.token,
-      headers,
-      body: options.body,
-    });
-
     const response = await fetch(url, {
       ...options,
       headers,
-    });
-
-    console.log("API Response:", {
-      status: response.status,
-      statusText: response.statusText,
-      ok: response.ok,
+      credentials: "include", // Include cookies for refresh token
     });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error("API Error:", errorData);
+
+      // Handle token expiry — attempt refresh
+      if (response.status === 401 && errorData.code === "TOKEN_EXPIRED") {
+        const refreshed = await this.attemptTokenRefresh();
+        if (refreshed) {
+          // Retry the original request with new token
+          headers.Authorization = `Bearer ${this.token}`;
+          const retryResponse = await fetch(url, { ...options, headers, credentials: "include" });
+          if (retryResponse.ok) {
+            return retryResponse.json();
+          }
+        }
+      }
 
       // Handle validation errors specifically
       if (response.status === 400 && errorData.errors) {
@@ -603,11 +651,147 @@ export class ApiClient {
     });
   }
 
-  async register(data: RegisterRequest): Promise<AuthResponse> {
+  async register(data: RegisterRequest & { role?: string; departmentId?: number; phone?: string }): Promise<AuthResponse> {
     return this.makeRequest<AuthResponse>("/auth/register", {
       method: "POST",
       body: JSON.stringify(data),
     });
+  }
+
+  async refreshToken(): Promise<{ token: string; admin: Admin }> {
+    return this.makeRequest<{ token: string; admin: Admin }>("/auth/refresh", {
+      method: "POST",
+    });
+  }
+
+  async logout(): Promise<void> {
+    await this.makeRequest<any>("/auth/logout", { method: "POST" }).catch(() => {});
+    this.clearToken();
+  }
+
+  async changePassword(currentPassword: string, newPassword: string): Promise<any> {
+    return this.makeRequest<any>("/auth/change-password", {
+      method: "PUT",
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
+  }
+
+  private async attemptTokenRefresh(): Promise<boolean> {
+    try {
+      const result = await fetch(`${this.baseURL}/auth/refresh`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+      if (result.ok) {
+        const data = await result.json();
+        if (data.token) {
+          this.setToken(data.token);
+          return true;
+        }
+      }
+    } catch {
+      // Refresh failed
+    }
+    return false;
+  }
+
+  // ─── Department Methods ───
+  async getDepartments(): Promise<{ departments: Department[] }> {
+    return this.makeRequest<{ departments: Department[] }>("/departments");
+  }
+
+  async getDepartment(id: number): Promise<{ department: Department }> {
+    return this.makeRequest<{ department: Department }>(`/departments/${id}`);
+  }
+
+  async createDepartment(data: { name: string; code: string; description?: string; contactEmail?: string; contactPhone?: string }): Promise<{ department: Department }> {
+    return this.makeRequest<{ department: Department }>("/departments", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateDepartment(id: number, data: Partial<Department>): Promise<{ department: Department }> {
+    return this.makeRequest<{ department: Department }>(`/departments/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  }
+
+  async toggleDepartment(id: number): Promise<{ department: Department }> {
+    return this.makeRequest<{ department: Department }>(`/departments/${id}/toggle`, {
+      method: "PATCH",
+    });
+  }
+
+  async getPublicDepartments(): Promise<{ departments: Department[] }> {
+    return this.makeRequest<{ departments: Department[] }>("/departments/public/list");
+  }
+
+  async getDepartmentStats(id: number): Promise<{ stats: any }> {
+    return this.makeRequest<{ stats: any }>(`/departments/${id}/stats`);
+  }
+
+  // ─── Admin Management Methods ───
+  async getAdmins(): Promise<{ admins: Admin[] }> {
+    return this.makeRequest<{ admins: Admin[] }>("/admin");
+  }
+
+  async getAdmin(id: number): Promise<{ admin: Admin }> {
+    return this.makeRequest<{ admin: Admin }>(`/admin/${id}`);
+  }
+
+  async updateAdmin(id: number, data: Partial<Admin>): Promise<{ admin: Admin }> {
+    return this.makeRequest<{ admin: Admin }>(`/admin/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  }
+
+  async toggleAdmin(id: number): Promise<{ admin: Admin }> {
+    return this.makeRequest<{ admin: Admin }>(`/admin/${id}/toggle`, {
+      method: "PATCH",
+    });
+  }
+
+  async deleteAdmin(id: number): Promise<any> {
+    return this.makeRequest<any>(`/admin/${id}`, { method: "DELETE" });
+  }
+
+  async unlockAdmin(id: number): Promise<any> {
+    return this.makeRequest<any>(`/admin/${id}/unlock`, { method: "PATCH" });
+  }
+
+  async resetAdminPassword(id: number, newPassword: string): Promise<any> {
+    return this.makeRequest<any>(`/admin/${id}/reset-password`, {
+      method: "PATCH",
+      body: JSON.stringify({ newPassword }),
+    });
+  }
+
+  // ─── Audit Log Methods ───
+  async getAuditLogs(params?: { page?: number; limit?: number; action?: string; entity?: string }): Promise<{ logs: AuditLogEntry[]; pagination: any }> {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append("page", params.page.toString());
+    if (params?.limit) queryParams.append("limit", params.limit.toString());
+    if (params?.action) queryParams.append("action", params.action);
+    if (params?.entity) queryParams.append("entity", params.entity);
+    const query = queryParams.toString();
+    return this.makeRequest<{ logs: AuditLogEntry[]; pagination: any }>(`/audit-logs${query ? `?${query}` : ""}`);
+  }
+
+  // ─── Notification Methods ───
+  async getNotifications(page = 1): Promise<{ notifications: NotificationEntry[]; unreadCount: number; pagination: any }> {
+    return this.makeRequest<{ notifications: NotificationEntry[]; unreadCount: number; pagination: any }>(`/notifications?page=${page}`);
+  }
+
+  async markNotificationRead(id: number): Promise<any> {
+    return this.makeRequest<any>(`/notifications/${id}/read`, { method: "PATCH" });
+  }
+
+  async markAllNotificationsRead(): Promise<any> {
+    return this.makeRequest<any>("/notifications/read-all", { method: "PATCH" });
   }
 
   async getProfile(): Promise<AuthResponse> {

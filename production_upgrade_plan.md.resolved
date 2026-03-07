@@ -1,0 +1,847 @@
+# 🏛️ Government Services Platform — Production Upgrade Plan
+
+> **Target Scale:** 4 million users · Multi-department · Production-grade security
+> **Current State:** Single-admin prototype with critical security gaps
+> **Date:** 2026-03-07
+
+---
+
+## Table of Contents
+
+1. [Security Audit & Vulnerabilities](#1-security-audit--vulnerabilities-found)
+2. [Role-Based Access Control (RBAC)](#2-role-based-access-control-rbac)
+3. [Department System Architecture](#3-department-system-architecture)
+4. [Database Schema Redesign](#4-database-schema-redesign)
+5. [Backend Hardening](#5-backend-hardening)
+6. [Frontend Overhaul](#6-frontend-overhaul)
+7. [Scalability for 4M Users](#7-scalability-for-4-million-users)
+8. [Additional Features for Production](#8-additional-features-for-production)
+9. [Implementation Phases](#9-implementation-phases)
+10. [Deployment Architecture](#10-deployment-architecture)
+
+---
+
+## 1. Security Audit & Vulnerabilities Found
+
+> [!CAUTION]
+> The following are **critical security issues** that must be fixed before any production deployment. Several of these could lead to complete system compromise.
+
+### 🔴 CRITICAL — Fix Immediately
+
+| # | Vulnerability | File(s) | Description |
+|---|---|---|---|
+| 1 | **Open Registration Endpoint** | [adminAuth.ts](file:///home/archilect/Information-Service-part2/backend/routes/adminAuth.ts#L12-L77) | Anyone can register as an admin via `POST /api/auth/register`. There is **zero access control** — any internet user can create an admin account and gain full system access. |
+| 2 | **Admin Routes Without Auth** | [grievance.ts](file:///home/archilect/Information-Service-part2/backend/routes/grievance.ts), [feedback.ts](file:///home/archilect/Information-Service-part2/backend/routes/feedback.ts) | Routes marked as "admin only" (GET all grievances, PUT/DELETE grievances, GET/PUT/DELETE feedbacks) have **no [authenticateAdmin](file:///home/archilect/Information-Service-part2/backend/routes/adminAuth.ts#131-163) middleware**. Anyone can read, modify, or delete all citizen data. |
+| 3 | **Hardcoded JWT Fallback Secrets** | [adminAuth.ts:63](file:///home/archilect/Information-Service-part2/backend/routes/adminAuth.ts#L63), [simpleAuth.ts:38](file:///home/archilect/Information-Service-part2/backend/routes/simpleAuth.ts#L38) | `process.env.JWT_SECRET \|\| "your-secret-key"` and `"fallback-secret"` — if env var is missing, attacker can forge tokens with the default secret. |
+| 4 | **Mock Auth Route Left in Codebase** | [mockAuth.ts](file:///home/archilect/Information-Service-part2/backend/routes/mockAuth.ts) | Stores passwords in plaintext in memory. Even though not mounted in [index.ts](file:///home/archilect/Information-Service-part2/backend/index.ts), it's a code smell and potential risk if accidentally imported. |
+| 5 | **Duplicate Route Mounting** | [index.ts:54-55](file:///home/archilect/Information-Service-part2/backend/index.ts#L54-L55) | `feedbackRoutes` and `grievanceRoutes` are mounted **twice** each — increases attack surface and causes confusion. |
+| 6 | **Error Messages Leak Internal Info** | Multiple route files | Error handlers return `error.message` to clients in non-development mode: `error instanceof Error ? error.message : "Unknown error"`. This leaks stack traces and internal DB error messages. |
+
+### 🟠 HIGH — Fix Before Production
+
+| # | Vulnerability | File(s) | Description |
+|---|---|---|---|
+| 7 | **No Rate Limiting** | All routes | No rate limiting on any endpoint. Login can be brute-forced. Public submission endpoints (grievance, feedback) can be spammed. The system will be trivially DDoSable. |
+| 8 | **No Helmet / Security Headers** | [index.ts](file:///home/archilect/Information-Service-part2/backend/index.ts) | No `helmet` middleware. Missing `X-Content-Type-Options`, `Strict-Transport-Security`, `X-Frame-Options`, CSP, etc. |
+| 9 | **Verbose Request Logging in Production** | [index.ts:39-44](file:///home/archilect/Information-Service-part2/backend/index.ts#L39-L44) | Logs **all headers and request bodies** to console. This will log passwords, tokens, PII. Must be removed or gated to dev-only. |
+| 10 | **No CSRF Protection** | Global | JWT-only auth with no CSRF token for state-changing operations. |
+| 11 | **JWT Token Too Long-Lived** | [adminAuth.ts:64](file:///home/archilect/Information-Service-part2/backend/routes/adminAuth.ts#L64), [simpleAuth.ts:39](file:///home/archilect/Information-Service-part2/backend/routes/simpleAuth.ts#L39) | `24h` and `7d` expiry with **no refresh token mechanism** and **no token revocation**. If a token is compromised, there's no way to invalidate it. |
+| 12 | **Password Policy Too Weak** | [adminAuth.ts:16](file:///home/archilect/Information-Service-part2/backend/routes/adminAuth.ts#L16) | Only requires `min: 6` characters. No requirement for uppercase, numbers, or special characters. Government systems need strong password policies. |
+| 13 | **No Input Sanitization** | Multiple routes | `body("name").notEmpty()` checks presence but doesn't sanitize against XSS payloads stored in DB fields (e.g., `<script>` in grievance description). |
+| 14 | **Multiple PrismaClient Instances** | Every route file | Each route file creates `new PrismaClient()` — will exhaust DB connection pool under load. Only [index.ts](file:///home/archilect/Information-Service-part2/backend/index.ts) and [officeManagement.ts](file:///home/archilect/Information-Service-part2/backend/routes/officeManagement.ts) share the singleton. |
+| 15 | **Frontend Stores Token in localStorage** | [AuthContext.tsx:77](file:///home/archilect/Information-Service-part2/frontend/src/contexts/AuthContext.tsx#L77) | Vulnerable to XSS — any injected script can steal the admin token. Should use `httpOnly` cookies. |
+| 16 | **Console.log Leaks in Frontend API Client** | [api.ts:554-565](file:///home/archilect/Information-Service-part2/frontend/src/types/api.ts#L559-L565) | Logs full request details including auth headers and tokens to browser console. |
+
+### 🟡 MEDIUM — Fix for Production Readiness
+
+| # | Issue | Description |
+|---|---|---|
+| 17 | **No Audit Logging** | No record of who did what, when. Required for government compliance. |
+| 18 | **No Data Encryption at Rest** | PII (names, emails, phone numbers, addresses) stored unencrypted. |
+| 19 | **No File Upload Validation** | `multer` is installed but file uploads aren't validated for type/content. |
+| 20 | **Tracking ID Collision Risk** | [generateTrackingId()](file:///home/archilect/Information-Service-part2/backend/routes/grievance.ts#8-14) in grievance.ts uses `Math.random()` — not cryptographically secure, collision possible at scale. |
+| 21 | **No Pagination Limit Enforcement** | Some routes accept unbounded `limit` query params — can dump entire tables. |
+| 22 | **Dead Code Files** | [simpleAuth.ts](file:///home/archilect/Information-Service-part2/backend/routes/simpleAuth.ts), [mockAuth.ts](file:///home/archilect/Information-Service-part2/backend/routes/mockAuth.ts), [demo.ts](file:///home/archilect/Information-Service-part2/backend/routes/demo.ts), [testAuth.ts](file:///home/archilect/Information-Service-part2/backend/routes/testAuth.ts), `*_new.tsx` files — dead code increases attack surface. |
+| 23 | **CORS Wildcard Risk** | Multiple hardcoded origins in CORS config. In production, should be strictly limited. |
+
+---
+
+## 2. Role-Based Access Control (RBAC)
+
+### Role Hierarchy
+
+```
+SuperAdmin (you)
+├── Full system control
+├── Create/manage departments
+├── Create/manage department admins
+├── View all data across departments
+├── System configuration
+└── Audit log access
+
+Department Admin (e.g., Police, Revenue, Health)
+├── Manage services within their department
+├── View/handle grievances routed to their department
+├── View/handle feedback for their department
+├── Manage department employees/posts
+└── View department-level analytics
+
+(Future: Department Staff)
+├── View-only access to department data
+├── Update grievance/feedback status
+└── Cannot create/delete services
+```
+
+### Permission Matrix
+
+| Action | SuperAdmin | Dept Admin | Public |
+|---|:---:|:---:|:---:|
+| Create departments | ✅ | ❌ | ❌ |
+| Create/manage admins | ✅ | ❌ | ❌ |
+| Assign admins to departments | ✅ | ❌ | ❌ |
+| Create services (any dept) | ✅ | Own dept only | ❌ |
+| Edit services | ✅ | Own dept only | ❌ |
+| Publish services | ✅ | Own dept only | ❌ |
+| View all grievances | ✅ | Own dept only | Own (via tracking) |
+| Handle grievances | ✅ | Own dept only | ❌ |
+| View all feedbacks | ✅ | Own dept only | ❌ |
+| Delete data | ✅ | Own dept (restricted) | ❌ |
+| View analytics | ✅ (global) | Own dept | ❌ |
+| Access audit logs | ✅ | ❌ | ❌ |
+| System settings | ✅ | ❌ | ❌ |
+| Submit grievance/feedback | ✅ | ✅ | ✅ |
+| View published services | ✅ | ✅ | ✅ |
+
+---
+
+## 3. Department System Architecture
+
+### Department Model
+
+```
+Department
+├── id, name, code (e.g., "POL", "REV", "HLT")
+├── description, contactEmail, contactPhone
+├── headOfDepartment (reference to Admin)
+├── isActive, createdAt, updatedAt
+│
+├── Admins[] ──── Department admins assigned here
+├── SchemeServices[] ──── Services belonging to this dept
+├── CertificateServices[]
+├── ContactServices[]
+├── Grievances[] ──── Grievances routed to this dept
+└── Feedbacks[] ──── Feedbacks tagged for this dept
+```
+
+### Sample Departments
+
+| Code | Department Name | Responsibility |
+|---|---|---|
+| `POL` | Police Department | Law enforcement, FIR services, safety |
+| `REV` | Revenue Department | Land records, tax, registrations |
+| `HLT` | Health Department | Hospitals, vaccination, health schemes |
+| `EDU` | Education Department | Schools, scholarships, examinations |
+| `PWD` | Public Works Department | Roads, buildings, infrastructure |
+| `AGR` | Agriculture Department | Farming schemes, subsidies, crop insurance |
+| `SOC` | Social Welfare | Pension, disability, SC/ST/OBC welfare |
+| `WRD` | Water Resources Department | Water supply, irrigation |
+| `ELC` | Electricity Department | Power supply, billing, connections |
+| `TRN` | Transport Department | Licenses, vehicle registration, permits |
+
+### Grievance Routing Flow
+
+```mermaid
+flowchart TD
+    A[Citizen Submits Grievance] --> B{Department Selected?}
+    B -->|Yes| C[Route to Department]
+    B -->|No / General| D[Goes to SuperAdmin Queue]
+    C --> E[Dept Admin Receives Notification]
+    E --> F[Dept Admin Reviews]
+    F --> G{Action}
+    G -->|Assign| H[Assign to Staff Member]
+    G -->|Escalate| I[Escalate to SuperAdmin]
+    G -->|Resolve| J[Mark Solved + Notes]
+    J --> K[Citizen Gets Status Update]
+    D --> L[SuperAdmin Routes to Department]
+    L --> C
+```
+
+---
+
+## 4. Database Schema Redesign
+
+### New Models to Add
+
+```prisma
+// ─── NEW: Department Model ───
+model Department {
+  id              Int      @id @default(autoincrement())
+  name            String   @unique
+  code            String   @unique  // e.g., "POL", "REV"
+  description     String?
+  contactEmail    String?
+  contactPhone    String?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  admins              Admin[]
+  schemeServices      SchemeService[]
+  certificateServices CertificateService[]
+  contactServices     ContactService[]
+  grievances          Grievance[]
+  feedbacks           Feedback[]
+}
+
+// ─── NEW: Audit Log ───
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  action     String   // CREATE, UPDATE, DELETE, LOGIN, etc.
+  entity     String   // Admin, SchemeService, Grievance, etc.
+  entityId   Int?
+  details    Json?    // What changed (old value → new value)
+  ipAddress  String?
+  userAgent  String?
+  adminId    Int?
+  admin      Admin?   @relation(fields: [adminId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@index([adminId])
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+// ─── NEW: Session Management (for token revocation) ───
+model Session {
+  id        String   @id @default(uuid())
+  adminId   Int
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  isActive  Boolean  @default(true)
+
+  @@index([adminId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
+// ─── NEW: Notification System ───
+model Notification {
+  id        Int      @id @default(autoincrement())
+  adminId   Int
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   // grievance_new, feedback_new, escalation, system
+  isRead    Boolean  @default(false)
+  link      String?  // Deep link to the relevant page
+  createdAt DateTime @default(now())
+
+  @@index([adminId, isRead])
+}
+
+// ─── NEW: Grievance Activity Log ───
+model GrievanceActivity {
+  id          Int      @id @default(autoincrement())
+  grievanceId Int
+  grievance   Grievance @relation(fields: [grievanceId], references: [id], onDelete: Cascade)
+  action      String   // status_change, assigned, note_added, escalated
+  fromValue   String?
+  toValue     String?
+  note        String?
+  performedBy String?  // Admin name
+  adminId     Int?
+  createdAt   DateTime @default(now())
+
+  @@index([grievanceId])
+}
+```
+
+### Modified Existing Models
+
+```diff
+model Admin {
+   id        Int      @id @default(autoincrement())
+   email     String   @unique
+   password  String
+   name      String
+-  role      String   @default("admin")
++  role      String   @default("department_admin") // "super_admin" | "department_admin"
++  phone     String?
++  isActive  Boolean  @default(true)
++  lastLogin DateTime?
++  loginAttempts Int   @default(0)
++  lockedUntil DateTime?
+   createdAt DateTime @default(now())
+   updatedAt DateTime @updatedAt
+
++  // Department relation
++  departmentId Int?
++  department   Department? @relation(fields: [departmentId], references: [id])
+
+   schemeServices      SchemeService[]
+   certificateServices CertificateService[]
+   contactServices     ContactService[]
++  auditLogs           AuditLog[]
++  sessions            Session[]
++  notifications       Notification[]
+}
+
+model Grievance {
+   // ... existing fields ...
++  departmentId  Int?
++  department    Department?  @relation(fields: [departmentId], references: [id])
++  activities    GrievanceActivity[]
++  escalatedAt   DateTime?
++  escalatedTo   String?    // SuperAdmin or higher department
++  slaDeadline   DateTime?  // Auto-calculated SLA
++  responseCount Int        @default(0)
+   // ... rest stays ...
+}
+
+model Feedback {
+   // ... existing fields ...
++  departmentId Int?
++  department   Department? @relation(fields: [departmentId], references: [id])
+}
+
+model SchemeService {
+   // ... existing fields ...
++  departmentId Int?
++  department   Department? @relation(fields: [departmentId], references: [id])
+}
+
+model CertificateService {
+   // ... existing fields ...
++  departmentId Int?
++  department   Department? @relation(fields: [departmentId], references: [id])
+}
+
+model ContactService {
+   // ... existing fields ...
++  departmentId Int?
++  department   Department? @relation(fields: [departmentId], references: [id])
+}
+```
+
+### Database Indexes for Performance at Scale
+
+```prisma
+// Add to schema.prisma for 4M user performance
+@@index([status, departmentId])     // on Grievance
+@@index([status, departmentId])     // on Feedback
+@@index([status, isActive])         // on all Service models
+@@index([departmentId, status])     // on all Service models
+@@index([createdAt])                // on Grievance, Feedback
+@@index([trackingId])               // on Grievance (already unique)
+@@index([email])                    // on Grievance, Feedback (for user lookups)
+```
+
+---
+
+## 5. Backend Hardening
+
+### 5.1 Immediate Security Fixes
+
+```
+Task List:
+├── ☐ Remove /api/auth/register from public access (or restrict to SuperAdmin-only)
+├── ☐ Add authenticateAdmin to ALL grievance and feedback admin routes
+├── ☐ Remove hardcoded JWT fallback secrets — CRASH if JWT_SECRET missing
+├── ☐ Delete mockAuth.ts, simpleAuth.ts, testAuth.ts, demo.ts
+├── ☐ Fix duplicate route mounting in index.ts
+├── ☐ Remove verbose request logging (or gate behind NODE_ENV === 'development')
+├── ☐ Stop leaking error.message to clients — return generic error in production
+├── ☐ Remove console.log from frontend API client
+```
+
+### 5.2 New Middleware Stack
+
+```
+Middleware Pipeline (in order):
+1. helmet()                           — Security headers
+2. cors(strictConfig)                 — Strict origin whitelist
+3. express.json({ limit: '1mb' })     — Body size limit
+4. rateLimiter (global)               — 100 req/min per IP
+5. rateLimiter (auth)                 — 5 login attempts/15min per IP
+6. rateLimiter (public submit)        — 10 submissions/hour per IP
+7. requestId middleware               — Unique ID per request for tracing
+8. structured logger (pino/winston)   — Replace console.log
+9. express.urlencoded                 — Form data
+10. routes...
+11. 404 handler
+12. Global error handler (sanitized)
+```
+
+### 5.3 Auth Overhaul
+
+```
+Changes:
+├── Access token: 15 minutes (short-lived)
+├── Refresh token: 7 days (httpOnly cookie, rotated on use)
+├── Token stored in httpOnly + Secure + SameSite=Strict cookie
+├── Session table for revocation (logout = delete session)
+├── Account lockout after 5 failed attempts (15 min lockout)
+├── Password policy: min 8 chars, 1 upper, 1 lower, 1 number, 1 special
+├── bcrypt rounds: 12 (already good)
+└── SuperAdmin-only endpoint to create new admins
+```
+
+### 5.4 New API Routes
+
+```
+Auth Routes:
+  POST   /api/auth/login                — Login (returns httpOnly cookie)
+  POST   /api/auth/refresh              — Refresh access token
+  POST   /api/auth/logout               — Invalidate session
+  GET    /api/auth/profile              — Get current admin profile
+  PUT    /api/auth/change-password      — Change own password
+
+SuperAdmin Routes:
+  POST   /api/admin/create              — Create department admin (SuperAdmin only)
+  GET    /api/admin/list                — List all admins
+  PUT    /api/admin/:id                 — Update admin
+  PATCH  /api/admin/:id/toggle          — Activate/deactivate admin
+  DELETE /api/admin/:id                 — Remove admin
+
+Department Routes:
+  POST   /api/departments               — Create department (SuperAdmin)
+  GET    /api/departments               — List all departments
+  GET    /api/departments/:id           — Get department details
+  PUT    /api/departments/:id           — Update department (SuperAdmin)
+  PATCH  /api/departments/:id/toggle    — Activate/deactivate (SuperAdmin)
+  GET    /api/departments/:id/stats     — Department analytics
+
+Audit Routes:
+  GET    /api/audit-logs                — View audit trail (SuperAdmin)
+  GET    /api/audit-logs/:entity/:id    — View logs for specific entity
+
+Notification Routes:
+  GET    /api/notifications             — Get my notifications
+  PATCH  /api/notifications/:id/read    — Mark as read
+  PATCH  /api/notifications/read-all    — Mark all as read
+```
+
+### 5.5 Singleton PrismaClient
+
+```typescript
+// backend/lib/prisma.ts — Single shared instance
+import { PrismaClient } from "@prisma/client";
+
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+
+export const prisma =
+  globalForPrisma.prisma ||
+  new PrismaClient({
+    log: process.env.NODE_ENV === "development" 
+      ? ["query", "warn", "error"] 
+      : ["error"],
+  });
+
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = prisma;
+}
+```
+
+---
+
+## 6. Frontend Overhaul
+
+### 6.1 Security Fixes
+
+```
+Frontend Security:
+├── ☐ Remove all console.log from API client
+├── ☐ Move token to httpOnly cookie (no more localStorage)
+├── ☐ Add CSRF token header to all mutations
+├── ☐ Sanitize all user-displayed content (DOMPurify)
+├── ☐ Add Content Security Policy meta tag
+└── ☐ Remove /admin/register page (admin creation via SuperAdmin only)
+```
+
+### 6.2 New Pages Needed
+
+```
+SuperAdmin Dashboard:
+├── /admin                         — Dashboard home (role-aware)
+├── /admin/departments             — Department management
+├── /admin/departments/:id         — Department detail + stats
+├── /admin/users                   — Admin user management
+├── /admin/users/create            — Create department admin
+├── /admin/audit-logs              — System audit trail
+├── /admin/system-settings         — Global config
+└── /admin/analytics               — Cross-department analytics
+
+Department Admin Dashboard:
+├── /admin                         — Dashboard home (dept-scoped)
+├── /admin/my-department           — Department overview
+├── /admin/grievances              — Dept grievances (filtered)
+├── /admin/feedbacks               — Dept feedbacks (filtered)
+├── /admin/services                — Dept services
+└── /admin/team                    — Dept team members
+
+Public Pages (enhanced):
+├── /grievances-service            — Add department selector
+├── /feedback-service              — Add department selector
+└── /track/:trackingId             — Grievance tracking (dedicated)
+```
+
+### 6.3 Auth Context Upgrade
+
+```typescript
+// Enhanced AuthContext
+interface AuthContextType {
+  admin: Admin | null;
+  isLoading: boolean;
+  isSuperAdmin: boolean;         // NEW
+  isDepartmentAdmin: boolean;    // NEW
+  department: Department | null; // NEW
+  permissions: string[];         // NEW
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  isAuthenticated: boolean;
+}
+```
+
+### 6.4 Route Guards
+
+```typescript
+// Role-based route protection
+<Route element={<RequireAuth />}>                     {/* Any admin */}
+  <Route element={<RequireSuperAdmin />}>             {/* SuperAdmin only */}
+    <Route path="/admin/departments" ... />
+    <Route path="/admin/users" ... />
+    <Route path="/admin/audit-logs" ... />
+  </Route>
+  <Route element={<RequireDepartmentAccess />}>       {/* Dept-scoped */}
+    <Route path="/admin/grievances" ... />
+    <Route path="/admin/services" ... />
+  </Route>
+</Route>
+```
+
+---
+
+## 7. Scalability for 4 Million Users
+
+### 7.1 Database Optimization
+
+```
+PostgreSQL Tuning:
+├── Connection pooling: PgBouncer (min 20, max 100 connections)
+├── Read replicas for public-facing queries (services, tracking)
+├── Materialized views for analytics/stats dashboards
+├── Partitioning: Grievance table by createdAt (monthly partitions)
+├── Proper indexes on all frequently-queried columns
+├── VACUUM and ANALYZE schedules
+└── Query optimization: N+1 query elimination in Prisma
+
+Expected Query Volumes (4M users):
+├── Public service views:     ~50,000 req/day
+├── Grievance submissions:    ~5,000-10,000/day
+├── Feedback submissions:     ~2,000-5,000/day
+├── Grievance tracking:       ~20,000 req/day
+├── Admin panel (all admins):  ~5,000 req/day
+└── Peak multiplier:           3-5x during business hours
+```
+
+### 7.2 Caching Strategy
+
+```
+Redis Caching Layers:
+├── Published services list:    Cache 5 min, invalidate on publish/update
+├── Department list:            Cache 1 hour
+├── Individual service details: Cache 5 min
+├── Grievance tracking lookup:  Cache 1 min
+├── Admin session validation:   Cache 5 min
+├── Rate limit counters:        Redis-based (not in-memory)
+└── Dashboard statistics:       Cache 15 min, background refresh
+```
+
+### 7.3 Infrastructure Recommendations
+
+```
+Production Architecture:
+├── API Server: 2-4 instances behind load balancer (Nginx/ALB)
+├── Database: PostgreSQL 15+ with read replica
+├── Cache: Redis 7+ (ElastiCache or self-hosted)
+├── CDN: CloudFront/Cloudflare for frontend assets
+├── File Storage: S3/MinIO for grievance attachments
+├── Queue: BullMQ (Redis-backed) for async tasks
+│   ├── Email notifications
+│   ├── Grievance auto-routing
+│   ├── SLA breach alerts
+│   └── Report generation
+├── Monitoring: Prometheus + Grafana
+├── Logging: ELK stack or CloudWatch
+└── CI/CD: GitHub Actions → Docker → ECR → ECS/EC2
+```
+
+### 7.4 API Performance Targets
+
+| Endpoint | Target p95 Latency | Current Risk |
+|---|---|---|
+| GET /public/list (services) | < 100ms | No caching, N+1 queries |
+| POST /grievances | < 200ms | OK, but no rate limit |
+| GET /grievances/track/:id | < 50ms | OK with index |
+| GET /admin/dashboard | < 300ms | Multiple unoptimized queries |
+| POST /auth/login | < 500ms (bcrypt) | No rate limit, brute-forceable |
+
+---
+
+## 8. Additional Features for Production
+
+### 8.1 Essential Government Platform Features
+
+| Feature | Priority | Description |
+|---|:---:|---|
+| **Email Notifications** | P0 | Notify citizens on grievance status changes, notify admins on new submissions |
+| **SMS Integration** | P0 | Many users won't have email. Integrate Twilio/MSG91 for SMS updates |
+| **SLA Management** | P0 | Auto-set resolution deadlines per priority: Urgent=24h, High=3d, Medium=7d, Low=14d. Dashboard shows SLA breaches. |
+| **Grievance Escalation** | P0 | Auto-escalate to SuperAdmin if SLA breached. Dept admin can manually escalate. |
+| **File Attachments** | P1 | Proper file upload with virus scanning, type validation, and S3 storage for grievance evidence |
+| **Dashboard Analytics** | P1 | Charts: grievances by dept, resolution time, SLA compliance, service usage, feedback trends |
+| **Search & Filter** | P1 | Full-text search on grievances/services. Filter by date range, department, status, priority |
+| **Export to PDF/Excel** | P1 | Export grievance reports, service listings, analytics for government reporting |
+| **Bilingual Support (English/Bengali)** | P1 | i18n framework. Bengali translations for all public-facing pages |
+| **Accessibility (WCAG 2.1)** | P1 | Government websites must be accessible. Screen reader support, keyboard nav, high contrast |
+| **Print-Friendly Views** | P2 | Print grievance receipts, service details, certificates |
+| **Announcement System** | P2 | SuperAdmin can post public announcements/notices |
+| **FAQ/Knowledge Base** | P2 | Reduce grievance load by providing self-service answers |
+| **Citizen Portal** | P3 | Optional citizen account to track all their submissions in one place |
+
+### 8.2 Admin Experience Improvements
+
+| Feature | Description |
+|---|---|
+| **Real-time Notifications** | WebSocket-based bell icon showing new grievances/feedbacks |
+| **Bulk Operations** | Select multiple grievances → assign, change status, export |
+| **Canned Responses** | Pre-written response templates for common grievance resolutions |
+| **Internal Notes** | Admin-only notes on grievances visible to other admins but not citizens |
+| **Assignment Queue** | Auto-assign grievances round-robin among department admins |
+| **Activity Timeline** | Per-grievance history log: who changed what, when |
+| **Dashboard Widgets** | Customizable widgets: pending count, SLA breach count, recent activity |
+
+### 8.3 Compliance & Legal
+
+| Requirement | Action |
+|---|---|
+| **Data Protection** | Encrypt PII fields, implement data retention policies |
+| **Right to Information (RTI)** | Ensure audit trails are immutable |
+| **Government IT Guidelines** | Follow MeitY guidelines for government websites |
+| **Backup & Recovery** | Daily automated backups, tested restore procedure |
+| **Disaster Recovery** | Multi-AZ deployment, <4 hour RTO |
+
+---
+
+## 9. Implementation Phases
+
+### Phase 1: Security Hardening (Week 1-2) 🔴
+> Must complete before ANY public deployment
+
+```
+☐ 1.1  Fix open registration (restrict to SuperAdmin)
+☐ 1.2  Add authenticateAdmin to grievance/feedback admin routes
+☐ 1.3  Remove hardcoded JWT fallbacks (fail if missing)
+☐ 1.4  Delete dead code (mockAuth, simpleAuth, testAuth, demo, *_new files)
+☐ 1.5  Fix duplicate route mounting
+☐ 1.6  Add helmet middleware
+☐ 1.7  Add rate limiting (express-rate-limit + redis store)
+☐ 1.8  Sanitize error responses
+☐ 1.9  Remove verbose logging / replace with structured logger
+☐ 1.10 Create singleton PrismaClient
+☐ 1.11 Add input sanitization (express-validator + custom XSS filter)
+☐ 1.12 Strengthen password policy
+☐ 1.13 Remove frontend console.log statements
+☐ 1.14 Add .env.example files (with placeholder values, not real secrets)
+```
+
+### Phase 2: RBAC + Departments (Week 2-4) 🟠
+> Core architectural change
+
+```
+☐ 2.1  Add Department model to Prisma schema
+☐ 2.2  Add departmentId to Admin, Grievance, Feedback, all Service models
+☐ 2.3  Add AuditLog model
+☐ 2.4  Add Session model (for token revocation)
+☐ 2.5  Create SuperAdmin seed script (first SuperAdmin created via CLI)
+☐ 2.6  Build department CRUD routes
+☐ 2.7  Build admin management routes (SuperAdmin only)
+☐ 2.8  Implement role-based middleware (requireSuperAdmin, requireDeptAdmin)
+☐ 2.9  Add departmentId scoping to all existing routes
+☐ 2.10 Implement audit logging middleware
+☐ 2.11 Update frontend AuthContext with role/department awareness
+☐ 2.12 Build SuperAdmin dashboard pages
+☐ 2.13 Build Department Admin dashboard pages
+☐ 2.14 Add department selector to grievance/feedback submission forms
+☐ 2.15 Implement route guards on frontend
+☐ 2.16 Run Prisma migration
+```
+
+### Phase 3: Auth Overhaul (Week 4-5) 🟠
+> Proper session management
+
+```
+☐ 3.1  Implement refresh token flow (httpOnly cookies)
+☐ 3.2  Remove localStorage token storage from frontend
+☐ 3.3  Build session management (login creates session, logout deletes)
+☐ 3.4  Account lockout after failed attempts
+☐ 3.5  Remove /admin/register page (replaced by SuperAdmin admin creation)
+☐ 3.6  Add "Manage Sessions" page for admins (see active sessions, revoke)
+☐ 3.7  Short-lived access tokens (15 min) + refresh rotation
+```
+
+### Phase 4: Scalability (Week 5-7) 🟡
+> Prepare for 4M users
+
+```
+☐ 4.1  Set up Redis caching layer
+☐ 4.2  Add database indexes per schema above
+☐ 4.3  Implement PgBouncer connection pooling
+☐ 4.4  Add response caching for public endpoints
+☐ 4.5  Optimize Prisma queries (eliminate N+1, add select)
+☐ 4.6  Set up BullMQ for async jobs (emails, notifications)
+☐ 4.7  Implement CDN for frontend assets
+☐ 4.8  Load testing with k6/Artillery (target: 1000 concurrent users)
+☐ 4.9  Set up monitoring (Prometheus metrics endpoint)
+☐ 4.10 Configure production PostgreSQL (tuning, read replicas)
+```
+
+### Phase 5: Feature Completion (Week 7-10) 🟡
+> Production features
+
+```
+☐ 5.1  Email notification service (nodemailer + templates)
+☐ 5.2  SMS notification integration
+☐ 5.3  SLA management engine (auto-deadline, breach alerts)
+☐ 5.4  Grievance escalation flow
+☐ 5.5  File upload to S3 with type validation
+☐ 5.6  Dashboard analytics (charts, graphs)
+☐ 5.7  Advanced search and filtering
+☐ 5.8  Export to PDF/Excel
+☐ 5.9  Notification bell (WebSocket)
+☐ 5.10 Activity timeline on grievances
+☐ 5.11 Bilingual support (English/Bengali)
+☐ 5.12 Accessibility audit + fixes
+```
+
+### Phase 6: Deployment & Hardening (Week 10-12) 🟡
+> Go-live preparation
+
+```
+☐ 6.1  Docker containerization (Dockerfile, docker-compose.prod.yml)
+☐ 6.2  CI/CD pipeline (build, test, deploy)
+☐ 6.3  Production environment setup (AWS/GCP/Azure)
+☐ 6.4  SSL/TLS certificates (Let's Encrypt or government CA)
+☐ 6.5  Database backup automation
+☐ 6.6  Disaster recovery plan + drill
+☐ 6.7  Security penetration testing
+☐ 6.8  Performance load testing (4M user simulation)
+☐ 6.9  Documentation (API docs, admin guide, user guide)
+☐ 6.10 Government compliance review
+```
+
+---
+
+## 10. Deployment Architecture
+
+```mermaid
+graph TB
+    subgraph "Public Internet"
+        U[4M Citizens]
+        A[Admin Users]
+    end
+
+    subgraph "CDN Layer"
+        CF[Cloudflare/CloudFront]
+    end
+
+    subgraph "Load Balancer"
+        LB[Nginx / ALB]
+    end
+
+    subgraph "Application Tier"
+        API1[API Server 1]
+        API2[API Server 2]
+        API3[API Server 3]
+        WS[WebSocket Server]
+    end
+
+    subgraph "Cache Layer"
+        R[Redis Cluster]
+        BQ[BullMQ Workers]
+    end
+
+    subgraph "Database Tier"
+        PG["PostgreSQL Primary"]
+        PGR["PostgreSQL Read Replica"]
+        PGB[PgBouncer]
+    end
+
+    subgraph "Storage"
+        S3[S3 / MinIO]
+    end
+
+    subgraph "External Services"
+        EM[Email Service - SES/SMTP]
+        SM[SMS Gateway - MSG91]
+    end
+
+    subgraph "Monitoring"
+        PR[Prometheus]
+        GR[Grafana]
+        LOG[ELK / CloudWatch]
+    end
+
+    U --> CF
+    A --> CF
+    CF --> LB
+    LB --> API1
+    LB --> API2
+    LB --> API3
+    LB --> WS
+
+    API1 --> PGB
+    API2 --> PGB
+    API3 --> PGB
+    API1 --> R
+    API2 --> R
+    API3 --> R
+    API1 --> S3
+    WS --> R
+
+    PGB --> PG
+    PGB --> PGR
+
+    BQ --> R
+    BQ --> EM
+    BQ --> SM
+    BQ --> PGB
+
+    API1 --> PR
+    API2 --> PR
+    API3 --> PR
+    PR --> GR
+    API1 --> LOG
+```
+
+---
+
+## Summary
+
+> [!IMPORTANT]
+> **Start with Phase 1 (Security Hardening).** The current codebase has vulnerabilities that would allow anyone on the internet to register as an admin and access all citizen data. Nothing else matters until these are fixed.
+
+**Key numbers:**
+- **23 vulnerabilities** identified (6 critical, 10 high, 7 medium)
+- **6 phases** of work across ~12 weeks
+- **~150+ tasks** total
+- **10+ new database models/modifications**
+- **15+ new API endpoints**
+- **10+ new frontend pages**
+
+**The single most important first step:** Lock down the `/api/auth/register` endpoint and add [authenticateAdmin](file:///home/archilect/Information-Service-part2/backend/routes/adminAuth.ts#131-163) to the grievance and feedback admin routes.

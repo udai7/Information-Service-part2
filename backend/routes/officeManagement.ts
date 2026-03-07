@@ -1,7 +1,7 @@
 import { Router, Response, Request } from "express";
 import { body, param, validationResult } from "express-validator";
-import { prisma } from "../index";
-import { authenticateAdmin } from "./adminAuth";
+import { prisma } from "../lib/prisma";
+import { authenticateAdmin } from "../middleware/auth";
 import "../types/express";
 
 const router = Router();

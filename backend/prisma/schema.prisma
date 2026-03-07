@@ -10,18 +10,121 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Admin {
+// ─── Department Model ───
+model Department {
+  id           Int      @id @default(autoincrement())
+  name         String   @unique
+  code         String   @unique // e.g., "POL", "REV", "HLT"
+  description  String?
+  contactEmail String?
+  contactPhone String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  admins              Admin[]
+  schemeServices      SchemeService[]
+  certificateServices CertificateService[]
+  contactServices     ContactService[]
+  grievances          Grievance[]
+  feedbacks           Feedback[]
+}
+
+// ─── Audit Log ───
+model AuditLog {
   id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  name      String
-  role      String   @default("admin")
+  action    String // CREATE, UPDATE, DELETE, LOGIN, etc.
+  entity    String // Admin, SchemeService, Grievance, etc.
+  entityId  Int?
+  details   Json?  // What changed (old value -> new value)
+  ipAddress String?
+  userAgent String?
+  adminId   Int?
+  admin     Admin? @relation(fields: [adminId], references: [id])
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  @@index([adminId])
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+// ─── Session Management (for token revocation) ───
+model Session {
+  id        String   @id @default(uuid())
+  adminId   Int
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  isActive  Boolean  @default(true)
+
+  @@index([adminId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
+// ─── Notification System ───
+model Notification {
+  id        Int      @id @default(autoincrement())
+  adminId   Int
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String // grievance_new, feedback_new, escalation, system
+  isRead    Boolean  @default(false)
+  link      String? // Deep link to the relevant page
+  createdAt DateTime @default(now())
+
+  @@index([adminId, isRead])
+}
+
+// ─── Grievance Activity Log ───
+model GrievanceActivity {
+  id          Int       @id @default(autoincrement())
+  grievanceId Int
+  grievance   Grievance @relation(fields: [grievanceId], references: [id], onDelete: Cascade)
+  action      String // status_change, assigned, note_added, escalated
+  fromValue   String?
+  toValue     String?
+  note        String?
+  performedBy String? // Admin name
+  adminId     Int?
+  createdAt   DateTime  @default(now())
+
+  @@index([grievanceId])
+}
+
+model Admin {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  password      String
+  name          String
+  phone         String?
+  role          String    @default("department_admin") // "super_admin" | "department_admin"
+  isActive      Boolean   @default(true)
+  lastLogin     DateTime?
+  loginAttempts Int       @default(0)
+  lockedUntil   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Department relation
+  departmentId Int?
+  department   Department? @relation(fields: [departmentId], references: [id])
 
   schemeServices      SchemeService[]
   certificateServices CertificateService[]
   contactServices     ContactService[]
+  auditLogs           AuditLog[]
+  sessions            Session[]
+  notifications       Notification[]
+
+  @@index([email])
+  @@index([role])
+  @@index([departmentId])
 }
 
 model SchemeService {
@@ -34,13 +137,17 @@ model SchemeService {
   onlineUrl       String?
   offlineAddress  String?
   status          String   @default("draft") // draft, pending, published
-  isActive        Boolean  @default(true) // Admin dashboard control
+  isActive        Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   // Admin relation
   adminId Int
   admin   Admin @relation(fields: [adminId], references: [id])
+
+  // Department relation
+  departmentId Int?
+  department   Department? @relation(fields: [departmentId], references: [id])
 
   // Extended details
   eligibilityDetails String[]
@@ -67,6 +174,10 @@ model SchemeService {
   // Related entities
   contacts  ContactPerson[]
   documents SupportiveDocument[]
+
+  @@index([status, isActive])
+  @@index([departmentId, status])
+  @@index([createdAt])
 }
 
 model ContactPerson {
@@ -104,14 +215,18 @@ model CertificateService {
   applicationMode String
   onlineUrl       String?
   offlineAddress  String?
-  status          String   @default("draft") // draft, pending, published
-  isActive        Boolean  @default(true) // Admin dashboard control
+  status          String   @default("draft")
+  isActive        Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   // Admin relation
   adminId Int
   admin   Admin @relation(fields: [adminId], references: [id])
+
+  // Department relation
+  departmentId Int?
+  department   Department? @relation(fields: [departmentId], references: [id])
 
   // Extended details
   eligibilityDetails String[]
@@ -139,6 +254,10 @@ model CertificateService {
   documents        CertificateDocument[]
   processSteps     CertificateProcessStep[]
   eligibilityItems CertificateEligibility[]
+
+  @@index([status, isActive])
+  @@index([departmentId, status])
+  @@index([createdAt])
 }
 
 model CertificateContact {
@@ -151,7 +270,7 @@ model CertificateContact {
   designation     String
   contact         String
   email           String
-  applicationType String @default("New Application") // New Application, Lost Application, etc.
+  applicationType String @default("New Application")
 
   certificateServiceId Int
   certificateService   CertificateService @relation(fields: [certificateServiceId], references: [id], onDelete: Cascade)
@@ -163,7 +282,7 @@ model CertificateDocument {
   documentType    String
   validProof      String
   isRequired      Boolean @default(true)
-  applicationType String  @default("New Application") // New Application, Lost Application, etc.
+  applicationType String  @default("New Application")
 
   certificateServiceId Int
   certificateService   CertificateService @relation(fields: [certificateServiceId], references: [id], onDelete: Cascade)
@@ -173,7 +292,7 @@ model CertificateProcessStep {
   id              Int    @id @default(autoincrement())
   slNo            Int
   stepDetails     String
-  applicationType String @default("New Application") // New Application, Lost Application, etc.
+  applicationType String @default("New Application")
 
   certificateServiceId Int
   certificateService   CertificateService @relation(fields: [certificateServiceId], references: [id], onDelete: Cascade)
@@ -182,7 +301,7 @@ model CertificateProcessStep {
 model CertificateEligibility {
   id                Int    @id @default(autoincrement())
   eligibilityDetail String
-  applicationType   String @default("New Application") // New Application, Lost Application, etc.
+  applicationType   String @default("New Application")
 
   certificateServiceId Int
   certificateService   CertificateService @relation(fields: [certificateServiceId], references: [id], onDelete: Cascade)
@@ -197,14 +316,18 @@ model ContactService {
   applicationMode String
   onlineUrl       String?
   offlineAddress  String?
-  status          String   @default("draft") // draft, pending, published
-  isActive        Boolean  @default(true) // Admin dashboard control
+  status          String   @default("draft")
+  isActive        Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   // Admin relation
   adminId Int
   admin   Admin @relation(fields: [adminId], references: [id])
+
+  // Department relation
+  departmentId Int?
+  department   Department? @relation(fields: [departmentId], references: [id])
 
   // Extended details
   eligibilityDetails String[]
@@ -226,6 +349,10 @@ model ContactService {
   // Related entities
   contacts  ContactServiceContact[]
   documents ContactServiceDocument[]
+
+  @@index([status, isActive])
+  @@index([departmentId, status])
+  @@index([createdAt])
 }
 
 model ContactServiceContact {
@@ -259,11 +386,11 @@ model ContactServiceDocument {
 
 model Post {
   id          Int      @id @default(autoincrement())
-  postName    String // Changed from 'title' to match frontend
-  rank        String // Changed from 'level' to match frontend
+  postName    String
+  rank        String
   description String?
   department  String?
-  status      String   @default("active") // active, inactive
+  status      String   @default("active")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -281,10 +408,10 @@ model Employee {
   email       String
   phone       String
   designation String
-  employeeId  String? // Employee ID/Number (optional)
+  employeeId  String?
   joiningDate DateTime?
   salary      Float?
-  status      String    @default("active") // active, inactive, on_leave
+  status      String    @default("active")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -296,45 +423,69 @@ model Employee {
 model Feedback {
   id          Int       @id @default(autoincrement())
   name        String
-  email       String? // Made optional for WhatsApp bot compatibility
+  email       String?
   phone       String?
-  subject     String    @default("General Feedback") // Made optional with default
-  message     String    @default("") // Made optional with default
-  comment     String? // Added for WhatsApp bot compatibility
-  rating      Int? // 1-5 star rating (optional)
-  category    String? // General, Service, Technical, etc.
-  serviceType String? // Added for WhatsApp bot compatibility
-  source      String    @default("web") // web, whatsapp, mobile
-  status      String    @default("new") // new, resolved
+  subject     String    @default("General Feedback")
+  message     String    @default("")
+  comment     String?
+  rating      Int?
+  category    String?
+  serviceType String?
+  source      String    @default("web")
+  status      String    @default("new")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   resolvedAt  DateTime?
-  resolvedBy  String? // Admin name who resolved it
-  adminNotes  String? // Internal notes by admin
+  resolvedBy  String?
+  adminNotes  String?
+
+  // Department relation
+  departmentId Int?
+  department   Department? @relation(fields: [departmentId], references: [id])
+
+  @@index([status, departmentId])
+  @@index([createdAt])
+  @@index([email])
 }
 
 model Grievance {
-  id          Int      @id @default(autoincrement())
-  name        String
-  email       String
-  phone       String
-  address     String
-  subject     String
-  description String
-  category    String? // Service Related, Technical, Policy, etc.
-  department  String? // Added for WhatsApp bot compatibility
-  priority    String   @default("medium") // low, medium, high, urgent
-  status      String   @default("new") // new, pending, solved
-  attachments String[] // File paths or URLs
-  source      String   @default("web") // web, whatsapp, mobile
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  name          String
+  email         String
+  phone         String
+  address       String
+  subject       String
+  description   String
+  category      String?
+  priority      String   @default("medium")
+  status        String   @default("new")
+  attachments   String[]
+  source        String   @default("web")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   // Admin tracking
-  assignedTo String? // Admin name who is handling
-  adminNotes String? // Internal notes by admin
-  resolvedAt DateTime?
+  assignedTo    String?
+  adminNotes    String?
+  resolvedAt    DateTime?
 
   // Tracking information
-  trackingId String @unique // Unique tracking ID for users
+  trackingId    String   @unique
+
+  // Department relation
+  departmentId  Int?
+  department    Department?        @relation(fields: [departmentId], references: [id])
+  activities    GrievanceActivity[]
+
+  // Escalation & SLA
+  escalatedAt   DateTime?
+  escalatedTo   String?
+  slaDeadline   DateTime?
+  responseCount Int       @default(0)
+
+  @@index([status, departmentId])
+  @@index([createdAt])
+  @@index([trackingId])
+  @@index([email])
+  @@index([priority, status])
 }
