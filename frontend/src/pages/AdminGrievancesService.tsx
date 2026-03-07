@@ -19,7 +19,16 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { apiClient } from "../types/api";
-import type { Grievance } from "../types/api";
+import type { Grievance, Department } from "../types/api";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function AdminGrievancesService() {
   const [activeTab, setActiveTab] = useState("new");
@@ -40,9 +49,25 @@ export default function AdminGrievancesService() {
     avgResolutionTime: 0,
   });
 
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [isForwarding, setIsForwarding] = useState(false);
+  const [forwardDeptId, setForwardDeptId] = useState<string>("");
+  const [forwardNote, setForwardNote] = useState("");
+  const { toast } = useToast();
+
   useEffect(() => {
     fetchGrievances();
+    fetchDepartments();
   }, []);
+
+  const fetchDepartments = async () => {
+    try {
+      const response = await apiClient.getPublicDepartments();
+      setDepartments(response.departments || []);
+    } catch (err) {
+      console.error("Failed to load departments:", err);
+    }
+  };
 
   const fetchGrievances = async () => {
     setLoading(true);
@@ -92,6 +117,27 @@ export default function AdminGrievancesService() {
   const closeModal = () => {
     setModalOpen(false);
     setSelectedGrievance(null);
+    setIsForwarding(false);
+    setForwardDeptId("");
+    setForwardNote("");
+  };
+
+  const handleForward = async () => {
+    if (!selectedGrievance || !forwardDeptId || !forwardNote.trim()) {
+      toast({ title: "Error", description: "Department and Note are required.", variant: "destructive" });
+      return;
+    }
+
+    try {
+      await apiClient.forwardGrievance(selectedGrievance.id, parseInt(forwardDeptId), forwardNote);
+      toast({ title: "Success", description: "Grievance forwarded successfully" });
+      fetchGrievances();
+      closeModal();
+    } catch (err: any) {
+      console.error(err);
+      const msg = err.response?.data?.message || "Failed to forward grievance";
+      toast({ title: "Error", description: msg, variant: "destructive" });
+    }
   };
 
   const moveToPending = async (id: number) => {
@@ -442,35 +488,98 @@ export default function AdminGrievancesService() {
                       )}
                     </div>
 
-                    <div className="mt-6 flex gap-2">
-                      {selectedGrievance.status === "new" && (
-                        <>
-                          <Button
-                            onClick={() => moveToPending(selectedGrievance.id)}
-                            className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                    {isForwarding && (
+                      <div className="mt-6 border-t pt-4 space-y-4">
+                        <h3 className="font-semibold px-1">Forward Grievance</h3>
+                        <div>
+                          <label className="text-sm font-medium mb-1 block">
+                            Select Department *
+                          </label>
+                          <Select
+                            value={forwardDeptId}
+                            onValueChange={setForwardDeptId}
                           >
-                            Save for Later
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select target department" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {departments
+                                .filter((d) => d.id !== selectedGrievance?.departmentId) // exclude current
+                                .map((dept) => (
+                                  <SelectItem key={dept.id} value={dept.id.toString()}>
+                                    {dept.name}
+                                  </SelectItem>
+                                ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-1 block">
+                            Note for the New Admin *
+                          </label>
+                          <Textarea
+                            placeholder="Add a reason for forwarding this ticket..."
+                            value={forwardNote}
+                            onChange={(e) => setForwardNote(e.target.value)}
+                            rows={3}
+                          />
+                        </div>
+                        <div className="flex gap-2 justify-end">
+                          <Button variant="outline" size="sm" onClick={() => setIsForwarding(false)}>
+                            Cancel
                           </Button>
-                          <Button
-                            onClick={() => moveToSolved(selectedGrievance.id)}
-                            className="bg-green-600 hover:bg-green-700 text-white"
-                          >
-                            Mark as Solved
+                          <Button size="sm" onClick={handleForward} disabled={!forwardDeptId || !forwardNote.trim()}>
+                            Confirm Forward
                           </Button>
-                        </>
-                      )}
-                      {selectedGrievance.status === "pending" && (
-                        <Button
-                          onClick={() => moveToSolved(selectedGrievance.id)}
-                          className="bg-green-600 hover:bg-green-700 text-white"
-                        >
-                          Mark as Solved
+                        </div>
+                      </div>
+                    )}
+
+                    {!isForwarding && (
+                      <div className="mt-6 flex flex-wrap gap-2">
+                        {selectedGrievance.status === "new" && (
+                          <>
+                            <Button
+                              onClick={() => moveToPending(selectedGrievance.id)}
+                              className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                            >
+                              Save for Later
+                            </Button>
+                            <Button
+                              onClick={() => moveToSolved(selectedGrievance.id)}
+                              className="bg-green-600 hover:bg-green-700 text-white"
+                            >
+                              Mark as Solved
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              onClick={() => setIsForwarding(true)}
+                            >
+                              Forward...
+                            </Button>
+                          </>
+                        )}
+                        {selectedGrievance.status === "pending" && (
+                          <>
+                            <Button
+                              onClick={() => moveToSolved(selectedGrievance.id)}
+                              className="bg-green-600 hover:bg-green-700 text-white"
+                            >
+                              Mark as Solved
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              onClick={() => setIsForwarding(true)}
+                            >
+                              Forward...
+                            </Button>
+                          </>
+                        )}
+                        <Button variant="outline" onClick={closeModal}>
+                          Close
                         </Button>
-                      )}
-                      <Button variant="outline" onClick={closeModal}>
-                        Close
-                      </Button>
-                    </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

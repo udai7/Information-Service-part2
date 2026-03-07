@@ -38,7 +38,7 @@ import {
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { apiClient } from "../types/api";
-import type { Grievance, CreateGrievanceRequest } from "../types/api";
+import type { Grievance, CreateGrievanceRequest, Department } from "../types/api";
 
 export default function UserGrievancesService() {
   const [search, setSearch] = useState("");
@@ -57,7 +57,9 @@ export default function UserGrievancesService() {
     category: "",
     priority: "medium",
     attachments: [],
+    departmentId: undefined,
   });
+  const [departments, setDepartments] = useState<Department[]>([]);
   const [userGrievances, setUserGrievances] = useState<Grievance[]>([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -90,7 +92,17 @@ export default function UserGrievancesService() {
 
   useEffect(() => {
     fetchGrievances();
+    fetchDepartments();
   }, []);
+
+  const fetchDepartments = async () => {
+    try {
+      const response = await apiClient.getPublicDepartments();
+      setDepartments(response.departments || []);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+    }
+  };
 
   const fetchGrievances = async () => {
     setLoading(true);
@@ -120,7 +132,7 @@ export default function UserGrievancesService() {
 
   const handleInputChange = (
     field: keyof CreateGrievanceRequest,
-    value: string | string[],
+    value: string | string[] | number | undefined,
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -146,6 +158,7 @@ export default function UserGrievancesService() {
         category: "",
         priority: "medium",
         attachments: [],
+        departmentId: undefined,
       });
 
       // Refresh grievance list
@@ -417,6 +430,30 @@ export default function UserGrievancesService() {
                           Infrastructure
                         </SelectItem>
                         <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Department (Optional)
+                    </label>
+                    <Select
+                      value={formData.departmentId?.toString() || "none"}
+                      onValueChange={(value) =>
+                        handleInputChange("departmentId", value === "none" ? undefined : parseInt(value))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select department" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">No specific department</SelectItem>
+                        {departments.map((dept) => (
+                          <SelectItem key={dept.id} value={dept.id.toString()}>
+                            {dept.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>

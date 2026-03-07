@@ -439,6 +439,95 @@ router.patch(
   },
 );
 
+// Forward grievance (admin only)
+router.patch(
+  "/:id/forward",
+  authenticateAdmin,
+  [
+    body("departmentId").notEmpty().isInt().withMessage("Target department ID is required"),
+    body("adminNotes").notEmpty().isString().withMessage("Forwarding note is required"),
+  ],
+  async (req: Request, res: Response) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ message: "Validation failed", errors: errors.array() });
+      }
+
+      const { id } = req.params;
+      const { departmentId, adminNotes } = req.body;
+
+      const deptScope = getDepartmentScope(req.admin);
+      const existing = await prisma.grievance.findFirst({
+        where: { id: parseInt(id), ...deptScope },
+        include: { department: true }, // Include current department
+      });
+
+      if (!existing) {
+        return res.status(404).json({ message: "Grievance not found" });
+      }
+
+      const targetDepartment = await prisma.department.findUnique({
+        where: { id: parseInt(departmentId) },
+      });
+
+      if (!targetDepartment) {
+        return res.status(404).json({ message: "Target department not found" });
+      }
+
+      if (existing.departmentId === departmentId) {
+        return res.status(400).json({ message: "Grievance is already in this department" });
+      }
+
+      const forwardNote = `Forwarded to ${targetDepartment.name} by ${req.admin!.name}.\nNote: ${adminNotes}`;
+      const newNotes = existing.adminNotes ? `${existing.adminNotes}\n\n${forwardNote}` : forwardNote;
+
+      const grievance = await prisma.grievance.update({
+        where: { id: parseInt(id) },
+        data: {
+          departmentId: parseInt(departmentId),
+          adminNotes: newNotes,
+        },
+      });
+
+      await prisma.grievanceActivity.create({
+        data: {
+          grievanceId: grievance.id,
+          action: "forwarded",
+          fromValue: existing.department?.name || "No Department",
+          toValue: targetDepartment.name,
+          performedBy: req.admin!.name,
+          adminId: req.admin!.id,
+          note: adminNotes,
+        },
+      });
+
+      // Notify the new department admins
+      const targetAdmins = await prisma.admin.findMany({
+        where: { departmentId: targetDepartment.id, isActive: true },
+        select: { id: true },
+      });
+
+      if (targetAdmins.length > 0) {
+        await prisma.notification.createMany({
+          data: targetAdmins.map((admin) => ({
+            adminId: admin.id,
+            title: "Grievance Forwarded",
+            message: `A grievance was forwarded to your department: ${existing.subject}`,
+            type: "grievance_forwarded",
+            link: `/admin/grievances`,
+          })),
+        });
+      }
+
+      res.json({ message: "Grievance forwarded successfully", grievance });
+    } catch (error) {
+      console.error("Error forwarding grievance:", error);
+      res.status(500).json({ message: "Failed to forward grievance" });
+    }
+  },
+);
+
 // Assign grievance (admin only)
 router.patch(
   "/:id/assign",

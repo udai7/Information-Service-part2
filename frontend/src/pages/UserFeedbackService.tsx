@@ -29,7 +29,7 @@ import {
   Clock,
 } from "lucide-react";
 import { apiClient } from "../types/api";
-import type { Feedback, CreateFeedbackRequest } from "../types/api";
+import type { Feedback, CreateFeedbackRequest, Department } from "../types/api";
 
 export default function UserFeedbackService() {
   const [formData, setFormData] = useState<CreateFeedbackRequest>({
@@ -40,7 +40,9 @@ export default function UserFeedbackService() {
     message: "",
     rating: undefined,
     category: "",
+    departmentId: undefined,
   });
+  const [departments, setDepartments] = useState<Department[]>([]);
   const [userFeedbacks, setUserFeedbacks] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -53,7 +55,17 @@ export default function UserFeedbackService() {
 
   useEffect(() => {
     fetchFeedbacks();
+    fetchDepartments();
   }, []);
+
+  const fetchDepartments = async () => {
+    try {
+      const response = await apiClient.getPublicDepartments();
+      setDepartments(response.departments || []);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+    }
+  };
 
   const fetchFeedbacks = async () => {
     setLoading(true);
@@ -88,7 +100,7 @@ export default function UserFeedbackService() {
 
   const handleInputChange = (
     field: keyof CreateFeedbackRequest,
-    value: string | number,
+    value: string | number | undefined,
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -112,6 +124,7 @@ export default function UserFeedbackService() {
         message: "",
         rating: undefined,
         category: "",
+        departmentId: undefined,
       });
 
       // Refresh feedback list
@@ -284,6 +297,30 @@ export default function UserFeedbackService() {
                       </SelectContent>
                     </Select>
                   </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Department (Optional)
+                  </label>
+                  <Select
+                    value={formData.departmentId?.toString() || "none"}
+                    onValueChange={(value) =>
+                      handleInputChange("departmentId", value === "none" ? undefined : parseInt(value))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select department" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">No specific department</SelectItem>
+                      {departments.map((dept) => (
+                        <SelectItem key={dept.id} value={dept.id.toString()}>
+                          {dept.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>

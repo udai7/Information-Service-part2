@@ -277,6 +277,7 @@ export interface Grievance {
   priority: "low" | "medium" | "high" | "urgent";
   status: "new" | "pending" | "solved";
   attachments: string[]; // File paths or URLs
+  departmentId?: number;
   createdAt: string;
   updatedAt: string;
 
@@ -538,6 +539,7 @@ export interface CreateFeedbackRequest {
   message: string;
   rating?: number; // 1-5 star rating
   category?: string; // General, Service, Technical, etc.
+  departmentId?: number; // Optional department to route directly to
 }
 
 export interface UpdateFeedbackRequest {
@@ -556,6 +558,7 @@ export interface CreateGrievanceRequest {
   category?: string; // Service Related, Technical, Policy, etc.
   priority?: "low" | "medium" | "high" | "urgent";
   attachments?: string[]; // File paths or URLs
+  departmentId?: number; // Optional department to route directly to
 }
 
 export interface UpdateGrievanceRequest {
@@ -665,7 +668,7 @@ export class ApiClient {
   }
 
   async logout(): Promise<void> {
-    await this.makeRequest<any>("/auth/logout", { method: "POST" }).catch(() => {});
+    await this.makeRequest<any>("/auth/logout", { method: "POST" }).catch(() => { });
     this.clearToken();
   }
 
@@ -1178,6 +1181,17 @@ export class ApiClient {
     return this.makeRequest<GrievanceResponse>(`/grievances/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
+    });
+  }
+
+  async forwardGrievance(
+    id: number,
+    departmentId: number,
+    adminNotes: string,
+  ): Promise<GrievanceResponse> {
+    return this.makeRequest<GrievanceResponse>(`/grievances/${id}/forward`, {
+      method: "PATCH",
+      body: JSON.stringify({ departmentId, adminNotes }),
     });
   }
 
