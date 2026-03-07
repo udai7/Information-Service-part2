@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { body, param, validationResult } from "express-validator";
-import { prisma } from "../lib/prisma";
+import { prisma, queryCache } from "../lib/prisma";
 import { authenticateAdmin, requireSuperAdmin } from "../middleware/auth";
 import { createAuditLog, AuditActions } from "../lib/auditLog";
 import "../types/express";
@@ -51,6 +51,9 @@ router.post(
         },
       });
 
+      // Invalidate department caches
+      queryCache.invalidate("departments");
+
       await createAuditLog({
         action: AuditActions.CREATE,
         entity: "Department",
@@ -72,9 +75,16 @@ router.post(
   },
 );
 
-// ─── List All Departments ───
+// ─── List All Departments (cached) ───
 router.get("/", authenticateAdmin, async (req: Request, res: Response) => {
   try {
+    const cacheKey = "departments:list:all";
+    const cached = queryCache.get<any>(cacheKey);
+    if (cached) {
+      res.set("X-Cache", "HIT");
+      return res.json(cached);
+    }
+
     const departments = await prisma.department.findMany({
       include: {
         _count: {
@@ -91,14 +101,17 @@ router.get("/", authenticateAdmin, async (req: Request, res: Response) => {
       orderBy: { name: "asc" },
     });
 
-    res.json({ departments });
+    const result = { departments };
+    queryCache.set(cacheKey, result, 60_000); // Cache 1 min
+    res.set("X-Cache", "MISS");
+    res.json(result);
   } catch (error) {
     console.error("Error fetching departments:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-// ─── Get Department by ID ───
+// ─── Get Department by ID (cached) ───
 router.get(
   "/:id",
   authenticateAdmin,
@@ -106,6 +119,13 @@ router.get(
   async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id);
+      const cacheKey = `departments:${id}`;
+      const cached = queryCache.get<any>(cacheKey);
+      if (cached) {
+        res.set("X-Cache", "HIT");
+        return res.json(cached);
+      }
+
       const department = await prisma.department.findUnique({
         where: { id },
         include: {
@@ -128,7 +148,10 @@ router.get(
         return res.status(404).json({ error: "Department not found" });
       }
 
-      res.json({ department });
+      const result = { department };
+      queryCache.set(cacheKey, result, 60_000); // Cache 1 min
+      res.set("X-Cache", "MISS");
+      res.json(result);
     } catch (error) {
       console.error("Error fetching department:", error);
       res.status(500).json({ error: "Internal server error" });
@@ -136,7 +159,7 @@ router.get(
   },
 );
 
-// ─── Get Department Stats ───
+// ─── Get Department Stats (cached briefly) ───
 router.get(
   "/:id/stats",
   authenticateAdmin,
@@ -144,6 +167,12 @@ router.get(
   async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id);
+      const cacheKey = `departments:${id}:stats`;
+      const cached = queryCache.get<any>(cacheKey);
+      if (cached) {
+        res.set("X-Cache", "HIT");
+        return res.json(cached);
+      }
 
       const [
         totalGrievances,
@@ -165,13 +194,17 @@ router.get(
         prisma.schemeService.count({ where: { departmentId: id, status: "published" } }),
       ]);
 
-      res.json({
+      const result = {
         stats: {
           grievances: { total: totalGrievances, new: newGrievances, pending: pendingGrievances, solved: solvedGrievances },
           feedbacks: { total: totalFeedbacks, new: newFeedbacks },
           services: { total: totalServices, published: publishedServices },
         },
-      });
+      };
+
+      queryCache.set(cacheKey, result, 30_000); // Cache 30 sec
+      res.set("X-Cache", "MISS");
+      res.json(result);
     } catch (error) {
       console.error("Error fetching department stats:", error);
       res.status(500).json({ error: "Internal server error" });
@@ -210,6 +243,9 @@ router.put(
           ...(contactPhone !== undefined && { contactPhone }),
         },
       });
+
+      // Invalidate department caches
+      queryCache.invalidate("departments");
 
       await createAuditLog({
         action: AuditActions.UPDATE,
@@ -252,6 +288,9 @@ router.patch(
         data: { isActive: !department.isActive },
       });
 
+      // Invalidate department caches
+      queryCache.invalidate("departments");
+
       await createAuditLog({
         action: AuditActions.TOGGLE_ACTIVE,
         entity: "Department",
@@ -270,16 +309,28 @@ router.patch(
   },
 );
 
-// ─── Public: List Active Departments ───
+// ─── Public: List Active Departments (cached longer) ───
 router.get("/public/list", async (_req: Request, res: Response) => {
   try {
+    const cacheKey = "departments:public:list";
+    const cached = queryCache.get<any>(cacheKey);
+    if (cached) {
+      res.set("X-Cache", "HIT");
+      res.set("Cache-Control", "public, max-age=300"); // Browser cache 5 min
+      return res.json(cached);
+    }
+
     const departments = await prisma.department.findMany({
       where: { isActive: true },
       select: { id: true, name: true, code: true, description: true, contactEmail: true, contactPhone: true },
       orderBy: { name: "asc" },
     });
 
-    res.json({ departments });
+    const result = { departments };
+    queryCache.set(cacheKey, result, 5 * 60_000); // Cache 5 min
+    res.set("X-Cache", "MISS");
+    res.set("Cache-Control", "public, max-age=300");
+    res.json(result);
   } catch (error) {
     console.error("Error fetching public departments:", error);
     res.status(500).json({ error: "Internal server error" });

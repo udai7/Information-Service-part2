@@ -1,13 +1,14 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import compression from "compression";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import path from "path";
-import { prisma } from "./lib/prisma";
+import { prisma, queryCache } from "./lib/prisma";
 
 // Import middleware
-import { globalLimiter } from "./middleware/rateLimiter";
+import { globalLimiter, apiLimiter } from "./middleware/rateLimiter";
 import { errorHandler, sanitizeInput } from "./middleware/errorHandler";
 
 // Import routes
@@ -28,6 +29,18 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// ─── Performance: Response Compression ───
+app.use(
+  compression({
+    level: 6, // Balanced speed vs compression ratio
+    threshold: 1024, // Only compress responses > 1KB
+    filter: (req, res) => {
+      if (req.headers["x-no-compression"]) return false;
+      return compression.filter(req, res);
+    },
+  }),
+);
+
 // ─── Security Middleware ───
 app.use(
   helmet({
@@ -42,6 +55,13 @@ app.use(
       },
     },
     crossOriginEmbedderPolicy: false,
+    // Additional security headers
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true,
+    },
+    referrerPolicy: { policy: "strict-origin-when-cross-origin" },
   }),
 );
 
@@ -50,11 +70,11 @@ const allowedOrigins = [
   process.env.FRONTEND_URL || "http://localhost:5173",
   ...(process.env.NODE_ENV !== "production"
     ? [
-        "http://localhost:5174",
-        "http://localhost:8080",
-        "http://localhost:8081",
-        "http://localhost:3000",
-      ]
+      "http://localhost:5174",
+      "http://localhost:8080",
+      "http://localhost:8081",
+      "http://localhost:3000",
+    ]
     : []),
 ].filter(Boolean);
 
@@ -72,12 +92,13 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    maxAge: 86400, // Pre-flight cache: 24 hours
   }),
 );
 
-// ─── Body Parsing ───
-app.use(express.json({ limit: "1mb" }));
-app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+// ─── Body Parsing (with size limits for security) ───
+app.use(express.json({ limit: "500kb" }));
+app.use(express.urlencoded({ extended: true, limit: "500kb" }));
 app.use(cookieParser());
 
 // ─── Rate Limiting ───
@@ -85,6 +106,9 @@ app.use("/api/", globalLimiter);
 
 // ─── Input Sanitization ───
 app.use(sanitizeInput);
+
+// ─── Performance: ETag support for conditional requests ───
+app.set("etag", "strong");
 
 // ─── Request Logging (Development Only) ───
 if (process.env.NODE_ENV === "development") {
@@ -107,14 +131,19 @@ app.use("/api/offices", officeManagementRoutes);
 app.use("/api/feedbacks", feedbackRoutes);
 app.use("/api/grievances", grievanceRoutes);
 
-// ─── Health Check ───
+// ─── Health Check (with cache headers) ───
 app.get("/api/health", (_req, res) => {
+  res.set("Cache-Control", "no-cache");
   res.json({ status: "OK", message: "Server is running", timestamp: new Date().toISOString() });
 });
 
 // ─── Serve Frontend ───
 const clientBuildPath = path.join(__dirname, "../dist/spa");
-app.use(express.static(clientBuildPath));
+app.use(express.static(clientBuildPath, {
+  maxAge: "1y",
+  immutable: true,
+  etag: true,
+}));
 
 // ─── Error Handling ───
 app.use(errorHandler);
@@ -134,17 +163,34 @@ app.get("*", (req, res) => {
 });
 
 // ─── Graceful Shutdown ───
-process.on("SIGINT", async () => {
-  console.log("Shutting down gracefully...");
+const gracefulShutdown = async (signal: string) => {
+  console.log(`${signal} received, shutting down gracefully...`);
+  queryCache.destroy();
   await prisma.$disconnect();
   process.exit(0);
-});
+};
 
-process.on("SIGTERM", async () => {
-  console.log("SIGTERM received, shutting down...");
-  await prisma.$disconnect();
-  process.exit(0);
-});
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+
+// ─── Periodic Session Cleanup (every 6 hours) ───
+setInterval(async () => {
+  try {
+    const result = await prisma.session.deleteMany({
+      where: {
+        OR: [
+          { expiresAt: { lt: new Date() } },
+          { isActive: false },
+        ],
+      },
+    });
+    if (result.count > 0) {
+      console.log(`Cleaned up ${result.count} expired/inactive sessions`);
+    }
+  } catch (e) {
+    console.error("Session cleanup error:", e);
+  }
+}, 6 * 60 * 60 * 1000);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -35,11 +36,6 @@ import {
 import AdminSidebar from "@/components/ui/AdminSidebar";
 import { useToast } from "@/hooks/use-toast";
 import { apiClient } from "../types/api";
-import type {
-  SchemeService,
-  CertificateService,
-  ContactService,
-} from "../types/api";
 
 export default function AdminLayout({
   children,
@@ -60,154 +56,114 @@ export function DashboardHome() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const [togglingIds, setTogglingIds] = useState<Set<string>>(new Set());
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  // Service states
-  const [schemeServices, setSchemeServices] = useState<SchemeService[]>([]);
-  const [certificateServices, setCertificateServices] = useState<
-    CertificateService[]
-  >([]);
-  const [contactServices, setContactServices] = useState<ContactService[]>([]);
+  // ─── Parallel Cached Queries via React Query ───
+  // This performs memoized fetching so re-renders don't cause extra network requests
+  const { data: schemesResponse, isLoading: loadingSchemes } = useQuery({
+    queryKey: ["admin_schemeServices"],
+    queryFn: () => apiClient.getSchemeServices(),
+  });
 
-  useEffect(() => {
-    fetchAllServices();
-  }, []);
+  const { data: certsResponse, isLoading: loadingCerts } = useQuery({
+    queryKey: ["admin_certificateServices"],
+    queryFn: () => apiClient.getCertificateServices(),
+  });
 
-  const fetchAllServices = async () => {
-    setLoading(true);
-    try {
-      // Fetch all services (not just published ones) to include inactive services
-      const [schemeResponse, certResponse, contactResponse] = await Promise.all(
-        [
-          apiClient.getSchemeServices(),
-          apiClient.getCertificateServices(),
-          apiClient.getContactServices(),
-        ],
-      );
+  const { data: contactsResponse, isLoading: loadingContacts } = useQuery({
+    queryKey: ["admin_contactServices"],
+    queryFn: () => apiClient.getContactServices(),
+  });
 
-      // Only show published services but include both active and inactive
-      const publishedSchemes = (schemeResponse.schemeServices || []).filter(
-        (s) => s.status === "published",
-      );
-      const publishedCerts = (certResponse.certificateServices || []).filter(
-        (s) => s.status === "published",
-      );
-      const publishedContacts = (contactResponse.contactServices || []).filter(
-        (s) => s.status === "published",
-      );
+  const loading = loadingSchemes || loadingCerts || loadingContacts;
 
-      setSchemeServices(publishedSchemes);
-      setCertificateServices(publishedCerts);
-      setContactServices(publishedContacts);
-    } catch (error) {
-      console.error("Error fetching services:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const toggleServiceActive = async (
-    serviceType: "scheme" | "certificate" | "contact",
-    id: number,
-    currentStatus: boolean,
-  ) => {
-    const toggleKey = `${serviceType}-${id}`;
-    try {
-      setTogglingIds((prev) => new Set(prev).add(toggleKey));
-      const newStatus = !currentStatus;
-
+  // Optimistic & Cached Mutations
+  const toggleMutation = useMutation({
+    mutationFn: async ({
+      serviceType,
+      id,
+      newStatus,
+    }: {
+      serviceType: "scheme" | "certificate" | "contact";
+      id: number;
+      newStatus: boolean;
+    }) => {
       switch (serviceType) {
         case "scheme":
-          await apiClient.toggleSchemeServiceActive(id, newStatus);
-          // Refresh scheme services from server
-          const schemeResponse = await apiClient.getSchemeServices();
-          const publishedSchemes = (schemeResponse.schemeServices || []).filter(
-            (s) => s.status === "published",
-          );
-          setSchemeServices(publishedSchemes);
-          break;
+          return apiClient.toggleSchemeServiceActive(id, newStatus);
         case "certificate":
-          await apiClient.toggleCertificateServiceActive(id, newStatus);
-          // Refresh certificate services from server
-          const certResponse = await apiClient.getCertificateServices();
-          const publishedCerts = (
-            certResponse.certificateServices || []
-          ).filter((s) => s.status === "published");
-          setCertificateServices(publishedCerts);
-          break;
+          return apiClient.toggleCertificateServiceActive(id, newStatus);
         case "contact":
-          await apiClient.toggleContactServiceActive(id, newStatus);
-          // Refresh contact services from server
-          const contactResponse = await apiClient.getContactServices();
-          const publishedContacts = (
-            contactResponse.contactServices || []
-          ).filter((s) => s.status === "published");
-          setContactServices(publishedContacts);
-          break;
+          return apiClient.toggleContactServiceActive(id, newStatus);
       }
+    },
+    onSuccess: (_, variables) => {
+      // Invalidate relevant query to trigger background refetch
+      queryClient.invalidateQueries({
+        queryKey: [`admin_${variables.serviceType}Services`],
+      });
 
-      // Show success message
-      setMessage(
-        `Service ${newStatus ? "activated" : "deactivated"} successfully`,
-      );
-      setTimeout(() => setMessage(null), 3000);
-
-      // Show toast notification
       toast({
         title: "Success",
-        description: `Service ${
-          newStatus ? "activated" : "deactivated"
-        } successfully`,
+        description: `Service ${variables.newStatus ? "activated" : "deactivated"} successfully`,
       });
-    } catch (error) {
-      console.error("Error toggling service status:", error);
-      // Show error message to user
-      setMessage("Failed to update service status. Please try again.");
-      setTimeout(() => setMessage(null), 5000);
-
-      // Show error toast
+    },
+    onError: () => {
       toast({
         title: "Error",
         description: "Failed to update service status. Please try again.",
         variant: "destructive",
       });
-    } finally {
-      setTogglingIds((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(toggleKey);
-        return newSet;
-      });
-    }
-  };
+    },
+  });
 
-  // Statistics
-  const allServices = [
-    ...schemeServices,
-    ...certificateServices,
-    ...contactServices,
-  ];
-  const activeServices = allServices.filter((s) => s.isActive !== false);
-  const inactiveServices = allServices.filter((s) => s.isActive === false);
+  // ─── Memoized Computed State ───
+  // Ensures filtering operations are completely cached until the underlying server data changes
+  const {
+    schemeServices,
+    certificateServices,
+    contactServices,
+    allServices,
+    activeServices,
+    inactiveServices,
+    stats,
+  } = useMemo(() => {
+    const s1 = (schemesResponse?.schemeServices || []).filter((s) => s.status === "published");
+    const s2 = (certsResponse?.certificateServices || []).filter((s) => s.status === "published");
+    const s3 = (contactsResponse?.contactServices || []).filter((s) => s.status === "published");
 
-  const stats = {
-    total: allServices.length,
-    active: activeServices.length,
-    inactive: inactiveServices.length,
-    schemes: schemeServices.length,
-    certificates: certificateServices.length,
-    contacts: contactServices.length,
-  };
+    const all = [...s1, ...s2, ...s3];
+    const active = all.filter((s) => s.isActive !== false);
+    const inactive = all.filter((s) => s.isActive === false);
+
+    return {
+      schemeServices: s1,
+      certificateServices: s2,
+      contactServices: s3,
+      allServices: all,
+      activeServices: active,
+      inactiveServices: inactive,
+      stats: {
+        total: all.length,
+        active: active.length,
+        inactive: inactive.length,
+        schemes: s1.length,
+        certificates: s2.length,
+        contacts: s3.length,
+      },
+    };
+  }, [schemesResponse, certsResponse, contactsResponse]);
 
   // Filter function
   const filterServices = (services: any[], serviceType: string) => {
+    const searchLower = search.toLowerCase();
     return services.filter((service) => {
       const matchesSearch =
-        service.name.toLowerCase().includes(search.toLowerCase()) ||
-        service.summary?.toLowerCase().includes(search.toLowerCase()) ||
-        service.type?.toLowerCase().includes(search.toLowerCase());
+        service.name.toLowerCase().includes(searchLower) ||
+        service.summary?.toLowerCase().includes(searchLower) ||
+        service.type?.toLowerCase().includes(searchLower);
 
       const matchesStatus =
         statusFilter === "all" ||
@@ -228,34 +184,28 @@ export function DashboardHome() {
     serviceType: "scheme" | "certificate" | "contact";
   }) => {
     const isActive = service.isActive !== false;
+    const isToggling = toggleMutation.isPending && toggleMutation.variables?.id === service.id && toggleMutation.variables?.serviceType === serviceType;
 
     const getIcon = () => {
       switch (serviceType) {
-        case "scheme":
-          return <FileText className="h-5 w-5" />;
-        case "certificate":
-          return <Award className="h-5 w-5" />;
-        case "contact":
-          return <Phone className="h-5 w-5" />;
+        case "scheme": return <FileText className="h-5 w-5" />;
+        case "certificate": return <Award className="h-5 w-5" />;
+        case "contact": return <Phone className="h-5 w-5" />;
       }
     };
 
     const getTypeColor = () => {
       switch (serviceType) {
-        case "scheme":
-          return "bg-teal-100 text-teal-800";
-        case "certificate":
-          return "bg-green-100 text-green-800";
-        case "contact":
-          return "bg-slate-100 text-slate-800";
+        case "scheme": return "bg-teal-100 text-teal-800";
+        case "certificate": return "bg-green-100 text-green-800";
+        case "contact": return "bg-slate-100 text-slate-800";
       }
     };
 
     return (
       <Card
-        className={`hover:shadow-lg transition-all duration-200 ${
-          !isActive ? "opacity-60 border-gray-300" : "border-green-200"
-        }`}
+        className={`hover:shadow-lg transition-all duration-200 ${!isActive ? "opacity-60 border-gray-300" : "border-green-200"
+          }`}
       >
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
@@ -268,10 +218,7 @@ export function DashboardHome() {
                 {serviceType}
               </Badge>
               {isActive ? (
-                <Badge
-                  className="bg-green-100 text-green-800"
-                  variant="secondary"
-                >
+                <Badge className="bg-green-100 text-green-800" variant="secondary">
                   Active
                 </Badge>
               ) : (
@@ -289,8 +236,7 @@ export function DashboardHome() {
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-600">
               <div>
-                Mode:{" "}
-                <span className="font-medium">{service.applicationMode}</span>
+                Mode: <span className="font-medium">{service.applicationMode}</span>
               </div>
               {service.type && (
                 <div>
@@ -305,23 +251,20 @@ export function DashboardHome() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              {togglingIds.has(`${serviceType}-${service.id}`) ? (
+              {isToggling ? (
                 <LoadingSpinner size="sm" variant="inline" text="Updating..." />
               ) : (
                 <>
-                  <Label
-                    htmlFor={`switch-${serviceType}-${service.id}`}
-                    className="text-sm"
-                  >
+                  <Label htmlFor={`switch-${serviceType}-${service.id}`} className="text-sm">
                     {isActive ? "Active" : "Inactive"}
                   </Label>
                   <Switch
                     id={`switch-${serviceType}-${service.id}`}
                     checked={isActive}
                     onCheckedChange={() =>
-                      toggleServiceActive(serviceType, service.id, isActive)
+                      toggleMutation.mutate({ serviceType, id: service.id, newStatus: !isActive })
                     }
-                    disabled={togglingIds.has(`${serviceType}-${service.id}`)}
+                    disabled={toggleMutation.isPending}
                   />
                 </>
               )}
@@ -336,9 +279,7 @@ export function DashboardHome() {
     <div className="container mx-auto px-4 py-8">
       {/* Welcome Section */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">
-          Service Management Dashboard
-        </h1>
+        <h1 className="text-3xl font-bold mb-2">Service Management Dashboard</h1>
         <p className="text-gray-600">
           Manage published services visibility and monitor platform performance
         </p>
@@ -358,95 +299,25 @@ export function DashboardHome() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-6 gap-6 mb-8">
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Services
-            </CardTitle>
-            <Users className="h-4 w-4 text-teal-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-teal-600">
-              {stats.total}
-            </div>
-            <p className="text-xs text-muted-foreground">All published</p>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Active Services
-            </CardTitle>
-            <Activity className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              {stats.active}
-            </div>
-            <p className="text-xs text-muted-foreground">Visible to users</p>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Inactive Services
-            </CardTitle>
-            <AlertCircle className="h-4 w-4 text-red-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">
-              {stats.inactive}
-            </div>
-            <p className="text-xs text-muted-foreground">Hidden from users</p>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Scheme Services
-            </CardTitle>
-            <FileText className="h-4 w-4 text-teal-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-teal-600">
-              {stats.schemes}
-            </div>
-            <p className="text-xs text-muted-foreground">Government schemes</p>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Certificate Services
-            </CardTitle>
-            <Award className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              {stats.certificates}
-            </div>
-            <p className="text-xs text-muted-foreground">Document services</p>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Contact Services
-            </CardTitle>
-            <Phone className="h-4 w-4 text-teal-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-teal-600">
-              {stats.contacts}
-            </div>
-            <p className="text-xs text-muted-foreground">Contact information</p>
-          </CardContent>
-        </Card>
+        {[
+          { title: "Total Services", value: stats.total, icon: Users, color: "teal", sub: "All published" },
+          { title: "Active Services", value: stats.active, icon: Activity, color: "green", sub: "Visible to users" },
+          { title: "Inactive Services", value: stats.inactive, icon: AlertCircle, color: "red", sub: "Hidden from users" },
+          { title: "Scheme Services", value: stats.schemes, icon: FileText, color: "teal", sub: "Government schemes" },
+          { title: "Certificate Services", value: stats.certificates, icon: Award, color: "green", sub: "Document services" },
+          { title: "Contact Services", value: stats.contacts, icon: Phone, color: "teal", sub: "Contact information" },
+        ].map((stat, i) => (
+          <Card key={i} className="hover:shadow-lg transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+              <stat.icon className={`h-4 w-4 text-${stat.color}-600`} />
+            </CardHeader>
+            <CardContent>
+              <div className={`text-2xl font-bold text-${stat.color}-600`}>{stat.value}</div>
+              <p className="text-xs text-muted-foreground">{stat.sub}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
       {/* Filters */}
@@ -496,9 +367,7 @@ export function DashboardHome() {
                 <SelectContent>
                   <SelectItem value="all">All Types</SelectItem>
                   <SelectItem value="scheme">Scheme Services</SelectItem>
-                  <SelectItem value="certificate">
-                    Certificate Services
-                  </SelectItem>
+                  <SelectItem value="certificate">Certificate Services</SelectItem>
                   <SelectItem value="contact">Contact Services</SelectItem>
                 </SelectContent>
               </Select>
@@ -510,18 +379,10 @@ export function DashboardHome() {
       {/* Services */}
       <Tabs defaultValue="all" className="w-full">
         <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
-          <TabsTrigger value="all">
-            All Services ({allServices.length})
-          </TabsTrigger>
-          <TabsTrigger value="scheme">
-            Schemes ({schemeServices.length})
-          </TabsTrigger>
-          <TabsTrigger value="certificate">
-            Certificates ({certificateServices.length})
-          </TabsTrigger>
-          <TabsTrigger value="contact">
-            Contacts ({contactServices.length})
-          </TabsTrigger>
+          <TabsTrigger value="all">All Services ({allServices.length})</TabsTrigger>
+          <TabsTrigger value="scheme">Schemes ({schemeServices.length})</TabsTrigger>
+          <TabsTrigger value="certificate">Certificates ({certificateServices.length})</TabsTrigger>
+          <TabsTrigger value="contact">Contacts ({contactServices.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="all" className="mt-6">
@@ -533,27 +394,13 @@ export function DashboardHome() {
             ) : (
               <>
                 {filterServices(schemeServices, "scheme").map((service) => (
-                  <ServiceCard
-                    key={`scheme-${service.id}`}
-                    service={service}
-                    serviceType="scheme"
-                  />
+                  <ServiceCard key={`scheme-${service.id}`} service={service} serviceType="scheme" />
                 ))}
-                {filterServices(certificateServices, "certificate").map(
-                  (service) => (
-                    <ServiceCard
-                      key={`certificate-${service.id}`}
-                      service={service}
-                      serviceType="certificate"
-                    />
-                  ),
-                )}
+                {filterServices(certificateServices, "certificate").map((service) => (
+                  <ServiceCard key={`certificate-${service.id}`} service={service} serviceType="certificate" />
+                ))}
                 {filterServices(contactServices, "contact").map((service) => (
-                  <ServiceCard
-                    key={`contact-${service.id}`}
-                    service={service}
-                    serviceType="contact"
-                  />
+                  <ServiceCard key={`contact-${service.id}`} service={service} serviceType="contact" />
                 ))}
               </>
             )}
@@ -563,37 +410,23 @@ export function DashboardHome() {
         <TabsContent value="scheme" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterServices(schemeServices, "scheme").map((service) => (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                serviceType="scheme"
-              />
+              <ServiceCard key={service.id} service={service} serviceType="scheme" />
             ))}
           </div>
         </TabsContent>
 
         <TabsContent value="certificate" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filterServices(certificateServices, "certificate").map(
-              (service) => (
-                <ServiceCard
-                  key={service.id}
-                  service={service}
-                  serviceType="certificate"
-                />
-              ),
-            )}
+            {filterServices(certificateServices, "certificate").map((service) => (
+              <ServiceCard key={service.id} service={service} serviceType="certificate" />
+            ))}
           </div>
         </TabsContent>
 
         <TabsContent value="contact" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filterServices(contactServices, "contact").map((service) => (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                serviceType="contact"
-              />
+              <ServiceCard key={service.id} service={service} serviceType="contact" />
             ))}
           </div>
         </TabsContent>
@@ -614,7 +447,7 @@ export function DashboardHome() {
           <div className="flex flex-wrap gap-4">
             <Button
               variant="outline"
-              onClick={() => fetchAllServices()}
+              onClick={() => queryClient.invalidateQueries()}
               disabled={loading}
             >
               <Activity className="h-4 w-4 mr-2" />
@@ -623,10 +456,7 @@ export function DashboardHome() {
             <Button
               variant="outline"
               onClick={() => {
-                const inactiveCount = inactiveServices.length;
-                setMessage(
-                  `Found ${inactiveCount} inactive services that are hidden from users.`,
-                );
+                setMessage(`Found ${inactiveServices.length} inactive services that are hidden from users.`);
                 setTimeout(() => setMessage(null), 5000);
               }}
             >

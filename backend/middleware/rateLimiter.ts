@@ -1,13 +1,26 @@
 import rateLimit from "express-rate-limit";
 
-// Global rate limiter: 100 requests per minute per IP
+// Global rate limiter: 200 requests per minute per IP (increased for admin dashboard traversal)
 export const globalLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
-  max: 100,
+  max: 200,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
     error: "Too many requests, please try again later.",
+  },
+  // Skip rate limiting for health checks
+  skip: (req) => req.path === "/api/health",
+});
+
+// API rate limiter: stricter for write operations
+export const apiLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    error: "Too many API requests, please slow down.",
   },
 });
 
@@ -42,5 +55,16 @@ export const registrationLimiter = rateLimit({
   legacyHeaders: false,
   message: {
     error: "Too many registration attempts. Please try again later.",
+  },
+});
+
+// Read-heavy endpoint limiter (generous for dashboard data)
+export const readLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 120,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    error: "Too many read requests. Please try again shortly.",
   },
 });

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { prisma } from "../lib/prisma";
+import { prisma, queryCache } from "../lib/prisma";
 
 // Ensure JWT_SECRET is set - crash if missing in production
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -32,7 +32,7 @@ export interface JwtPayload {
   sessionId?: string;
 }
 
-// Authenticate admin via Bearer token
+// Authenticate admin via Bearer token — with cache for DB lookup
 export const authenticateAdmin = async (
   req: Request,
   res: Response,
@@ -49,21 +49,32 @@ export const authenticateAdmin = async (
 
     const decoded = jwt.verify(token, getJwtSecret()) as JwtPayload;
 
-    // Verify admin exists and is active
-    const admin = await prisma.admin.findUnique({
-      where: { id: decoded.adminId },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        isActive: true,
-        departmentId: true,
-        department: {
-          select: { id: true, name: true, code: true },
+    // Check cache first — avoids DB hit on every authenticated request
+    const cacheKey = `admin:${decoded.adminId}`;
+    let admin = queryCache.get<any>(cacheKey);
+
+    if (!admin) {
+      // Cache miss — fetch from DB
+      admin = await prisma.admin.findUnique({
+        where: { id: decoded.adminId },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          isActive: true,
+          departmentId: true,
+          department: {
+            select: { id: true, name: true, code: true },
+          },
         },
-      },
-    });
+      });
+
+      if (admin && admin.isActive) {
+        // Cache for 2 minutes — short enough to catch deactivations quickly
+        queryCache.set(cacheKey, admin, 2 * 60 * 1000);
+      }
+    }
 
     if (!admin || !admin.isActive) {
       return res.status(401).json({ error: "Invalid or inactive account" });
