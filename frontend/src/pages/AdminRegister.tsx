@@ -144,7 +144,7 @@ export default function AdminRegister() {
                 Already have an account?{" "}
                 <Link
                   to="/admin/login"
-                  className="text-blue-600 hover:underline"
+                  className="text-teal-600 hover:underline"
                 >
                   Login here
                 </Link>

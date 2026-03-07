@@ -199,7 +199,7 @@ export default function UserGrievancesService() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "new":
-        return "bg-blue-100 text-blue-800";
+        return "bg-teal-100 text-teal-800";
       case "pending":
         return "bg-orange-100 text-orange-800";
       case "solved":
@@ -232,10 +232,10 @@ export default function UserGrievancesService() {
                 <CardTitle className="text-sm font-medium">
                   Total Grievances
                 </CardTitle>
-                <FileText className="h-4 w-4 text-blue-600" />
+                <FileText className="h-4 w-4 text-teal-600" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-teal-600">
                   {stats.totalGrievances}
                 </div>
                 <p className="text-xs text-muted-foreground">All submissions</p>
@@ -244,10 +244,10 @@ export default function UserGrievancesService() {
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">New</CardTitle>
-                <FileText className="h-4 w-4 text-blue-600" />
+                <FileText className="h-4 w-4 text-teal-600" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-teal-600">
                   {stats.newGrievances}
                 </div>
                 <p className="text-xs text-muted-foreground">Under review</p>
@@ -453,7 +453,7 @@ export default function UserGrievancesService() {
 
                   <Button
                     type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700"
+                    className="w-full bg-teal-600 hover:bg-teal-700"
                     disabled={submitting}
                   >
                     {submitting ? "Submitting..." : "Submit Grievance"}
@@ -663,11 +663,11 @@ export default function UserGrievancesService() {
               </div>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-800">
+            <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
+              <p className="text-sm text-teal-800">
                 <strong>What's next?</strong>
               </p>
-              <ul className="text-sm text-blue-700 mt-2 space-y-1">
+              <ul className="text-sm text-teal-700 mt-2 space-y-1">
                 <li>
                   • Use your tracking ID to check the status of your grievance
                 </li>

@@ -116,10 +116,10 @@ export default function AdminFeedbackService() {
                     <CardTitle className="text-sm font-medium">
                       New Feedbacks
                     </CardTitle>
-                    <MessageSquare className="h-4 w-4 text-blue-600" />
+                    <MessageSquare className="h-4 w-4 text-teal-600" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-blue-600">
+                    <div className="text-2xl font-bold text-teal-600">
                       {stats.newFeedbacks}
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -148,10 +148,10 @@ export default function AdminFeedbackService() {
                     <CardTitle className="text-sm font-medium">
                       Total Feedbacks
                     </CardTitle>
-                    <Activity className="h-4 w-4 text-slate-600" />
+                    <Activity className="h-4 w-4 text-teal-600" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-slate-600">
+                    <div className="text-2xl font-bold text-teal-600">
                       {stats.totalFeedbacks}
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -218,7 +218,7 @@ export default function AdminFeedbackService() {
                             {fb.email} •{" "}
                             {new Date(fb.createdAt).toLocaleDateString()}
                             {fb.category && (
-                              <span className="ml-2 bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                              <span className="ml-2 bg-teal-100 text-teal-800 px-2 py-1 rounded text-xs">
                                 {fb.category}
                               </span>
                             )}
@@ -281,7 +281,7 @@ export default function AdminFeedbackService() {
                               ? new Date(fb.resolvedAt).toLocaleDateString()
                               : "N/A"}
                             {fb.category && (
-                              <span className="ml-2 bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                              <span className="ml-2 bg-teal-100 text-teal-800 px-2 py-1 rounded text-xs">
                                 {fb.category}
                               </span>
                             )}

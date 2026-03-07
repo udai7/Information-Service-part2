@@ -158,11 +158,11 @@ export default function UserDashboard() {
   const getServiceRoute = (service: CombinedService) => {
     switch (service.type) {
       case "scheme":
-        return "/user-scheme-service";
+        return "/scheme-service";
       case "certificate":
-        return "/user-certificate-service";
+        return "/certificate-service";
       case "contact":
-        return "/user-contact-service";
+        return "/contact-service";
       default:
         return "/";
     }
@@ -173,7 +173,7 @@ export default function UserDashboard() {
       case "scheme":
         return "bg-green-100 text-green-800";
       case "certificate":
-        return "bg-blue-100 text-blue-800";
+        return "bg-teal-100 text-teal-800";
       case "contact":
         return "bg-slate-100 text-slate-800";
       default:
@@ -239,10 +239,10 @@ export default function UserDashboard() {
               <Card className="hover:shadow-lg transition-shadow">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Schemes</CardTitle>
-                  <Award className="h-4 w-4 text-blue-600" />
+                  <Award className="h-4 w-4 text-teal-600" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-blue-600">
+                  <div className="text-2xl font-bold text-teal-600">
                     {stats.schemes}
                   </div>
                   <p className="text-xs text-muted-foreground">
@@ -256,10 +256,10 @@ export default function UserDashboard() {
                   <CardTitle className="text-sm font-medium">
                     Certificates
                   </CardTitle>
-                  <FileText className="h-4 w-4 text-slate-600" />
+                  <FileText className="h-4 w-4 text-teal-600" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-slate-600">
+                  <div className="text-2xl font-bold text-teal-600">
                     {stats.certificates}
                   </div>
                   <p className="text-xs text-muted-foreground">

@@ -62,7 +62,7 @@ export default function UserEmergencyService() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-teal-600">
                   {stats.active}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -77,7 +77,7 @@ export default function UserEmergencyService() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-slate-600">
+                <div className="text-2xl font-bold text-teal-600">
                   {stats.total}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -125,7 +125,7 @@ export default function UserEmergencyService() {
                 <CardContent>
                   <Button
                     onClick={() => setModalDept(dept)}
-                    className="w-full mt-2 bg-blue-600 text-white"
+                    className="w-full mt-2 bg-teal-600 text-white"
                   >
                     View Details
                   </Button>

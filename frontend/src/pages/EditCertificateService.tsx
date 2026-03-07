@@ -1201,25 +1201,25 @@ export default function EditCertificateService() {
                 <div className="mb-4 flex items-center justify-center space-x-4">
                   <button
                     onClick={() => setStep(1)}
-                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 1 ? "bg-blue-500 text-white" : "bg-gray-300"}`}
+                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 1 ? "bg-teal-500 text-white" : "bg-gray-300"}`}
                   >
                     Add Process
                   </button>
                   <button
                     onClick={() => setStep(2)}
-                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 2 ? "bg-blue-500 text-white" : "bg-gray-300"}`}
+                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 2 ? "bg-teal-500 text-white" : "bg-gray-300"}`}
                   >
                     Add Documents
                   </button>
                   <button
                     onClick={() => setStep(3)}
-                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 3 ? "bg-blue-500 text-white" : "bg-gray-300"}`}
+                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 3 ? "bg-teal-500 text-white" : "bg-gray-300"}`}
                   >
                     Add Eligibility
                   </button>
                   <button
                     onClick={() => setStep(4)}
-                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 4 ? "bg-blue-500 text-white" : "bg-gray-300"}`}
+                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 4 ? "bg-teal-500 text-white" : "bg-gray-300"}`}
                   >
                     Add Contact Person
                   </button>

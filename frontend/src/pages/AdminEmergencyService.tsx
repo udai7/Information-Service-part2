@@ -100,10 +100,10 @@ export default function AdminEmergencyService() {
                 <CardTitle className="text-sm font-medium">
                   Active Services
                 </CardTitle>
-                <Activity className="h-4 w-4 text-blue-600" />
+                <Activity className="h-4 w-4 text-teal-600" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-teal-600">
                   {stats.active}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -130,10 +130,10 @@ export default function AdminEmergencyService() {
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Users</CardTitle>
-                <Users className="h-4 w-4 text-slate-600" />
+                <Users className="h-4 w-4 text-teal-600" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-slate-600">
+                <div className="text-2xl font-bold text-teal-600">
                   {stats.users}
                 </div>
                 <p className="text-xs text-muted-foreground">

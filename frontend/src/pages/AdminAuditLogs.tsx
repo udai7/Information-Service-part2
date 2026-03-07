@@ -38,7 +38,7 @@ import { apiClient } from "../types/api";
 import type { AuditLogEntry } from "../types/api";
 
 const ACTION_COLORS: Record<string, string> = {
-  LOGIN: "bg-blue-100 text-slate-700",
+  LOGIN: "bg-teal-100 text-slate-700",
   LOGOUT: "bg-gray-100 text-gray-700",
   LOGIN_FAILED: "bg-red-100 text-red-700",
   REGISTER: "bg-green-100 text-green-700",
@@ -47,7 +47,7 @@ const ACTION_COLORS: Record<string, string> = {
   DELETE: "bg-red-100 text-red-700",
   PUBLISH: "bg-slate-100 text-slate-700",
   TOGGLE_ACTIVE: "bg-orange-100 text-orange-700",
-  STATUS_CHANGE: "bg-indigo-100 text-indigo-700",
+  STATUS_CHANGE: "bg-teal-100 text-teal-700",
   PASSWORD_CHANGE: "bg-pink-100 text-pink-700",
 };
 
@@ -122,7 +122,7 @@ export default function AdminAuditLogs() {
           {/* Header */}
           <div className="mb-6">
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-              <ScrollText className="h-6 w-6 text-slate-600" />
+              <ScrollText className="h-6 w-6 text-teal-600" />
               Audit Logs
             </h1>
             <p className="text-gray-500 mt-1">

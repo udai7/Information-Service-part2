@@ -327,7 +327,7 @@ const OfficeDetails: React.FC = () => {
                   </Button>
                   <Button
                     onClick={handleAddPost}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    className="bg-teal-600 hover:bg-teal-700"
                   >
                     Add Post
                   </Button>
@@ -373,7 +373,7 @@ const OfficeDetails: React.FC = () => {
                   </p>
                   <Button
                     onClick={() => setShowAddPostForm(true)}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    className="bg-teal-600 hover:bg-teal-700"
                   >
                     Add First Post
                   </Button>
@@ -388,7 +388,7 @@ const OfficeDetails: React.FC = () => {
                     </h2>
                     <Button
                       onClick={() => setShowAddPostForm(true)}
-                      className="bg-blue-600 hover:bg-blue-700"
+                      className="bg-teal-600 hover:bg-teal-700"
                     >
                       Add New Post
                     </Button>

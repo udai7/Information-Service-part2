@@ -187,7 +187,7 @@ export default function AdminDepartments() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-                <Building2 className="h-6 w-6 text-slate-600" />
+                <Building2 className="h-6 w-6 text-teal-600" />
                 Department Management
               </h1>
               <p className="text-gray-500 mt-1">
@@ -335,7 +335,7 @@ export default function AdminDepartments() {
                     {deptStats ? (
                       <div className="grid grid-cols-3 gap-3 text-center">
                         <div className="bg-slate-50 rounded-lg p-2">
-                          <MessageSquare className="h-4 w-4 mx-auto text-blue-600 mb-1" />
+                          <MessageSquare className="h-4 w-4 mx-auto text-teal-600 mb-1" />
                           <div className="text-lg font-bold text-slate-700">
                             {deptStats.grievances?.total || 0}
                           </div>
@@ -351,7 +351,7 @@ export default function AdminDepartments() {
                           <div className="text-xs text-gray-500">Services</div>
                         </div>
                         <div className="bg-slate-50 rounded-lg p-2">
-                          <BarChart3 className="h-4 w-4 mx-auto text-blue-600 mb-1" />
+                          <BarChart3 className="h-4 w-4 mx-auto text-teal-600 mb-1" />
                           <div className="text-lg font-bold text-slate-700">
                             {deptStats.feedback?.total || 0}
                           </div>

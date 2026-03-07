@@ -207,7 +207,7 @@ export default function UserContactService() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-teal-600">
                   {stats.active}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -222,7 +222,7 @@ export default function UserContactService() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-slate-600">
+                <div className="text-2xl font-bold text-teal-600">
                   {stats.total}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -275,7 +275,7 @@ export default function UserContactService() {
                       </div>
                       <div>
                         <span className="font-semibold">Status:</span>{" "}
-                        <span className="inline-block bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full text-xs font-semibold">
+                        <span className="inline-block bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full text-xs font-semibold">
                           {service.status}
                         </span>
                       </div>
@@ -336,7 +336,7 @@ export default function UserContactService() {
                           setLoading(false);
                         }
                       }}
-                      className="w-full mt-2 bg-blue-600 text-white"
+                      className="w-full mt-2 bg-teal-600 text-white"
                       disabled={loading}
                     >
                       {loading ? "Loading..." : "View Details"}
@@ -367,7 +367,7 @@ export default function UserContactService() {
           {/* Modal for Contact Service Details */}
           {modalService && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-              <div className="bg-gray-50 rounded-xl shadow-2xl max-w-2xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-blue-200">
+              <div className="bg-gray-50 rounded-xl shadow-2xl max-w-2xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-teal-200">
                 <button
                   onClick={() => setModalService(null)}
                   className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
@@ -376,8 +376,8 @@ export default function UserContactService() {
                 </button>
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                    <h2 className="text-2xl font-bold text-blue-800">
+                    <div className="w-2 h-2 bg-teal-600 rounded-full"></div>
+                    <h2 className="text-2xl font-bold text-teal-800">
                       {modalService.name}
                     </h2>
                   </div>
@@ -389,15 +389,15 @@ export default function UserContactService() {
                 {/* Basic Information */}
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    <h3 className="text-lg font-semibold text-blue-800">
+                    <div className="w-2 h-2 bg-teal-400 rounded-full"></div>
+                    <h3 className="text-lg font-semibold text-teal-800">
                       Basic Information
                     </h3>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Type */}
                     <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-start justify-center min-h-[80px]">
-                      <span className="text-sm font-medium text-blue-700 mb-1">
+                      <span className="text-sm font-medium text-teal-700 mb-1">
                         Type
                       </span>
                       <span className="text-gray-800 text-base font-semibold">
@@ -406,7 +406,7 @@ export default function UserContactService() {
                     </div>
                     {/* Status */}
                     <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-start justify-center min-h-[80px]">
-                      <span className="text-sm font-medium text-blue-700 mb-1">
+                      <span className="text-sm font-medium text-teal-700 mb-1">
                         Status
                       </span>
                       <span className="text-gray-800 text-base font-semibold capitalize">
@@ -434,7 +434,7 @@ export default function UserContactService() {
                 {modalService.offices && (
                   <div className="mb-6">
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
                       <h3 className="text-lg font-semibold text-gray-800">
                         Filter Options
                       </h3>
@@ -448,7 +448,7 @@ export default function UserContactService() {
                           }}
                           value={filterType}
                         >
-                          <SelectTrigger className="w-[180px] border-blue-200 focus:border-blue-400">
+                          <SelectTrigger className="w-full sm:w-[180px] border-teal-200 focus:border-teal-300">
                             <SelectValue placeholder="Select Filter Type" />
                           </SelectTrigger>
                           <SelectContent>
@@ -466,7 +466,7 @@ export default function UserContactService() {
                             }
                             value={selectedDistrict}
                           >
-                            <SelectTrigger className="w-[180px] border-blue-200 focus:border-blue-400">
+                            <SelectTrigger className="w-full sm:w-[180px] border-teal-200 focus:border-teal-300">
                               <SelectValue placeholder="Select District" />
                             </SelectTrigger>
                             <SelectContent>
@@ -511,14 +511,14 @@ export default function UserContactService() {
                         .map((office: any, officeIdx: number) => (
                           <div
                             key={officeIdx}
-                            className="mb-4 p-4 border rounded-lg bg-gray-50 border-blue-200 shadow-sm hover:shadow-md transition-shadow duration-200"
+                            className="mb-4 p-4 border rounded-lg bg-gray-50 border-teal-200 shadow-sm hover:shadow-md transition-shadow duration-200"
                           >
-                            <h4 className="font-semibold text-lg mb-2 text-blue-800 flex items-center">
-                              <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                            <h4 className="font-semibold text-lg mb-2 text-teal-800 flex items-center">
+                              <span className="w-2 h-2 bg-teal-400 rounded-full mr-2"></span>
                               Office: {office.officeName}
                             </h4>
-                            <div className="bg-white rounded-md p-3 mb-3 border-l-4 border-blue-300">
-                              <p className="text-sm text-blue-700">
+                            <div className="bg-white rounded-md p-3 mb-3 border-l-4 border-teal-300">
+                              <p className="text-sm text-teal-700">
                                 <span className="font-medium">Level:</span>{" "}
                                 {office.level},
                                 <span className="font-medium"> District:</span>{" "}
@@ -532,8 +532,8 @@ export default function UserContactService() {
 
                             {/* Posts within this office */}
                             <div className="mt-3">
-                              <h5 className="font-semibold text-md mb-2 text-blue-700 flex items-center">
-                                <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                              <h5 className="font-semibold text-md mb-2 text-teal-700 flex items-center">
+                                <span className="w-2 h-2 bg-teal-500 rounded-full mr-2"></span>
                                 Posts:
                               </h5>
 
@@ -551,14 +551,14 @@ export default function UserContactService() {
                                     .map((post: any, postIdx: number) => (
                                       <li
                                         key={postIdx}
-                                        className="bg-white rounded-lg p-3 border-l-4 border-blue-400 shadow-sm"
+                                        className="bg-white rounded-lg p-3 border-l-4 border-teal-300 shadow-sm"
                                       >
                                         <div className="flex items-center mb-2">
-                                          <span className="w-2 h-2 bg-blue-300 rounded-full mr-2"></span>
-                                          <span className="font-medium text-blue-800">
+                                          <span className="w-2 h-2 bg-teal-300 rounded-full mr-2"></span>
+                                          <span className="font-medium text-teal-800">
                                             {post.postName}
                                           </span>
-                                          <span className="ml-2 text-sm bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                                          <span className="ml-2 text-sm bg-teal-100 text-teal-700 px-2 py-1 rounded-full">
                                             {post.postRank}
                                           </span>
                                         </div>
@@ -569,9 +569,9 @@ export default function UserContactService() {
                                             emp.postIndex ===
                                             post.globalPostIndex,
                                         ).length > 0 ? (
-                                          <div className="ml-4 mt-2 bg-gray-50 rounded-md p-3 border border-blue-200">
-                                            <h6 className="font-semibold text-sm mb-2 text-blue-700 flex items-center">
-                                              <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                                          <div className="ml-4 mt-2 bg-gray-50 rounded-md p-3 border border-teal-200">
+                                            <h6 className="font-semibold text-sm mb-2 text-teal-700 flex items-center">
+                                              <span className="w-2 h-2 bg-teal-400 rounded-full mr-2"></span>
                                               Employees:
                                             </h6>
                                             <ul className="space-y-2">
@@ -588,21 +588,21 @@ export default function UserContactService() {
                                                   ) => (
                                                     <li
                                                       key={empIdx}
-                                                      className="bg-white rounded-md p-2 text-sm border border-blue-100"
+                                                      className="bg-white rounded-md p-2 text-sm border border-teal-100"
                                                     >
-                                                      <span className="font-medium text-blue-800">
+                                                      <span className="font-medium text-teal-800">
                                                         {emp.employeeName}
                                                       </span>
-                                                      <span className="ml-2 text-blue-600">
+                                                      <span className="ml-2 text-teal-600">
                                                         ({emp.designation})
                                                       </span>
                                                       {emp.email && (
-                                                        <div className="text-blue-500 text-xs mt-1">
+                                                        <div className="text-teal-600 text-xs mt-1">
                                                           📧 {emp.email}
                                                         </div>
                                                       )}
                                                       {emp.phone && (
-                                                        <div className="text-blue-400 text-xs">
+                                                        <div className="text-teal-400 text-xs">
                                                           📞 {emp.phone}
                                                         </div>
                                                       )}
@@ -612,7 +612,7 @@ export default function UserContactService() {
                                             </ul>
                                           </div>
                                         ) : (
-                                          <div className="ml-4 mt-2 text-sm text-blue-400 bg-blue-50 rounded-md p-2 border border-blue-100">
+                                          <div className="ml-4 mt-2 text-sm text-teal-400 bg-teal-50 rounded-md p-2 border border-teal-100">
                                             No employee details present
                                           </div>
                                         )}
@@ -620,8 +620,8 @@ export default function UserContactService() {
                                     ))}
                                 </ul>
                               ) : (
-                                <div className="bg-blue-50 rounded-md p-3 border border-blue-100">
-                                  <p className="text-sm text-blue-400 text-center">
+                                <div className="bg-teal-50 rounded-md p-3 border border-teal-100">
+                                  <p className="text-sm text-teal-400 text-center">
                                     No post details present
                                   </p>
                                 </div>

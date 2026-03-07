@@ -88,7 +88,7 @@ export default function AdminLogin() {
                 Don't have an account?{" "}
                 <Link
                   to="/admin/register"
-                  className="text-blue-600 hover:underline"
+                  className="text-teal-600 hover:underline"
                 >
                   Create account
                 </Link>

@@ -195,10 +195,10 @@ export default function AdminContactService() {
                     <CardTitle className="text-sm font-medium">
                       Active Services
                     </CardTitle>
-                    <Activity className="h-4 w-4 text-blue-600" />
+                    <Activity className="h-4 w-4 text-teal-600" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-blue-600">
+                    <div className="text-2xl font-bold text-teal-600">
                       {stats.active}
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -211,10 +211,10 @@ export default function AdminContactService() {
                     <CardTitle className="text-sm font-medium">
                       Inactive Services
                     </CardTitle>
-                    <Users className="h-4 w-4 text-slate-600" />
+                    <Users className="h-4 w-4 text-teal-600" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-slate-600">
+                    <div className="text-2xl font-bold text-teal-600">
                       {stats.inactive}
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -292,7 +292,7 @@ export default function AdminContactService() {
                                 <span className="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded">
                                   {service.status}
                                 </span>
-                                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">
+                                <span className="px-2 py-1 bg-teal-100 text-teal-800 text-xs rounded">
                                   {service.applicationMode}
                                 </span>
                               </div>
@@ -348,7 +348,7 @@ export default function AdminContactService() {
                                 <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
                                   {service.status}
                                 </span>
-                                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">
+                                <span className="px-2 py-1 bg-teal-100 text-teal-800 text-xs rounded">
                                   {service.applicationMode}
                                 </span>
                                 <span

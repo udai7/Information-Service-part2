@@ -232,10 +232,10 @@ export default function AdminGrievancesService() {
                     <CardTitle className="text-sm font-medium">
                       New Grievances
                     </CardTitle>
-                    <FileText className="h-4 w-4 text-blue-600" />
+                    <FileText className="h-4 w-4 text-teal-600" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-blue-600">
+                    <div className="text-2xl font-bold text-teal-600">
                       {stats.newGrievances}
                     </div>
                     <p className="text-xs text-muted-foreground">

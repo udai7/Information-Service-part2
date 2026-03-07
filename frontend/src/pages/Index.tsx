@@ -17,97 +17,167 @@ import {
   Globe,
   Award,
   Clock,
-  Sparkles,
-  Star,
-  TrendingUp,
-  Heart,
   FileText,
   Phone,
+  CheckCircle,
+  MapPin,
+  BookOpen,
+  Headphones,
+  ChevronRight,
+  Building2,
+  Landmark,
+  AlertCircle,
+  MessageSquare,
+  Mail,
+  ExternalLink,
 } from "lucide-react";
 
+// ─── Data ───
+const STATS = [
+  { label: "Active Services", value: "500+", icon: Globe },
+  { label: "Grievances Resolved", value: "10K+", icon: Users },
+  { label: "Success Rate", value: "99%", icon: Award },
+  { label: "Avg Response", value: "< 1hr", icon: Clock },
+];
+
+const FEATURES = [
+  {
+    icon: Search,
+    title: "Find Services Easily",
+    description:
+      "Browse all official services, certificates, and schemes available to citizens of Tripura from a single, unified platform.",
+  },
+  {
+    icon: Shield,
+    title: "Trusted & Verified",
+    description:
+      "Every service detail and document requirement is sourced directly from government authorities and kept current.",
+  },
+  {
+    icon: Zap,
+    title: "Step-by-Step Guidance",
+    description:
+      "Clear instructions for applying, renewing, or updating certificates and services — no confusion, no wasted trips.",
+  },
+  {
+    icon: Users,
+    title: "For Every Citizen",
+    description:
+      "From students to seniors, everyone can access the right information and manage their government service needs.",
+  },
+];
+
+const SERVICE_CATEGORIES = [
+  {
+    icon: FileText,
+    title: "Certificates",
+    description: "Birth, death, income, caste, residence and more — apply online or find your nearest office.",
+    link: "/certificate-service",
+    count: "50+",
+  },
+  {
+    icon: BookOpen,
+    title: "Schemes",
+    description: "Education grants, housing subsidies, pension plans and welfare programmes for all eligible citizens.",
+    link: "/scheme-service",
+    count: "120+",
+  },
+  {
+    icon: Phone,
+    title: "Contact Directory",
+    description: "Reach any government office directly — phone numbers, emails, addresses all in one place.",
+    link: "/contact-service",
+    count: "200+",
+  },
+  {
+    icon: AlertCircle,
+    title: "Grievances",
+    description: "File complaints and track resolution status for any government service issue you face.",
+    link: "/grievances-service",
+    count: "24/7",
+  },
+  {
+    icon: MessageSquare,
+    title: "Feedback",
+    description: "Rate services, share your experience, and help us improve government service delivery.",
+    link: "/feedback-service",
+    count: "Open",
+  },
+  {
+    icon: Headphones,
+    title: "Emergency Services",
+    description: "Quick access to emergency contacts, helpline numbers, and disaster management resources.",
+    link: "/user-dashboard",
+    count: "24/7",
+  },
+];
+
+const STEPS = [
+  {
+    step: "01",
+    title: "Browse Services",
+    description: "Explore the full catalogue of government services, certificates and schemes available in Tripura.",
+  },
+  {
+    step: "02",
+    title: "Check Requirements",
+    description: "View the complete list of documents needed, eligibility criteria, and application fees.",
+  },
+  {
+    step: "03",
+    title: "Follow the Guide",
+    description: "Step-by-step instructions walk you through the application process — online or offline.",
+  },
+  {
+    step: "04",
+    title: "Get It Done",
+    description: "Submit your application with confidence. Track progress and get support if you need help.",
+  },
+];
+
+const FAQ_ITEMS = [
+  {
+    q: "Is this an official government website?",
+    a: "InfoServices Tripura is an information portal that aggregates publicly available government service data to help citizens navigate processes easily.",
+  },
+  {
+    q: "Do I need to create an account?",
+    a: "No. All service information, document requirements, and contact details are available without registration.",
+  },
+  {
+    q: "How current is the information?",
+    a: "Our team regularly updates service details. Each listing shows when it was last verified by administrators.",
+  },
+  {
+    q: "Can I apply for services directly through this portal?",
+    a: "For services with online application, we provide direct links to the official portals. For offline services, we provide addresses and office hours.",
+  },
+];
+
+// ─── Component ───
 export default function Index() {
-  const features = [
-    {
-      icon: <Search className="h-6 w-6" />,
-      title: "Find Government Services Easily",
-      description:
-        "Browse and discover all official services, certificates, and schemes available to citizens of Tripura.",
-    },
-    {
-      icon: <Shield className="h-6 w-6" />,
-      title: "Trusted & Verified Information",
-      description:
-        "All service details and document requirements are sourced from government authorities and kept up-to-date.",
-    },
-    {
-      icon: <Zap className="h-6 w-6" />,
-      title: "Step-by-Step Application Guidance",
-      description:
-        "Get clear instructions for applying, renewing, or updating certificates and services—no confusion, no wasted trips.",
-    },
-    {
-      icon: <Users className="h-6 w-6" />,
-      title: "Empowering Every Citizen",
-      description:
-        "From students to professionals, everyone can access the right information and manage their government service needs.",
-    },
-  ];
-
-  const stats = [
-    {
-      label: "Active Services",
-      value: "500+",
-      icon: <Globe className="h-5 w-5" />,
-    },
-    {
-      label: "Grievances Solved",
-      value: "10K+",
-      icon: <Users className="h-5 w-5" />,
-    },
-    {
-      label: "Success Rate",
-      value: "99%",
-      icon: <Award className="h-5 w-5" />,
-    },
-    {
-      label: "Avg Response",
-      value: "< 1hr",
-      icon: <Clock className="h-5 w-5" />,
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-gray-50 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-slate-200/20 to-slate-300/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-gray-200/20 to-slate-200/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-slate-100/20 to-gray-200/20 rounded-full blur-3xl animate-pulse delay-500"></div>
-      </div>
-
-      {/* Header */}
-      <header className="border-b bg-white/90 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="h-10 w-10 bg-slate-800 rounded-xl flex items-center justify-center shadow-lg">
-                <Search className="h-5 w-5 text-white" />
+    <div className="min-h-screen bg-white">
+      {/* ─── Header ─── */}
+      <header className="border-b border-slate-200 bg-white sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-3">
+              <div className="h-9 w-9 rounded-lg bg-teal-600 flex items-center justify-center">
+                <Landmark className="h-5 w-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-slate-900">
+              <span className="text-lg font-semibold text-slate-900 tracking-tight">
                 InfoServices Tripura
               </span>
             </div>
-            <nav className="hidden md:flex items-center space-x-6">
-              <Link
-                to="/user-dashboard"
-                className="text-gray-600 hover:text-primary transition-all duration-300 hover:scale-105 font-medium"
-              >
+            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+              <a href="#services" className="hover:text-slate-900 transition-colors">Services</a>
+              <a href="#how-it-works" className="hover:text-slate-900 transition-colors">How It Works</a>
+              <a href="#faq" className="hover:text-slate-900 transition-colors">FAQ</a>
+              <Link to="/user-dashboard" className="hover:text-slate-900 transition-colors">
                 Dashboard
               </Link>
-              <Button
-                asChild
-                className="shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-              >
+              <Button size="sm" asChild className="bg-teal-600 hover:bg-teal-700 text-white">
                 <Link to="/admin/login">Admin Portal</Link>
               </Button>
             </nav>
@@ -115,269 +185,337 @@ export default function Index() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="py-24 px-4 relative z-10">
-        <div className="container mx-auto text-center">
-          <div className="animate-fade-in-up">
-            <Badge
-              variant="outline"
-              className="mb-6 px-4 py-2 text-sm font-medium bg-white/80 backdrop-blur-sm border-slate-200 hover:scale-105 transition-all duration-300"
-            >
-              <Sparkles className="w-4 h-4 mr-2 text-slate-600" />
+      {/* ─── Hero ─── */}
+      <section className="bg-slate-50 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+          <div className="max-w-3xl">
+            <Badge variant="outline" className="mb-5 text-teal-700 border-teal-200 bg-teal-50 text-xs font-medium px-3 py-1">
               Tripura's Unified Government Services Portal
             </Badge>
-          </div>
-
-          <div className="animate-fade-in-up delay-200">
-            <h1 className="text-5xl md:text-7xl font-bold mb-8 text-slate-900 leading-tight">
-              Access All Government Services & Certificates
-              <br />
-              <span className="text-4xl md:text-6xl text-slate-600">
-                For Citizens of Tripura
-              </span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight tracking-tight">
+              Government services,{" "}
+              <span className="text-teal-700">simplified.</span>
             </h1>
-          </div>
-
-          <div className="animate-fade-in-up delay-400">
-            <p className="text-xl md:text-2xl text-gray-600 mb-10 max-w-4xl mx-auto leading-relaxed">
-              InfoServices Tripura is your one-stop platform to discover, apply
-              for, and manage government services, certificates, and schemes.
-              Get official guidance, document checklists, and step-by-step
-              instructions for every process—making government interactions
-              simple and transparent for everyone in Tripura.
+            <p className="mt-6 text-lg text-slate-600 leading-relaxed max-w-2xl">
+              One platform to discover, understand, and access every government service,
+              certificate, and welfare scheme available to citizens of Tripura.
+              Clear guidance, verified information, zero confusion.
             </p>
-          </div>
-
-          <div className="animate-fade-in-up delay-600">
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Button
-                size="lg"
-                asChild
-                className="text-lg px-8 py-4 bg-slate-700 hover:bg-slate-800 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group"
-              >
+            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+              <Button size="lg" asChild className="bg-teal-600 hover:bg-teal-700 text-white h-12 px-6 text-base">
                 <Link to="/user-dashboard">
-                  <Star className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
-                  Explore Services
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  Explore All Services
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                asChild
-                className="text-lg px-8 py-4 border-2 border-gray-300 hover:border-slate-300 bg-white/80 backdrop-blur-sm hover:bg-slate-50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-              >
-                <Link to="/admin/login">
-                  <Shield className="mr-2 h-5 w-5" />
-                  Admin Portal
-                </Link>
+              <Button size="lg" variant="outline" asChild className="h-12 px-6 text-base border-slate-300 text-slate-700 hover:bg-slate-100">
+                <a href="#services">
+                  Browse Categories
+                  <ChevronRight className="ml-1 h-4 w-4" />
+                </a>
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 px-4 bg-white/60 backdrop-blur-sm relative z-10">
-        <div className="container mx-auto">
+      {/* ─── Stats Bar ─── */}
+      <section className="border-b border-slate-200 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div
-                key={index}
-                className="text-center group hover:scale-105 transition-all duration-300"
-              >
-                <div className="flex items-center justify-center mb-4">
-                  <div className="p-4 bg-slate-700 rounded-2xl text-white shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:rotate-3">
-                    {stat.icon}
-                  </div>
+            {STATS.map((stat) => (
+              <div key={stat.label} className="flex items-center gap-4">
+                <div className="h-11 w-11 rounded-lg bg-teal-50 flex items-center justify-center flex-shrink-0">
+                  <stat.icon className="h-5 w-5 text-teal-600" />
                 </div>
-                <div className="text-4xl font-bold text-slate-800 mb-2">
-                  {stat.value}
+                <div>
+                  <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
+                  <div className="text-sm text-slate-500">{stat.label}</div>
                 </div>
-                <div className="text-gray-600 font-medium">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-24 px-4 relative z-10">
-        <div className="container mx-auto">
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center justify-center p-3 bg-slate-700 rounded-2xl mb-6">
-              <Heart className="h-6 w-6 text-white" />
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-slate-900">
-              Why Choose InfoServices Tripura?
+      {/* ─── Service Categories ─── */}
+      <section id="services" className="bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="max-w-2xl mb-12">
+            <h2 className="text-3xl font-bold text-slate-900 tracking-tight">
+              Everything you need, in one place
             </h2>
-            <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              We simplify government services for every citizen—find what you
-              need, follow clear steps, and get support for certificates,
-              schemes, and emergency services. No more confusion or wasted time.
+            <p className="mt-3 text-slate-600 text-lg">
+              Access certificates, schemes, contact directories, grievance filing and more — all organized for quick navigation.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <Card
-                key={index}
-                className="text-center hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-0 bg-white/80 backdrop-blur-sm group overflow-hidden relative"
-              >
-                {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                <CardHeader className="relative z-10">
-                  <div className="mx-auto p-4 bg-slate-700 rounded-2xl text-white w-fit mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
-                    {feature.icon}
-                  </div>
-                  <CardTitle className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-300">
-                    {feature.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="relative z-10">
-                  <CardDescription className="text-gray-600 leading-relaxed">
-                    {feature.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {SERVICE_CATEGORIES.map((cat) => (
+              <Link key={cat.title} to={cat.link} className="group">
+                <Card className="h-full border border-slate-200 hover:border-teal-300 hover:shadow-md transition-all duration-200 bg-white">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="h-10 w-10 rounded-lg bg-slate-100 group-hover:bg-teal-50 flex items-center justify-center transition-colors">
+                        <cat.icon className="h-5 w-5 text-slate-600 group-hover:text-teal-600 transition-colors" />
+                      </div>
+                      <Badge variant="secondary" className="text-xs bg-slate-100 text-slate-600">
+                        {cat.count}
+                      </Badge>
+                    </div>
+                    <CardTitle className="text-base font-semibold text-slate-900 group-hover:text-teal-700 transition-colors">
+                      {cat.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-sm text-slate-500 leading-relaxed">
+                      {cat.description}
+                    </CardDescription>
+                    <div className="mt-4 flex items-center text-sm font-medium text-teal-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                      Browse services <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 px-4 bg-slate-800 text-white relative overflow-hidden">
-        {/* Background decorations */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-72 h-72 bg-white/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
-          <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-white/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-        </div>
-
-        <div className="container mx-auto text-center relative z-10">
-          <div className="inline-flex items-center justify-center p-3 bg-white/20 rounded-2xl mb-8 backdrop-blur-sm">
-            <TrendingUp className="h-6 w-6 text-white" />
+      {/* ─── Why Choose Us ─── */}
+      <section className="bg-slate-50 border-y border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <h2 className="text-3xl font-bold text-slate-900 tracking-tight">
+              Why citizens trust this platform
+            </h2>
+            <p className="mt-3 text-slate-600 text-lg">
+              Built to make government interactions simpler, faster, and more transparent for every citizen of Tripura.
+            </p>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            Start Your Government Service Journey
-          </h2>
-          <p className="text-xl md:text-2xl mb-12 opacity-90 max-w-3xl mx-auto leading-relaxed">
-            Join thousands of Tripura citizens who trust InfoServices to access,
-            apply for, and manage their government services and certificates.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <Button
-              size="lg"
-              variant="secondary"
-              asChild
-              className="text-lg px-10 py-4 bg-white text-blue-600 hover:bg-gray-50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 font-semibold"
-            >
-              <Link to="/user-dashboard">
-                <FileText className="mr-2 h-5 w-5" />
-                Browse Services
-              </Link>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              asChild
-              className="text-lg px-10 py-4 bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 font-semibold"
-            >
-              <Link to="/admin/login">
-                <Shield className="mr-2 h-5 w-5" />
-                Service Provider?
-              </Link>
-            </Button>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {FEATURES.map((feature) => (
+              <div key={feature.title} className="text-center">
+                <div className="mx-auto h-12 w-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center mb-4 shadow-sm">
+                  <feature.icon className="h-5 w-5 text-teal-600" />
+                </div>
+                <h3 className="font-semibold text-slate-900 mb-2">{feature.title}</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">{feature.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-16 px-4 bg-gray-900 text-white relative">
-        <div className="container mx-auto">
-          <div className="grid md:grid-cols-4 gap-12">
-            <div className="md:col-span-2">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="h-10 w-10 bg-slate-700 rounded-xl flex items-center justify-center shadow-lg">
-                  <Search className="h-5 w-5 text-white" />
-                </div>
-                <span className="text-2xl font-bold text-white">
-                  InfoServices Tripura
-                </span>
+      {/* ─── How It Works ─── */}
+      <section id="how-it-works" className="bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="max-w-2xl mb-14">
+            <h2 className="text-3xl font-bold text-slate-900 tracking-tight">
+              How it works
+            </h2>
+            <p className="mt-3 text-slate-600 text-lg">
+              Four simple steps to access any government service in Tripura.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {STEPS.map((item, index) => (
+              <div key={item.step} className="relative">
+                {index < STEPS.length - 1 && (
+                  <div className="hidden lg:block absolute top-6 left-full w-full h-px bg-slate-200 -translate-x-4" />
+                )}
+                <div className="text-3xl font-bold text-teal-600/20 mb-3">{item.step}</div>
+                <h3 className="font-semibold text-slate-900 mb-2">{item.title}</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">{item.description}</p>
               </div>
-              <p className="text-gray-400 text-lg leading-relaxed mb-6">
-                Your trusted portal for all government services, certificates,
-                and schemes in Tripura. Making government interactions simple
-                and transparent.
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Info Banner ─── */}
+      <section className="bg-teal-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div className="text-center lg:text-left">
+              <h2 className="text-2xl font-bold text-white mb-2">
+                Ready to get started?
+              </h2>
+              <p className="text-teal-100 text-lg max-w-xl">
+                Join thousands of Tripura citizens who use InfoServices to navigate government
+                processes with confidence.
               </p>
-              <div className="flex space-x-4">
-                <div className="p-3 bg-slate-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  <Award className="h-5 w-5 text-white" />
+            </div>
+            <div className="flex gap-3">
+              <Button size="lg" asChild className="bg-white text-teal-700 hover:bg-teal-50 h-12 px-6 font-semibold">
+                <Link to="/user-dashboard">
+                  <FileText className="mr-2 h-4 w-4" />
+                  Browse Services
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild className="border-teal-400 text-white hover:bg-teal-700 h-12 px-6 font-semibold">
+                <Link to="/admin/login">
+                  <Shield className="mr-2 h-4 w-4" />
+                  Admin Login
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FAQ ─── */}
+      <section id="faq" className="bg-slate-50 border-t border-slate-200">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <h2 className="text-3xl font-bold text-slate-900 tracking-tight text-center mb-12">
+            Frequently asked questions
+          </h2>
+          <div className="space-y-4">
+            {FAQ_ITEMS.map((item) => (
+              <div key={item.q} className="bg-white border border-slate-200 rounded-lg p-5">
+                <h3 className="font-semibold text-slate-900 mb-2 flex items-start gap-2">
+                  <CheckCircle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                  {item.q}
+                </h3>
+                <p className="text-sm text-slate-500 leading-relaxed ml-7">{item.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Quick Links ─── */}
+      <section className="bg-white border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid sm:grid-cols-3 gap-6">
+            <Card className="border-slate-200 hover:border-teal-200 transition-colors">
+              <CardHeader>
+                <div className="h-10 w-10 rounded-lg bg-teal-50 flex items-center justify-center mb-2">
+                  <Building2 className="h-5 w-5 text-teal-600" />
                 </div>
-                <div className="p-3 bg-slate-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  <FileText className="h-5 w-5 text-white" />
+                <CardTitle className="text-base">Government Offices</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-sm mb-3">
+                  Find addresses, phone numbers and working hours for all district and sub-division offices.
+                </CardDescription>
+                <Link to="/contact-service" className="text-sm font-medium text-teal-600 hover:text-teal-700 inline-flex items-center">
+                  View directory <ExternalLink className="ml-1 h-3.5 w-3.5" />
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="border-slate-200 hover:border-teal-200 transition-colors">
+              <CardHeader>
+                <div className="h-10 w-10 rounded-lg bg-teal-50 flex items-center justify-center mb-2">
+                  <MapPin className="h-5 w-5 text-teal-600" />
                 </div>
-                <div className="p-3 bg-slate-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  <Phone className="h-5 w-5 text-white" />
+                <CardTitle className="text-base">District Services</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-sm mb-3">
+                  Services organized by district — find what's available in your area and how to apply.
+                </CardDescription>
+                <Link to="/scheme-service" className="text-sm font-medium text-teal-600 hover:text-teal-700 inline-flex items-center">
+                  Explore schemes <ExternalLink className="ml-1 h-3.5 w-3.5" />
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="border-slate-200 hover:border-teal-200 transition-colors">
+              <CardHeader>
+                <div className="h-10 w-10 rounded-lg bg-teal-50 flex items-center justify-center mb-2">
+                  <Headphones className="h-5 w-5 text-teal-600" />
+                </div>
+                <CardTitle className="text-base">Need Help?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-sm mb-3">
+                  File a grievance, give feedback, or reach out to our support team for assistance.
+                </CardDescription>
+                <Link to="/grievances-service" className="text-sm font-medium text-teal-600 hover:text-teal-700 inline-flex items-center">
+                  Get support <ExternalLink className="ml-1 h-3.5 w-3.5" />
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Footer ─── */}
+      <footer className="bg-slate-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            {/* Brand */}
+            <div className="lg:col-span-2">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="h-9 w-9 rounded-lg bg-teal-600 flex items-center justify-center">
+                  <Landmark className="h-5 w-5 text-white" />
+                </div>
+                <span className="text-lg font-semibold tracking-tight">InfoServices Tripura</span>
+              </div>
+              <p className="text-slate-400 text-sm leading-relaxed max-w-md mb-6">
+                Your trusted portal for all government services, certificates, and welfare
+                schemes in Tripura. Making government interactions simple and transparent
+                for every citizen.
+              </p>
+              <div className="flex gap-2">
+                <div className="h-9 w-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition-colors cursor-pointer">
+                  <Mail className="h-4 w-4 text-slate-400" />
+                </div>
+                <div className="h-9 w-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition-colors cursor-pointer">
+                  <Phone className="h-4 w-4 text-slate-400" />
+                </div>
+                <div className="h-9 w-9 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition-colors cursor-pointer">
+                  <Globe className="h-4 w-4 text-slate-400" />
                 </div>
               </div>
             </div>
+
+            {/* Platform */}
             <div>
-              <h3 className="font-bold text-xl mb-6 text-white">Platform</h3>
-              <ul className="space-y-4 text-gray-400">
+              <h4 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">Platform</h4>
+              <ul className="space-y-2.5 text-sm text-slate-400">
                 <li>
-                  <Link
-                    to="/user-dashboard"
-                    className="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block font-medium"
-                  >
-                    User Dashboard
-                  </Link>
+                  <Link to="/user-dashboard" className="hover:text-white transition-colors">Dashboard</Link>
                 </li>
                 <li>
-                  <Link
-                    to="/admin/login"
-                    className="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block font-medium"
-                  >
-                    Admin Portal
-                  </Link>
+                  <Link to="/scheme-service" className="hover:text-white transition-colors">Schemes</Link>
+                </li>
+                <li>
+                  <Link to="/certificate-service" className="hover:text-white transition-colors">Certificates</Link>
+                </li>
+                <li>
+                  <Link to="/contact-service" className="hover:text-white transition-colors">Contact Directory</Link>
+                </li>
+                <li>
+                  <Link to="/grievances-service" className="hover:text-white transition-colors">Grievances</Link>
                 </li>
               </ul>
             </div>
+
+            {/* Support */}
             <div>
-              <h3 className="font-bold text-xl mb-6 text-white">Support</h3>
-              <ul className="space-y-4 text-gray-400">
+              <h4 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">Support</h4>
+              <ul className="space-y-2.5 text-sm text-slate-400">
                 <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block font-medium"
-                  >
-                    Help Center
-                  </a>
+                  <Link to="/feedback-service" className="hover:text-white transition-colors">Feedback</Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block font-medium"
-                  >
-                    Contact Us
-                  </a>
+                  <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block font-medium"
-                  >
-                    FAQ
-                  </a>
+                  <Link to="/admin/login" className="hover:text-white transition-colors">Admin Portal</Link>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center">
-            <p className="text-gray-400 text-lg">
-              &copy; 2025 InfoServices Tripura. All rights reserved. Made with{" "}
-              <Heart className="inline h-4 w-4 text-red-500 mx-1" />
-              for the people of Tripura.
+
+          <div className="border-t border-slate-800 mt-10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-slate-500">
+              &copy; {new Date().getFullYear()} InfoServices Tripura. All rights reserved.
+            </p>
+            <p className="text-sm text-slate-500">
+              Made for the citizens of Tripura
             </p>
           </div>
         </div>

@@ -142,10 +142,10 @@ export default function UserFeedbackService() {
                 <CardTitle className="text-sm font-medium">
                   Total Feedbacks
                 </CardTitle>
-                <MessageSquare className="h-4 w-4 text-blue-600" />
+                <MessageSquare className="h-4 w-4 text-teal-600" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-teal-600">
                   {stats.totalFeedbacks}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -342,7 +342,7 @@ export default function UserFeedbackService() {
 
                 <Button
                   type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  className="w-full bg-teal-600 hover:bg-teal-700"
                   disabled={submitting}
                 >
                   {submitting ? "Submitting..." : "Submit Feedback"}

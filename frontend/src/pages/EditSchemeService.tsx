@@ -532,7 +532,7 @@ export default function EditSchemeService() {
 
         {schemeService && (
           <div className="flex flex-col items-center justify-center">
-            <div className="grid grid-cols-2 gap-4 place-content-center bg-white p-6 rounded-lg shadow-md">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 place-content-center bg-white p-6 rounded-lg shadow-md">
               <div className="border p-4 mb-6 rounded-md bg-white shadow-md">
                 <Card>
                   <CardHeader>
@@ -724,25 +724,25 @@ export default function EditSchemeService() {
                 <div className="mb-4 flex items-center justify-center space-x-4">
                   <button
                     onClick={() => setStep(1)}
-                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 1 ? "bg-blue-500 text-white" : "bg-gray-300"}`}
+                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 1 ? "bg-teal-500 text-white" : "bg-gray-300"}`}
                   >
                     Eligibility
                   </button>
                   <button
                     onClick={() => setStep(2)}
-                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 2 ? "bg-blue-500 text-white" : "bg-gray-300"}`}
+                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 2 ? "bg-teal-500 text-white" : "bg-gray-300"}`}
                   >
                     Scheme Details
                   </button>
                   <button
                     onClick={() => setStep(3)}
-                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 3 ? "bg-blue-500 text-white" : "bg-gray-300"}`}
+                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 3 ? "bg-teal-500 text-white" : "bg-gray-300"}`}
                   >
                     Application Process
                   </button>
                   <button
                     onClick={() => setStep(4)}
-                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 4 ? "bg-blue-500 text-white" : "bg-gray-300"}`}
+                    className={`px-4 py-2 rounded-md flex items-center justify-center ${step === 4 ? "bg-teal-500 text-white" : "bg-gray-300"}`}
                   >
                     Contact Service
                   </button>

@@ -92,7 +92,7 @@ export default function UserSchemeService() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-teal-600">
                   {stats.active}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -107,7 +107,7 @@ export default function UserSchemeService() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-slate-600">
+                <div className="text-2xl font-bold text-teal-600">
                   {stats.total}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -128,7 +128,7 @@ export default function UserSchemeService() {
               value={schemeTypeFilter}
               onValueChange={(value) => setSchemeTypeFilter(value)}
             >
-              <SelectTrigger className="w-[200px]">
+              <SelectTrigger className="w-full sm:w-[200px]">
                 <SelectValue placeholder="Filter by type" />
               </SelectTrigger>
               <SelectContent>
@@ -188,7 +188,7 @@ export default function UserSchemeService() {
                             href={scheme.onlineUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
+                            className="text-teal-600 hover:underline"
                           >
                             Apply Online
                           </a>
@@ -209,7 +209,7 @@ export default function UserSchemeService() {
                   <CardContent>
                     <Button
                       onClick={() => setModalScheme(scheme)}
-                      className="w-full mt-2 bg-blue-600 text-white"
+                      className="w-full mt-2 bg-teal-600 text-white"
                     >
                       View Details
                     </Button>
@@ -248,7 +248,7 @@ export default function UserSchemeService() {
           {/* Modal for Scheme Details */}
           {modalScheme && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-              <div className="bg-gray-50 rounded-lg shadow-xl max-w-4xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-blue-200">
+              <div className="bg-gray-50 rounded-lg shadow-xl max-w-4xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-teal-200">
                 <button
                   onClick={() => setModalScheme(null)}
                   className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
@@ -257,8 +257,8 @@ export default function UserSchemeService() {
                 </button>
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                    <h2 className="text-2xl font-bold text-blue-800">
+                    <div className="w-2 h-2 bg-teal-600 rounded-full"></div>
+                    <h2 className="text-2xl font-bold text-teal-800">
                       {modalScheme.name}
                     </h2>
                   </div>
@@ -270,8 +270,8 @@ export default function UserSchemeService() {
                 {/* Basic Information */}
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    <h3 className="text-lg font-semibold text-blue-800">
+                    <div className="w-2 h-2 bg-teal-400 rounded-full"></div>
+                    <h3 className="text-lg font-semibold text-teal-800">
                       Basic Information
                     </h3>
                   </div>
@@ -322,7 +322,7 @@ export default function UserSchemeService() {
                 {(modalScheme.onlineUrl || modalScheme.offlineAddress) && (
                   <div className="mb-6">
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
                       <h3 className="text-lg font-semibold text-gray-800">
                         How to Apply
                       </h3>
@@ -330,14 +330,14 @@ export default function UserSchemeService() {
                     <div className="bg-white p-4 rounded-lg shadow-sm">
                       {modalScheme.onlineUrl && (
                         <div className="mb-2">
-                          <span className="font-medium text-indigo-700">
+                          <span className="font-medium text-teal-700">
                             Online:
                           </span>{" "}
                           <a
                             href={modalScheme.onlineUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
+                            className="text-teal-600 hover:underline"
                           >
                             {modalScheme.onlineUrl}
                           </a>
@@ -345,7 +345,7 @@ export default function UserSchemeService() {
                       )}
                       {modalScheme.offlineAddress && (
                         <div>
-                          <span className="font-medium text-indigo-700">
+                          <span className="font-medium text-teal-700">
                             Offline:
                           </span>{" "}
                           <span className="text-gray-700">

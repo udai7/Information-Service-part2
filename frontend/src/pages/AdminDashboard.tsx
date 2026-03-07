@@ -243,7 +243,7 @@ export function DashboardHome() {
     const getTypeColor = () => {
       switch (serviceType) {
         case "scheme":
-          return "bg-blue-100 text-blue-800";
+          return "bg-teal-100 text-teal-800";
         case "certificate":
           return "bg-green-100 text-green-800";
         case "contact":
@@ -346,9 +346,9 @@ export function DashboardHome() {
 
       {/* Message Display */}
       {message && (
-        <Card className="mb-6 border-blue-200 bg-blue-50">
+        <Card className="mb-6 border-teal-200 bg-teal-50">
           <CardContent className="pt-6">
-            <div className="flex items-center gap-2 text-blue-800">
+            <div className="flex items-center gap-2 text-teal-800">
               <AlertCircle className="h-5 w-5" />
               <span>{message}</span>
             </div>
@@ -363,10 +363,10 @@ export function DashboardHome() {
             <CardTitle className="text-sm font-medium">
               Total Services
             </CardTitle>
-            <Users className="h-4 w-4 text-slate-600" />
+            <Users className="h-4 w-4 text-teal-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-slate-600">
+            <div className="text-2xl font-bold text-teal-600">
               {stats.total}
             </div>
             <p className="text-xs text-muted-foreground">All published</p>
@@ -408,10 +408,10 @@ export function DashboardHome() {
             <CardTitle className="text-sm font-medium">
               Scheme Services
             </CardTitle>
-            <FileText className="h-4 w-4 text-blue-600" />
+            <FileText className="h-4 w-4 text-teal-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-2xl font-bold text-teal-600">
               {stats.schemes}
             </div>
             <p className="text-xs text-muted-foreground">Government schemes</p>
@@ -438,10 +438,10 @@ export function DashboardHome() {
             <CardTitle className="text-sm font-medium">
               Contact Services
             </CardTitle>
-            <Phone className="h-4 w-4 text-slate-600" />
+            <Phone className="h-4 w-4 text-teal-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-slate-600">
+            <div className="text-2xl font-bold text-teal-600">
               {stats.contacts}
             </div>
             <p className="text-xs text-muted-foreground">Contact information</p>
@@ -509,7 +509,7 @@ export function DashboardHome() {
 
       {/* Services */}
       <Tabs defaultValue="all" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
           <TabsTrigger value="all">
             All Services ({allServices.length})
           </TabsTrigger>

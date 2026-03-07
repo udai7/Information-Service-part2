@@ -118,14 +118,14 @@ export default function AdminManagement() {
     }
     setSaving(true);
     try {
-      await apiClient.register(
-        form.name,
-        form.email,
-        form.password,
-        form.role,
-        form.departmentId ? parseInt(form.departmentId) : undefined,
-        form.phone || undefined,
-      );
+      await apiClient.register({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        role: form.role,
+        departmentId: form.departmentId ? parseInt(form.departmentId) : undefined,
+        phone: form.phone || undefined,
+      });
       toast({ title: "Success", description: "Admin created successfully" });
       setShowCreate(false);
       setForm({
@@ -250,7 +250,7 @@ export default function AdminManagement() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-                <UserCog className="h-6 w-6 text-slate-600" />
+                <UserCog className="h-6 w-6 text-teal-600" />
                 Admin Management
               </h1>
               <p className="text-gray-500 mt-1">
@@ -396,7 +396,7 @@ export default function AdminManagement() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-slate-600">
+                <div className="text-2xl font-bold text-teal-600">
                   {admins.filter((a) => a.role === "super_admin").length}
                 </div>
               </CardContent>
@@ -420,7 +420,7 @@ export default function AdminManagement() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-slate-600">
+                <div className="text-2xl font-bold text-teal-600">
                   {departments.length}
                 </div>
               </CardContent>
