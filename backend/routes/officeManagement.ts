@@ -47,7 +47,7 @@ router.get(
       res.status(500).json({
         success: false,
         message: "Failed to fetch office",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -100,7 +100,7 @@ router.get(
       res.status(500).json({
         success: false,
         message: "Failed to fetch posts",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -166,7 +166,7 @@ router.post(
       res.status(500).json({
         success: false,
         message: "Failed to create post",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -254,7 +254,7 @@ router.post(
       res.status(500).json({
         success: false,
         message: "Failed to add employee",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -329,7 +329,7 @@ router.put(
       res.status(500).json({
         success: false,
         message: "Failed to update employee",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -397,7 +397,7 @@ router.put(
       res.status(500).json({
         success: false,
         message: "Failed to update post",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -460,7 +460,7 @@ router.delete(
       res.status(500).json({
         success: false,
         message: "Failed to delete employee",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -511,7 +511,7 @@ router.get(
       res.status(500).json({
         success: false,
         message: "Failed to fetch office",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -563,7 +563,7 @@ router.get(
       res.status(500).json({
         success: false,
         message: "Failed to fetch posts",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },

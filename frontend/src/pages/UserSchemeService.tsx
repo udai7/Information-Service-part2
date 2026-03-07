@@ -51,12 +51,8 @@ export default function UserSchemeService() {
   const fetchApiSchemeServices = async () => {
     setLoading(true);
     try {
-      const response = await apiClient.getSchemeServices();
-      const activeServices = (response.schemeServices || []).filter(
-        (service) =>
-          service.status === "published" && service.isActive !== false,
-      );
-      setApiSchemeServices(activeServices);
+      const response = await apiClient.getPublicSchemeServices();
+      setApiSchemeServices(response.schemeServices || []);
     } catch (error) {
       console.error("Error fetching scheme services:", error);
     } finally {
@@ -67,7 +63,7 @@ export default function UserSchemeService() {
   return (
     <div className="flex min-h-screen">
       <ServicesMenu />
-      <div className="flex-1 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="flex-1 bg-gray-50">
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold mb-2">Schemes</h1>
           <p className="text-gray-600 mb-8">
@@ -111,7 +107,7 @@ export default function UserSchemeService() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-purple-600">
+                <div className="text-2xl font-bold text-slate-600">
                   {stats.total}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -252,7 +248,7 @@ export default function UserSchemeService() {
           {/* Modal for Scheme Details */}
           {modalScheme && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg shadow-xl max-w-4xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-blue-200">
+              <div className="bg-gray-50 rounded-lg shadow-xl max-w-4xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-blue-200">
                 <button
                   onClick={() => setModalScheme(null)}
                   className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
@@ -282,14 +278,14 @@ export default function UserSchemeService() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {modalScheme.type && (
                       <div className="bg-white p-4 rounded-lg shadow-sm">
-                        <h4 className="font-semibold mb-1 text-purple-700">
+                        <h4 className="font-semibold mb-1 text-slate-700">
                           Type
                         </h4>
                         <p className="text-gray-700">{modalScheme.type}</p>
                       </div>
                     )}
                     <div className="bg-white p-4 rounded-lg shadow-sm">
-                      <h4 className="font-semibold mb-1 text-purple-700">
+                      <h4 className="font-semibold mb-1 text-slate-700">
                         Application Mode
                       </h4>
                       <p className="text-gray-700">
@@ -303,7 +299,7 @@ export default function UserSchemeService() {
                     {modalScheme.targetAudience &&
                       modalScheme.targetAudience.length > 0 && (
                         <div className="bg-white p-4 rounded-lg shadow-sm">
-                          <h4 className="font-semibold mb-1 text-purple-700">
+                          <h4 className="font-semibold mb-1 text-slate-700">
                             Target Audience
                           </h4>
                           <p className="text-gray-700">
@@ -312,7 +308,7 @@ export default function UserSchemeService() {
                         </div>
                       )}
                     <div className="bg-white p-4 rounded-lg shadow-sm">
-                      <h4 className="font-semibold mb-1 text-purple-700">
+                      <h4 className="font-semibold mb-1 text-slate-700">
                         Status
                       </h4>
                       <p className="text-gray-700 capitalize">
@@ -446,16 +442,16 @@ export default function UserSchemeService() {
                       {modalScheme.contacts.map((contact, idx) => (
                         <div
                           key={idx}
-                          className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg shadow-sm border-l-4 border-purple-400"
+                          className="bg-gray-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-300"
                         >
                           <div className="mb-4">
-                            <h4 className="text-lg font-semibold text-purple-700 mb-2">
+                            <h4 className="text-lg font-semibold text-slate-700 mb-2">
                               Contact Person {idx + 1}
                             </h4>
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                              <span className="text-purple-600 font-medium">
+                              <span className="text-slate-600 font-medium">
                                 Service Name:
                               </span>{" "}
                               <span className="text-gray-700">
@@ -463,7 +459,7 @@ export default function UserSchemeService() {
                               </span>
                             </div>
                             <div>
-                              <span className="text-purple-600 font-medium">
+                              <span className="text-slate-600 font-medium">
                                 District:
                               </span>{" "}
                               <span className="text-gray-700">
@@ -471,7 +467,7 @@ export default function UserSchemeService() {
                               </span>
                             </div>
                             <div>
-                              <span className="text-purple-600 font-medium">
+                              <span className="text-slate-600 font-medium">
                                 Sub District:
                               </span>{" "}
                               <span className="text-gray-700">
@@ -479,7 +475,7 @@ export default function UserSchemeService() {
                               </span>
                             </div>
                             <div>
-                              <span className="text-purple-600 font-medium">
+                              <span className="text-slate-600 font-medium">
                                 Block:
                               </span>{" "}
                               <span className="text-gray-700">
@@ -487,7 +483,7 @@ export default function UserSchemeService() {
                               </span>
                             </div>
                             <div>
-                              <span className="text-purple-600 font-medium">
+                              <span className="text-slate-600 font-medium">
                                 Name:
                               </span>{" "}
                               <span className="text-gray-700">
@@ -495,7 +491,7 @@ export default function UserSchemeService() {
                               </span>
                             </div>
                             <div>
-                              <span className="text-purple-600 font-medium">
+                              <span className="text-slate-600 font-medium">
                                 Designation:
                               </span>{" "}
                               <span className="text-gray-700">
@@ -503,7 +499,7 @@ export default function UserSchemeService() {
                               </span>
                             </div>
                             <div>
-                              <span className="text-purple-600 font-medium">
+                              <span className="text-slate-600 font-medium">
                                 Contact:
                               </span>{" "}
                               <span className="text-gray-700">
@@ -511,7 +507,7 @@ export default function UserSchemeService() {
                               </span>
                             </div>
                             <div>
-                              <span className="text-purple-600 font-medium">
+                              <span className="text-slate-600 font-medium">
                                 Email:
                               </span>{" "}
                               <span className="text-gray-700">
@@ -526,7 +522,7 @@ export default function UserSchemeService() {
                 )}
 
                 {/* Timestamps */}
-                <div className="pt-4 border-t border-purple-200">
+                <div className="pt-4 border-t border-slate-200">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
                     <h4 className="text-sm font-semibold text-gray-600">

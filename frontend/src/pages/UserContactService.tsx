@@ -177,7 +177,7 @@ export default function UserContactService() {
   return (
     <div className="flex min-h-screen">
       <ServicesMenu />
-      <div className="flex-1 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="flex-1 bg-gray-50">
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold mb-2">Contact Service</h1>
           <p className="text-gray-600 mb-8">
@@ -222,7 +222,7 @@ export default function UserContactService() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-purple-600">
+                <div className="text-2xl font-bold text-slate-600">
                   {stats.total}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -367,7 +367,7 @@ export default function UserContactService() {
           {/* Modal for Contact Service Details */}
           {modalService && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-2xl max-w-2xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-blue-200">
+              <div className="bg-gray-50 rounded-xl shadow-2xl max-w-2xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-blue-200">
                 <button
                   onClick={() => setModalService(null)}
                   className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
@@ -419,7 +419,7 @@ export default function UserContactService() {
                     modalService.targetAudience.length > 0 && (
                       <div className="mt-4">
                         <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-start justify-center min-h-[80px]">
-                          <span className="text-sm font-medium text-purple-700 mb-1">
+                          <span className="text-sm font-medium text-slate-700 mb-1">
                             Target Audience
                           </span>
                           <span className="text-gray-800 text-base font-semibold">
@@ -511,7 +511,7 @@ export default function UserContactService() {
                         .map((office: any, officeIdx: number) => (
                           <div
                             key={officeIdx}
-                            className="mb-4 p-4 border rounded-lg bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200 shadow-sm hover:shadow-md transition-shadow duration-200"
+                            className="mb-4 p-4 border rounded-lg bg-gray-50 border-blue-200 shadow-sm hover:shadow-md transition-shadow duration-200"
                           >
                             <h4 className="font-semibold text-lg mb-2 text-blue-800 flex items-center">
                               <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
@@ -569,7 +569,7 @@ export default function UserContactService() {
                                             emp.postIndex ===
                                             post.globalPostIndex,
                                         ).length > 0 ? (
-                                          <div className="ml-4 mt-2 bg-gradient-to-r from-blue-50 to-blue-100 rounded-md p-3 border border-blue-200">
+                                          <div className="ml-4 mt-2 bg-gray-50 rounded-md p-3 border border-blue-200">
                                             <h6 className="font-semibold text-sm mb-2 text-blue-700 flex items-center">
                                               <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
                                               Employees:
@@ -634,7 +634,7 @@ export default function UserContactService() {
                 )}
 
                 {/* Record Information */}
-                <div className="pt-4 border-t border-purple-200">
+                <div className="pt-4 border-t border-slate-200">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
                     <h4 className="text-sm font-semibold text-gray-600">

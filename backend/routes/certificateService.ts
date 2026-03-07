@@ -9,7 +9,6 @@ const router = express.Router();
 // GET /api/certificate-services - Get all certificate services
 router.get("/", authenticateAdmin, async (req: Request, res: Response) => {
   try {
-    console.log("Fetching certificate services for admin:", req.admin?.id);
 
     const certificateServices = await prisma.certificateService.findMany({
       include: {
@@ -24,7 +23,6 @@ router.get("/", authenticateAdmin, async (req: Request, res: Response) => {
       orderBy: { createdAt: "desc" },
     });
 
-    console.log(`Found ${certificateServices.length} certificate services`);
 
     res.json({
       success: true,
@@ -35,7 +33,7 @@ router.get("/", authenticateAdmin, async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch certificate services",
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: "An internal error occurred",
     });
   }
 });
@@ -57,7 +55,6 @@ router.get(
       }
 
       const id = parseInt(req.params.id);
-      console.log(`Fetching certificate service with ID: ${id}`);
 
       const certificateService = await prisma.certificateService.findUnique({
         where: { id },
@@ -71,14 +68,12 @@ router.get(
       });
 
       if (!certificateService) {
-        console.log(`Certificate service with ID ${id} not found`);
         return res.status(404).json({
           success: false,
           message: "Certificate service not found",
         });
       }
 
-      console.log(`Found certificate service: ${certificateService.name}`);
 
       res.json({
         success: true,
@@ -89,7 +84,7 @@ router.get(
       res.status(500).json({
         success: false,
         message: "Failed to fetch certificate service",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -121,8 +116,6 @@ router.post(
       }
 
       const adminId = req.admin!.id;
-      console.log("Creating certificate service for admin:", adminId);
-      console.log("Request body:", req.body);
 
       const {
         name,
@@ -158,11 +151,6 @@ router.post(
         },
       });
 
-      console.log(
-        "Certificate service created successfully:",
-        certificateService.id,
-      );
-
       res.status(201).json({
         success: true,
         certificateService,
@@ -173,7 +161,7 @@ router.post(
       res.status(500).json({
         success: false,
         message: "Failed to create certificate service",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -196,8 +184,6 @@ router.patch(
       }
 
       const id = parseInt(req.params.id);
-      console.log(`Updating certificate service with ID: ${id}`);
-      console.log("Update data:", req.body);
 
       // Check if certificate service exists
       const existingService = await prisma.certificateService.findUnique({
@@ -294,7 +280,6 @@ router.patch(
         },
       });
 
-      console.log("Certificate service updated successfully");
 
       res.json({
         success: true,
@@ -306,7 +291,7 @@ router.patch(
       res.status(500).json({
         success: false,
         message: "Failed to update certificate service",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -329,7 +314,6 @@ router.patch(
       }
 
       const id = parseInt(req.params.id);
-      console.log(`Publishing certificate service with ID: ${id}`);
 
       const existingService = await prisma.certificateService.findUnique({
         where: { id },
@@ -354,7 +338,6 @@ router.patch(
         },
       });
 
-      console.log("Certificate service published successfully");
 
       res.json({
         success: true,
@@ -366,7 +349,7 @@ router.patch(
       res.status(500).json({
         success: false,
         message: "Failed to publish certificate service",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -446,7 +429,7 @@ router.patch(
       res.status(500).json({
         success: false,
         message: "Failed to toggle certificate service status",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -469,7 +452,6 @@ router.delete(
       }
 
       const id = parseInt(req.params.id);
-      console.log(`Deleting certificate service with ID: ${id}`);
 
       const existingService = await prisma.certificateService.findUnique({
         where: { id },
@@ -486,7 +468,6 @@ router.delete(
         where: { id },
       });
 
-      console.log("Certificate service deleted successfully");
 
       res.json({
         success: true,
@@ -497,7 +478,7 @@ router.delete(
       res.status(500).json({
         success: false,
         message: "Failed to delete certificate service",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -560,7 +541,7 @@ router.get("/public/list", async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch certificate services",
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: "An internal error occurred",
     });
   }
 });
@@ -607,7 +588,7 @@ router.get("/public/:id", async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch certificate service",
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: "An internal error occurred",
     });
   }
 });

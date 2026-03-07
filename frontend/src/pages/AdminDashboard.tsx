@@ -49,7 +49,7 @@ export default function AdminLayout({
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />
-      <div className="flex-1 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="flex-1 bg-gray-50">
         {children}
       </div>
     </div>
@@ -247,7 +247,7 @@ export function DashboardHome() {
         case "certificate":
           return "bg-green-100 text-green-800";
         case "contact":
-          return "bg-purple-100 text-purple-800";
+          return "bg-slate-100 text-slate-800";
       }
     };
 
@@ -363,10 +363,10 @@ export function DashboardHome() {
             <CardTitle className="text-sm font-medium">
               Total Services
             </CardTitle>
-            <Users className="h-4 w-4 text-purple-600" />
+            <Users className="h-4 w-4 text-slate-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-600">
+            <div className="text-2xl font-bold text-slate-600">
               {stats.total}
             </div>
             <p className="text-xs text-muted-foreground">All published</p>
@@ -438,10 +438,10 @@ export function DashboardHome() {
             <CardTitle className="text-sm font-medium">
               Contact Services
             </CardTitle>
-            <Phone className="h-4 w-4 text-purple-600" />
+            <Phone className="h-4 w-4 text-slate-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-600">
+            <div className="text-2xl font-bold text-slate-600">
               {stats.contacts}
             </div>
             <p className="text-xs text-muted-foreground">Contact information</p>

@@ -31,7 +31,7 @@ export default function UserEmergencyService() {
   return (
     <div className="flex min-h-screen">
       <ServicesMenu />
-      <div className="flex-1 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="flex-1 bg-gray-50">
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold mb-2">Emergency Service</h1>
           <p className="text-gray-600 mb-8">
@@ -77,7 +77,7 @@ export default function UserEmergencyService() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-purple-600">
+                <div className="text-2xl font-bold text-slate-600">
                   {stats.total}
                 </div>
                 <p className="text-xs text-muted-foreground">

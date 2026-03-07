@@ -60,12 +60,8 @@ export default function UserCertificateService() {
   const fetchApiCertificateServices = async () => {
     setLoading(true);
     try {
-      const response = await apiClient.getCertificateServices();
-      const activeServices = (response.certificateServices || []).filter(
-        (service) =>
-          service.status === "published" && service.isActive !== false,
-      );
-      setApiCertificateServices(activeServices);
+      const response = await apiClient.getPublicCertificateServices();
+      setApiCertificateServices(response.certificateServices || []);
     } catch (error) {
       console.error("Error fetching certificate services:", error);
     } finally {
@@ -83,7 +79,7 @@ export default function UserCertificateService() {
   return (
     <div className="flex min-h-screen">
       <ServicesMenu />
-      <div className="flex-1 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="flex-1 bg-gray-50">
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-3xl font-bold mb-2">Certificates</h1>
           <p className="text-gray-600 mb-8">
@@ -127,7 +123,7 @@ export default function UserCertificateService() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-purple-600">
+                <div className="text-2xl font-bold text-slate-600">
                   {stats.total}
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -399,7 +395,7 @@ export default function UserCertificateService() {
           {/* Modal for Certificate Details */}
           {modalCert && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg shadow-xl max-w-4xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-blue-200">
+              <div className="bg-gray-50 rounded-lg shadow-xl max-w-4xl w-full p-6 relative animate-fade-in overflow-y-auto max-h-[90vh] border border-blue-200">
                 <button
                   onClick={() => setModalCert(null)}
                   className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
@@ -463,7 +459,7 @@ export default function UserCertificateService() {
                     {modalCert.targetAudience &&
                       modalCert.targetAudience.length > 0 && (
                         <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-start justify-center min-h-[80px]">
-                          <span className="text-sm font-medium text-purple-700 mb-1">
+                          <span className="text-sm font-medium text-slate-700 mb-1">
                             Target Audience
                           </span>
                           <span className="text-gray-800 text-base font-semibold">
@@ -860,7 +856,7 @@ export default function UserCertificateService() {
 
                     <div className="mb-6">
                       <div className="flex items-center gap-2 mb-3">
-                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                        <div className="w-2 h-2 bg-slate-500 rounded-full"></div>
                         <h3 className="text-lg font-semibold text-gray-800">
                           Status
                         </h3>
@@ -912,7 +908,7 @@ export default function UserCertificateService() {
                 )}
 
                 {/* Timestamps */}
-                <div className="pt-4 border-t border-purple-200">
+                <div className="pt-4 border-t border-slate-200">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
                     <h4 className="text-sm font-semibold text-gray-600">

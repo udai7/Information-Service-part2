@@ -33,26 +33,34 @@ export function ServicesMenu() {
         { label: "Feedback Service", path: "/feedback-service" },
       ]
     : [
-        { label: "Scheme Service", path: "/user-scheme-service" },
-        { label: "Certificate Service", path: "/user-certificate-service" },
-        { label: "Contact Service", path: "/user-contact-service" },
-        { label: "Grievances Service", path: "/user-grievances-service" },
-        { label: "Feedback Service", path: "/user-feedback-service" },
+        { label: "Scheme Service", path: "/scheme-service" },
+        { label: "Certificate Service", path: "/certificate-service" },
+        { label: "Contact Service", path: "/contact-service" },
+        { label: "Grievances Service", path: "/grievances-service" },
+        { label: "Feedback Service", path: "/feedback-service" },
       ];
+
+  const linkClass = (path: string) =>
+    `flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors ${
+      location.pathname === path
+        ? "bg-slate-100 text-slate-900 font-semibold"
+        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+    }`;
+
   return (
-    <nav className="flex flex-col gap-2 p-4 bg-blue-900 min-h-screen w-64 text-white font-medium border-r border-blue-800">
+    <nav className="flex flex-col gap-1 p-4 bg-white min-h-screen w-60 font-medium border-r border-slate-200">
       <Button
-        className="mb-6 w-full bg-primary text-white hover:bg-primary/90"
+        variant="ghost"
+        className="mb-4 w-full justify-start text-slate-800 font-semibold hover:bg-slate-50"
         onClick={() => navigate(isAdmin ? "/admin" : "/user-dashboard")}
       >
         {isAdmin ? "Admin Dashboard" : "User Dashboard"}
       </Button>
+      <div className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold px-3 pt-2 pb-2">
+        Services
+      </div>
       {menuItems.map((item) => (
-        <Link
-          key={item.path}
-          to={item.path}
-          className={`rounded px-4 py-2 transition-colors hover:bg-blue-800 hover:text-yellow-300 ${location.pathname === item.path ? "bg-blue-800 text-yellow-300" : ""}`}
-        >
+        <Link key={item.path} to={item.path} className={linkClass(item.path)}>
           {item.label}
         </Link>
       ))}

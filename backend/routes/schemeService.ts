@@ -208,7 +208,6 @@ router.get(
       }
 
       const serviceId = parseInt(req.params.id);
-      console.log("Getting scheme service with ID:", serviceId);
 
       const schemeService = await prisma.schemeService.findFirst({
         where: {
@@ -224,14 +223,11 @@ router.get(
         },
       });
 
-      console.log("Found scheme service:", schemeService);
 
       if (!schemeService) {
-        console.log("Scheme service not found");
         return res.status(404).json({ error: "Scheme service not found" });
       }
 
-      console.log("Returning scheme service response");
       res.json({ schemeService });
     } catch (error) {
       console.error("Get scheme service error:", error);

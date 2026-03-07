@@ -9,7 +9,6 @@ const router = express.Router();
 // GET /api/contact-services - Get all contact services
 router.get("/", authenticateAdmin, async (req: Request, res: Response) => {
   try {
-    console.log("Fetching contact services for admin:", req.admin?.id);
 
     const contactServices = await prisma.contactService.findMany({
       include: {
@@ -22,7 +21,6 @@ router.get("/", authenticateAdmin, async (req: Request, res: Response) => {
       orderBy: { createdAt: "desc" },
     });
 
-    console.log(`Found ${contactServices.length} contact services`);
 
     res.json({
       success: true,
@@ -33,7 +31,7 @@ router.get("/", authenticateAdmin, async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch contact services",
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: "An internal error occurred",
     });
   }
 });
@@ -55,7 +53,6 @@ router.get(
       }
 
       const id = parseInt(req.params.id);
-      console.log(`Fetching contact service with ID: ${id}`);
 
       const contactService = await prisma.contactService.findUnique({
         where: { id },
@@ -69,14 +66,12 @@ router.get(
       });
 
       if (!contactService) {
-        console.log(`Contact service with ID ${id} not found`);
         return res.status(404).json({
           success: false,
           message: "Contact service not found",
         });
       }
 
-      console.log(`Found contact service: ${contactService.name}`);
 
       res.json({
         success: true,
@@ -87,7 +82,7 @@ router.get(
       res.status(500).json({
         success: false,
         message: "Failed to fetch contact service",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -119,8 +114,6 @@ router.post(
       }
 
       const adminId = req.admin!.id;
-      console.log("Creating contact service for admin:", adminId);
-      console.log("Request body:", req.body);
 
       const {
         name,
@@ -156,7 +149,6 @@ router.post(
         },
       });
 
-      console.log("Contact service created successfully:", contactService.id);
 
       res.status(201).json({
         success: true,
@@ -168,7 +160,7 @@ router.post(
       res.status(500).json({
         success: false,
         message: "Failed to create contact service",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -191,8 +183,6 @@ router.patch(
       }
 
       const id = parseInt(req.params.id);
-      console.log(`Updating contact service with ID: ${id}`);
-      console.log("Update data:", req.body);
 
       // Check if contact service exists
       const existingService = await prisma.contactService.findUnique({
@@ -261,7 +251,6 @@ router.patch(
         },
       });
 
-      console.log("Contact service updated successfully");
 
       res.json({
         success: true,
@@ -273,7 +262,7 @@ router.patch(
       res.status(500).json({
         success: false,
         message: "Failed to update contact service",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -296,7 +285,6 @@ router.patch(
       }
 
       const id = parseInt(req.params.id);
-      console.log(`Publishing contact service with ID: ${id}`);
 
       const existingService = await prisma.contactService.findUnique({
         where: { id },
@@ -321,7 +309,6 @@ router.patch(
         },
       });
 
-      console.log("Contact service published successfully");
 
       res.json({
         success: true,
@@ -333,7 +320,7 @@ router.patch(
       res.status(500).json({
         success: false,
         message: "Failed to publish contact service",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -412,7 +399,7 @@ router.patch(
       res.status(500).json({
         success: false,
         message: "Failed to toggle contact service status",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -435,7 +422,6 @@ router.delete(
       }
 
       const id = parseInt(req.params.id);
-      console.log(`Deleting contact service with ID: ${id}`);
 
       const existingService = await prisma.contactService.findUnique({
         where: { id },
@@ -452,7 +438,6 @@ router.delete(
         where: { id },
       });
 
-      console.log("Contact service deleted successfully");
 
       res.json({
         success: true,
@@ -463,7 +448,7 @@ router.delete(
       res.status(500).json({
         success: false,
         message: "Failed to delete contact service",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },
@@ -524,7 +509,7 @@ router.get("/public/list", async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch contact services",
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: "An internal error occurred",
     });
   }
 });
@@ -549,7 +534,6 @@ router.delete(
       const serviceId = parseInt(req.params.serviceId);
       const contactId = parseInt(req.params.contactId);
 
-      console.log(`Deleting contact ${contactId} from service ${serviceId}`);
 
       // Check if the service exists
       const existingService = await prisma.contactService.findUnique({
@@ -583,7 +567,6 @@ router.delete(
         where: { id: contactId },
       });
 
-      console.log("Contact deleted successfully");
 
       res.json({
         success: true,
@@ -594,7 +577,7 @@ router.delete(
       res.status(500).json({
         success: false,
         message: "Failed to delete contact",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "An internal error occurred",
       });
     }
   },

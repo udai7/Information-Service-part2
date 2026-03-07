@@ -1341,16 +1341,16 @@ export class ApiClient {
     return this.makeRequest<PostsResponse>(`/offices/public/${officeId}/posts`);
   }
 
-  // Get all published services for admin dashboard
+  // Get all published services (public - no auth required)
   async getAllPublishedServices(): Promise<{
     schemeServices: SchemeService[];
     certificateServices: CertificateService[];
     contactServices: ContactService[];
   }> {
     const [schemes, certificates, contacts] = await Promise.all([
-      this.getSchemeServices({ status: "published" }),
-      this.getCertificateServices({ status: "published" }),
-      this.getContactServices({ status: "published" }),
+      this.getPublicSchemeServices({ limit: 100 }),
+      this.getPublicCertificateServices({ limit: 100 }),
+      this.getPublicContactServices({ limit: 100 }),
     ]);
 
     return {

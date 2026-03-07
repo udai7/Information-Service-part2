@@ -33,6 +33,9 @@ import EditSchemeService from "./pages/EditSchemeService";
 import EditCertificateService from "./pages/EditCertificateService";
 import EditContactDepartment from "./pages/EditContactDepartment";
 import OfficeDetails from "./pages/OfficeDetails";
+import AdminDepartments from "./pages/AdminDepartments";
+import AdminManagementPage from "./pages/AdminManagementPage";
+import AdminAuditLogs from "./pages/AdminAuditLogs";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -104,6 +107,13 @@ const App = () => (
               <Route path="/admin/edit-scheme-service/:id" element={<EditSchemeService />} />
               <Route path="/admin/edit-certificate-service/:id" element={<EditCertificateService />} />
               <Route path="/admin/edit-contact-department/:id" element={<EditContactDepartment />} />
+              <Route path="/admin/departments" element={<AdminDepartments />} />
+
+              {/* Super Admin Only Routes */}
+              <Route element={<RequireSuperAdmin />}>
+                <Route path="/admin/manage-admins" element={<AdminManagementPage />} />
+                <Route path="/admin/audit-logs" element={<AdminAuditLogs />} />
+              </Route>
 
               {/* Admin service pages */}
               <Route path="/admin-scheme-service" element={<AdminSchemeService />} />
