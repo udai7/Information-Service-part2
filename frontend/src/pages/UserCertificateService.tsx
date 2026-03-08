@@ -932,7 +932,7 @@ export default function UserCertificateService() {
                   </div>
                 )}
 
-                {/* Timestamps */}}
+                {/* Timestamps */}
                 <div className="pt-4 border-t border-slate-200">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 bg-gray-400 rounded-full"></div>

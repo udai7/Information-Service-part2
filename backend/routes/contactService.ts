@@ -1,8 +1,10 @@
 import express, { Request, Response } from "express";
 import { body, param, validationResult } from "express-validator";
 import { prisma } from "../lib/prisma";
+import { queryCache } from "../lib/prisma";
 import { authenticateAdmin } from "../middleware/auth";
-import { pdfUpload } from "../lib/fileUpload";
+import { readLimiter } from "../middleware/rateLimiter";
+import { pdfUpload, uploadPDFToOCI } from "../lib/fileUpload";
 import "../types/express";
 
 const router = express.Router();
@@ -193,19 +195,14 @@ router.patch(
         });
       }
 
-      // Only update scalar fields - don't touch contacts (offices) to preserve posts/employees
-      const {
-        contacts,
-        documents,
-        admin,
-        createdAt,
-        updatedAt,
-        id: bodyId,
-        publishedBy,
-        publishedByName,
-        pdfUrl,
-        ...updateData
-      } = req.body;
+      // Only update whitelisted scalar fields to prevent mass assignment
+      const allowedFields = ["name", "summary", "type", "applicationMode", "isActive"] as const;
+      const updateData: Record<string, any> = {};
+      for (const field of allowedFields) {
+        if (req.body[field] !== undefined) {
+          updateData[field] = req.body[field];
+        }
+      }
 
       const updatedService = await prisma.contactService.update({
         where: { id },
@@ -351,6 +348,9 @@ router.patch(
         contactService: publishedService,
         message: "Contact service published successfully",
       });
+
+      // Invalidate public cache
+      queryCache.invalidate("contacts:public");
     } catch (error) {
       console.error("Error publishing contact service:", error);
       res.status(500).json({
@@ -390,7 +390,7 @@ router.post(
         });
       }
 
-      const pdfUrl = `/uploads/pdfs/${req.file.filename}`;
+      const pdfUrl = await uploadPDFToOCI(req.file);
 
       const updatedService = await prisma.contactService.update({
         where: { id },
@@ -533,12 +533,22 @@ router.delete(
 // PUBLIC ROUTES (no authentication required)
 
 // GET /api/contact-services/public/list - Get all published contact services (public)
-router.get("/public/list", async (req: Request, res: Response) => {
+router.get("/public/list", readLimiter, async (req: Request, res: Response) => {
   try {
     const { page = 1, limit = 10, search } = req.query;
     const pageNum = parseInt(page as string);
     const limitNum = Math.min(parseInt(limit as string) || 10, 100);
     const offset = (pageNum - 1) * limitNum;
+
+    // Use cache for non-search queries (deep include is expensive)
+    const cacheKey = search ? null : `contacts:public:${page}:${limitNum}`;
+    if (cacheKey) {
+      const cached = queryCache.get<any>(cacheKey);
+      if (cached) {
+        res.set("Cache-Control", "public, max-age=60, s-maxage=120");
+        return res.json(cached);
+      }
+    }
 
     let whereClause: any = {
       status: "published",
@@ -578,7 +588,7 @@ router.get("/public/list", async (req: Request, res: Response) => {
 
     const totalPages = Math.ceil(total / limitNum);
 
-    res.json({
+    const result = {
       success: true,
       contactServices,
       pagination: {
@@ -587,7 +597,15 @@ router.get("/public/list", async (req: Request, res: Response) => {
         total,
         pages: totalPages,
       },
-    });
+    };
+
+    // Cache non-search results for 2 minutes
+    if (cacheKey) {
+      queryCache.set(cacheKey, result, 120_000);
+    }
+
+    res.set("Cache-Control", "public, max-age=60, s-maxage=120");
+    res.json(result);
   } catch (error) {
     console.error("Error fetching public contact services:", error);
     res.status(500).json({

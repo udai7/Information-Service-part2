@@ -49,6 +49,11 @@ export const authenticateAdmin = async (
 
     const decoded = jwt.verify(token, getJwtSecret()) as JwtPayload;
 
+    // Reject refresh tokens being used as access tokens
+    if ((decoded as any).type === "refresh") {
+      return res.status(401).json({ error: "Invalid token type." });
+    }
+
     // Check cache first — avoids DB hit on every authenticated request
     const cacheKey = `admin:${decoded.adminId}`;
     let admin = queryCache.get<any>(cacheKey);

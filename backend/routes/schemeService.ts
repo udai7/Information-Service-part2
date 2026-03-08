@@ -1,8 +1,10 @@
 import express, { Request, Response } from "express";
 import { body, validationResult, param } from "express-validator";
 import { prisma } from "../lib/prisma";
+import { queryCache } from "../lib/prisma";
 import { authenticateAdmin } from "../middleware/auth";
-import { pdfUpload } from "../lib/fileUpload";
+import { readLimiter } from "../middleware/rateLimiter";
+import { pdfUpload, uploadPDFToOCI } from "../lib/fileUpload";
 import "../types/express";
 
 const router = express.Router();
@@ -521,6 +523,9 @@ router.patch(
         message: "Scheme service published successfully",
         schemeService: updatedService,
       });
+
+      // Invalidate public cache
+      queryCache.invalidate("schemes:public");
     } catch (error) {
       console.error("Publish scheme service error:", error);
       res.status(500).json({ error: "Internal server error" });
@@ -656,7 +661,7 @@ router.post(
         return res.status(404).json({ error: "Scheme service not found" });
       }
 
-      const pdfUrl = `/uploads/pdfs/${req.file.filename}`;
+      const pdfUrl = await uploadPDFToOCI(req.file);
 
       const updatedService = await prisma.schemeService.update({
         where: { id },
@@ -681,10 +686,21 @@ router.post(
 );
 
 // Get public scheme services (for user dashboard)
-router.get("/public/list", async (req, res) => {
+router.get("/public/list", readLimiter, async (req, res) => {
   try {
     const { page = 1, limit = 10, search } = req.query;
-    const skip = (parseInt(page as string) - 1) * parseInt(limit as string);
+    const limitNum = Math.min(parseInt(limit as string) || 10, 100);
+    const skip = (parseInt(page as string) - 1) * limitNum;
+
+    // Use cache for non-search queries
+    const cacheKey = search ? null : `schemes:public:${page}:${limitNum}`;
+    if (cacheKey) {
+      const cached = queryCache.get<any>(cacheKey);
+      if (cached) {
+        res.set("Cache-Control", "public, max-age=60, s-maxage=120");
+        return res.json(cached);
+      }
+    }
 
     const where: any = { status: "published" };
 
@@ -716,20 +732,28 @@ router.get("/public/list", async (req, res) => {
         },
         orderBy: { updatedAt: "desc" },
         skip,
-        take: parseInt(limit as string),
+        take: limitNum,
       }),
       prisma.schemeService.count({ where }),
     ]);
 
-    res.json({
+    const result = {
       schemeServices,
       pagination: {
         page: parseInt(page as string),
-        limit: parseInt(limit as string),
+        limit: limitNum,
         total,
-        pages: Math.ceil(total / parseInt(limit as string)),
+        pages: Math.ceil(total / limitNum),
       },
-    });
+    };
+
+    // Cache non-search results for 2 minutes
+    if (cacheKey) {
+      queryCache.set(cacheKey, result, 120_000);
+    }
+
+    res.set("Cache-Control", "public, max-age=60, s-maxage=120");
+    res.json(result);
   } catch (error) {
     console.error("Get public scheme services error:", error);
     res.status(500).json({ error: "Internal server error" });

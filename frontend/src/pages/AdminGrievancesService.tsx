@@ -450,6 +450,25 @@ export default function AdminGrievancesService() {
                         </p>
                       </div>
 
+                      {selectedGrievance.imageUrl && (
+                        <div>
+                          <strong>Attached Image:</strong>
+                          <div className="mt-2">
+                            <a
+                              href={selectedGrievance.imageUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <img
+                                src={selectedGrievance.imageUrl}
+                                alt="Grievance attachment"
+                                className="max-w-full max-h-80 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                              />
+                            </a>
+                          </div>
+                        </div>
+                      )}
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <strong>Submitted:</strong>{" "}

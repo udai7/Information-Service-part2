@@ -47,7 +47,7 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'"],
         styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
         imgSrc: ["'self'", "data:", "https:"],
         fontSrc: ["'self'", "https://fonts.gstatic.com"],
@@ -81,8 +81,13 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, Postman, etc.)
-      if (!origin) return callback(null, true);
+      // In production, reject requests with no origin
+      if (!origin) {
+        if (process.env.NODE_ENV === "production") {
+          return callback(new Error("Origin required"));
+        }
+        return callback(null, true);
+      }
       if (allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {

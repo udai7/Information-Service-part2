@@ -6,7 +6,7 @@ import { authenticateAdmin, getDepartmentScope } from "../middleware/auth";
 import { submissionLimiter, readLimiter } from "../middleware/rateLimiter";
 import { createAuditLog, AuditActions } from "../lib/auditLog";
 import { sendOTP } from "../lib/mailer";
-import { imageUpload, processAndSaveImage } from "../lib/fileUpload";
+import { imageUpload, uploadImageToOCI } from "../lib/fileUpload";
 import "../types/express";
 
 const router = express.Router();
@@ -768,13 +768,11 @@ router.post(
         });
       }
 
-      // Process and compress image
-      const filename = await processAndSaveImage(
+      // Process, compress, and upload image to OCI
+      const imageUrl = await uploadImageToOCI(
         req.file.buffer,
         req.file.originalname,
       );
-
-      const imageUrl = `/uploads/images/${filename}`;
 
       const updatedGrievance = await prisma.grievance.update({
         where: { id },

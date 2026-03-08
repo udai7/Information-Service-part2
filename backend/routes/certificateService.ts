@@ -1,8 +1,10 @@
 import express, { Request, Response } from "express";
 import { body, param, validationResult } from "express-validator";
 import { prisma } from "../lib/prisma";
+import { queryCache } from "../lib/prisma";
 import { authenticateAdmin } from "../middleware/auth";
-import { pdfUpload } from "../lib/fileUpload";
+import { readLimiter } from "../middleware/rateLimiter";
+import { pdfUpload, uploadPDFToOCI } from "../lib/fileUpload";
 import "../types/express";
 
 const router = express.Router();
@@ -198,18 +200,20 @@ router.patch(
         });
       }
 
-      // Extract relationship fields and nested data that shouldn't be directly updated
-      const {
-        contacts,
-        documents,
-        processSteps,
-        eligibilityItems,
-        admin,
-        createdAt,
-        updatedAt,
-        id: bodyId,
-        ...updateData
-      } = req.body;
+      // Extract only whitelisted scalar fields to prevent mass assignment
+      const allowedFields = [
+        "name", "summary", "applicationMode", "type",
+        "onlineUrl", "offlineAddress", "isActive",
+        "applicationFee", "processingTime", "validityPeriod",
+      ] as const;
+      const updateData: Record<string, any> = {};
+      for (const field of allowedFields) {
+        if (req.body[field] !== undefined) {
+          updateData[field] = req.body[field];
+        }
+      }
+
+      const { contacts, documents, processSteps, eligibilityItems } = req.body;
 
       let prismaUpdateData: any = updateData;
 
@@ -353,6 +357,9 @@ router.patch(
         certificateService: publishedService,
         message: "Certificate service published successfully",
       });
+
+      // Invalidate public cache
+      queryCache.invalidate("certs:public");
     } catch (error) {
       console.error("Error publishing certificate service:", error);
       res.status(500).json({
@@ -392,7 +399,7 @@ router.post(
         });
       }
 
-      const pdfUrl = `/uploads/pdfs/${req.file.filename}`;
+      const pdfUrl = await uploadPDFToOCI(req.file);
 
       const updatedService = await prisma.certificateService.update({
         where: { id },
@@ -555,12 +562,22 @@ router.delete(
 // PUBLIC ROUTES (no authentication required)
 
 // GET /api/certificate-services/public/list - Get all published certificate services (public)
-router.get("/public/list", async (req: Request, res: Response) => {
+router.get("/public/list", readLimiter, async (req: Request, res: Response) => {
   try {
     const { page = 1, limit = 10, search } = req.query;
     const pageNum = parseInt(page as string);
-    const limitNum = parseInt(limit as string);
+    const limitNum = Math.min(parseInt(limit as string) || 10, 100);
     const offset = (pageNum - 1) * limitNum;
+
+    // Use cache for non-search queries
+    const cacheKey = search ? null : `certs:public:${page}:${limitNum}`;
+    if (cacheKey) {
+      const cached = queryCache.get<any>(cacheKey);
+      if (cached) {
+        res.set("Cache-Control", "public, max-age=60, s-maxage=120");
+        return res.json(cached);
+      }
+    }
 
     let whereClause: any = {
       status: "published",
@@ -594,7 +611,7 @@ router.get("/public/list", async (req: Request, res: Response) => {
 
     const totalPages = Math.ceil(total / limitNum);
 
-    res.json({
+    const result = {
       success: true,
       certificateServices,
       pagination: {
@@ -603,7 +620,15 @@ router.get("/public/list", async (req: Request, res: Response) => {
         total,
         pages: totalPages,
       },
-    });
+    };
+
+    // Cache non-search results for 2 minutes
+    if (cacheKey) {
+      queryCache.set(cacheKey, result, 120_000);
+    }
+
+    res.set("Cache-Control", "public, max-age=60, s-maxage=120");
+    res.json(result);
   } catch (error) {
     console.error("Error fetching public certificate services:", error);
     res.status(500).json({
@@ -615,7 +640,7 @@ router.get("/public/list", async (req: Request, res: Response) => {
 });
 
 // GET /api/certificate-services/public/:id - Get specific published certificate service (public)
-router.get("/public/:id", async (req: Request, res: Response) => {
+router.get("/public/:id", readLimiter, async (req: Request, res: Response) => {
   try {
     const serviceId = parseInt(req.params.id);
 
