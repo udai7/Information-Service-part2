@@ -13,8 +13,6 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   Search,
   ArrowLeft,
-  Activity,
-  TrendingUp,
   CheckCircle,
   FileText,
   Award,
@@ -26,11 +24,6 @@ import {
   StatsCardSkeleton,
 } from "@/components/ui/loading-skeletons";
 import { apiClient } from "../types/api";
-import type {
-  SchemeService,
-  CertificateService,
-  ContactService,
-} from "../types/api";
 
 // Combined service type for unified display
 type CombinedService = {
@@ -75,8 +68,8 @@ export default function UserDashboard() {
                 service.applicationMode === "both"
                   ? "Online/Offline"
                   : service.applicationMode === "online"
-                  ? "Online"
-                  : "Offline",
+                    ? "Online"
+                    : "Offline",
             });
           });
       }
@@ -93,8 +86,8 @@ export default function UserDashboard() {
                 service.applicationMode === "both"
                   ? "Online/Offline"
                   : service.applicationMode === "online"
-                  ? "Online"
-                  : "Offline",
+                    ? "Online"
+                    : "Offline",
             });
           });
       }
@@ -207,11 +200,15 @@ export default function UserDashboard() {
 
         <div className="container mx-auto px-4 py-8">
           {/* Welcome Section */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Welcome back!</h1>
-            <p className="text-gray-600">
-              Discover and manage your information services
-            </p>
+          <div className="mb-8 p-8 rounded-2xl bg-gradient-to-br from-teal-700 to-emerald-900 text-white shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-white opacity-10 blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-teal-300 opacity-20 blur-3xl"></div>
+            <div className="relative z-10">
+              <h1 className="text-4xl font-extrabold mb-3 tracking-tight">Welcome back!</h1>
+              <p className="text-teal-50 text-lg max-w-xl font-medium">
+                Discover, manage, and interact with all public information services via your centralized citizen dashboard.
+              </p>
+            </div>
           </div>
 
           {/* Stats Cards */}
@@ -399,8 +396,8 @@ export default function UserDashboard() {
                         {service.type === "scheme"
                           ? "Scheme"
                           : service.type === "certificate"
-                          ? "Certificate"
-                          : "Contacts"}
+                            ? "Certificate"
+                            : "Contacts"}
                         <ArrowLeft className="ml-2 h-4 w-4 rotate-180" />
                       </Button>
                     </div>

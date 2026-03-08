@@ -3,11 +3,83 @@ import { body, validationResult, query } from "express-validator";
 import crypto from "crypto";
 import { prisma } from "../lib/prisma";
 import { authenticateAdmin, getDepartmentScope } from "../middleware/auth";
-import { submissionLimiter } from "../middleware/rateLimiter";
+import { submissionLimiter, readLimiter } from "../middleware/rateLimiter";
 import { createAuditLog, AuditActions } from "../lib/auditLog";
+import { sendOTP } from "../lib/mailer";
 import "../types/express";
 
 const router = express.Router();
+
+async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
+  const secret = process.env.TURNSTILE_SECRET_KEY || "1x0000000000000000000000000000000AA";
+  try {
+    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `secret=${secret}&response=${token}&remoteip=${ip}`,
+    });
+    const data = await response.json();
+    return data.success;
+  } catch (error) {
+    console.error("Turnstile verification failed:", error);
+    return false;
+  }
+}
+
+// Send OTP and verify Turnstile + daily limit
+router.post(
+  "/public/send-otp",
+  submissionLimiter,
+  [
+    body("email").isEmail().normalizeEmail().withMessage("Valid email is required"),
+    body("turnstileToken").notEmpty().withMessage("Turnstile verification required"),
+  ],
+  async (req: Request, res: Response) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ message: "Validation failed", errors: errors.array() });
+      }
+
+      const { email, turnstileToken } = req.body;
+
+      // 1. Verify Turnstile
+      const isHuman = await verifyTurnstile(turnstileToken, req.ip || "");
+      if (!isHuman) {
+        return res.status(403).json({ message: "Turnstile verification failed" });
+      }
+
+      // 2. Check daily limit (3 grievances per day)
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+
+      const countToday = await prisma.grievance.count({
+        where: { email, createdAt: { gte: todayStart } },
+      });
+
+      if (countToday >= 3) {
+        return res.status(429).json({ message: "Daily limit of 3 grievances reached for this email." });
+      }
+
+      // 3. Generate and send OTP
+      const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
+
+      await prisma.verificationOTP.upsert({
+        where: { email },
+        update: { otp, expiresAt },
+        create: { email, otp, expiresAt },
+      });
+
+      await sendOTP(email, otp);
+
+      res.json({ message: "OTP sent successfully" });
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      res.status(500).json({ message: "Failed to send OTP" });
+    }
+  }
+);
 
 // Generate cryptographically secure tracking ID
 function generateTrackingId(): string {
@@ -46,6 +118,8 @@ router.post(
       .isIn(["low", "medium", "high", "urgent"])
       .withMessage("Invalid priority"),
     body("attachments").optional().isArray(),
+    body("website").optional().isString(),
+    body("otp").trim().notEmpty().withMessage("OTP is required"),
   ],
   async (req: Request, res: Response) => {
     try {
@@ -59,8 +133,42 @@ router.post(
 
       const {
         name, email, phone, address, subject, description,
-        category, departmentId, priority = "medium", attachments = [],
+        category, departmentId, priority = "medium", attachments = [], website, otp
       } = req.body;
+
+      if (website && website.trim() !== "") {
+        console.warn(`Spam bot detected via honeypot (IP: ${req.ip}). Discarding grievance silently.`);
+        // Simulate immediate success
+        const trackingId = generateTrackingId();
+        const slaDeadline = calculateSlaDeadline(priority);
+        return res.status(201).json({
+          message: "Grievance submitted successfully",
+          grievance: { id: 0, trackingId, status: "new", slaDeadline },
+          trackingId,
+        });
+      }
+
+      // 1. Check daily limit again
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      const countToday = await prisma.grievance.count({
+        where: { email, createdAt: { gte: todayStart } },
+      });
+      if (countToday >= 3) {
+        return res.status(429).json({ message: "Daily limit of 3 grievances reached for this email." });
+      }
+
+      // 2. Verify OTP
+      const storedOtp = await prisma.verificationOTP.findUnique({
+        where: { email },
+      });
+
+      if (!storedOtp || storedOtp.otp !== otp || storedOtp.expiresAt < new Date()) {
+        return res.status(400).json({ message: "Invalid or expired OTP" });
+      }
+
+      // Burn OTP
+      await prisma.verificationOTP.delete({ where: { email } });
 
       const trackingId = generateTrackingId();
       const slaDeadline = calculateSlaDeadline(priority);
@@ -120,6 +228,32 @@ router.post(
     }
   },
 );
+
+// Get recent community grievances (public endpoint)
+router.get("/public/recent", readLimiter, async (req: Request, res: Response) => {
+  try {
+    const grievances = await prisma.grievance.findMany({
+      take: 10,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        subject: true,
+        description: true,
+        status: true,
+        priority: true,
+        category: true,
+        trackingId: true,
+        name: true,
+        createdAt: true,
+      },
+    });
+
+    res.json({ message: "Recent grievances retrieved successfully", grievances });
+  } catch (error) {
+    console.error("Error fetching recent grievances:", error);
+    res.status(500).json({ message: "Failed to fetch recent grievances" });
+  }
+});
 
 // Get all grievances (admin only, department-scoped)
 router.get(

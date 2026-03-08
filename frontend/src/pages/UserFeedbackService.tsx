@@ -23,11 +23,12 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import {
   MessageSquare,
   Star,
-  ThumbsUp,
   Send,
   CheckCircle,
   Clock,
 } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { Turnstile } from "@marsidev/react-turnstile";
 import { apiClient } from "../types/api";
 import type { Feedback, CreateFeedbackRequest, Department } from "../types/api";
 
@@ -41,11 +42,16 @@ export default function UserFeedbackService() {
     rating: undefined,
     category: "",
     departmentId: undefined,
+    website: "",
+    otp: "",
   });
   const [departments, setDepartments] = useState<Department[]>([]);
   const [userFeedbacks, setUserFeedbacks] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [sendingOtp, setSendingOtp] = useState(false);
   const [stats, setStats] = useState({
     totalFeedbacks: 0,
     avgRating: 0,
@@ -70,7 +76,7 @@ export default function UserFeedbackService() {
   const fetchFeedbacks = async () => {
     setLoading(true);
     try {
-      const response = await apiClient.getFeedbacks();
+      const response = await apiClient.getPublicFeedbacks();
       const feedbacks = response.feedbacks || [];
       setUserFeedbacks(feedbacks);
 
@@ -108,6 +114,42 @@ export default function UserFeedbackService() {
     }));
   };
 
+  const handleSendOtp = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!formData.email) {
+      return toast({
+        title: "Email Required",
+        description: "Please enter your email first.",
+        variant: "destructive",
+      });
+    }
+    if (!turnstileToken) {
+      return toast({
+        title: "Verification Required",
+        description: "Please complete the CAPTCHA check.",
+        variant: "destructive",
+      });
+    }
+
+    setSendingOtp(true);
+    try {
+      await apiClient.sendFeedbackOtp(formData.email, turnstileToken);
+      setOtpSent(true);
+      toast({
+        title: "OTP Sent",
+        description: "Check your email for the 6-digit verification code.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Failed to send OTP",
+        description: error.message || "An error occurred while sending OTP.",
+        variant: "destructive",
+      });
+    } finally {
+      setSendingOtp(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -125,15 +167,26 @@ export default function UserFeedbackService() {
         rating: undefined,
         category: "",
         departmentId: undefined,
+        website: "",
+        otp: "",
       });
+      setOtpSent(false);
+      setTurnstileToken("");
 
       // Refresh feedback list
       fetchFeedbacks();
 
-      alert("Feedback submitted successfully!");
+      toast({
+        title: "Success",
+        description: "Feedback submitted successfully!",
+      });
     } catch (error) {
       console.error("Error submitting feedback:", error);
-      alert("Failed to submit feedback. Please try again.");
+      toast({
+        title: "Submission failed",
+        description: "Failed to submit feedback. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -144,10 +197,16 @@ export default function UserFeedbackService() {
       <ServicesMenu />
       <div className="flex-1 bg-gray-50">
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold mb-2">Feedback Service</h1>
-          <p className="text-gray-600 mb-8">
-            Share your thoughts and help us improve our services.
-          </p>
+          <div className="mb-8 p-8 rounded-2xl bg-gradient-to-br from-teal-700 to-emerald-900 text-white shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-white opacity-10 blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-teal-300 opacity-20 blur-3xl"></div>
+            <div className="relative z-10">
+              <h1 className="text-4xl font-extrabold mb-3 tracking-tight">Feedback Service</h1>
+              <p className="text-teal-50 text-lg max-w-xl font-medium">
+                Share your thoughts and help us improve our services.
+              </p>
+            </div>
+          </div>
 
           {/* Status Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -228,6 +287,20 @@ export default function UserFeedbackService() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Honeypot field - visually hidden to stop basic bots */}
+                <div style={{ position: "absolute", left: "-9999px" }} aria-hidden="true">
+                  <label htmlFor="website">Leave this field empty</label>
+                  <input
+                    type="text"
+                    id="website"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={formData.website || ""}
+                    onChange={(e) => handleInputChange("website", e.target.value)}
+                  />
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">
@@ -378,13 +451,52 @@ export default function UserFeedbackService() {
                   </Select>
                 </div>
 
-                <Button
-                  type="submit"
-                  className="w-full bg-teal-600 hover:bg-teal-700"
-                  disabled={submitting}
-                >
-                  {submitting ? "Submitting..." : "Submit Feedback"}
-                </Button>
+                {!otpSent ? (
+                  <div className="space-y-4">
+                    <div className="flex justify-center my-4">
+                      <Turnstile
+                        siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY || "1x00000000000000000000AA"}
+                        onSuccess={(token: string) => setTurnstileToken(token)}
+                        options={{
+                          // extra config if needed
+                        }}
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      onClick={handleSendOtp}
+                      className="w-full bg-teal-600 hover:bg-teal-700"
+                      disabled={sendingOtp || !turnstileToken}
+                    >
+                      {sendingOtp ? "Sending OTP..." : "Verify Identity & Send OTP"}
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-4 mt-8">
+                    <div className="p-4 bg-teal-50 border border-teal-200 rounded-lg">
+                      <label className="block text-sm font-medium mb-1">
+                        Enter 6-digit OTP sent to {formData.email} *
+                      </label>
+                      <Input
+                        type="text"
+                        value={formData.otp || ""}
+                        onChange={(e) =>
+                          handleInputChange("otp", e.target.value)
+                        }
+                        required
+                        placeholder="123456"
+                        maxLength={6}
+                      />
+                    </div>
+                    <Button
+                      type="submit"
+                      className="w-full bg-teal-600 hover:bg-teal-700"
+                      disabled={submitting}
+                    >
+                      {submitting ? "Submitting..." : "Submit Feedback"}
+                    </Button>
+                  </div>
+                )}
               </form>
             </CardContent>
           </Card>

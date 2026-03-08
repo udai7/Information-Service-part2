@@ -2,11 +2,86 @@ import express, { Request, Response } from "express";
 import { body, validationResult, query } from "express-validator";
 import { prisma } from "../lib/prisma";
 import { authenticateAdmin, getDepartmentScope } from "../middleware/auth";
-import { submissionLimiter } from "../middleware/rateLimiter";
+import {
+  submissionLimiter,
+  readLimiter,
+} from "../middleware/rateLimiter";
 import { createAuditLog, AuditActions } from "../lib/auditLog";
+import { sendOTP } from "../lib/mailer";
 import "../types/express";
 
 const router = express.Router();
+
+async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
+  const secret = process.env.TURNSTILE_SECRET_KEY || "1x0000000000000000000000000000000AA";
+  try {
+    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `secret=${secret}&response=${token}&remoteip=${ip}`,
+    });
+    const data = await response.json();
+    return data.success;
+  } catch (error) {
+    console.error("Turnstile verification failed:", error);
+    return false;
+  }
+}
+
+// Send OTP and verify Turnstile + daily limit
+router.post(
+  "/public/send-otp",
+  submissionLimiter,
+  [
+    body("email").isEmail().normalizeEmail().withMessage("Valid email is required"),
+    body("turnstileToken").notEmpty().withMessage("Turnstile verification required"),
+  ],
+  async (req: Request, res: Response) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ message: "Validation failed", errors: errors.array() });
+      }
+
+      const { email, turnstileToken } = req.body;
+
+      // 1. Verify Turnstile
+      const isHuman = await verifyTurnstile(turnstileToken, req.ip || "");
+      if (!isHuman) {
+        return res.status(403).json({ message: "Turnstile verification failed" });
+      }
+
+      // 2. Check daily limit (3 feedbacks per day)
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+
+      const countToday = await prisma.feedback.count({
+        where: { email, createdAt: { gte: todayStart } },
+      });
+
+      if (countToday >= 3) {
+        return res.status(429).json({ message: "Daily limit of 3 feedbacks reached for this email." });
+      }
+
+      // 3. Generate and send OTP
+      const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
+
+      await prisma.verificationOTP.upsert({
+        where: { email },
+        update: { otp, expiresAt },
+        create: { email, otp, expiresAt },
+      });
+
+      await sendOTP(email, otp);
+
+      res.json({ message: "OTP sent successfully" });
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      res.status(500).json({ message: "Failed to send OTP" });
+    }
+  }
+);
 
 // Create feedback (public endpoint - rate limited)
 router.post(
@@ -21,6 +96,8 @@ router.post(
     body("rating").optional().isInt({ min: 1, max: 5 }).withMessage("Rating must be between 1 and 5"),
     body("category").optional().isString(),
     body("departmentId").optional().isInt(),
+    body("website").optional().isString(),
+    body("otp").trim().notEmpty().withMessage("OTP is required"),
   ],
   async (req: Request, res: Response) => {
     try {
@@ -29,7 +106,39 @@ router.post(
         return res.status(400).json({ message: "Validation failed", errors: errors.array() });
       }
 
-      const { name, email, phone, subject, message, rating, category, departmentId } = req.body;
+      const { name, email, phone, subject, message, rating, category, departmentId, website, otp } = req.body;
+
+      if (website && website.trim() !== "") {
+        console.warn(`Spam bot detected via honeypot (IP: ${req.ip}). Discarding feedback silently.`);
+        return res.status(201).json({ message: "Feedback submitted successfully", feedback: { id: 0 } });
+      }
+
+      // 1. Check daily limit again
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      const emailToCheck = email || "anonymous";
+      if (emailToCheck !== "anonymous") {
+        const countToday = await prisma.feedback.count({
+          where: { email: emailToCheck, createdAt: { gte: todayStart } },
+        });
+        if (countToday >= 3) {
+          return res.status(429).json({ message: "Daily limit of 3 feedbacks reached for this email." });
+        }
+      }
+
+      // 2. Verify OTP
+      if (emailToCheck !== "anonymous") {
+        const storedOtp = await prisma.verificationOTP.findUnique({
+          where: { email: emailToCheck },
+        });
+
+        if (!storedOtp || storedOtp.otp !== otp || storedOtp.expiresAt < new Date()) {
+          return res.status(400).json({ message: "Invalid or expired OTP" });
+        }
+
+        // Burn OTP
+        await prisma.verificationOTP.delete({ where: { email: emailToCheck } });
+      }
 
       const feedback = await prisma.feedback.create({
         data: {
@@ -63,8 +172,33 @@ router.post(
       console.error("Error creating feedback:", error);
       res.status(500).json({ message: "Failed to submit feedback" });
     }
-  },
+  }
 );
+
+// Get recent community feedbacks (public endpoint)
+router.get("/public/recent", readLimiter, async (req: Request, res: Response) => {
+  try {
+    const feedbacks = await prisma.feedback.findMany({
+      take: 10,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        name: true,
+        subject: true,
+        message: true,
+        rating: true,
+        category: true,
+        status: true,
+        createdAt: true,
+      },
+    });
+
+    res.json({ message: "Recent feedbacks retrieved successfully", feedbacks });
+  } catch (error) {
+    console.error("Error fetching recent feedbacks:", error);
+    res.status(500).json({ message: "Failed to fetch recent feedbacks" });
+  }
+});
 
 // Get all feedbacks (admin only, department-scoped)
 router.get(

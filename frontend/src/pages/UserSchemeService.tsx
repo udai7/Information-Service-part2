@@ -65,10 +65,16 @@ export default function UserSchemeService() {
       <ServicesMenu />
       <div className="flex-1 bg-gray-50">
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold mb-2">Schemes</h1>
-          <p className="text-gray-600 mb-8">
-            Browse available government schemes and view details.
-          </p>
+          <div className="mb-8 p-8 rounded-2xl bg-gradient-to-br from-teal-700 to-emerald-900 text-white shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-white opacity-10 blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-teal-300 opacity-20 blur-3xl"></div>
+            <div className="relative z-10">
+              <h1 className="text-4xl font-extrabold mb-3 tracking-tight">Schemes</h1>
+              <p className="text-teal-50 text-lg max-w-xl font-medium">
+                Browse available government schemes, view eligibility criteria, and discover benefits.
+              </p>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -169,8 +175,8 @@ export default function UserSchemeService() {
                         {scheme.applicationMode === "both"
                           ? "Online/Offline"
                           : scheme.applicationMode === "online"
-                          ? "Online"
-                          : "Offline"}
+                            ? "Online"
+                            : "Offline"}
                       </div>
                       {scheme.targetAudience &&
                         scheme.targetAudience.length > 0 && (
@@ -292,8 +298,8 @@ export default function UserSchemeService() {
                         {modalScheme.applicationMode === "both"
                           ? "Online/Offline"
                           : modalScheme.applicationMode === "online"
-                          ? "Online"
-                          : "Offline"}
+                            ? "Online"
+                            : "Offline"}
                       </p>
                     </div>
                     {modalScheme.targetAudience &&

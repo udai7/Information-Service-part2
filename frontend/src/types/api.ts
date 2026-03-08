@@ -540,6 +540,8 @@ export interface CreateFeedbackRequest {
   rating?: number; // 1-5 star rating
   category?: string; // General, Service, Technical, etc.
   departmentId?: number; // Optional department to route directly to
+  website?: string; // Honeypot field for bot spam prevention
+  otp?: string; // One time password for verification
 }
 
 export interface UpdateFeedbackRequest {
@@ -559,6 +561,8 @@ export interface CreateGrievanceRequest {
   priority?: "low" | "medium" | "high" | "urgent";
   attachments?: string[]; // File paths or URLs
   departmentId?: number; // Optional department to route directly to
+  website?: string; // Honeypot field for bot spam prevention
+  otp?: string; // One time password for verification
 }
 
 export interface UpdateGrievanceRequest {
@@ -1108,6 +1112,17 @@ export class ApiClient {
     );
   }
 
+  async getPublicFeedbacks(): Promise<FeedbackListResponse> {
+    return this.makeRequest<FeedbackListResponse>("/feedbacks/public/recent");
+  }
+
+  async sendFeedbackOtp(email: string, turnstileToken: string): Promise<void> {
+    return this.makeRequest<void>("/feedbacks/public/send-otp", {
+      method: "POST",
+      body: JSON.stringify({ email, turnstileToken }),
+    });
+  }
+
   async getFeedback(id: number): Promise<FeedbackResponse> {
     return this.makeRequest<FeedbackResponse>(`/feedbacks/${id}`);
   }
@@ -1162,6 +1177,17 @@ export class ApiClient {
     return this.makeRequest<GrievanceListResponse>(
       `/grievances${query ? `?${query}` : ""}`,
     );
+  }
+
+  async getPublicGrievances(): Promise<GrievanceListResponse> {
+    return this.makeRequest<GrievanceListResponse>("/grievances/public/recent");
+  }
+
+  async sendGrievanceOtp(email: string, turnstileToken: string): Promise<void> {
+    return this.makeRequest<void>("/grievances/public/send-otp", {
+      method: "POST",
+      body: JSON.stringify({ email, turnstileToken }),
+    });
   }
 
   async getGrievance(id: number): Promise<GrievanceResponse> {

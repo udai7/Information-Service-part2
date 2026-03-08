@@ -81,10 +81,16 @@ export default function UserCertificateService() {
       <ServicesMenu />
       <div className="flex-1 bg-gray-50">
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold mb-2">Certificates</h1>
-          <p className="text-gray-600 mb-8">
-            Browse available certificates and view details.
-          </p>
+          <div className="mb-8 p-8 rounded-2xl bg-gradient-to-br from-teal-700 to-emerald-900 text-white shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-white opacity-10 blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-teal-300 opacity-20 blur-3xl"></div>
+            <div className="relative z-10">
+              <h1 className="text-4xl font-extrabold mb-3 tracking-tight">Certificates</h1>
+              <p className="text-teal-50 text-lg max-w-xl font-medium">
+                Browse available certificates, view details, and track application requirements.
+              </p>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -169,8 +175,8 @@ export default function UserCertificateService() {
                         {cert.applicationMode === "both"
                           ? "Online/Offline"
                           : cert.applicationMode === "online"
-                          ? "Online"
-                          : "Offline"}
+                            ? "Online"
+                            : "Offline"}
                       </div>
                       {cert.targetAudience &&
                         cert.targetAudience.length > 0 && (
@@ -343,7 +349,7 @@ export default function UserCertificateService() {
                               cert.contacts?.filter(
                                 (contact) =>
                                   contact.applicationType ===
-                                    "New Application" ||
+                                  "New Application" ||
                                   !contact.applicationType,
                               ) || [],
                             "Update Application":
@@ -452,8 +458,8 @@ export default function UserCertificateService() {
                         {modalCert.applicationMode === "both"
                           ? "Online/Offline"
                           : modalCert.applicationMode === "online"
-                          ? "Online"
-                          : "Offline"}
+                            ? "Online"
+                            : "Offline"}
                       </span>
                     </div>
                     {modalCert.targetAudience &&

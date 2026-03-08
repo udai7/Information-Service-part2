@@ -179,10 +179,16 @@ export default function UserContactService() {
       <ServicesMenu />
       <div className="flex-1 bg-gray-50">
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold mb-2">Contact Service</h1>
-          <p className="text-gray-600 mb-8">
-            Find contact information for service officers.
-          </p>
+          <div className="mb-8 p-8 rounded-2xl bg-gradient-to-br from-teal-700 to-emerald-900 text-white shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-white opacity-10 blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-teal-300 opacity-20 blur-3xl"></div>
+            <div className="relative z-10">
+              <h1 className="text-4xl font-extrabold mb-3 tracking-tight">Contact Service</h1>
+              <p className="text-teal-50 text-lg max-w-xl font-medium">
+                Find authentic department contacts and authoritative public sector directories seamlessly.
+              </p>
+            </div>
+          </div>
           {/* Status Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <Card className="hover:shadow-lg transition-shadow">
@@ -538,10 +544,10 @@ export default function UserContactService() {
                               </h5>
 
                               {modalService.posts &&
-                              modalService.posts.filter(
-                                (post: any) =>
-                                  post.officeId === office.officeId,
-                              ).length > 0 ? (
+                                modalService.posts.filter(
+                                  (post: any) =>
+                                    post.officeId === office.officeId,
+                                ).length > 0 ? (
                                 <ul className="space-y-3">
                                   {modalService.posts
                                     .filter(
@@ -564,11 +570,11 @@ export default function UserContactService() {
                                         </div>
                                         {/* Employees within this post */}
                                         {modalService.employees &&
-                                        modalService.employees.filter(
-                                          (emp: any) =>
-                                            emp.postIndex ===
-                                            post.globalPostIndex,
-                                        ).length > 0 ? (
+                                          modalService.employees.filter(
+                                            (emp: any) =>
+                                              emp.postIndex ===
+                                              post.globalPostIndex,
+                                          ).length > 0 ? (
                                           <div className="ml-4 mt-2 bg-gray-50 rounded-md p-3 border border-teal-200">
                                             <h6 className="font-semibold text-sm mb-2 text-teal-700 flex items-center">
                                               <span className="w-2 h-2 bg-teal-400 rounded-full mr-2"></span>

@@ -249,29 +249,30 @@ export default function Index() {
               Access certificates, schemes, contact directories, grievance filing and more — all organized for quick navigation.
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 relative">
             {SERVICE_CATEGORIES.map((cat) => (
               <Link key={cat.title} to={cat.link} className="group">
-                <Card className="h-full border border-slate-200 hover:border-teal-300 hover:shadow-md transition-all duration-200 bg-white">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="h-10 w-10 rounded-lg bg-slate-100 group-hover:bg-teal-50 flex items-center justify-center transition-colors">
-                        <cat.icon className="h-5 w-5 text-slate-600 group-hover:text-teal-600 transition-colors" />
+                <Card className="h-full border border-slate-200 hover:border-teal-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 bg-white shadow-sm relative overflow-hidden rounded-2xl">
+                  <div className="absolute inset-0 bg-gradient-to-br from-teal-50/50 to-emerald-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <CardHeader className="pb-3 relative z-10">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="h-12 w-12 rounded-xl bg-slate-100 group-hover:bg-gradient-to-br group-hover:from-teal-500 group-hover:to-emerald-600 shadow-sm flex items-center justify-center transition-all duration-300">
+                        <cat.icon className="h-6 w-6 text-slate-600 group-hover:text-white transition-colors duration-300" />
                       </div>
-                      <Badge variant="secondary" className="text-xs bg-slate-100 text-slate-600">
+                      <Badge variant="secondary" className="text-xs font-semibold bg-slate-100 text-slate-600 group-hover:bg-teal-100 group-hover:text-teal-700 transition-colors duration-300 px-2.5 py-1">
                         {cat.count}
                       </Badge>
                     </div>
-                    <CardTitle className="text-base font-semibold text-slate-900 group-hover:text-teal-700 transition-colors">
+                    <CardTitle className="text-xl font-bold text-slate-900 group-hover:text-teal-700 transition-colors duration-300">
                       {cat.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-sm text-slate-500 leading-relaxed">
+                  <CardContent className="relative z-10">
+                    <CardDescription className="text-sm text-slate-600 leading-relaxed font-medium">
                       {cat.description}
                     </CardDescription>
-                    <div className="mt-4 flex items-center text-sm font-medium text-teal-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                      Browse services <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                    <div className="mt-5 flex items-center text-sm font-semibold text-teal-600 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-[-10px] group-hover:translate-x-0">
+                      Browse services <ArrowRight className="ml-1.5 h-4 w-4" />
                     </div>
                   </CardContent>
                 </Card>
@@ -294,12 +295,13 @@ export default function Index() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {FEATURES.map((feature) => (
-              <div key={feature.title} className="text-center">
-                <div className="mx-auto h-12 w-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center mb-4 shadow-sm">
-                  <feature.icon className="h-5 w-5 text-teal-600" />
+              <div key={feature.title} className="text-center group p-6 rounded-2xl hover:bg-white hover:shadow-xl transition-all duration-300 border border-transparent hover:border-slate-100">
+                <div className="mx-auto h-16 w-16 rounded-2xl bg-white border border-slate-200 flex items-center justify-center mb-5 shadow-sm group-hover:scale-110 group-hover:border-teal-200 transition-transform duration-300 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-teal-50 to-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <feature.icon className="h-7 w-7 text-teal-600 relative z-10" />
                 </div>
-                <h3 className="font-semibold text-slate-900 mb-2">{feature.title}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed">{feature.description}</p>
+                <h3 className="font-bold text-slate-900 mb-3 text-lg">{feature.title}</h3>
+                <p className="text-slate-600 leading-relaxed font-medium">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -319,13 +321,13 @@ export default function Index() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {STEPS.map((item, index) => (
-              <div key={item.step} className="relative">
+              <div key={item.step} className="relative group p-6 rounded-2xl hover:bg-slate-50 transition-colors duration-300">
                 {index < STEPS.length - 1 && (
-                  <div className="hidden lg:block absolute top-6 left-full w-full h-px bg-slate-200 -translate-x-4" />
+                  <div className="hidden lg:block absolute top-[52px] left-full w-[calc(100%-48px)] h-px border-t-2 border-dashed border-slate-200 -translate-x-6 group-hover:border-teal-200 transition-colors duration-300" />
                 )}
-                <div className="text-3xl font-bold text-teal-600/20 mb-3">{item.step}</div>
-                <h3 className="font-semibold text-slate-900 mb-2">{item.title}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed">{item.description}</p>
+                <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-slate-200 to-slate-300 mb-5 group-hover:from-teal-300 group-hover:to-teal-500 transition-all duration-300 drop-shadow-sm">{item.step}</div>
+                <h3 className="font-bold text-slate-900 mb-3 text-lg group-hover:text-teal-700 transition-colors duration-300">{item.title}</h3>
+                <p className="text-slate-600 leading-relaxed font-medium text-sm">{item.description}</p>
               </div>
             ))}
           </div>
@@ -371,12 +373,12 @@ export default function Index() {
           </h2>
           <div className="space-y-4">
             {FAQ_ITEMS.map((item) => (
-              <div key={item.q} className="bg-white border border-slate-200 rounded-lg p-5">
-                <h3 className="font-semibold text-slate-900 mb-2 flex items-start gap-2">
-                  <CheckCircle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-0.5" />
+              <div key={item.q} className="group bg-white border border-slate-200 hover:border-teal-300 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
+                <h3 className="font-bold text-slate-900 mb-2 flex items-start gap-3 group-hover:text-teal-800 transition-colors duration-300">
+                  <CheckCircle className="h-6 w-6 text-teal-500 bg-teal-50 rounded-full p-1 flex-shrink-0 mt-0.5" />
                   {item.q}
                 </h3>
-                <p className="text-sm text-slate-500 leading-relaxed ml-7">{item.a}</p>
+                <p className="text-slate-600 leading-relaxed ml-9 font-medium">{item.a}</p>
               </div>
             ))}
           </div>
@@ -387,53 +389,53 @@ export default function Index() {
       <section className="bg-white border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid sm:grid-cols-3 gap-6">
-            <Card className="border-slate-200 hover:border-teal-200 transition-colors">
-              <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-teal-50 flex items-center justify-center mb-2">
-                  <Building2 className="h-5 w-5 text-teal-600" />
+            <Card className="border-slate-200 hover:border-teal-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl overflow-hidden group bg-white">
+              <CardHeader className="bg-slate-50 group-hover:bg-teal-50/50 transition-colors duration-300 pb-5">
+                <div className="h-14 w-14 rounded-xl bg-white shadow-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-slate-100 group-hover:border-teal-100">
+                  <Building2 className="h-7 w-7 text-teal-600 group-hover:text-teal-700" />
                 </div>
-                <CardTitle className="text-base">Government Offices</CardTitle>
+                <CardTitle className="text-xl font-bold">Government Offices</CardTitle>
               </CardHeader>
-              <CardContent>
-                <CardDescription className="text-sm mb-3">
+              <CardContent className="pt-5">
+                <CardDescription className="text-sm mb-5 font-medium leading-relaxed text-slate-600">
                   Find addresses, phone numbers and working hours for all district and sub-division offices.
                 </CardDescription>
-                <Link to="/contact-service" className="text-sm font-medium text-teal-600 hover:text-teal-700 inline-flex items-center">
-                  View directory <ExternalLink className="ml-1 h-3.5 w-3.5" />
+                <Link to="/contact-service" className="text-sm font-bold text-teal-600 hover:text-teal-700 inline-flex items-center">
+                  View directory <ExternalLink className="ml-1.5 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 hover:border-teal-200 transition-colors">
-              <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-teal-50 flex items-center justify-center mb-2">
-                  <MapPin className="h-5 w-5 text-teal-600" />
+            <Card className="border-slate-200 hover:border-teal-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl overflow-hidden group bg-white">
+              <CardHeader className="bg-slate-50 group-hover:bg-teal-50/50 transition-colors duration-300 pb-5">
+                <div className="h-14 w-14 rounded-xl bg-white shadow-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-slate-100 group-hover:border-teal-100">
+                  <MapPin className="h-7 w-7 text-teal-600 group-hover:text-teal-700" />
                 </div>
-                <CardTitle className="text-base">District Services</CardTitle>
+                <CardTitle className="text-xl font-bold">District Services</CardTitle>
               </CardHeader>
-              <CardContent>
-                <CardDescription className="text-sm mb-3">
+              <CardContent className="pt-5">
+                <CardDescription className="text-sm mb-5 font-medium leading-relaxed text-slate-600">
                   Services organized by district — find what's available in your area and how to apply.
                 </CardDescription>
-                <Link to="/scheme-service" className="text-sm font-medium text-teal-600 hover:text-teal-700 inline-flex items-center">
-                  Explore schemes <ExternalLink className="ml-1 h-3.5 w-3.5" />
+                <Link to="/scheme-service" className="text-sm font-bold text-teal-600 hover:text-teal-700 inline-flex items-center">
+                  Explore schemes <ExternalLink className="ml-1.5 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 hover:border-teal-200 transition-colors">
-              <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-teal-50 flex items-center justify-center mb-2">
-                  <Headphones className="h-5 w-5 text-teal-600" />
+            <Card className="border-slate-200 hover:border-teal-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl overflow-hidden group bg-white">
+              <CardHeader className="bg-slate-50 group-hover:bg-teal-50/50 transition-colors duration-300 pb-5">
+                <div className="h-14 w-14 rounded-xl bg-white shadow-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-slate-100 group-hover:border-teal-100">
+                  <Headphones className="h-7 w-7 text-teal-600 group-hover:text-teal-700" />
                 </div>
-                <CardTitle className="text-base">Need Help?</CardTitle>
+                <CardTitle className="text-xl font-bold">Need Help?</CardTitle>
               </CardHeader>
-              <CardContent>
-                <CardDescription className="text-sm mb-3">
+              <CardContent className="pt-5">
+                <CardDescription className="text-sm mb-5 font-medium leading-relaxed text-slate-600">
                   File a grievance, give feedback, or reach out to our support team for assistance.
                 </CardDescription>
-                <Link to="/grievances-service" className="text-sm font-medium text-teal-600 hover:text-teal-700 inline-flex items-center">
-                  Get support <ExternalLink className="ml-1 h-3.5 w-3.5" />
+                <Link to="/grievances-service" className="text-sm font-bold text-teal-600 hover:text-teal-700 inline-flex items-center">
+                  Get support <ExternalLink className="ml-1.5 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </CardContent>
             </Card>
