@@ -88,7 +88,7 @@ export default function AdminAuditLogs() {
 
   if (!isSuperAdmin) {
     return (
-      <div className="flex min-h-screen">
+      <div className="flex flex-col md:flex-row min-h-screen">
         <AdminSidebar />
         <div className="flex-1 flex items-center justify-center">
           <Card className="w-96">
@@ -115,7 +115,7 @@ export default function AdminAuditLogs() {
     : logs;
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex flex-col md:flex-row min-h-screen">
       <AdminSidebar />
       <div className="flex-1 bg-gray-50 p-6">
         <div className="max-w-7xl mx-auto">

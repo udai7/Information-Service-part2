@@ -270,7 +270,7 @@ const OfficeDetails: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex flex-col md:flex-row min-h-screen">
       <div className="flex-1 bg-gray-50">
         <div className="container mx-auto px-4 py-8">
           <div className="mb-8">

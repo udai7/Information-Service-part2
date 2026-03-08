@@ -30,7 +30,14 @@ import {
   MessageSquare,
   Mail,
   ExternalLink,
+  Menu,
 } from "lucide-react";
+
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 // ─── Data ───
 const STATS = [
@@ -181,6 +188,32 @@ export default function Index() {
                 <Link to="/admin/login">Admin Portal</Link>
               </Button>
             </nav>
+
+            <div className="md:hidden flex items-center">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="text-slate-600">
+                    <Menu className="h-6 w-6" />
+                    <span className="sr-only">Toggle Menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-white">
+                  <div className="flex flex-col gap-6 pt-10 px-2 h-full">
+                    <a href="#services" className="text-lg font-semibold text-slate-800 hover:text-teal-600 transition-colors">Services</a>
+                    <a href="#how-it-works" className="text-lg font-semibold text-slate-800 hover:text-teal-600 transition-colors">How It Works</a>
+                    <a href="#faq" className="text-lg font-semibold text-slate-800 hover:text-teal-600 transition-colors">FAQ</a>
+                    <div className="mt-auto border-t border-slate-100 pt-6 flex flex-col gap-4 pb-6">
+                      <Button asChild variant="outline" className="w-full justify-center h-12 text-base font-medium">
+                        <Link to="/user-dashboard">User Dashboard</Link>
+                      </Button>
+                      <Button asChild className="w-full justify-center bg-teal-600 hover:bg-teal-700 text-white h-12 text-base font-medium">
+                        <Link to="/admin/login">Admin Portal</Link>
+                      </Button>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
       </header>

@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
@@ -26,45 +26,82 @@ export function ServicesMenu() {
   const isAdmin = location.pathname.startsWith("/admin");
   const menuItems = isAdmin
     ? [
-        { label: "Scheme Service", path: "/scheme-service" },
-        { label: "Certificate Service", path: "/certificate-service" },
-        { label: "Contact Service", path: "/contact-service" },
-        { label: "Grievances Service", path: "/grievances-service" },
-        { label: "Feedback Service", path: "/feedback-service" },
-      ]
+      { label: "Scheme Service", path: "/scheme-service" },
+      { label: "Certificate Service", path: "/certificate-service" },
+      { label: "Contact Service", path: "/contact-service" },
+      { label: "Grievances Service", path: "/grievances-service" },
+      { label: "Feedback Service", path: "/feedback-service" },
+    ]
     : [
-        { label: "Scheme Service", path: "/scheme-service" },
-        { label: "Certificate Service", path: "/certificate-service" },
-        { label: "Contact Service", path: "/contact-service" },
-        { label: "Grievances Service", path: "/grievances-service" },
-        { label: "Feedback Service", path: "/feedback-service" },
-      ];
+      { label: "Scheme Service", path: "/scheme-service" },
+      { label: "Certificate Service", path: "/certificate-service" },
+      { label: "Contact Service", path: "/contact-service" },
+      { label: "Grievances Service", path: "/grievances-service" },
+      { label: "Feedback Service", path: "/feedback-service" },
+    ];
 
   const linkClass = (path: string) =>
-    `flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors ${
-      location.pathname === path
-        ? "bg-teal-50 text-teal-700 font-semibold"
-        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+    `flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors ${location.pathname === path
+      ? "bg-teal-50 text-teal-700 font-semibold"
+      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
     }`;
 
   return (
-    <nav className="flex flex-col gap-1 p-4 bg-white min-h-screen w-60 font-medium border-r border-slate-200">
-      <Button
-        variant="ghost"
-        className="mb-4 w-full justify-start text-slate-800 font-semibold hover:bg-slate-50"
-        onClick={() => navigate(isAdmin ? "/admin" : "/user-dashboard")}
-      >
-        {isAdmin ? "Admin Dashboard" : "User Dashboard"}
-      </Button>
-      <div className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold px-3 pt-2 pb-2">
-        Services
+    <>
+      <nav className="hidden md:flex flex-col gap-1 p-4 bg-white min-h-screen w-60 font-medium border-r border-slate-200 shrink-0">
+        <Button
+          variant="ghost"
+          className="mb-4 w-full justify-start text-slate-800 font-semibold hover:bg-slate-50"
+          onClick={() => navigate(isAdmin ? "/admin" : "/user-dashboard")}
+        >
+          {isAdmin ? "Admin Dashboard" : "User Dashboard"}
+        </Button>
+        <div className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold px-3 pt-2 pb-2">
+          Services
+        </div>
+        {menuItems.map((item) => (
+          <Link key={item.path} to={item.path} className={linkClass(item.path)}>
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+
+      {/* Mobile Navigation Header */}
+      <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200 w-full shrink-0">
+        <span className="font-bold text-slate-800">Menu</span>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" className="text-slate-600">
+              <PanelLeft className="h-6 w-6" />
+              <span className="sr-only">Toggle Menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[300px] bg-white p-0">
+            <nav className="flex flex-col gap-1 p-4 h-full">
+              <Button
+                variant="ghost"
+                className="mb-4 w-full justify-start text-slate-800 font-semibold hover:bg-slate-50"
+                onClick={() => navigate(isAdmin ? "/admin" : "/user-dashboard")}
+              >
+                {isAdmin ? "Admin Dashboard" : "User Dashboard"}
+              </Button>
+              <div className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold px-3 pt-2 pb-2">
+                Services
+              </div>
+              <div className="flex flex-col gap-1">
+                {menuItems.map((item) => (
+                  <SheetClose asChild key={item.path}>
+                    <Link to={item.path} className={linkClass(item.path)}>
+                      {item.label}
+                    </Link>
+                  </SheetClose>
+                ))}
+              </div>
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
-      {menuItems.map((item) => (
-        <Link key={item.path} to={item.path} className={linkClass(item.path)}>
-          {item.label}
-        </Link>
-      ))}
-    </nav>
+    </>
   );
 }
 
@@ -658,7 +695,7 @@ const SidebarMenuAction = React.forwardRef<
         "peer-data-[size=lg]/menu-button:top-2.5",
         "group-data-[collapsible=icon]:hidden",
         showOnHover &&
-          "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0",
+        "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0",
         className,
       )}
       {...props}
