@@ -6,7 +6,7 @@ import { authenticateAdmin, getDepartmentScope } from "../middleware/auth";
 import { submissionLimiter, readLimiter } from "../middleware/rateLimiter";
 import { createAuditLog, AuditActions } from "../lib/auditLog";
 import { sendOTP } from "../lib/mailer";
-import { imageUpload, uploadImageToOCI } from "../lib/fileUpload";
+import { imageUpload, uploadImageToOCI, deleteFromOCI } from "../lib/fileUpload";
 import "../types/express";
 
 const router = express.Router();
@@ -766,6 +766,11 @@ router.post(
         return res.status(404).json({
           message: "Grievance not found",
         });
+      }
+
+      // Delete old image from OCI if it exists
+      if (existingGrievance.imageUrl?.startsWith("https://")) {
+        await deleteFromOCI(existingGrievance.imageUrl);
       }
 
       // Process, compress, and upload image to OCI

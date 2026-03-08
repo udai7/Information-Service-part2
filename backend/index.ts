@@ -1,9 +1,11 @@
+import dotenv from "dotenv";
+dotenv.config(); // Must be first — modules read env vars at import time
+
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
 import path from "path";
 import { prisma, queryCache } from "./lib/prisma";
 
@@ -23,8 +25,6 @@ import contactServiceRoutes from "./routes/contactService";
 import officeManagementRoutes from "./routes/officeManagement";
 import feedbackRoutes from "./routes/feedback";
 import grievanceRoutes from "./routes/grievance";
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;

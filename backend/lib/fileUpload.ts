@@ -100,6 +100,11 @@ export const uploadPDFToOCI = async (
 ): Promise<string> => {
   const filename = generateFilename(file.originalname);
   const objectName = `pdfs/${filename}`;
+
+  if (!file.buffer || file.buffer.length === 0) {
+    throw new Error("PDF file buffer is empty");
+  }
+
   return uploadToOCI(file.buffer, objectName, "application/pdf");
 };
 

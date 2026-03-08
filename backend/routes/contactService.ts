@@ -4,7 +4,7 @@ import { prisma } from "../lib/prisma";
 import { queryCache } from "../lib/prisma";
 import { authenticateAdmin } from "../middleware/auth";
 import { readLimiter } from "../middleware/rateLimiter";
-import { pdfUpload, uploadPDFToOCI } from "../lib/fileUpload";
+import { pdfUpload, uploadPDFToOCI, deleteFromOCI } from "../lib/fileUpload";
 import "../types/express";
 
 const router = express.Router();
@@ -388,6 +388,11 @@ router.post(
           success: false,
           message: "Contact service not found",
         });
+      }
+
+      // Delete old PDF from OCI if it exists
+      if (existingService.pdfUrl?.startsWith("https://")) {
+        await deleteFromOCI(existingService.pdfUrl);
       }
 
       const pdfUrl = await uploadPDFToOCI(req.file);
