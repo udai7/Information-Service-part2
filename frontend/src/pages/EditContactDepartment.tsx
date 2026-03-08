@@ -24,6 +24,16 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { apiClient } from "../types/api";
 import { toast } from "@/hooks/use-toast";
 
@@ -34,6 +44,9 @@ export default function EditContactDepartment() {
   const [serviceDetails, setServiceDetails] = useState<any>(null);
   const [offices, setOffices] = useState<any[]>([]);
   const [isAddOfficeDialogOpen, setIsAddOfficeDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [officeToDeleteIndex, setOfficeToDeleteIndex] = useState<number | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const [newOffice, setNewOffice] = useState({
     officeName: "",
     level: "",
@@ -45,85 +58,19 @@ export default function EditContactDepartment() {
 
   useEffect(() => {
     const fetchContactService = async () => {
-      console.log("fetchContactService called with id:", id);
-      console.log("id type:", typeof id);
-      console.log("parsed id:", id ? parseInt(id) : "no id");
-
-      if (!id) {
-        console.log("No ID provided");
-        return;
-      }
+      if (!id) return;
 
       try {
-        // Get all contact services to find by ID
-        console.log("Fetching contact services...");
-        const response = await apiClient.getContactServices();
-        console.log("API response:", response);
-        console.log("Looking for service with ID:", id);
-        console.log("Available services:", response.contactServices);
-        console.log(
-          "Available IDs:",
-          response.contactServices?.map((s) => `${s.id} (${typeof s.id})`),
-        );
+        // Try direct fetch first
+        const response = await apiClient.getContactService(parseInt(id));
+        const service = response.contactService;
 
-        const contactService = response.contactServices?.find(
-          (service: any) =>
-            service.id === id ||
-            service.id === parseInt(id!) ||
-            service.id.toString() === id,
-        );
-
-        console.log("Found contact service:", contactService);
-
-        // If not found in list, try to get individual service by ID
-        if (!contactService) {
-          try {
-            console.log("Trying to get individual service by ID:", id);
-            const individualResponse = await apiClient.getContactService(
-              parseInt(id!),
-            );
-            console.log("Individual service response:", individualResponse);
-            const individualService = individualResponse.contactService;
-
-            if (individualService) {
-              console.log(
-                "Setting current service from individual call:",
-                individualService,
-              );
-              setCurrentService(individualService);
-              setServiceDetails(individualService);
-              // Map contacts to office format for display
-              if (individualService.contacts) {
-                const mappedOffices = individualService.contacts.map(
-                  (contact) => ({
-                    id: contact.id, // Preserve the contact ID for deletion
-                    officeName: contact.name,
-                    level: contact.designation,
-                    officePinCode: contact.contact,
-                    district: contact.district,
-                    block: contact.block,
-                    subdivision: contact.subDistrict,
-                    status: "active",
-                  }),
-                );
-                setOffices(mappedOffices);
-                console.log("Mapped offices:", mappedOffices);
-              }
-              return; // Exit early since we found the service
-            }
-          } catch (individualError) {
-            console.log("Failed to get individual service:", individualError);
-          }
-        }
-
-        if (contactService) {
-          console.log("Setting current service:", contactService);
-          setCurrentService(contactService);
-          setServiceDetails(contactService);
-          // Map contacts to office format for display
-          if (contactService.contacts) {
-            const mappedOffices = contactService.contacts.map((contact) => ({
-              id: contact.id, // Preserve the contact ID for deletion
+        if (service) {
+          setCurrentService(service);
+          setServiceDetails(service);
+          if (service.contacts) {
+            const mappedOffices = service.contacts.map((contact: any) => ({
+              id: contact.id,
               officeName: contact.name,
               level: contact.designation,
               officePinCode: contact.contact,
@@ -133,18 +80,11 @@ export default function EditContactDepartment() {
               status: "active",
             }));
             setOffices(mappedOffices);
-            console.log("Mapped offices:", mappedOffices);
           }
         } else {
-          console.log(
-            "Service not found, available IDs:",
-            response.contactServices?.map((s) => s.id),
-          );
           toast({
             title: "Error",
-            description: `Contact service not found with ID: ${id}. Available IDs: ${
-              response.contactServices?.map((s) => s.id).join(", ") || "none"
-            }`,
+            description: "Contact service not found",
             variant: "destructive",
           });
           navigate("/admin-contact-service");
@@ -157,13 +97,11 @@ export default function EditContactDepartment() {
           variant: "destructive",
         });
         navigate("/admin-contact-service");
-      } finally {
-        // Loading state removed
       }
     };
 
     fetchContactService();
-  }, [id]);
+  }, [id, navigate]);
 
   const handleNewOfficeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -172,7 +110,6 @@ export default function EditContactDepartment() {
 
   const handleNewOfficeSelectChange = (name: string, value: string) => {
     if (name === "level" && value === "State") {
-      // Clear district when level is set to State
       setNewOffice((prev) => ({ ...prev, [name]: value, district: "" }));
     } else {
       setNewOffice((prev) => ({ ...prev, [name]: value }));
@@ -180,12 +117,7 @@ export default function EditContactDepartment() {
   };
 
   const handleAddOffice = async () => {
-    console.log("handleAddOffice called");
-    console.log("currentService:", currentService);
-    console.log("newOffice:", newOffice);
-
     if (!currentService) {
-      console.log("No current service found");
       toast({
         title: "Error",
         description: "No service selected",
@@ -194,7 +126,6 @@ export default function EditContactDepartment() {
       return;
     }
 
-    // Validate required fields
     const isDistrictRequired = newOffice.level !== "State";
     if (
       !newOffice.officeName ||
@@ -204,112 +135,84 @@ export default function EditContactDepartment() {
       const missingFields = [];
       if (!newOffice.officeName) missingFields.push("Office Name");
       if (!newOffice.level) missingFields.push("Level");
-      if (isDistrictRequired && !newOffice.district)
-        missingFields.push("District");
+      if (isDistrictRequired && !newOffice.district) missingFields.push("District");
 
       toast({
-        title: "Error",
-        description: `Please fill in all required fields (${missingFields.join(
-          ", ",
-        )})`,
+        title: "Missing Fields",
+        description: `Please fill: ${missingFields.join(", ")}`,
         variant: "destructive",
       });
       return;
     }
 
-    const newContact = {
-      serviceName: currentService.name,
-      name: newOffice.officeName,
-      designation: newOffice.level,
-      contact: newOffice.officePinCode,
-      email: "",
-      district:
-        newOffice.level === "State" ? "All Districts" : newOffice.district,
-      subDistrict: newOffice.subdivision || "",
-      block: newOffice.block,
-    };
-
-    console.log("Creating office with level:", newOffice.level);
-
+    setIsSaving(true);
     try {
-      // Create update data with all contacts including the new one
-      const updatedContacts = [...(currentService.contacts || []), newContact];
-
-      const updateData = {
-        name: currentService.name,
-        summary: currentService.summary,
-        type: currentService.type,
-        targetAudience: currentService.targetAudience || [],
-        applicationMode: currentService.applicationMode,
-        onlineUrl: currentService.onlineUrl,
-        offlineAddress: currentService.offlineAddress,
-        status: currentService.status,
-        eligibilityDetails: currentService.eligibilityDetails || [],
-        contactDetails: currentService.contactDetails || [],
-        processDetails: currentService.processDetails || [],
-        contacts: updatedContacts,
-      };
-
-      console.log("Sending update to API:", updateData);
-      const response = await apiClient.updateContactService(
+      // Use the new dedicated endpoint to add office without destroying existing data
+      const response = await apiClient.addOfficeToContactService(
         currentService.id,
-        updateData,
+        {
+          officeName: newOffice.officeName,
+          level: newOffice.level,
+          pincode: newOffice.officePinCode,
+          district: newOffice.level === "State" ? "All Districts" : newOffice.district,
+          block: newOffice.block,
+          subdivision: newOffice.subdivision,
+        },
       );
-      console.log("API response:", response);
 
-      // Update the current service state with the response from the server
-      const updatedService = response.contactService;
-      if (updatedService) {
-        setCurrentService(updatedService);
-        setServiceDetails(updatedService);
-
-        // Update the offices display by mapping the updated contacts
-        if (updatedService.contacts) {
-          const mappedOffices = updatedService.contacts.map((contact: any) => ({
-            id: contact.id, // Preserve the contact ID for deletion
-            officeName: contact.name,
-            level: contact.designation,
-            officePinCode: contact.contact,
-            district: contact.district,
-            block: contact.block,
-            subdivision: contact.subDistrict,
+      if (response.success && response.office) {
+        // Add the new office to local state
+        setOffices((prev) => [
+          ...prev,
+          {
+            id: response.office.id,
+            officeName: response.office.name,
+            level: response.office.designation,
+            officePinCode: response.office.contact,
+            district: response.office.district,
+            block: response.office.block,
+            subdivision: response.office.subDistrict,
             status: "active",
-          }));
-          setOffices(mappedOffices);
+          },
+        ]);
+
+        // Refresh the full service to keep state in sync
+        const refreshed = await apiClient.getContactService(currentService.id);
+        if (refreshed.contactService) {
+          setCurrentService(refreshed.contactService);
         }
+
+        toast({
+          title: "Success",
+          description: "Office added successfully",
+        });
+
+        setNewOffice({
+          officeName: "",
+          level: "",
+          officePinCode: "",
+          district: "",
+          block: "",
+          subdivision: "",
+        });
+        setIsAddOfficeDialogOpen(false);
       }
-
-      toast({
-        title: "Success",
-        description: "Office added successfully",
-      });
-
-      // Reset the form
-      setNewOffice({
-        officeName: "",
-        level: "",
-        officePinCode: "",
-        district: "",
-        block: "",
-        subdivision: "",
-      });
-      setIsAddOfficeDialogOpen(false);
     } catch (error: any) {
       console.error("Error adding office:", error);
       toast({
         title: "Error",
-        description: `Failed to add office: ${
-          error?.message || "Unknown error"
-        }`,
+        description: `Failed to add office: ${error?.message || "Unknown error"}`,
         variant: "destructive",
       });
+    } finally {
+      setIsSaving(false);
     }
   };
 
-  const handleDeleteOffice = async (index: number) => {
-    if (!currentService) return;
+  const handleDeleteOffice = async () => {
+    if (!currentService || officeToDeleteIndex === null) return;
 
-    const officeToDelete = offices[index];
+    const officeToDelete = offices[officeToDeleteIndex];
     if (!officeToDelete.id) {
       toast({
         title: "Error",
@@ -319,24 +222,13 @@ export default function EditContactDepartment() {
       return;
     }
 
-    // Confirm deletion
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete the office "${officeToDelete.officeName}"? This action cannot be undone.`,
-    );
-
-    if (!confirmDelete) {
-      return;
-    }
-
     try {
-      // Delete the contact from the database
       await apiClient.deleteContactFromService(
         currentService.id,
         officeToDelete.id,
       );
 
-      // Remove from local state
-      const updatedOffices = offices.filter((_, i) => i !== index);
+      const updatedOffices = offices.filter((_, i) => i !== officeToDeleteIndex);
       setOffices(updatedOffices);
 
       toast({
@@ -350,6 +242,9 @@ export default function EditContactDepartment() {
         description: "Failed to delete office",
         variant: "destructive",
       });
+    } finally {
+      setIsDeleteDialogOpen(false);
+      setOfficeToDeleteIndex(null);
     }
   };
 
@@ -357,23 +252,45 @@ export default function EditContactDepartment() {
     navigate(`/admin/office-details/${office.officeName}`);
   };
 
-  const handlePublishService = async () => {
+  const handleSaveDetails = async () => {
+    if (!id) return;
+    setIsSaving(true);
     try {
-      // Update service details first
-      const updateData = {
+      await apiClient.updateContactService(parseInt(id), {
         name: serviceDetails?.name,
         summary: serviceDetails?.summary,
         type: serviceDetails?.type,
-      };
+      });
+      toast({
+        title: "Success",
+        description: "Department details saved.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to save details.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
-      await apiClient.updateContactService(parseInt(id!), updateData);
+  const handlePublishService = async () => {
+    if (!id) return;
+    setIsSaving(true);
+    try {
+      await apiClient.updateContactService(parseInt(id), {
+        name: serviceDetails?.name,
+        summary: serviceDetails?.summary,
+        type: serviceDetails?.type,
+      });
 
-      // Then publish the service
-      await apiClient.publishContactService(parseInt(id!));
+      await apiClient.publishContactService(parseInt(id));
 
       toast({
-        title: "Service Published Successfully!",
-        description: "The contact service has been published and is now live.",
+        title: "Service Published!",
+        description: "The contact service is now live.",
       });
 
       navigate("/admin-contact-service?tab=published");
@@ -384,6 +301,8 @@ export default function EditContactDepartment() {
         description: "Failed to publish service. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -463,16 +382,25 @@ export default function EditContactDepartment() {
               </CardContent>
             </Card>
             <Button
-              onClick={() => setIsAddOfficeDialogOpen(true)}
+              onClick={handleSaveDetails}
               className="mt-4 w-full"
+              variant="outline"
+              disabled={isSaving}
+            >
+              {isSaving ? "Saving..." : "Save Details"}
+            </Button>
+            <Button
+              onClick={() => setIsAddOfficeDialogOpen(true)}
+              className="mt-2 w-full"
             >
               + Add Office
             </Button>
             <Button
               onClick={handlePublishService}
               className="mt-2 w-full bg-green-600 hover:bg-green-700"
+              disabled={isSaving}
             >
-              Publish Service
+              {isSaving ? "Publishing..." : "Publish Service"}
             </Button>
           </div>
 
@@ -480,16 +408,19 @@ export default function EditContactDepartment() {
           <div className="md:w-2/3">
             <Card>
               <CardHeader>
-                <CardTitle>Offices</CardTitle>
+                <CardTitle>Offices ({offices.length})</CardTitle>
+                <CardDescription>
+                  Add offices, then click View to manage posts and employees within each office.
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 {offices.length === 0 ? (
-                  <p className="text-gray-500">No offices added yet.</p>
+                  <p className="text-gray-500">No offices added yet. Add an office to get started.</p>
                 ) : (
                   <div className="grid gap-4">
                     {offices.map((office, index) => (
                       <Card
-                        key={index}
+                        key={office.id || index}
                         className="flex justify-between items-center p-4"
                       >
                         <div>
@@ -498,6 +429,7 @@ export default function EditContactDepartment() {
                           </CardTitle>
                           <CardDescription>
                             {office.level} - {office.district}
+                            {office.block && ` - ${office.block}`}
                           </CardDescription>
                         </div>
                         <div className="flex gap-2">
@@ -506,12 +438,15 @@ export default function EditContactDepartment() {
                             variant="outline"
                             onClick={() => handleViewOffice(office)}
                           >
-                            View
+                            View / Manage
                           </Button>
                           <Button
                             size="sm"
                             variant="destructive"
-                            onClick={() => handleDeleteOffice(index)}
+                            onClick={() => {
+                              setOfficeToDeleteIndex(index);
+                              setIsDeleteDialogOpen(true);
+                            }}
                           >
                             Delete
                           </Button>
@@ -640,17 +575,35 @@ export default function EditContactDepartment() {
               </div>
             </div>
             <div className="flex justify-end">
-              <Button
-                onClick={() => {
-                  console.log("Save Office button clicked");
-                  handleAddOffice();
-                }}
-              >
-                Save Office
+              <Button onClick={handleAddOffice} disabled={isSaving}>
+                {isSaving ? "Saving..." : "Save Office"}
               </Button>
             </div>
           </DialogContent>
         </Dialog>
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Office</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete the office "
+                {officeToDeleteIndex !== null ? offices[officeToDeleteIndex]?.officeName : ""}
+                "? This will also delete all posts and employees within this office. This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDeleteOffice}
+                className="bg-red-600 hover:bg-red-700"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );

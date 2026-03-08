@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Card,
   CardHeader,
@@ -35,6 +35,7 @@ import {
   MapPin,
   Copy,
   CheckCircle2,
+  ImagePlus,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Turnstile } from "@marsidev/react-turnstile";
@@ -68,6 +69,9 @@ export default function UserGrievancesService() {
   const [submitting, setSubmitting] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [otpSent, setOtpSent] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const [sendingOtp, setSendingOtp] = useState(false);
   const [stats, setStats] = useState({
     totalGrievances: 0,
@@ -189,6 +193,16 @@ export default function UserGrievancesService() {
     try {
       const response = await apiClient.createGrievance(formData);
 
+      // Upload image if one was selected
+      if (imageFile && response.grievance?.id) {
+        try {
+          await apiClient.uploadGrievanceImage(response.grievance.id, imageFile);
+        } catch (imgErr) {
+          console.error("Image upload failed:", imgErr);
+          // Don't fail the whole submission for image upload failure
+        }
+      }
+
       // Reset form
       setFormData({
         name: "",
@@ -204,6 +218,8 @@ export default function UserGrievancesService() {
         website: "",
         otp: "",
       });
+      setImageFile(null);
+      setImagePreview(null);
       setOtpSent(false);
       setTurnstileToken("");
 
@@ -556,6 +572,59 @@ export default function UserGrievancesService() {
                       placeholder="Provide detailed description of your grievance..."
                       rows={4}
                     />
+                  </div>
+
+                  {/* Image Upload */}
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Attach Image (optional)
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      ref={imageInputRef}
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          if (file.size > 5 * 1024 * 1024) {
+                            toast({ title: "File too large", description: "Max 5MB allowed", variant: "destructive" });
+                            return;
+                          }
+                          setImageFile(file);
+                          const reader = new FileReader();
+                          reader.onload = (ev) => setImagePreview(ev.target?.result as string);
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                    <div className="flex items-center gap-3">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => imageInputRef.current?.click()}
+                        className="flex items-center gap-2"
+                      >
+                        <ImagePlus className="h-4 w-4" />
+                        {imageFile ? "Change Image" : "Choose Image"}
+                      </Button>
+                      {imageFile && (
+                        <span className="text-sm text-gray-600">{imageFile.name}</span>
+                      )}
+                    </div>
+                    {imagePreview && (
+                      <div className="mt-2 relative inline-block">
+                        <img src={imagePreview} alt="Preview" className="max-h-32 rounded-lg border" />
+                        <button
+                          type="button"
+                          onClick={() => { setImageFile(null); setImagePreview(null); if (imageInputRef.current) imageInputRef.current.value = ""; }}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    )}
+                    <p className="text-xs text-gray-500 mt-1">JPEG, PNG, or WebP. Max 5MB. Will be compressed.</p>
                   </div>
 
                   {!otpSent ? (

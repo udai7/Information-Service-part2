@@ -178,6 +178,11 @@ model SchemeService {
   docLost      String?
   docSurrender String?
 
+  // Publisher tracking
+  publishedBy     Int?
+  publishedByName String?
+  pdfUrl          String?
+
   // Related entities
   contacts  ContactPerson[]
   documents SupportiveDocument[]
@@ -255,6 +260,11 @@ model CertificateService {
   docUpdate    String?
   docLost      String?
   docSurrender String?
+
+  // Publisher tracking
+  publishedBy     Int?
+  publishedByName String?
+  pdfUrl          String?
 
   // Related entities
   contacts         CertificateContact[]
@@ -352,6 +362,11 @@ model ContactService {
   docUpdate    String?
   docLost      String?
   docSurrender String?
+
+  // Publisher tracking
+  publishedBy     Int?
+  publishedByName String?
+  pdfUrl          String?
 
   // Related entities
   contacts  ContactServiceContact[]
@@ -467,6 +482,7 @@ model Grievance {
   priority      String   @default("medium")
   status        String   @default("new")
   attachments   String[]
+  imageUrl      String?
   source        String   @default("web")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

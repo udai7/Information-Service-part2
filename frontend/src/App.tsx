@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { lazy, Suspense } from "react";
+import CookieConsent from "./components/CookieConsent";
 
 // ─── Critical pages (eagerly loaded) ───
 import Index from "./pages/Index";
@@ -112,6 +113,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <CookieConsent />
         <BrowserRouter>
           <Suspense fallback={<PageLoader />}>
             <Routes>

@@ -137,6 +137,13 @@ app.get("/api/health", (_req, res) => {
   res.json({ status: "OK", message: "Server is running", timestamp: new Date().toISOString() });
 });
 
+// ─── Serve Uploads (PDFs and images) ───
+const uploadsPath = path.join(__dirname, "uploads");
+app.use("/uploads", express.static(uploadsPath, {
+  maxAge: "7d",
+  etag: true,
+}));
+
 // ─── Serve Frontend ───
 const clientBuildPath = path.join(__dirname, "../dist/spa");
 app.use(express.static(clientBuildPath, {

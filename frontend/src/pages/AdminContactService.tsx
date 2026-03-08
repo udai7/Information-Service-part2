@@ -8,10 +8,10 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { Plus, CheckCircle, Activity, Clock, Users } from "lucide-react";
+import { Plus, CheckCircle, Activity, Clock, Users, Upload, FileText } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { apiClient } from "../types/api";
 import type { ContactService } from "../types/api";
 import { useAuth } from "../contexts/AuthContext";
@@ -27,6 +27,9 @@ export default function AdminContactService() {
   const [error, setError] = useState("");
   const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
   const [togglingIds, setTogglingIds] = useState<Set<number>>(new Set());
+  const [uploadingIds, setUploadingIds] = useState<Set<number>>(new Set());
+  const pdfInputRef = useRef<HTMLInputElement>(null);
+  const [uploadTargetId, setUploadTargetId] = useState<number | null>(null);
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
@@ -336,6 +339,28 @@ export default function AdminContactService() {
                     </Card>
                   ) : (
                     <div className="space-y-4">
+                      <input
+                        type="file"
+                        accept=".pdf"
+                        ref={pdfInputRef}
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file || uploadTargetId === null) return;
+                          setUploadingIds((prev) => new Set(prev).add(uploadTargetId));
+                          try {
+                            const res = await apiClient.uploadServicePdf("contact-services", uploadTargetId, file);
+                            setServices((prev) => prev.map((s) => s.id === uploadTargetId ? { ...s, pdfUrl: res.pdfUrl } : s));
+                            toast({ title: "PDF uploaded successfully" });
+                          } catch (err: any) {
+                            toast({ title: "Upload failed", description: err?.message, variant: "destructive" });
+                          } finally {
+                            setUploadingIds((prev) => { const n = new Set(prev); n.delete(uploadTargetId); return n; });
+                            setUploadTargetId(null);
+                            e.target.value = "";
+                          }
+                        }}
+                      />
                       {publishedServices.map((service) => (
                         <Card key={service.id} className="p-4">
                           <div className="flex justify-between items-start">
@@ -344,7 +369,7 @@ export default function AdminContactService() {
                               <p className="text-gray-600 text-sm">
                                 {service.summary}
                               </p>
-                              <div className="flex gap-2 mt-2">
+                              <div className="flex flex-wrap gap-2 mt-2">
                                 <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
                                   {service.status}
                                 </span>
@@ -362,6 +387,16 @@ export default function AdminContactService() {
                                     ? "Active"
                                     : "Inactive"}
                                 </span>
+                                {service.publishedByName && (
+                                  <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">
+                                    Published by: {service.publishedByName}
+                                  </span>
+                                )}
+                                {service.pdfUrl && (
+                                  <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded flex items-center gap-1">
+                                    <FileText className="h-3 w-3" /> PDF attached
+                                  </span>
+                                )}
                               </div>
                             </div>
                             <div className="flex gap-2">
@@ -381,6 +416,21 @@ export default function AdminContactService() {
                                   "Deactivate"
                                 ) : (
                                   "Activate"
+                                )}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                  setUploadTargetId(service.id);
+                                  pdfInputRef.current?.click();
+                                }}
+                                disabled={uploadingIds.has(service.id)}
+                              >
+                                {uploadingIds.has(service.id) ? (
+                                  <LoadingSpinner size="sm" variant="inline" />
+                                ) : (
+                                  <><Upload className="h-4 w-4 mr-1" /> PDF</>
                                 )}
                               </Button>
                               <Button

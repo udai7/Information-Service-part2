@@ -310,7 +310,7 @@ export default function UserDashboard() {
               {filteredServices.map((service) => (
                 <Card
                   key={`${service.type}-${service.id}`}
-                  className="hover:shadow-lg transition-all duration-200 hover:-translate-y-1"
+                  className="hover:shadow-lg transition-all duration-200 hover:-translate-y-1 flex flex-col h-full"
                 >
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -326,10 +326,10 @@ export default function UserDashboard() {
                               service.type.slice(1)}
                           </Badge>
                         </div>
-                        <CardTitle className="text-lg mb-1">
+                        <CardTitle className="text-lg mb-1 line-clamp-1">
                           {service.name}
                         </CardTitle>
-                        <CardDescription>{service.summary}</CardDescription>
+                        <CardDescription className="line-clamp-2">{service.summary}</CardDescription>
                       </div>
                       {service.applicationMode && (
                         <Badge variant="outline" className="ml-2">
@@ -338,8 +338,8 @@ export default function UserDashboard() {
                       )}
                     </div>
                   </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
+                  <CardContent className="flex-1 flex flex-col">
+                    <div className="space-y-4 flex-1">
                       {service.targetAudience &&
                         service.targetAudience.length > 0 && (
                           <div className="flex flex-wrap gap-1">
@@ -389,7 +389,7 @@ export default function UserDashboard() {
                       </div>
 
                       <Button
-                        className="w-full"
+                        className="w-full mt-auto"
                         onClick={() => navigate(getServiceRoute(service))}
                       >
                         View{" "}

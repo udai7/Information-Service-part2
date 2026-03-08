@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { body, validationResult, param } from "express-validator";
 import { prisma } from "../lib/prisma";
 import { authenticateAdmin } from "../middleware/auth";
+import { pdfUpload } from "../lib/fileUpload";
 import "../types/express";
 
 const router = express.Router();
@@ -494,11 +495,17 @@ router.patch(
         });
       }
 
-      // Update status to published
+      // Determine publisher name for accountability
+      const publisherName =
+        req.admin!.role === "super_admin" ? "Admin" : req.admin!.name;
+
+      // Update status to published with publisher info
       const updatedService = await prisma.schemeService.update({
         where: { id: serviceId },
         data: {
           status: "published",
+          publishedBy: req.admin!.id,
+          publishedByName: publisherName,
           updatedAt: new Date(),
         },
         include: {
@@ -622,6 +629,52 @@ router.delete(
       res.json({ message: "Scheme service deleted successfully" });
     } catch (error) {
       console.error("Delete scheme service error:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
+
+// Upload PDF for scheme service
+router.post(
+  "/:id/upload-pdf",
+  authenticateAdmin,
+  param("id").isInt().withMessage("Invalid service ID"),
+  pdfUpload.single("pdf"),
+  async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+
+      if (!req.file) {
+        return res.status(400).json({ error: "No PDF file uploaded" });
+      }
+
+      const existingService = await prisma.schemeService.findUnique({
+        where: { id },
+      });
+
+      if (!existingService) {
+        return res.status(404).json({ error: "Scheme service not found" });
+      }
+
+      const pdfUrl = `/uploads/pdfs/${req.file.filename}`;
+
+      const updatedService = await prisma.schemeService.update({
+        where: { id },
+        data: { pdfUrl },
+        include: {
+          admin: { select: { id: true, name: true, email: true } },
+          contacts: true,
+          documents: true,
+        },
+      });
+
+      res.json({
+        message: "PDF uploaded successfully",
+        schemeService: updatedService,
+        pdfUrl,
+      });
+    } catch (error) {
+      console.error("Error uploading PDF:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   },

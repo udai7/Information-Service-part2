@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { body, param, validationResult } from "express-validator";
 import { prisma } from "../lib/prisma";
 import { authenticateAdmin } from "../middleware/auth";
+import { pdfUpload } from "../lib/fileUpload";
 import "../types/express";
 
 const router = express.Router();
@@ -326,9 +327,17 @@ router.patch(
         });
       }
 
+      const admin = req.admin!;
+      const publisherName =
+        admin.role === "super_admin" ? "Admin" : admin.name;
+
       const publishedService = await prisma.certificateService.update({
         where: { id },
-        data: { status: "published" },
+        data: {
+          status: "published",
+          publishedBy: admin.id,
+          publishedByName: publisherName,
+        },
         include: {
           contacts: true,
           documents: true,
@@ -349,6 +358,65 @@ router.patch(
       res.status(500).json({
         success: false,
         message: "Failed to publish certificate service",
+        error: "An internal error occurred",
+      });
+    }
+  },
+);
+
+// POST /api/certificate-services/:id/upload-pdf - Upload PDF for certificate service
+router.post(
+  "/:id/upload-pdf",
+  authenticateAdmin,
+  param("id").isInt().withMessage("ID must be a valid integer"),
+  pdfUpload.single("pdf"),
+  async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+
+      if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          message: "No PDF file uploaded",
+        });
+      }
+
+      const existingService = await prisma.certificateService.findUnique({
+        where: { id },
+      });
+
+      if (!existingService) {
+        return res.status(404).json({
+          success: false,
+          message: "Certificate service not found",
+        });
+      }
+
+      const pdfUrl = `/uploads/pdfs/${req.file.filename}`;
+
+      const updatedService = await prisma.certificateService.update({
+        where: { id },
+        data: { pdfUrl },
+        include: {
+          contacts: true,
+          documents: true,
+          admin: {
+            select: { id: true, name: true, email: true },
+          },
+        },
+      });
+
+      res.json({
+        success: true,
+        certificateService: updatedService,
+        pdfUrl,
+        message: "PDF uploaded successfully",
+      });
+    } catch (error) {
+      console.error("Error uploading PDF:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to upload PDF",
         error: "An internal error occurred",
       });
     }

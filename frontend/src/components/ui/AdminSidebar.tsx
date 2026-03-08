@@ -58,7 +58,7 @@ export function AdminSidebar() {
     }`;
 
   return (
-    <nav className="flex flex-col w-60 min-h-screen bg-white border-r border-slate-200">
+    <nav className="flex flex-col w-60 h-screen sticky top-0 bg-white border-r border-slate-200 overflow-y-auto">
       {/* Header */}
       <div className="p-4 border-b border-slate-100">
         <Button

@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { apiClient } from "../types/api";
 import type { Feedback, CreateFeedbackRequest } from "../types/api";
+import { toast } from "@/hooks/use-toast";
 
 export default function UserFeedbackService() {
   const [formData, setFormData] = useState<CreateFeedbackRequest>({
@@ -116,10 +117,10 @@ export default function UserFeedbackService() {
       // Refresh feedback list
       fetchFeedbacks();
 
-      alert("Feedback submitted successfully!");
+      toast({ title: "Success", description: "Feedback submitted successfully!" });
     } catch (error) {
       console.error("Error submitting feedback:", error);
-      alert("Failed to submit feedback. Please try again.");
+      toast({ title: "Error", description: "Failed to submit feedback. Please try again.", variant: "destructive" });
     } finally {
       setSubmitting(false);
     }

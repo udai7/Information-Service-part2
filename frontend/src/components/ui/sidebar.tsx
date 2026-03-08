@@ -48,7 +48,7 @@ export function ServicesMenu() {
 
   return (
     <>
-      <nav className="hidden md:flex flex-col gap-1 p-4 bg-white min-h-screen w-60 font-medium border-r border-slate-200 shrink-0">
+      <nav className="hidden md:flex flex-col gap-1 p-4 bg-white h-screen sticky top-0 w-60 font-medium border-r border-slate-200 shrink-0 overflow-y-auto">
         <Button
           variant="ghost"
           className="mb-4 w-full justify-start text-slate-800 font-semibold hover:bg-slate-50"

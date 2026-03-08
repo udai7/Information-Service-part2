@@ -170,6 +170,11 @@ export interface SchemeService {
   adminId: number;
   contacts: ContactPerson[];
   documents: SupportiveDocument[];
+
+  // Publisher tracking
+  publishedBy?: number;
+  publishedByName?: string;
+  pdfUrl?: string;
 }
 
 export interface CertificateService {
@@ -210,6 +215,11 @@ export interface CertificateService {
   documents: CertificateDocument[];
   processSteps: CertificateProcessStep[];
   eligibilityItems: CertificateEligibility[];
+
+  // Publisher tracking
+  publishedBy?: number;
+  publishedByName?: string;
+  pdfUrl?: string;
 }
 
 export interface ContactService {
@@ -248,6 +258,11 @@ export interface ContactService {
   adminId: number;
   contacts: ContactServiceContact[];
   documents: ContactServiceDocument[];
+
+  // Publisher tracking
+  publishedBy?: number;
+  publishedByName?: string;
+  pdfUrl?: string;
 }
 
 export interface Feedback {
@@ -279,6 +294,7 @@ export interface Grievance {
   priority: "low" | "medium" | "high" | "urgent";
   status: "new" | "pending" | "solved";
   attachments: string[]; // File paths or URLs
+  imageUrl?: string;
   departmentId?: number;
   createdAt: string;
   updatedAt: string;
@@ -996,6 +1012,73 @@ export class ApiClient {
         method: "DELETE",
       },
     );
+  }
+
+  // Add office to contact service (new dedicated endpoint)
+  async addOfficeToContactService(
+    serviceId: number,
+    data: { officeName: string; level: string; pincode?: string; district?: string; block?: string; subdivision?: string },
+  ): Promise<{ success: boolean; office: any; message?: string }> {
+    return this.makeRequest<{ success: boolean; office: any; message?: string }>(
+      `/contact-services/${serviceId}/offices`,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+    );
+  }
+
+  // PDF Upload methods
+  async uploadServicePdf(
+    serviceType: "scheme-services" | "certificate-services" | "contact-services",
+    serviceId: number,
+    file: File,
+  ): Promise<{ pdfUrl: string; message: string }> {
+    const formData = new FormData();
+    formData.append("pdf", file);
+
+    const url = `${this.baseURL}/${serviceType}/${serviceId}/upload-pdf`;
+    const headers: Record<string, string> = {};
+    if (this.token) {
+      headers.Authorization = `Bearer ${this.token}`;
+    }
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers,
+      body: formData,
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || errorData.error || "Failed to upload PDF");
+    }
+
+    return response.json();
+  }
+
+  // Image Upload for grievances
+  async uploadGrievanceImage(
+    grievanceId: number,
+    file: File,
+  ): Promise<{ imageUrl: string; message: string }> {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const url = `${this.baseURL}/grievances/${grievanceId}/upload-image`;
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || "Failed to upload image");
+    }
+
+    return response.json();
   }
 
   // Office Management API methods

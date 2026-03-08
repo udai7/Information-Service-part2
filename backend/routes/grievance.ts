@@ -6,6 +6,7 @@ import { authenticateAdmin, getDepartmentScope } from "../middleware/auth";
 import { submissionLimiter, readLimiter } from "../middleware/rateLimiter";
 import { createAuditLog, AuditActions } from "../lib/auditLog";
 import { sendOTP } from "../lib/mailer";
+import { imageUpload, processAndSaveImage } from "../lib/fileUpload";
 import "../types/express";
 
 const router = express.Router();
@@ -741,5 +742,57 @@ router.delete("/:id", authenticateAdmin, async (req: Request, res: Response) => 
     res.status(500).json({ message: "Failed to delete grievance" });
   }
 });
+
+// POST /api/grievances/:id/upload-image - Upload image for grievance
+router.post(
+  "/:id/upload-image",
+  submissionLimiter,
+  imageUpload.single("image"),
+  async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+
+      if (!req.file) {
+        return res.status(400).json({
+          message: "No image file uploaded",
+        });
+      }
+
+      const existingGrievance = await prisma.grievance.findUnique({
+        where: { id },
+      });
+
+      if (!existingGrievance) {
+        return res.status(404).json({
+          message: "Grievance not found",
+        });
+      }
+
+      // Process and compress image
+      const filename = await processAndSaveImage(
+        req.file.buffer,
+        req.file.originalname,
+      );
+
+      const imageUrl = `/uploads/images/${filename}`;
+
+      const updatedGrievance = await prisma.grievance.update({
+        where: { id },
+        data: { imageUrl },
+      });
+
+      res.json({
+        message: "Image uploaded successfully",
+        imageUrl,
+        grievance: updatedGrievance,
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      res.status(500).json({
+        message: "Failed to upload image",
+      });
+    }
+  },
+);
 
 export default router;
