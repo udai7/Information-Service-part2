@@ -23,6 +23,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Building2,
   Plus,
   Edit,
@@ -31,6 +39,7 @@ import {
   MessageSquare,
   BarChart3,
   Trash2,
+  AlertTriangle,
 } from "lucide-react";
 import AdminSidebar from "@/components/ui/AdminSidebar";
 import { useAuth } from "@/contexts/AuthContext";
@@ -53,6 +62,9 @@ export default function AdminDepartments() {
   const [showCreate, setShowCreate] = useState(false);
   const [editDept, setEditDept] = useState<Department | null>(null);
   const [saving, setSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<Department | null>(null);
+  const [deleteStep, setDeleteStep] = useState<0 | 1 | 2>(0); // 0=closed, 1=first confirm, 2=final confirm
+  const [deleting, setDeleting] = useState(false);
   const [form, setForm] = useState({
     name: "",
     code: "",
@@ -178,30 +190,43 @@ export default function AdminDepartments() {
     }
   };
 
-  const handleDelete = async (dept: Department) => {
-    if (
-      !confirm(
-        `Are you sure you want to delete "${dept.name}" (${dept.code})? This cannot be undone. The department must have no admins, services, grievances, or feedback.`
-      )
-    )
+  const openDeleteDialog = (dept: Department) => {
+    setDeleteTarget(dept);
+    setDeleteStep(1);
+  };
+
+  const confirmDelete = async () => {
+    if (deleteStep === 1) {
+      setDeleteStep(2);
       return;
+    }
+    if (!deleteTarget) return;
+    setDeleting(true);
     try {
-      await apiClient.deleteDepartment(dept.id);
-      // Optimistic removal from state
-      setDepartments((prev) => prev.filter((d) => d.id !== dept.id));
+      await apiClient.deleteDepartment(deleteTarget.id);
+      setDepartments((prev) => prev.filter((d) => d.id !== deleteTarget.id));
       setStats((prev) => {
         const next = { ...prev };
-        delete next[dept.id];
+        delete next[deleteTarget.id];
         return next;
       });
       toast({ title: "Success", description: "Department deleted successfully" });
+      setDeleteTarget(null);
+      setDeleteStep(0);
     } catch (error: any) {
       toast({
         title: "Error",
         description: error?.message || "Failed to delete department",
         variant: "destructive",
       });
+    } finally {
+      setDeleting(false);
     }
+  };
+
+  const cancelDelete = () => {
+    setDeleteTarget(null);
+    setDeleteStep(0);
   };
 
   if (loading) {
@@ -432,7 +457,7 @@ export default function AdminDepartments() {
                             variant="ghost"
                             size="sm"
                             className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                            onClick={() => handleDelete(dept)}
+                            onClick={() => openDeleteDialog(dept)}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -454,6 +479,51 @@ export default function AdminDepartments() {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog (double confirmation) */}
+      <AlertDialog open={deleteStep > 0} onOpenChange={(open) => { if (!open) cancelDelete(); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2 text-red-600">
+              <AlertTriangle className="h-5 w-5" />
+              {deleteStep === 1 ? "Delete Department?" : "Are you absolutely sure?"}
+            </AlertDialogTitle>
+            <AlertDialogDescription className="space-y-2">
+              {deleteStep === 1 ? (
+                <>
+                  <p>
+                    You are about to delete <strong>"{deleteTarget?.name}"</strong> ({deleteTarget?.code}).
+                  </p>
+                  <p className="text-red-500 font-medium">
+                    This will permanently delete ALL admins, services, grievances, and feedback associated with this department.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-red-600 font-semibold">
+                    This action cannot be undone!
+                  </p>
+                  <p>
+                    All data for <strong>"{deleteTarget?.name}"</strong> will be permanently destroyed. This includes every admin account, scheme, certificate, contact service, grievance, and feedback record.
+                  </p>
+                </>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button variant="outline" onClick={cancelDelete} disabled={deleting}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmDelete}
+              disabled={deleting}
+            >
+              {deleting ? "Deleting..." : deleteStep === 1 ? "Yes, Continue" : "Delete Permanently"}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

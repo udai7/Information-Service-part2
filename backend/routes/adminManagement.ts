@@ -308,9 +308,51 @@ router.delete(
         return res.status(403).json({ error: "Access denied. Cannot manage this admin." });
       }
 
-      await prisma.session.deleteMany({ where: { adminId: id } });
-      await prisma.notification.deleteMany({ where: { adminId: id } });
-      await prisma.admin.delete({ where: { id } });
+      // Cascade delete all related records in a transaction
+      await prisma.$transaction(async (tx) => {
+        // Clean up services created by this admin
+        // SchemeService sub-relations
+        await tx.contactPerson.deleteMany({ where: { schemeService: { adminId: id } } });
+        await tx.supportiveDocument.deleteMany({ where: { schemeService: { adminId: id } } });
+        await tx.schemeService.deleteMany({ where: { adminId: id } });
+
+        // CertificateService sub-relations
+        await tx.certificateContact.deleteMany({ where: { certificateService: { adminId: id } } });
+        await tx.certificateDocument.deleteMany({ where: { certificateService: { adminId: id } } });
+        await tx.certificateProcessStep.deleteMany({ where: { certificateService: { adminId: id } } });
+        await tx.certificateEligibility.deleteMany({ where: { certificateService: { adminId: id } } });
+        await tx.certificateService.deleteMany({ where: { adminId: id } });
+
+        // ContactService sub-relations (offices -> posts -> employees)
+        await tx.employee.deleteMany({
+          where: { post: { office: { contactService: { adminId: id } } } },
+        });
+        await tx.post.deleteMany({
+          where: { office: { contactService: { adminId: id } } },
+        });
+        await tx.contactServiceContact.deleteMany({ where: { contactService: { adminId: id } } });
+        await tx.contactServiceDocument.deleteMany({ where: { contactService: { adminId: id } } });
+        await tx.contactService.deleteMany({ where: { adminId: id } });
+
+        // Nullify audit log references
+        await tx.auditLog.updateMany({
+          where: { adminId: id },
+          data: { adminId: null },
+        });
+
+        // Nullify grievance activity references
+        await tx.grievanceActivity.updateMany({
+          where: { adminId: id },
+          data: { adminId: null },
+        });
+
+        // Delete sessions and notifications
+        await tx.session.deleteMany({ where: { adminId: id } });
+        await tx.notification.deleteMany({ where: { adminId: id } });
+
+        // Finally delete the admin
+        await tx.admin.delete({ where: { id } });
+      });
 
       await createAuditLog({
         action: AuditActions.DELETE,

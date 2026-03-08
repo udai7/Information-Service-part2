@@ -106,7 +106,9 @@ export default function AdminGrievancesService() {
     } finally {
       if (showSpinner) setLoading(false);
     }
-  }; = (grievance: Grievance) => {
+  };
+
+  const openModal = (grievance: Grievance) => {
     setSelectedGrievance(grievance);
     setModalOpen(true);
   };

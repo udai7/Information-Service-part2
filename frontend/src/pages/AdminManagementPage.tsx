@@ -28,6 +28,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -53,6 +61,7 @@ import {
   KeyRound,
   UserCog,
   Edit,
+  AlertTriangle,
 } from "lucide-react";
 import AdminSidebar from "@/components/ui/AdminSidebar";
 import { useAuth } from "@/contexts/AuthContext";
@@ -78,6 +87,8 @@ export default function AdminManagement() {
   const [showEdit, setShowEdit] = useState(false);
   const [editingAdmin, setEditingAdmin] = useState<Admin | null>(null);
   const [saving, setSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<Admin | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -251,25 +262,27 @@ export default function AdminManagement() {
     }
   };
 
-  const handleDelete = async (admin: Admin) => {
+  const handleDelete = (admin: Admin) => {
     if (admin.id === currentAdmin?.id) return;
-    if (
-      !confirm(
-        `Are you sure you want to delete ${admin.name}? This cannot be undone.`
-      )
-    )
-      return;
+    setDeleteTarget(admin);
+  };
+
+  const confirmDeleteAdmin = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
     try {
-      await apiClient.deleteAdmin(admin.id);
-      // Optimistic removal
-      setAdmins((prev) => prev.filter((a) => a.id !== admin.id));
+      await apiClient.deleteAdmin(deleteTarget.id);
+      setAdmins((prev) => prev.filter((a) => a.id !== deleteTarget.id));
       toast({ title: "Success", description: "Admin deleted" });
+      setDeleteTarget(null);
     } catch {
       toast({
         title: "Error",
         description: "Failed to delete admin",
         variant: "destructive",
       });
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -863,6 +876,34 @@ export default function AdminManagement() {
           </Card>
         </div>
       </div>
+
+      {/* Delete Admin Confirmation Dialog */}
+      <AlertDialog open={!!deleteTarget} onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2 text-red-600">
+              <AlertTriangle className="h-5 w-5" />
+              Delete Admin Account?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="space-y-2">
+              <p>
+                You are about to permanently delete <strong>{deleteTarget?.name}</strong> ({deleteTarget?.email}).
+              </p>
+              <p className="text-red-500 font-medium">
+                This will also delete all services, data, and records created by this admin. This action cannot be undone.
+              </p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button variant="outline" onClick={() => setDeleteTarget(null)} disabled={deleting}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={confirmDeleteAdmin} disabled={deleting}>
+              {deleting ? "Deleting..." : "Delete Permanently"}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

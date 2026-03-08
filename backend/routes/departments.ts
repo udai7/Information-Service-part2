@@ -339,22 +339,71 @@ router.delete(
         return res.status(404).json({ error: "Department not found" });
       }
 
-      // Check if department has any associated data
-      const totalRelated =
-        department._count.admins +
-        department._count.schemeServices +
-        department._count.certificateServices +
-        department._count.contactServices +
-        department._count.grievances +
-        department._count.feedbacks;
-
-      if (totalRelated > 0) {
-        return res.status(400).json({
-          error: `Cannot delete department. It has ${department._count.admins} admin(s), ${department._count.schemeServices + department._count.certificateServices + department._count.contactServices} service(s), ${department._count.grievances} grievance(s), and ${department._count.feedbacks} feedback(s). Please reassign or remove them first.`,
+      // Cascade delete everything in a transaction (extended timeout for many queries)
+      await prisma.$transaction(async (tx) => {
+        // First, collect all admin IDs in this department
+        const deptAdmins = await tx.admin.findMany({
+          where: { departmentId: id },
+          select: { id: true },
         });
-      }
+        const adminIds = deptAdmins.map((a) => a.id);
 
-      await prisma.department.delete({ where: { id } });
+        // Build OR condition: by departmentId OR by adminId (covers all cases)
+        const byDeptOrAdmin = adminIds.length > 0
+          ? { OR: [{ departmentId: id }, { adminId: { in: adminIds } }] }
+          : { departmentId: id };
+
+        // Delete grievance activities for department grievances
+        await tx.grievanceActivity.deleteMany({
+          where: { grievance: { departmentId: id } },
+        });
+        // Delete grievances & feedbacks
+        await tx.grievance.deleteMany({ where: { departmentId: id } });
+        await tx.feedback.deleteMany({ where: { departmentId: id } });
+
+        // Delete scheme service sub-relations then scheme services
+        await tx.contactPerson.deleteMany({ where: { schemeService: byDeptOrAdmin } });
+        await tx.supportiveDocument.deleteMany({ where: { schemeService: byDeptOrAdmin } });
+        await tx.schemeService.deleteMany({ where: byDeptOrAdmin });
+
+        // Delete certificate service sub-relations then certificate services
+        await tx.certificateContact.deleteMany({ where: { certificateService: byDeptOrAdmin } });
+        await tx.certificateDocument.deleteMany({ where: { certificateService: byDeptOrAdmin } });
+        await tx.certificateProcessStep.deleteMany({ where: { certificateService: byDeptOrAdmin } });
+        await tx.certificateEligibility.deleteMany({ where: { certificateService: byDeptOrAdmin } });
+        await tx.certificateService.deleteMany({ where: byDeptOrAdmin });
+
+        // Delete contact service sub-relations (offices -> posts -> employees)
+        await tx.employee.deleteMany({
+          where: { post: { office: { contactService: byDeptOrAdmin } } },
+        });
+        await tx.post.deleteMany({
+          where: { office: { contactService: byDeptOrAdmin } },
+        });
+        await tx.contactServiceContact.deleteMany({ where: { contactService: byDeptOrAdmin } });
+        await tx.contactServiceDocument.deleteMany({ where: { contactService: byDeptOrAdmin } });
+        await tx.contactService.deleteMany({ where: byDeptOrAdmin });
+
+        // Clean up admin-related records
+        if (adminIds.length > 0) {
+          await tx.auditLog.updateMany({
+            where: { adminId: { in: adminIds } },
+            data: { adminId: null },
+          });
+          await tx.grievanceActivity.updateMany({
+            where: { adminId: { in: adminIds } },
+            data: { adminId: null },
+          });
+          await tx.session.deleteMany({ where: { adminId: { in: adminIds } } });
+          await tx.notification.deleteMany({ where: { adminId: { in: adminIds } } });
+        }
+
+        // Delete all admins in this department
+        await tx.admin.deleteMany({ where: { departmentId: id } });
+
+        // Finally delete the department
+        await tx.department.delete({ where: { id } });
+      }, { timeout: 30000 });
 
       // Invalidate department caches
       queryCache.invalidate("departments");

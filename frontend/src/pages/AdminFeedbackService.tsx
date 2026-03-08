@@ -72,7 +72,9 @@ export default function AdminFeedbackService() {
     } finally {
       if (showSpinner) setLoading(false);
     }
-  }; = async (id: number) => {
+  };
+
+  const handleResolve = async (id: number) => {
     try {
       setResolvingIds((prev) => new Set(prev).add(id));
       await apiClient.resolveFeedback(id, "Resolved by admin");
