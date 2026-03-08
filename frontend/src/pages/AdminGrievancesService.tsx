@@ -55,7 +55,7 @@ export default function AdminGrievancesService() {
   const { toast } = useToast();
 
   useEffect(() => {
-    fetchGrievances();
+    fetchGrievances(true);
     fetchDepartments();
   }, []);
 
@@ -68,8 +68,8 @@ export default function AdminGrievancesService() {
     }
   };
 
-  const fetchGrievances = async () => {
-    setLoading(true);
+  const fetchGrievances = async (showSpinner = false) => {
+    if (showSpinner) setLoading(true);
     try {
       // Fetch all grievances by status
       const [newResponse, pendingResponse, solvedResponse] = await Promise.all([
@@ -104,11 +104,9 @@ export default function AdminGrievancesService() {
     } catch (error) {
       console.error("Error fetching grievances:", error);
     } finally {
-      setLoading(false);
+      if (showSpinner) setLoading(false);
     }
-  };
-
-  const openModal = (grievance: Grievance) => {
+  }; = (grievance: Grievance) => {
     setSelectedGrievance(grievance);
     setModalOpen(true);
   };

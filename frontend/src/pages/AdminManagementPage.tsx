@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -51,6 +52,7 @@ import {
   Trash2,
   KeyRound,
   UserCog,
+  Edit,
 } from "lucide-react";
 import AdminSidebar from "@/components/ui/AdminSidebar";
 import { useAuth } from "@/contexts/AuthContext";
@@ -58,33 +60,44 @@ import { useToast } from "@/hooks/use-toast";
 import { apiClient } from "../types/api";
 import type { Admin, Department } from "../types/api";
 
+const AVAILABLE_SERVICES = [
+  { key: "schemes", label: "Scheme Services" },
+  { key: "certificates", label: "Certificate Services" },
+  { key: "contacts", label: "Contact Services" },
+  { key: "grievances", label: "Grievances" },
+  { key: "feedback", label: "Feedback" },
+];
+
 export default function AdminManagement() {
-  const { admin: currentAdmin, isSuperAdmin } = useAuth();
+  const { admin: currentAdmin, isSuperAdmin, isDepartmentAdmin } = useAuth();
   const { toast } = useToast();
   const [admins, setAdmins] = useState<Admin[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [editingAdmin, setEditingAdmin] = useState<Admin | null>(null);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
     phone: "",
-    role: "department_admin",
+    role: isDepartmentAdmin ? "individual_admin" : "department_admin",
     departmentId: "",
+    assignedServices: [] as string[],
   });
 
   useEffect(() => {
-    fetchData();
+    fetchData(true);
   }, []);
 
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchData = async (showSpinner = false) => {
+    if (showSpinner) setLoading(true);
     try {
       const [adminsRes, deptsRes] = await Promise.all([
         apiClient.getAdmins(),
-        apiClient.getDepartments(),
+        isSuperAdmin ? apiClient.getDepartments() : Promise.resolve({ departments: [] }),
       ]);
       setAdmins(adminsRes.admins || []);
       setDepartments(deptsRes.departments || []);
@@ -95,8 +108,20 @@ export default function AdminManagement() {
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      if (showSpinner) setLoading(false);
     }
+  };
+
+  const resetForm = () => {
+    setForm({
+      name: "",
+      email: "",
+      password: "",
+      phone: "",
+      role: isDepartmentAdmin ? "individual_admin" : "department_admin",
+      departmentId: "",
+      assignedServices: [],
+    });
   };
 
   const handleCreate = async () => {
@@ -111,7 +136,16 @@ export default function AdminManagement() {
     if (form.password.length < 8) {
       toast({
         title: "Validation Error",
-        description: "Password must be at least 8 characters with uppercase, lowercase, number and special character",
+        description:
+          "Password must be at least 8 characters with uppercase, lowercase, number and special character",
+        variant: "destructive",
+      });
+      return;
+    }
+    if (form.role === "individual_admin" && form.assignedServices.length === 0) {
+      toast({
+        title: "Validation Error",
+        description: "Please assign at least one service to the individual admin",
         variant: "destructive",
       });
       return;
@@ -125,18 +159,12 @@ export default function AdminManagement() {
         role: form.role,
         departmentId: form.departmentId ? parseInt(form.departmentId) : undefined,
         phone: form.phone || undefined,
+        assignedServices: form.role === "individual_admin" ? form.assignedServices : undefined,
       });
       toast({ title: "Success", description: "Admin created successfully" });
       setShowCreate(false);
-      setForm({
-        name: "",
-        email: "",
-        password: "",
-        phone: "",
-        role: "department_admin",
-        departmentId: "",
-      });
-      fetchData();
+      resetForm();
+      fetchData(false);
     } catch (error: any) {
       toast({
         title: "Error",
@@ -148,16 +176,73 @@ export default function AdminManagement() {
     }
   };
 
+  const openEdit = (admin: Admin) => {
+    setEditingAdmin(admin);
+    setForm({
+      name: admin.name,
+      email: admin.email,
+      password: "",
+      phone: admin.phone || "",
+      role: admin.role,
+      departmentId: admin.departmentId?.toString() || "",
+      assignedServices: admin.assignedServices || [],
+    });
+    setShowEdit(true);
+  };
+
+  const handleUpdate = async () => {
+    if (!editingAdmin) return;
+    if (!form.name) {
+      toast({
+        title: "Validation Error",
+        description: "Name is required",
+        variant: "destructive",
+      });
+      return;
+    }
+    setSaving(true);
+    try {
+      const updateData: any = {
+        name: form.name,
+        phone: form.phone || undefined,
+      };
+      if (editingAdmin.role === "individual_admin") {
+        updateData.assignedServices = form.assignedServices;
+      }
+      await apiClient.updateAdmin(editingAdmin.id, updateData);
+      toast({ title: "Success", description: "Admin updated successfully" });
+      setShowEdit(false);
+      setEditingAdmin(null);
+      resetForm();
+      fetchData(false);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error?.message || "Failed to update admin",
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleToggle = async (admin: Admin) => {
     if (admin.id === currentAdmin?.id) return;
+    // Optimistic update
+    setAdmins((prev) =>
+      prev.map((a) => (a.id === admin.id ? { ...a, isActive: !a.isActive } : a))
+    );
     try {
       await apiClient.toggleAdmin(admin.id);
       toast({
         title: "Success",
         description: `Admin ${admin.isActive ? "deactivated" : "activated"}`,
       });
-      fetchData();
     } catch {
+      // Revert on failure
+      setAdmins((prev) =>
+        prev.map((a) => (a.id === admin.id ? { ...a, isActive: admin.isActive } : a))
+      );
       toast({
         title: "Error",
         description: "Failed to toggle admin",
@@ -168,11 +253,17 @@ export default function AdminManagement() {
 
   const handleDelete = async (admin: Admin) => {
     if (admin.id === currentAdmin?.id) return;
-    if (!confirm(`Are you sure you want to delete ${admin.name}? This cannot be undone.`)) return;
+    if (
+      !confirm(
+        `Are you sure you want to delete ${admin.name}? This cannot be undone.`
+      )
+    )
+      return;
     try {
       await apiClient.deleteAdmin(admin.id);
+      // Optimistic removal
+      setAdmins((prev) => prev.filter((a) => a.id !== admin.id));
       toast({ title: "Success", description: "Admin deleted" });
-      fetchData();
     } catch {
       toast({
         title: "Error",
@@ -185,8 +276,11 @@ export default function AdminManagement() {
   const handleUnlock = async (admin: Admin) => {
     try {
       await apiClient.unlockAdmin(admin.id);
+      // Update in-place
+      setAdmins((prev) =>
+        prev.map((a) => (a.id === admin.id ? { ...a, loginAttempts: 0, lockedUntil: null } : a))
+      );
       toast({ title: "Success", description: "Admin account unlocked" });
-      fetchData();
     } catch {
       toast({
         title: "Error",
@@ -211,7 +305,17 @@ export default function AdminManagement() {
     }
   };
 
-  if (!isSuperAdmin) {
+  const toggleService = (service: string) => {
+    setForm((prev) => ({
+      ...prev,
+      assignedServices: prev.assignedServices.includes(service)
+        ? prev.assignedServices.filter((s) => s !== service)
+        : [...prev.assignedServices, service],
+    }));
+  };
+
+  // Access check: only super_admin and department_admin can manage admins
+  if (!isSuperAdmin && !isDepartmentAdmin) {
     return (
       <div className="flex flex-col md:flex-row min-h-screen">
         <AdminSidebar />
@@ -221,7 +325,7 @@ export default function AdminManagement() {
               <ShieldAlert className="h-12 w-12 mx-auto text-red-500 mb-4" />
               <h2 className="text-xl font-bold">Access Denied</h2>
               <p className="text-gray-500 mt-2">
-                Only Super Admins can manage administrators.
+                You don't have permission to manage administrators.
               </p>
             </CardContent>
           </Card>
@@ -241,6 +345,32 @@ export default function AdminManagement() {
     );
   }
 
+  const getRoleLabel = (role: string) => {
+    switch (role) {
+      case "super_admin":
+        return "Super Admin";
+      case "department_admin":
+        return "Dept Admin";
+      case "individual_admin":
+        return "Individual Admin";
+      default:
+        return role;
+    }
+  };
+
+  const getRoleVariant = (role: string) => {
+    switch (role) {
+      case "super_admin":
+        return "default" as const;
+      case "department_admin":
+        return "secondary" as const;
+      case "individual_admin":
+        return "outline" as const;
+      default:
+        return "secondary" as const;
+    }
+  };
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
       <AdminSidebar />
@@ -254,23 +384,30 @@ export default function AdminManagement() {
                 Admin Management
               </h1>
               <p className="text-gray-500 mt-1">
-                Create and manage department administrators
+                {isDepartmentAdmin
+                  ? "Create and manage individual administrators for your department"
+                  : "Create and manage all administrators"}
               </p>
             </div>
-            <Dialog open={showCreate} onOpenChange={setShowCreate}>
+            <Dialog open={showCreate} onOpenChange={(open) => { setShowCreate(open); if (!open) resetForm(); }}>
               <DialogTrigger asChild>
                 <Button className="gap-2">
-                  <Plus className="h-4 w-4" /> Create Admin
+                  <Plus className="h-4 w-4" />{" "}
+                  {isDepartmentAdmin ? "Create Individual Admin" : "Create Admin"}
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
-                  <DialogTitle>Create New Admin</DialogTitle>
+                  <DialogTitle>
+                    {isDepartmentAdmin ? "Create Individual Admin" : "Create New Admin"}
+                  </DialogTitle>
                   <DialogDescription>
-                    Add a new administrator to the system
+                    {isDepartmentAdmin
+                      ? "Add a new individual administrator and assign services"
+                      : "Add a new administrator to the system"}
                   </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
+                <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto">
                   <div className="grid gap-2">
                     <Label htmlFor="name">Full Name *</Label>
                     <Input
@@ -317,26 +454,38 @@ export default function AdminManagement() {
                       placeholder="+91..."
                     />
                   </div>
-                  <div className="grid gap-2">
-                    <Label>Role</Label>
-                    <Select
-                      value={form.role}
-                      onValueChange={(v) => setForm({ ...form, role: v })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="department_admin">
-                          Department Admin
-                        </SelectItem>
-                        <SelectItem value="super_admin">
-                          Super Admin
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  {form.role === "department_admin" && (
+
+                  {/* Role Selection - Only show for SuperAdmin */}
+                  {isSuperAdmin && (
+                    <div className="grid gap-2">
+                      <Label>Role</Label>
+                      <Select
+                        value={form.role}
+                        onValueChange={(v) =>
+                          setForm({ ...form, role: v, assignedServices: [] })
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="department_admin">
+                            Department Admin
+                          </SelectItem>
+                          <SelectItem value="individual_admin">
+                            Individual Admin
+                          </SelectItem>
+                          <SelectItem value="super_admin">
+                            Super Admin
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+
+                  {/* Department Selection - Only for Super Admin creating dept/individual admins */}
+                  {isSuperAdmin &&
+                    (form.role === "department_admin" || form.role === "individual_admin") && (
                     <div className="grid gap-2">
                       <Label>Department *</Label>
                       <Select
@@ -361,11 +510,45 @@ export default function AdminManagement() {
                       </Select>
                     </div>
                   )}
+
+                  {/* Service Assignment - for individual_admin */}
+                  {form.role === "individual_admin" && (
+                    <div className="grid gap-2">
+                      <Label>Assign Services *</Label>
+                      <p className="text-xs text-gray-500">
+                        Select which services this admin can manage
+                      </p>
+                      <div className="space-y-3 border rounded-lg p-3">
+                        {AVAILABLE_SERVICES.map((service) => (
+                          <div
+                            key={service.key}
+                            className="flex items-center space-x-2"
+                          >
+                            <Checkbox
+                              id={`service-${service.key}`}
+                              checked={form.assignedServices.includes(
+                                service.key
+                              )}
+                              onCheckedChange={() =>
+                                toggleService(service.key)
+                              }
+                            />
+                            <Label
+                              htmlFor={`service-${service.key}`}
+                              className="text-sm font-normal cursor-pointer"
+                            >
+                              {service.label}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <DialogFooter>
                   <Button
                     variant="outline"
-                    onClick={() => setShowCreate(false)}
+                    onClick={() => { setShowCreate(false); resetForm(); }}
                   >
                     Cancel
                   </Button>
@@ -376,6 +559,84 @@ export default function AdminManagement() {
               </DialogContent>
             </Dialog>
           </div>
+
+          {/* Edit Dialog */}
+          <Dialog open={showEdit} onOpenChange={(open) => { setShowEdit(open); if (!open) { setEditingAdmin(null); resetForm(); } }}>
+            <DialogContent className="sm:max-w-[500px]">
+              <DialogHeader>
+                <DialogTitle>Edit Admin</DialogTitle>
+                <DialogDescription>
+                  Update admin details and service assignments
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto">
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-name">Full Name *</Label>
+                  <Input
+                    id="edit-name"
+                    value={form.name}
+                    onChange={(e) =>
+                      setForm({ ...form, name: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-phone">Phone</Label>
+                  <Input
+                    id="edit-phone"
+                    value={form.phone}
+                    onChange={(e) =>
+                      setForm({ ...form, phone: e.target.value })
+                    }
+                  />
+                </div>
+                {/* Service Assignment for individual admin */}
+                {editingAdmin?.role === "individual_admin" && (
+                  <div className="grid gap-2">
+                    <Label>Assigned Services</Label>
+                    <p className="text-xs text-gray-500">
+                      Update which services this admin can manage
+                    </p>
+                    <div className="space-y-3 border rounded-lg p-3">
+                      {AVAILABLE_SERVICES.map((service) => (
+                        <div
+                          key={service.key}
+                          className="flex items-center space-x-2"
+                        >
+                          <Checkbox
+                            id={`edit-service-${service.key}`}
+                            checked={form.assignedServices.includes(
+                              service.key
+                            )}
+                            onCheckedChange={() =>
+                              toggleService(service.key)
+                            }
+                          />
+                          <Label
+                            htmlFor={`edit-service-${service.key}`}
+                            className="text-sm font-normal cursor-pointer"
+                          >
+                            {service.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => { setShowEdit(false); setEditingAdmin(null); resetForm(); }}
+                >
+                  Cancel
+                </Button>
+                <Button onClick={handleUpdate} disabled={saving}>
+                  {saving ? "Saving..." : "Save Changes"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -389,18 +650,20 @@ export default function AdminManagement() {
                 <div className="text-2xl font-bold">{admins.length}</div>
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-gray-500">
-                  Super Admins
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-teal-600">
-                  {admins.filter((a) => a.role === "super_admin").length}
-                </div>
-              </CardContent>
-            </Card>
+            {isSuperAdmin && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm text-gray-500">
+                    Super Admins
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-teal-600">
+                    {admins.filter((a) => a.role === "super_admin").length}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm text-gray-500">
@@ -413,18 +676,34 @@ export default function AdminManagement() {
                 </div>
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-gray-500">
-                  Departments
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-teal-600">
-                  {departments.length}
-                </div>
-              </CardContent>
-            </Card>
+            {isDepartmentAdmin && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm text-gray-500">
+                    Individual Admins
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-teal-600">
+                    {admins.filter((a) => a.role === "individual_admin").length}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            {isSuperAdmin && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm text-gray-500">
+                    Departments
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-teal-600">
+                    {departments.length}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Admin Table */}
@@ -442,7 +721,8 @@ export default function AdminManagement() {
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Role</TableHead>
-                    <TableHead>Department</TableHead>
+                    {isSuperAdmin && <TableHead>Department</TableHead>}
+                    <TableHead>Services</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Last Login</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
@@ -473,25 +753,34 @@ export default function AdminManagement() {
                         {admin.email}
                       </TableCell>
                       <TableCell>
-                        <Badge
-                          variant={
-                            admin.role === "super_admin"
-                              ? "default"
-                              : "secondary"
-                          }
-                        >
-                          {admin.role === "super_admin"
-                            ? "Super Admin"
-                            : "Dept Admin"}
+                        <Badge variant={getRoleVariant(admin.role)}>
+                          {getRoleLabel(admin.role)}
                         </Badge>
                       </TableCell>
+                      {isSuperAdmin && (
+                        <TableCell>
+                          {admin.department ? (
+                            <Badge variant="outline">
+                              {admin.department.code}
+                            </Badge>
+                          ) : (
+                            <span className="text-gray-400">—</span>
+                          )}
+                        </TableCell>
+                      )}
                       <TableCell>
-                        {admin.department ? (
-                          <Badge variant="outline">
-                            {admin.department.code}
-                          </Badge>
+                        {admin.role === "individual_admin" && admin.assignedServices && admin.assignedServices.length > 0 ? (
+                          <div className="flex flex-wrap gap-1">
+                            {admin.assignedServices.map((s) => (
+                              <Badge key={s} variant="outline" className="text-xs capitalize">
+                                {s}
+                              </Badge>
+                            ))}
+                          </div>
+                        ) : admin.role === "individual_admin" ? (
+                          <span className="text-gray-400 text-xs">No services</span>
                         ) : (
-                          <span className="text-gray-400">—</span>
+                          <span className="text-gray-400 text-xs">All services</span>
                         )}
                       </TableCell>
                       <TableCell>
@@ -517,6 +806,12 @@ export default function AdminManagement() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={() => openEdit(admin)}
+                              >
+                                <Edit className="mr-2 h-4 w-4" />
+                                Edit
+                              </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => handleToggle(admin)}
                               >

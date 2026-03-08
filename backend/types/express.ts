@@ -11,6 +11,8 @@ declare global {
         role: string;
         isActive: boolean;
         departmentId?: number | null;
+        assignedServices?: string[];
+        createdById?: number | null;
         department?: {
           id: number;
           name: string;
@@ -34,6 +36,8 @@ export type AdminRequest = Request & {
     role: string;
     isActive: boolean;
     departmentId?: number | null;
+    assignedServices?: string[];
+    createdById?: number | null;
     department?: {
       id: number;
       name: string;

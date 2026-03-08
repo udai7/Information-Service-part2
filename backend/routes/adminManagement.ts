@@ -2,20 +2,42 @@ import express, { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import { body, param, validationResult } from "express-validator";
 import { prisma } from "../lib/prisma";
-import { authenticateAdmin, requireSuperAdmin } from "../middleware/auth";
+import { authenticateAdmin, requireSuperAdmin, requireDeptAdmin } from "../middleware/auth";
 import { createAuditLog, AuditActions } from "../lib/auditLog";
 import "../types/express";
 
 const router = express.Router();
 
-// ─── List All Admins (SuperAdmin only) ───
+// Helper: Check if the requesting admin can manage the target admin
+const canManageAdmin = (requester: any, targetAdmin: any): boolean => {
+  if (requester.role === "super_admin") return true;
+  if (requester.role === "department_admin") {
+    // Dept admins can only manage individual_admins in their department
+    return (
+      targetAdmin.role === "individual_admin" &&
+      targetAdmin.departmentId === requester.departmentId
+    );
+  }
+  return false;
+};
+
+// ─── List Admins (SuperAdmin: all, DeptAdmin: own department) ───
 router.get(
   "/",
   authenticateAdmin,
-  requireSuperAdmin,
+  requireDeptAdmin,
   async (req: Request, res: Response) => {
     try {
+      const where: any = {};
+
+      if (req.admin!.role === "department_admin") {
+        // Dept admin only sees individual admins in their department
+        where.departmentId = req.admin!.departmentId;
+        where.role = "individual_admin";
+      }
+
       const admins = await prisma.admin.findMany({
+        where,
         select: {
           id: true,
           email: true,
@@ -25,6 +47,8 @@ router.get(
           isActive: true,
           lastLogin: true,
           departmentId: true,
+          assignedServices: true,
+          createdById: true,
           department: { select: { id: true, name: true, code: true } },
           createdAt: true,
           _count: {
@@ -46,11 +70,11 @@ router.get(
   },
 );
 
-// ─── Get Admin by ID (SuperAdmin only) ───
+// ─── Get Admin by ID (SuperAdmin or DeptAdmin for own dept) ───
 router.get(
   "/:id",
   authenticateAdmin,
-  requireSuperAdmin,
+  requireDeptAdmin,
   param("id").isInt(),
   async (req: Request, res: Response) => {
     try {
@@ -69,6 +93,8 @@ router.get(
           loginAttempts: true,
           lockedUntil: true,
           departmentId: true,
+          assignedServices: true,
+          createdById: true,
           department: { select: { id: true, name: true, code: true } },
           createdAt: true,
           updatedAt: true,
@@ -87,6 +113,13 @@ router.get(
         return res.status(404).json({ error: "Admin not found" });
       }
 
+      // Dept admin can only see individual admins in their department
+      if (req.admin!.role === "department_admin") {
+        if (admin.role !== "individual_admin" || admin.departmentId !== req.admin!.departmentId) {
+          return res.status(403).json({ error: "Access denied" });
+        }
+      }
+
       res.json({ admin });
     } catch (error) {
       console.error("Error fetching admin:", error);
@@ -95,18 +128,19 @@ router.get(
   },
 );
 
-// ─── Update Admin (SuperAdmin only) ───
+// ─── Update Admin (SuperAdmin or DeptAdmin for own dept individual admins) ───
 router.put(
   "/:id",
   authenticateAdmin,
-  requireSuperAdmin,
+  requireDeptAdmin,
   param("id").isInt(),
   [
     body("name").optional().trim().isLength({ min: 2 }),
     body("email").optional().isEmail().normalizeEmail(),
-    body("role").optional().isIn(["super_admin", "department_admin"]),
+    body("role").optional().isIn(["super_admin", "department_admin", "individual_admin"]),
     body("departmentId").optional().isInt(),
     body("phone").optional().isMobilePhone("any"),
+    body("assignedServices").optional().isArray(),
   ],
   async (req: Request, res: Response) => {
     try {
@@ -116,11 +150,27 @@ router.put(
       }
 
       const id = parseInt(req.params.id);
-      const { name, email, role, departmentId, phone } = req.body;
+      const { name, email, role, departmentId, phone, assignedServices } = req.body;
+
+      // Fetch target admin
+      const targetAdmin = await prisma.admin.findUnique({ where: { id } });
+      if (!targetAdmin) {
+        return res.status(404).json({ error: "Admin not found" });
+      }
+
+      // Check permissions
+      if (!canManageAdmin(req.admin!, targetAdmin)) {
+        return res.status(403).json({ error: "Access denied. Cannot manage this admin." });
+      }
 
       // Don't allow removing your own super_admin role
       if (id === req.admin!.id && role && role !== "super_admin") {
         return res.status(400).json({ error: "Cannot change your own role" });
+      }
+
+      // Dept admin cannot change role to anything other than individual_admin
+      if (req.admin!.role === "department_admin" && role && role !== "individual_admin") {
+        return res.status(403).json({ error: "You can only assign the individual_admin role" });
       }
 
       const updateData: any = {};
@@ -129,6 +179,7 @@ router.put(
       if (role) updateData.role = role;
       if (phone !== undefined) updateData.phone = phone;
       if (departmentId !== undefined) updateData.departmentId = departmentId;
+      if (assignedServices !== undefined) updateData.assignedServices = assignedServices;
 
       const admin = await prisma.admin.update({
         where: { id },
@@ -141,6 +192,7 @@ router.put(
           phone: true,
           isActive: true,
           departmentId: true,
+          assignedServices: true,
           department: { select: { id: true, name: true, code: true } },
         },
       });
@@ -166,11 +218,11 @@ router.put(
   },
 );
 
-// ─── Toggle Admin Active/Inactive (SuperAdmin only) ───
+// ─── Toggle Admin Active/Inactive (SuperAdmin or DeptAdmin for own dept) ───
 router.patch(
   "/:id/toggle",
   authenticateAdmin,
-  requireSuperAdmin,
+  requireDeptAdmin,
   param("id").isInt(),
   async (req: Request, res: Response) => {
     try {
@@ -184,6 +236,11 @@ router.patch(
       const admin = await prisma.admin.findUnique({ where: { id } });
       if (!admin) {
         return res.status(404).json({ error: "Admin not found" });
+      }
+
+      // Check permissions
+      if (!canManageAdmin(req.admin!, admin)) {
+        return res.status(403).json({ error: "Access denied. Cannot manage this admin." });
       }
 
       const updated = await prisma.admin.update({
@@ -227,11 +284,11 @@ router.patch(
   },
 );
 
-// ─── Delete Admin (SuperAdmin only) ───
+// ─── Delete Admin (SuperAdmin or DeptAdmin for own dept individual admins) ───
 router.delete(
   "/:id",
   authenticateAdmin,
-  requireSuperAdmin,
+  requireDeptAdmin,
   param("id").isInt(),
   async (req: Request, res: Response) => {
     try {
@@ -239,6 +296,16 @@ router.delete(
 
       if (id === req.admin!.id) {
         return res.status(400).json({ error: "Cannot delete your own account" });
+      }
+
+      const targetAdmin = await prisma.admin.findUnique({ where: { id } });
+      if (!targetAdmin) {
+        return res.status(404).json({ error: "Admin not found" });
+      }
+
+      // Check permissions
+      if (!canManageAdmin(req.admin!, targetAdmin)) {
+        return res.status(403).json({ error: "Access denied. Cannot manage this admin." });
       }
 
       await prisma.session.deleteMany({ where: { adminId: id } });
@@ -265,15 +332,25 @@ router.delete(
   },
 );
 
-// ─── Unlock Admin Account (SuperAdmin only) ───
+// ─── Unlock Admin Account (SuperAdmin or DeptAdmin for own dept) ───
 router.patch(
   "/:id/unlock",
   authenticateAdmin,
-  requireSuperAdmin,
+  requireDeptAdmin,
   param("id").isInt(),
   async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id);
+
+      const targetAdmin = await prisma.admin.findUnique({ where: { id } });
+      if (!targetAdmin) {
+        return res.status(404).json({ error: "Admin not found" });
+      }
+
+      // Check permissions
+      if (!canManageAdmin(req.admin!, targetAdmin)) {
+        return res.status(403).json({ error: "Access denied" });
+      }
 
       const admin = await prisma.admin.update({
         where: { id },
@@ -292,11 +369,11 @@ router.patch(
   },
 );
 
-// ─── Reset Admin Password (SuperAdmin only) ───
+// ─── Reset Admin Password (SuperAdmin or DeptAdmin for own dept) ───
 router.patch(
   "/:id/reset-password",
   authenticateAdmin,
-  requireSuperAdmin,
+  requireDeptAdmin,
   param("id").isInt(),
   [
     body("newPassword")
@@ -313,6 +390,16 @@ router.patch(
 
       const id = parseInt(req.params.id);
       const { newPassword } = req.body;
+
+      const targetAdmin = await prisma.admin.findUnique({ where: { id } });
+      if (!targetAdmin) {
+        return res.status(404).json({ error: "Admin not found" });
+      }
+
+      // Check permissions
+      if (!canManageAdmin(req.admin!, targetAdmin)) {
+        return res.status(403).json({ error: "Access denied" });
+      }
 
       const hashedPassword = await bcrypt.hash(newPassword, 12);
       await prisma.admin.update({

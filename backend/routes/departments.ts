@@ -309,6 +309,77 @@ router.patch(
   },
 );
 
+// ─── Delete Department (SuperAdmin only) ───
+router.delete(
+  "/:id",
+  authenticateAdmin,
+  requireSuperAdmin,
+  param("id").isInt(),
+  async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+
+      const department = await prisma.department.findUnique({
+        where: { id },
+        include: {
+          _count: {
+            select: {
+              admins: true,
+              schemeServices: true,
+              certificateServices: true,
+              contactServices: true,
+              grievances: true,
+              feedbacks: true,
+            },
+          },
+        },
+      });
+
+      if (!department) {
+        return res.status(404).json({ error: "Department not found" });
+      }
+
+      // Check if department has any associated data
+      const totalRelated =
+        department._count.admins +
+        department._count.schemeServices +
+        department._count.certificateServices +
+        department._count.contactServices +
+        department._count.grievances +
+        department._count.feedbacks;
+
+      if (totalRelated > 0) {
+        return res.status(400).json({
+          error: `Cannot delete department. It has ${department._count.admins} admin(s), ${department._count.schemeServices + department._count.certificateServices + department._count.contactServices} service(s), ${department._count.grievances} grievance(s), and ${department._count.feedbacks} feedback(s). Please reassign or remove them first.`,
+        });
+      }
+
+      await prisma.department.delete({ where: { id } });
+
+      // Invalidate department caches
+      queryCache.invalidate("departments");
+
+      await createAuditLog({
+        action: AuditActions.DELETE,
+        entity: "Department",
+        entityId: id,
+        details: { name: department.name, code: department.code },
+        adminId: req.admin!.id,
+        ipAddress: req.ip,
+        userAgent: req.get("user-agent"),
+      });
+
+      res.json({ message: "Department deleted successfully" });
+    } catch (error: any) {
+      if (error.code === "P2025") {
+        return res.status(404).json({ error: "Department not found" });
+      }
+      console.error("Error deleting department:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+);
+
 // ─── Public: List Active Departments (cached longer) ───
 router.get("/public/list", async (_req: Request, res: Response) => {
   try {

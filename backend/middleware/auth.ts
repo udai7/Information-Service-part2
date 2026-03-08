@@ -64,6 +64,8 @@ export const authenticateAdmin = async (
           role: true,
           isActive: true,
           departmentId: true,
+          assignedServices: true,
+          createdById: true,
           department: {
             select: { id: true, name: true, code: true },
           },
@@ -122,6 +124,50 @@ export const requireDeptAdmin = (
       .json({ error: "Access denied. Admin privileges required." });
   }
   next();
+};
+
+// Require any admin role (super_admin, department_admin, or individual_admin)
+export const requireAnyAdmin = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  if (!req.admin) {
+    return res.status(401).json({ error: "Authentication required" });
+  }
+  if (
+    req.admin.role !== "super_admin" &&
+    req.admin.role !== "department_admin" &&
+    req.admin.role !== "individual_admin"
+  ) {
+    return res
+      .status(403)
+      .json({ error: "Access denied. Admin privileges required." });
+  }
+  next();
+};
+
+// Check if individual admin has access to a specific service
+export const requireServiceAccess = (service: string) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.admin) {
+      return res.status(401).json({ error: "Authentication required" });
+    }
+    // Super admin and department admin have full access
+    if (req.admin.role === "super_admin" || req.admin.role === "department_admin") {
+      return next();
+    }
+    // Individual admin — check assignedServices
+    if (req.admin.role === "individual_admin") {
+      const assignedServices = (req.admin as any).assignedServices || [];
+      if (assignedServices.includes(service)) {
+        return next();
+      }
+    }
+    return res
+      .status(403)
+      .json({ error: `Access denied. You don't have permission for ${service}.` });
+  };
 };
 
 // Scope queries to the admin's department (unless SuperAdmin)

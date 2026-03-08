@@ -14,11 +14,14 @@ interface AuthContextType {
   isLoading: boolean;
   isSuperAdmin: boolean;
   isDepartmentAdmin: boolean;
+  isIndividualAdmin: boolean;
   department: Department | null;
+  assignedServices: string[];
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
   refreshAuth: () => Promise<void>;
+  hasServiceAccess: (service: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -131,7 +134,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const isSuperAdmin = admin?.role === "super_admin";
   const isDepartmentAdmin = admin?.role === "department_admin";
+  const isIndividualAdmin = admin?.role === "individual_admin";
   const department = admin?.department || null;
+  const assignedServices = admin?.assignedServices || [];
+
+  const hasServiceAccess = (service: string): boolean => {
+    if (isSuperAdmin || isDepartmentAdmin) return true;
+    if (isIndividualAdmin) return assignedServices.includes(service);
+    return false;
+  };
 
   const value: AuthContextType = {
     admin,
@@ -139,11 +150,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isLoading,
     isSuperAdmin,
     isDepartmentAdmin,
+    isIndividualAdmin,
     department,
+    assignedServices,
     login,
     logout,
     isAuthenticated: !!admin && !!token,
     refreshAuth,
+    hasServiceAccess,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -10,6 +10,8 @@ export interface Admin {
   lastLogin?: string;
   departmentId?: number | null;
   department?: Department | null;
+  assignedServices?: string[];
+  createdById?: number | null;
   createdAt: string;
 }
 
@@ -658,7 +660,7 @@ export class ApiClient {
     });
   }
 
-  async register(data: RegisterRequest & { role?: string; departmentId?: number; phone?: string }): Promise<AuthResponse> {
+  async register(data: RegisterRequest & { role?: string; departmentId?: number; phone?: string; assignedServices?: string[] }): Promise<AuthResponse> {
     return this.makeRequest<AuthResponse>("/auth/register", {
       method: "POST",
       body: JSON.stringify(data),
@@ -730,6 +732,10 @@ export class ApiClient {
     return this.makeRequest<{ department: Department }>(`/departments/${id}/toggle`, {
       method: "PATCH",
     });
+  }
+
+  async deleteDepartment(id: number): Promise<any> {
+    return this.makeRequest<any>(`/departments/${id}`, { method: "DELETE" });
   }
 
   async getPublicDepartments(): Promise<{ departments: Department[] }> {

@@ -29,11 +29,11 @@ export default function AdminFeedbackService() {
   });
 
   useEffect(() => {
-    fetchFeedbacks();
+    fetchFeedbacks(true);
   }, []);
 
-  const fetchFeedbacks = async () => {
-    setLoading(true);
+  const fetchFeedbacks = async (showSpinner = false) => {
+    if (showSpinner) setLoading(true);
     try {
       // Fetch new feedbacks
       const newResponse = await apiClient.getFeedbacks({ status: "new" });
@@ -70,11 +70,9 @@ export default function AdminFeedbackService() {
     } catch (error) {
       console.error("Error fetching feedbacks:", error);
     } finally {
-      setLoading(false);
+      if (showSpinner) setLoading(false);
     }
-  };
-
-  const handleResolve = async (id: number) => {
+  }; = async (id: number) => {
     try {
       setResolvingIds((prev) => new Set(prev).add(id));
       await apiClient.resolveFeedback(id, "Resolved by admin");

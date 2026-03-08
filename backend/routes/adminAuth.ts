@@ -6,6 +6,7 @@ import { prisma } from "../lib/prisma";
 import {
   authenticateAdmin,
   requireSuperAdmin,
+  requireDeptAdmin,
   getJwtSecret,
   JWT_ACCESS_EXPIRY,
   JWT_REFRESH_EXPIRY,
@@ -23,11 +24,11 @@ const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@
 const MAX_LOGIN_ATTEMPTS = 5;
 const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes
 
-// ─── Create Admin (SuperAdmin only) ───
+// ─── Create Admin (SuperAdmin or DeptAdmin for individual_admin) ───
 router.post(
   "/register",
   authenticateAdmin,
-  requireSuperAdmin,
+  requireDeptAdmin,
   registrationLimiter,
   [
     body("email").isEmail().normalizeEmail(),
@@ -41,10 +42,11 @@ router.post(
     body("name").trim().isLength({ min: 2 }),
     body("role")
       .optional()
-      .isIn(["super_admin", "department_admin"])
-      .withMessage("Role must be super_admin or department_admin"),
+      .isIn(["super_admin", "department_admin", "individual_admin"])
+      .withMessage("Role must be super_admin, department_admin, or individual_admin"),
     body("departmentId").optional().isInt(),
     body("phone").optional().isMobilePhone("any"),
+    body("assignedServices").optional().isArray(),
   ],
   async (req: Request, res: Response) => {
     try {
@@ -53,7 +55,19 @@ router.post(
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { email, password, name, role = "department_admin", departmentId, phone } = req.body;
+      const { email, password, name, role = "department_admin", departmentId, phone, assignedServices } = req.body;
+
+      // Department admin can only create individual_admin
+      if (req.admin!.role === "department_admin") {
+        if (role !== "individual_admin") {
+          return res.status(403).json({ error: "Department admins can only create individual admins" });
+        }
+      }
+
+      // Only super_admin can create super_admin or department_admin
+      if ((role === "super_admin" || role === "department_admin") && req.admin!.role !== "super_admin") {
+        return res.status(403).json({ error: "Only super admins can create this role" });
+      }
 
       // Check if admin already exists
       const existingAdmin = await prisma.admin.findUnique({
@@ -64,16 +78,44 @@ router.post(
         return res.status(400).json({ error: "Admin already exists with this email" });
       }
 
-      // If department_admin, require departmentId
-      if (role === "department_admin" && !departmentId) {
-        return res.status(400).json({ error: "Department ID is required for department admins" });
+      // Determine departmentId for individual_admin
+      let effectiveDeptId = departmentId;
+      if (role === "individual_admin" && req.admin!.role === "department_admin") {
+        // Force same department as the creating dept admin
+        effectiveDeptId = req.admin!.departmentId;
+      }
+
+      // If department_admin or individual_admin, require departmentId
+      if ((role === "department_admin" || role === "individual_admin") && !effectiveDeptId) {
+        return res.status(400).json({ error: "Department ID is required for department and individual admins" });
       }
 
       // Verify department exists if provided
-      if (departmentId) {
-        const dept = await prisma.department.findUnique({ where: { id: departmentId } });
+      if (effectiveDeptId) {
+        const dept = await prisma.department.findUnique({ where: { id: effectiveDeptId } });
         if (!dept) {
           return res.status(400).json({ error: "Department not found" });
+        }
+
+        // Enforce only one department_admin per department
+        if (role === "department_admin") {
+          const existingDeptAdmin = await prisma.admin.findFirst({
+            where: { departmentId: effectiveDeptId, role: "department_admin" },
+          });
+          if (existingDeptAdmin) {
+            return res.status(400).json({
+              error: "This department already has a department admin. Each department can only have one department admin.",
+            });
+          }
+        }
+      }
+
+      // Validate assignedServices
+      const validServices = ["schemes", "certificates", "contacts", "grievances", "feedback"];
+      if (assignedServices && assignedServices.length > 0) {
+        const invalid = assignedServices.filter((s: string) => !validServices.includes(s));
+        if (invalid.length > 0) {
+          return res.status(400).json({ error: `Invalid services: ${invalid.join(", ")}. Valid: ${validServices.join(", ")}` });
         }
       }
 
@@ -88,7 +130,9 @@ router.post(
           name,
           role,
           phone,
-          departmentId: departmentId || null,
+          departmentId: effectiveDeptId || null,
+          assignedServices: role === "individual_admin" ? (assignedServices || []) : [],
+          createdById: req.admin!.id,
         },
         select: {
           id: true,
@@ -97,6 +141,8 @@ router.post(
           role: true,
           phone: true,
           departmentId: true,
+          assignedServices: true,
+          createdById: true,
           department: { select: { id: true, name: true, code: true } },
           createdAt: true,
         },
@@ -266,6 +312,7 @@ router.post(
           phone: admin.phone,
           departmentId: admin.departmentId,
           department: admin.department,
+          assignedServices: (admin as any).assignedServices || [],
         },
         token: accessToken,
       });
@@ -405,6 +452,8 @@ router.get("/profile", authenticateAdmin, async (req: Request, res: Response) =>
         isActive: true,
         lastLogin: true,
         departmentId: true,
+        assignedServices: true,
+        createdById: true,
         department: { select: { id: true, name: true, code: true } },
         createdAt: true,
       },

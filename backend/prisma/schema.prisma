@@ -103,7 +103,7 @@ model Admin {
   password      String
   name          String
   phone         String?
-  role          String    @default("department_admin") // "super_admin" | "department_admin"
+  role          String    @default("department_admin") // "super_admin" | "department_admin" | "individual_admin"
   isActive      Boolean   @default(true)
   lastLogin     DateTime?
   loginAttempts Int       @default(0)
@@ -115,6 +115,12 @@ model Admin {
   departmentId Int?
   department   Department? @relation(fields: [departmentId], references: [id])
 
+  // Assigned services for individual admins (e.g. ["schemes", "certificates", "contacts", "grievances", "feedback"])
+  assignedServices String[] @default([])
+
+  // Track who created this admin
+  createdById Int?
+
   schemeServices      SchemeService[]
   certificateServices CertificateService[]
   contactServices     ContactService[]
@@ -125,6 +131,7 @@ model Admin {
   @@index([email])
   @@index([role])
   @@index([departmentId])
+  @@index([createdById])
 }
 
 model SchemeService {

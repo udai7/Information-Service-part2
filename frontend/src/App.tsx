@@ -94,6 +94,12 @@ const RequireSuperAdmin = () => {
   return isSuperAdmin ? <Outlet /> : <Navigate to="/admin" replace />;
 };
 
+const RequireDeptAdminOrAbove = () => {
+  const { isSuperAdmin, isDepartmentAdmin, isLoading } = useAuth();
+  if (isLoading) return <PageLoader />;
+  return (isSuperAdmin || isDepartmentAdmin) ? <Outlet /> : <Navigate to="/admin" replace />;
+};
+
 const RedirectIfAuth = () => {
   const { isAuthenticated, isLoading } = useAuth();
   if (isLoading) return <PageLoader />;
@@ -138,9 +144,13 @@ const App = () => (
                 <Route path="/admin/edit-contact-department/:id" element={<EditContactDepartment />} />
                 <Route path="/admin/departments" element={<AdminDepartments />} />
 
+                {/* Dept Admin or SuperAdmin routes */}
+                <Route element={<RequireDeptAdminOrAbove />}>
+                  <Route path="/admin/manage-admins" element={<AdminManagementPage />} />
+                </Route>
+
                 {/* Super Admin Only Routes */}
                 <Route element={<RequireSuperAdmin />}>
-                  <Route path="/admin/manage-admins" element={<AdminManagementPage />} />
                   <Route path="/admin/audit-logs" element={<AdminAuditLogs />} />
                 </Route>
 

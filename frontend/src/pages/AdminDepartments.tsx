@@ -30,6 +30,7 @@ import {
   FileText,
   MessageSquare,
   BarChart3,
+  Trash2,
 } from "lucide-react";
 import AdminSidebar from "@/components/ui/AdminSidebar";
 import { useAuth } from "@/contexts/AuthContext";
@@ -61,23 +62,26 @@ export default function AdminDepartments() {
   });
 
   useEffect(() => {
-    fetchDepartments();
+    fetchDepartments(true);
   }, []);
 
-  const fetchDepartments = async () => {
-    setLoading(true);
+  const fetchDepartments = async (showSpinner = false) => {
+    if (showSpinner) setLoading(true);
     try {
       const res = await apiClient.getDepartments();
-      setDepartments(res.departments || []);
-      // Fetch stats for each department
-      for (const dept of res.departments || []) {
-        try {
-          const statsRes = await apiClient.getDepartmentStats(dept.id);
-          setStats((prev) => ({ ...prev, [dept.id]: statsRes.stats }));
-        } catch {
-          // Stats may not be available for all departments
+      const depts = res.departments || [];
+      setDepartments(depts);
+      // Fetch stats for all departments in parallel
+      const statsResults = await Promise.allSettled(
+        depts.map((dept) => apiClient.getDepartmentStats(dept.id))
+      );
+      const newStats: Record<number, DepartmentStats> = {};
+      statsResults.forEach((result, idx) => {
+        if (result.status === "fulfilled") {
+          newStats[depts[idx].id] = result.value.stats;
         }
-      }
+      });
+      setStats((prev) => ({ ...prev, ...newStats }));
     } catch {
       toast({
         title: "Error",
@@ -85,7 +89,7 @@ export default function AdminDepartments() {
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      if (showSpinner) setLoading(false);
     }
   };
 
@@ -138,7 +142,7 @@ export default function AdminDepartments() {
       setShowCreate(false);
       resetForm();
       setEditDept(null);
-      fetchDepartments();
+      fetchDepartments(false);
     } catch (error: any) {
       toast({
         title: "Error",
@@ -151,17 +155,50 @@ export default function AdminDepartments() {
   };
 
   const handleToggle = async (dept: Department) => {
+    // Optimistic update
+    setDepartments((prev) =>
+      prev.map((d) => (d.id === dept.id ? { ...d, isActive: !d.isActive } : d))
+    );
     try {
       await apiClient.toggleDepartment(dept.id);
       toast({
         title: "Success",
         description: `Department ${dept.isActive ? "deactivated" : "activated"}`,
       });
-      fetchDepartments();
     } catch {
+      // Revert on failure
+      setDepartments((prev) =>
+        prev.map((d) => (d.id === dept.id ? { ...d, isActive: dept.isActive } : d))
+      );
       toast({
         title: "Error",
         description: "Failed to toggle department",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDelete = async (dept: Department) => {
+    if (
+      !confirm(
+        `Are you sure you want to delete "${dept.name}" (${dept.code})? This cannot be undone. The department must have no admins, services, grievances, or feedback.`
+      )
+    )
+      return;
+    try {
+      await apiClient.deleteDepartment(dept.id);
+      // Optimistic removal from state
+      setDepartments((prev) => prev.filter((d) => d.id !== dept.id));
+      setStats((prev) => {
+        const next = { ...prev };
+        delete next[dept.id];
+        return next;
+      });
+      toast({ title: "Success", description: "Department deleted successfully" });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error?.message || "Failed to delete department",
         variant: "destructive",
       });
     }
@@ -383,13 +420,23 @@ export default function AdminDepartments() {
                         <span>Department admins</span>
                       </div>
                       {isSuperAdmin && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => openEdit(dept)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
+                        <div className="flex items-center gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => openEdit(dept)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                            onClick={() => handleDelete(dept)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       )}
                     </div>
                   </CardContent>

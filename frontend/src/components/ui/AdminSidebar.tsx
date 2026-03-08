@@ -13,26 +13,42 @@ import {
   LayoutDashboard,
   Shield,
   LogOut,
+  Users,
 } from "lucide-react";
 
 export function AdminSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isSuperAdmin, admin, logout } = useAuth();
+  const { isSuperAdmin, isDepartmentAdmin, isIndividualAdmin, admin, logout, hasServiceAccess } = useAuth();
 
-  const serviceItems = [
-    { label: "Schemes", path: "/admin-scheme-service", icon: FileText },
-    { label: "Certificates", path: "/admin-certificate-service", icon: Award },
-    { label: "Contacts", path: "/admin-contact-service", icon: Phone },
-    { label: "Grievances", path: "/admin-grievances-service", icon: MessageSquare },
-    { label: "Feedback", path: "/admin-feedback-service", icon: ThumbsUp },
+  const allServiceItems = [
+    { label: "Schemes", path: "/admin-scheme-service", icon: FileText, service: "schemes" },
+    { label: "Certificates", path: "/admin-certificate-service", icon: Award, service: "certificates" },
+    { label: "Contacts", path: "/admin-contact-service", icon: Phone, service: "contacts" },
+    { label: "Grievances", path: "/admin-grievances-service", icon: MessageSquare, service: "grievances" },
+    { label: "Feedback", path: "/admin-feedback-service", icon: ThumbsUp, service: "feedback" },
   ];
+
+  // Filter service items based on role and assigned services
+  const serviceItems = isIndividualAdmin
+    ? allServiceItems.filter((item) => hasServiceAccess(item.service))
+    : allServiceItems;
 
   const superAdminItems = [
     { label: "Departments", path: "/admin/departments", icon: Building2 },
     { label: "Manage Admins", path: "/admin/manage-admins", icon: UserCog },
     { label: "Audit Logs", path: "/admin/audit-logs", icon: ScrollText },
   ];
+
+  const deptAdminItems = [
+    { label: "Manage Admins", path: "/admin/manage-admins", icon: Users },
+  ];
+
+  const getRoleBadge = () => {
+    if (admin?.role === "super_admin") return "Super Admin";
+    if (admin?.role === "department_admin") return "Dept Admin";
+    return "Admin";
+  };
 
   const linkClass = (path: string) =>
     `flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors ${
@@ -59,7 +75,7 @@ export function AdminSidebar() {
       <div className="mx-4 mt-4 mb-2 px-3 py-2 bg-slate-50 rounded-md border border-slate-100 flex items-center gap-2">
         <Shield className="h-3.5 w-3.5 text-slate-400" />
         <span className="text-xs font-medium text-slate-600">
-          {admin?.role === "super_admin" ? "Super Admin" : "Dept Admin"}
+          {getRoleBadge()}
         </span>
         {admin?.department && (
           <span className="ml-auto text-xs font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
@@ -76,6 +92,22 @@ export function AdminSidebar() {
               Management
             </div>
             {superAdminItems.map((item) => (
+              <Link key={item.path} to={item.path} className={linkClass(item.path)}>
+                <item.icon className="h-4 w-4 shrink-0" />
+                {item.label}
+              </Link>
+            ))}
+            <div className="border-t border-slate-100 my-3" />
+          </>
+        )}
+
+        {/* Department Admin Section - no Departments, just admin management */}
+        {isDepartmentAdmin && (
+          <>
+            <div className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold px-3 pt-4 pb-2">
+              Management
+            </div>
+            {deptAdminItems.map((item) => (
               <Link key={item.path} to={item.path} className={linkClass(item.path)}>
                 <item.icon className="h-4 w-4 shrink-0" />
                 {item.label}
