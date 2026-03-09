@@ -475,6 +475,9 @@ router.patch(
           } successfully`,
         contactService: updatedService,
       });
+
+      // Invalidate public cache
+      await queryCache.invalidate("contacts:public");
     } catch (error) {
       console.error("Toggle contact service active status error:", error);
       res.status(500).json({
@@ -519,6 +522,9 @@ router.delete(
         where: { id },
       });
 
+      // Invalidate public cache
+      await queryCache.invalidate("contacts:public");
+
       res.json({
         success: true,
         message: "Contact service deleted successfully",
@@ -545,11 +551,13 @@ router.get("/public/list", readLimiter, async (req: Request, res: Response) => {
     const offset = (pageNum - 1) * limitNum;
 
     // Use cache for non-search queries (deep include is expensive)
-    const cacheKey = "contacts:public:list";
-    const cached = await queryCache.get<any>(cacheKey);
-    if (cached) {
-      res.set("Cache-Control", "public, max-age=60, s-maxage=120");
-      return res.json(cached);
+    const cacheKey = search ? null : `contacts:public:list:${pageNum}:${limitNum}`;
+    if (cacheKey) {
+      const cached = await queryCache.get<any>(cacheKey);
+      if (cached) {
+        res.set("Cache-Control", "public, max-age=60, s-maxage=120");
+        return res.json(cached);
+      }
     }
 
     let whereClause: any = {
@@ -602,7 +610,9 @@ router.get("/public/list", readLimiter, async (req: Request, res: Response) => {
     };
 
     // Cache non-search results for 2 minutes
-    await queryCache.set(cacheKey, result, 120_000); // Cache 2 min
+    if (cacheKey) {
+      await queryCache.set(cacheKey, result, 120_000); // Cache 2 min
+    }
     res.set("X-Cache", "MISS");
     res.set("Cache-Control", "public, max-age=60, s-maxage=120");
     res.json(result);

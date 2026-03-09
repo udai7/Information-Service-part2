@@ -592,9 +592,10 @@ export interface UpdateGrievanceRequest {
 
 // API Client Configuration
 export const API_BASE_URL =
-  import.meta.env.MODE === "production"
-    ? "https://your-production-api.com/api"
-    : "http://localhost:3001/api";
+  import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.MODE === "production"
+    ? "/api"
+    : "http://localhost:3001/api");
 
 // API Client Class
 export class ApiClient {
@@ -630,11 +631,17 @@ export class ApiClient {
       headers.Authorization = `Bearer ${this.token}`;
     }
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30_000); // 30s timeout
+
     const response = await fetch(url, {
       ...options,
       headers,
       credentials: "include", // Include cookies for refresh token
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));

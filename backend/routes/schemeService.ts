@@ -588,6 +588,9 @@ router.patch(
         message: `Scheme service ${isActive ? "activated" : "deactivated"} successfully`,
         schemeService: updatedService,
       });
+
+      // Invalidate public cache
+      await queryCache.invalidate("schemes:public");
     } catch (error) {
       console.error("Toggle scheme service active status error:", error);
       res.status(500).json({ error: "Internal server error" });
@@ -630,6 +633,9 @@ router.delete(
       await prisma.schemeService.delete({
         where: { id: serviceId },
       });
+
+      // Invalidate public cache
+      await queryCache.invalidate("schemes:public");
 
       res.json({ message: "Scheme service deleted successfully" });
     } catch (error) {

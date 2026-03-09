@@ -37,6 +37,21 @@ router.get("/", authenticateAdmin, async (req: Request, res: Response) => {
   }
 });
 
+// ─── Mark All as Read (must be before /:id/read to avoid matching "read-all" as id) ───
+router.patch("/read-all", authenticateAdmin, async (req: Request, res: Response) => {
+  try {
+    await prisma.notification.updateMany({
+      where: { adminId: req.admin!.id, isRead: false },
+      data: { isRead: true },
+    });
+
+    res.json({ message: "All notifications marked as read" });
+  } catch (error) {
+    console.error("Error marking all notifications:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // ─── Mark Notification as Read ───
 router.patch(
   "/:id/read",
@@ -58,20 +73,5 @@ router.patch(
     }
   },
 );
-
-// ─── Mark All as Read ───
-router.patch("/read-all", authenticateAdmin, async (req: Request, res: Response) => {
-  try {
-    await prisma.notification.updateMany({
-      where: { adminId: req.admin!.id, isRead: false },
-      data: { isRead: true },
-    });
-
-    res.json({ message: "All notifications marked as read" });
-  } catch (error) {
-    console.error("Error marking all notifications:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
 
 export default router;

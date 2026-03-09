@@ -2,6 +2,7 @@ import { Router, Response, Request } from "express";
 import { body, param, validationResult } from "express-validator";
 import { prisma } from "../lib/prisma";
 import { authenticateAdmin } from "../middleware/auth";
+import { readLimiter } from "../middleware/rateLimiter";
 import "../types/express";
 
 const router = Router();
@@ -471,6 +472,7 @@ router.delete(
 // GET /api/offices/public/by-name/:officeName - Get office by name (Public)
 router.get(
   "/public/by-name/:officeName",
+  readLimiter,
   param("officeName").notEmpty().withMessage("Office name is required"),
   async (req: Request, res: Response) => {
     try {
@@ -520,6 +522,7 @@ router.get(
 // GET /api/offices/public/:officeId/posts - Get all posts for an office (Public)
 router.get(
   "/public/:officeId/posts",
+  readLimiter,
   param("officeId").isInt().withMessage("Office ID must be a valid integer"),
   async (req: Request, res: Response) => {
     try {

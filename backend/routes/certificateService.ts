@@ -503,6 +503,9 @@ router.patch(
           } successfully`,
         certificateService: updatedService,
       });
+
+      // Invalidate public cache
+      await queryCache.invalidate("certs:public");
     } catch (error) {
       console.error("Toggle certificate service active status error:", error);
       res.status(500).json({
@@ -547,6 +550,9 @@ router.delete(
         where: { id },
       });
 
+      // Invalidate public cache
+      await queryCache.invalidate("certs:public");
+
 
       res.json({
         success: true,
@@ -574,11 +580,13 @@ router.get("/public/list", readLimiter, async (req: Request, res: Response) => {
     const offset = (pageNum - 1) * limitNum;
 
     // Use cache for non-search queries
-    const cacheKey = "certs:public:list";
-    const cached = await queryCache.get<any>(cacheKey);
-    if (cached) {
-      res.set("Cache-Control", "public, max-age=60, s-maxage=120");
-      return res.json(cached);
+    const cacheKey = search ? null : `certs:public:list:${pageNum}:${limitNum}`;
+    if (cacheKey) {
+      const cached = await queryCache.get<any>(cacheKey);
+      if (cached) {
+        res.set("Cache-Control", "public, max-age=60, s-maxage=120");
+        return res.json(cached);
+      }
     }
 
     let whereClause: any = {
@@ -625,7 +633,9 @@ router.get("/public/list", readLimiter, async (req: Request, res: Response) => {
     };
 
     // Cache non-search results for 2 minutes
-    await queryCache.set(cacheKey, result, 120_000); // 2min cache
+    if (cacheKey) {
+      await queryCache.set(cacheKey, result, 120_000); // 2min cache
+    }
     res.set("X-Cache", "MISS");
     res.set("Cache-Control", "public, max-age=60, s-maxage=120");
     res.json(result);
