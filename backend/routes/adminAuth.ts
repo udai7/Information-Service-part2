@@ -296,8 +296,8 @@ router.post(
       // Set refresh token as httpOnly cookie
       res.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        secure: true, // Always required when SameSite is None
+        sameSite: "none", // Must be "none" to allow cross-site cookies between Vercel and Render
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         path: "/api/auth",
       });
@@ -392,8 +392,8 @@ router.post("/refresh", async (req: Request, res: Response) => {
 
     res.cookie(REFRESH_TOKEN_COOKIE, newRefreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: true, // Always required when SameSite is None
+      sameSite: "none", // Must be "none" to allow cross-site cookies between Vercel and Render
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: "/api/auth",
     });
@@ -430,7 +430,11 @@ router.post("/logout", authenticateAdmin, async (req: Request, res: Response) =>
       userAgent: req.get("user-agent"),
     });
 
-    res.clearCookie(REFRESH_TOKEN_COOKIE, { path: "/api/auth" });
+    res.clearCookie(REFRESH_TOKEN_COOKIE, {
+      path: "/api/auth",
+      secure: true,
+      sameSite: "none"
+    });
     res.json({ message: "Logged out successfully" });
   } catch (error) {
     console.error("Logout error:", error);

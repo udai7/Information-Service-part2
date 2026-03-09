@@ -2,6 +2,8 @@ import multer from "multer";
 import path from "path";
 import crypto from "crypto";
 import sharp from "sharp";
+import fs from "fs";
+import os from "os";
 
 // ─── Oracle OCI PAR (Pre-Authenticated Request) Configuration ───
 // The PAR URL should end with /o/ e.g.:
@@ -11,7 +13,7 @@ const OCI_PAR_URL = process.env.OCI_PAR_URL;
 if (!OCI_PAR_URL) {
   console.warn(
     "⚠ WARNING: OCI_PAR_URL is not set. File uploads will fail. " +
-      "Set this to your Oracle OCI Pre-Authenticated Request URL.",
+    "Set this to your Oracle OCI Pre-Authenticated Request URL.",
   );
 }
 
@@ -59,7 +61,12 @@ const uploadToOCI = async (
 // ─── Multer Middleware (memory storage for both — buffers go to OCI) ───
 
 export const pdfUpload = multer({
-  storage: multer.memoryStorage(),
+  storage: multer.diskStorage({
+    destination: os.tmpdir(),
+    filename: (_req, file, cb) => {
+      cb(null, generateFilename(file.originalname));
+    }
+  }),
   limits: {
     fileSize: 10 * 1024 * 1024, // 10MB max
     files: 1,
@@ -74,7 +81,12 @@ export const pdfUpload = multer({
 });
 
 export const imageUpload = multer({
-  storage: multer.memoryStorage(),
+  storage: multer.diskStorage({
+    destination: os.tmpdir(),
+    filename: (_req, file, cb) => {
+      cb(null, generateFilename(file.originalname));
+    }
+  }),
   limits: {
     fileSize: 5 * 1024 * 1024, // 5MB max
     files: 1,
@@ -98,14 +110,26 @@ export const imageUpload = multer({
 export const uploadPDFToOCI = async (
   file: Express.Multer.File,
 ): Promise<string> => {
-  const filename = generateFilename(file.originalname);
+  const filename = path.basename(file.path);
   const objectName = `pdfs/${filename}`;
 
-  if (!file.buffer || file.buffer.length === 0) {
-    throw new Error("PDF file buffer is empty");
-  }
+  try {
+    const fileBuffer = await fs.promises.readFile(file.path);
+    if (!fileBuffer || fileBuffer.length === 0) {
+      throw new Error("PDF file buffer is empty");
+    }
 
-  return uploadToOCI(file.buffer, objectName, "application/pdf");
+    return await uploadToOCI(fileBuffer, objectName, "application/pdf");
+  } finally {
+    // Always cleanup the temporary file
+    try {
+      if (fs.existsSync(file.path)) {
+        await fs.promises.unlink(file.path);
+      }
+    } catch (cleanupErr) {
+      console.error(`Failed to cleanup temp file ${file.path}:`, cleanupErr);
+    }
+  }
 };
 
 /**
@@ -113,23 +137,34 @@ export const uploadPDFToOCI = async (
  * @returns The full OCI URL of the uploaded image.
  */
 export const uploadImageToOCI = async (
-  buffer: Buffer,
-  originalName: string,
+  file: Express.Multer.File,
 ): Promise<string> => {
+  const originalName = file.originalname;
   const filename = generateFilename(
     originalName.replace(/\.[^.]+$/, ".webp"),
   );
   const objectName = `images/${filename}`;
 
-  const processedBuffer = await sharp(buffer)
-    .resize(800, 800, {
-      fit: "inside",
-      withoutEnlargement: true,
-    })
-    .webp({ quality: 75 })
-    .toBuffer();
+  try {
+    const processedBuffer = await sharp(file.path)
+      .resize(800, 800, {
+        fit: "inside",
+        withoutEnlargement: true,
+      })
+      .webp({ quality: 75 })
+      .toBuffer();
 
-  return uploadToOCI(processedBuffer, objectName, "image/webp");
+    return await uploadToOCI(processedBuffer, objectName, "image/webp");
+  } finally {
+    // Always cleanup the temporary file
+    try {
+      if (fs.existsSync(file.path)) {
+        await fs.promises.unlink(file.path);
+      }
+    } catch (cleanupErr) {
+      console.error(`Failed to cleanup temp file ${file.path}:`, cleanupErr);
+    }
+  }
 };
 
 /**

@@ -774,10 +774,7 @@ router.post(
       }
 
       // Process, compress, and upload image to OCI
-      const imageUrl = await uploadImageToOCI(
-        req.file.buffer,
-        req.file.originalname,
-      );
+      const imageUrl = await uploadImageToOCI(req.file);
 
       const updatedGrievance = await prisma.grievance.update({
         where: { id },

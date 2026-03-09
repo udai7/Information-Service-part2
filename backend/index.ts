@@ -27,6 +27,10 @@ import feedbackRoutes from "./routes/feedback";
 import grievanceRoutes from "./routes/grievance";
 
 const app = express();
+
+// Trust the first proxy (Render load balancer) to ensure correct IP resolution for rate limiting
+app.set("trust proxy", 1);
+
 const PORT = process.env.PORT || 3001;
 
 // ─── Performance: Response Compression ───
@@ -55,6 +59,7 @@ app.use(
       },
     },
     crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" },
     // Additional security headers
     hsts: {
       maxAge: 31536000,

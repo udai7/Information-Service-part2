@@ -190,6 +190,7 @@ model SchemeService {
   @@index([status, isActive])
   @@index([departmentId, status])
   @@index([createdAt])
+  @@index([adminId])
 }
 
 model ContactPerson {
@@ -275,6 +276,7 @@ model CertificateService {
   @@index([status, isActive])
   @@index([departmentId, status])
   @@index([createdAt])
+  @@index([adminId])
 }
 
 model CertificateContact {
@@ -375,6 +377,7 @@ model ContactService {
   @@index([status, isActive])
   @@index([departmentId, status])
   @@index([createdAt])
+  @@index([adminId])
 }
 
 model ContactServiceContact {
@@ -508,7 +511,6 @@ model Grievance {
 
   @@index([status, departmentId])
   @@index([createdAt])
-  @@index([trackingId])
   @@index([email])
   @@index([priority, status])
 }
