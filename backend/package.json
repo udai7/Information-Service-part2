@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch index.ts",
-    "build": "rimraf dist && tsc && echo TypeScript compilation completed && echo Build artifacts generated successfully",
+    "build": "rm -rf dist && tsc && echo TypeScript compilation completed && echo Build artifacts generated successfully",
     "start": "node dist/index.js",
     "test": "vitest --run",
     "postinstall": "prisma generate",
@@ -15,7 +15,7 @@
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset",
     "db:seed": "tsx prisma/seed.ts",
-    "build:verbose": "rimraf dist && tsc --listFiles && echo TypeScript compilation completed with verbose output",
+    "build:verbose": "rm -rf dist && tsc --listFiles && echo TypeScript compilation completed with verbose output",
     "build:check": "tsc --noEmit && echo Type checking passed"
   },
   "dependencies": {
