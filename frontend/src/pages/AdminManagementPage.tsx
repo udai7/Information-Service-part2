@@ -62,6 +62,8 @@ import {
   UserCog,
   Edit,
   AlertTriangle,
+  Search,
+  Filter,
 } from "lucide-react";
 import AdminSidebar from "@/components/ui/AdminSidebar";
 import { useAuth } from "@/contexts/AuthContext";
@@ -98,6 +100,8 @@ export default function AdminManagement() {
     departmentId: "",
     assignedServices: [] as string[],
   });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
 
   useEffect(() => {
     fetchData(true);
@@ -499,30 +503,30 @@ export default function AdminManagement() {
                   {/* Department Selection - Only for Super Admin creating dept/individual admins */}
                   {isSuperAdmin &&
                     (form.role === "department_admin" || form.role === "individual_admin") && (
-                    <div className="grid gap-2">
-                      <Label>Department *</Label>
-                      <Select
-                        value={form.departmentId}
-                        onValueChange={(v) =>
-                          setForm({ ...form, departmentId: v })
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select department" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {departments.map((dept) => (
-                            <SelectItem
-                              key={dept.id}
-                              value={dept.id.toString()}
-                            >
-                              {dept.name} ({dept.code})
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
+                      <div className="grid gap-2">
+                        <Label>Department *</Label>
+                        <Select
+                          value={form.departmentId}
+                          onValueChange={(v) =>
+                            setForm({ ...form, departmentId: v })
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select department" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {departments.map((dept) => (
+                              <SelectItem
+                                key={dept.id}
+                                value={dept.id.toString()}
+                              >
+                                {dept.name} ({dept.code})
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
 
                   {/* Service Assignment - for individual_admin */}
                   {form.role === "individual_admin" && (
@@ -719,12 +723,61 @@ export default function AdminManagement() {
             )}
           </div>
 
+          {/* Search and Filters */}
+          <Card className="mb-6">
+            <CardContent className="pt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="search">Search Admins</Label>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="search"
+                      placeholder="Search by name, email, or department code..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="roleFilter">Role Filter</Label>
+                  <Select value={roleFilter} onValueChange={setRoleFilter}>
+                    <SelectTrigger id="roleFilter">
+                      <SelectValue placeholder="All Roles" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Roles</SelectItem>
+                      {isSuperAdmin && (
+                        <SelectItem value="super_admin">Super Admins</SelectItem>
+                      )}
+                      {isSuperAdmin && (
+                        <SelectItem value="department_admin">Department Admins</SelectItem>
+                      )}
+                      <SelectItem value="individual_admin">Individual Admins</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Admin Table */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
-                Administrators ({admins.length})
+                Administrators (
+                {admins.filter((a) => {
+                  const query = searchQuery.toLowerCase();
+                  const matchesSearch =
+                    a.name.toLowerCase().includes(query) ||
+                    a.email.toLowerCase().includes(query) ||
+                    (a.department?.code && a.department.code.toLowerCase().includes(query));
+                  const matchesRole = roleFilter === "all" || a.role === roleFilter;
+                  return matchesSearch && matchesRole;
+                }).length}
+                )
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -742,129 +795,160 @@ export default function AdminManagement() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {admins.map((admin) => (
-                    <TableRow
-                      key={admin.id}
-                      className={!admin.isActive ? "opacity-50" : ""}
-                    >
-                      <TableCell className="font-medium">
-                        <div className="flex items-center gap-2">
-                          {admin.role === "super_admin" ? (
-                            <Shield className="h-4 w-4 text-slate-500" />
-                          ) : (
-                            <Users className="h-4 w-4 text-slate-500" />
-                          )}
-                          {admin.name}
-                          {admin.id === currentAdmin?.id && (
-                            <Badge variant="outline" className="text-xs">
-                              You
-                            </Badge>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-gray-500">
-                        {admin.email}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={getRoleVariant(admin.role)}>
-                          {getRoleLabel(admin.role)}
-                        </Badge>
-                      </TableCell>
-                      {isSuperAdmin && (
+                  {admins
+                    .filter((a) => {
+                      const query = searchQuery.toLowerCase();
+                      const matchesSearch =
+                        a.name.toLowerCase().includes(query) ||
+                        a.email.toLowerCase().includes(query) ||
+                        (a.department?.code && a.department.code.toLowerCase().includes(query));
+                      const matchesRole = roleFilter === "all" || a.role === roleFilter;
+                      return matchesSearch && matchesRole;
+                    })
+                    .map((admin) => (
+                      <TableRow
+                        key={admin.id}
+                        className={!admin.isActive ? "opacity-50" : ""}
+                      >
+                        <TableCell className="font-medium">
+                          <div className="flex items-center gap-2">
+                            {admin.role === "super_admin" ? (
+                              <Shield className="h-4 w-4 text-slate-500" />
+                            ) : (
+                              <Users className="h-4 w-4 text-slate-500" />
+                            )}
+                            <div>
+                              {admin.name}
+                              <div className="text-xs text-gray-500 font-normal mt-0.5 md:hidden">
+                                {admin.email}
+                              </div>
+                            </div>
+                            {admin.id === currentAdmin?.id && (
+                              <Badge variant="outline" className="text-xs">
+                                You
+                              </Badge>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-gray-500 hidden md:table-cell">
+                          {admin.email}
+                        </TableCell>
                         <TableCell>
-                          {admin.department ? (
-                            <Badge variant="outline">
-                              {admin.department.code}
-                            </Badge>
+                          <Badge variant={getRoleVariant(admin.role)}>
+                            {getRoleLabel(admin.role)}
+                          </Badge>
+                        </TableCell>
+                        {isSuperAdmin && (
+                          <TableCell>
+                            {admin.department ? (
+                              <Badge variant="outline">
+                                {admin.department.code}
+                              </Badge>
+                            ) : (
+                              <span className="text-gray-400">—</span>
+                            )}
+                          </TableCell>
+                        )}
+                        <TableCell>
+                          {admin.role === "individual_admin" && admin.assignedServices && admin.assignedServices.length > 0 ? (
+                            <div className="flex flex-wrap gap-1">
+                              {admin.assignedServices.map((s) => (
+                                <Badge key={s} variant="outline" className="text-xs capitalize">
+                                  {s}
+                                </Badge>
+                              ))}
+                            </div>
+                          ) : admin.role === "individual_admin" ? (
+                            <span className="text-gray-400 text-xs">No services</span>
                           ) : (
-                            <span className="text-gray-400">—</span>
+                            <span className="text-gray-400 text-xs">All services</span>
                           )}
                         </TableCell>
-                      )}
-                      <TableCell>
-                        {admin.role === "individual_admin" && admin.assignedServices && admin.assignedServices.length > 0 ? (
-                          <div className="flex flex-wrap gap-1">
-                            {admin.assignedServices.map((s) => (
-                              <Badge key={s} variant="outline" className="text-xs capitalize">
-                                {s}
-                              </Badge>
-                            ))}
-                          </div>
-                        ) : admin.role === "individual_admin" ? (
-                          <span className="text-gray-400 text-xs">No services</span>
-                        ) : (
-                          <span className="text-gray-400 text-xs">All services</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {admin.isActive ? (
-                          <Badge className="bg-green-100 text-green-700">
-                            Active
-                          </Badge>
-                        ) : (
-                          <Badge variant="destructive">Inactive</Badge>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-gray-500 text-sm">
-                        {admin.lastLogin
-                          ? new Date(admin.lastLogin).toLocaleDateString()
-                          : "Never"}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {admin.id !== currentAdmin?.id && (
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm">
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem
-                                onClick={() => openEdit(admin)}
-                              >
-                                <Edit className="mr-2 h-4 w-4" />
-                                Edit
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleToggle(admin)}
-                              >
-                                {admin.isActive ? (
-                                  <>
-                                    <Lock className="mr-2 h-4 w-4" />
-                                    Deactivate
-                                  </>
-                                ) : (
-                                  <>
-                                    <Unlock className="mr-2 h-4 w-4" />
-                                    Activate
-                                  </>
-                                )}
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleUnlock(admin)}
-                              >
-                                <Unlock className="mr-2 h-4 w-4" />
-                                Unlock Account
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleResetPassword(admin)}
-                              >
-                                <KeyRound className="mr-2 h-4 w-4" />
-                                Reset Password
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="text-red-600"
-                                onClick={() => handleDelete(admin)}
-                              >
-                                <Trash2 className="mr-2 h-4 w-4" />
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        <TableCell>
+                          {admin.isActive ? (
+                            <Badge className="bg-green-100 text-green-700">
+                              Active
+                            </Badge>
+                          ) : (
+                            <Badge variant="destructive">Inactive</Badge>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-gray-500 text-sm">
+                          {admin.lastLogin
+                            ? new Date(admin.lastLogin).toLocaleDateString()
+                            : "Never"}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {admin.id !== currentAdmin?.id && (
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="sm">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem
+                                  onClick={() => openEdit(admin)}
+                                >
+                                  <Edit className="mr-2 h-4 w-4" />
+                                  Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() => handleToggle(admin)}
+                                >
+                                  {admin.isActive ? (
+                                    <>
+                                      <Lock className="mr-2 h-4 w-4" />
+                                      Deactivate
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Unlock className="mr-2 h-4 w-4" />
+                                      Activate
+                                    </>
+                                  )}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() => handleUnlock(admin)}
+                                >
+                                  <Unlock className="mr-2 h-4 w-4" />
+                                  Unlock Account
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() => handleResetPassword(admin)}
+                                >
+                                  <KeyRound className="mr-2 h-4 w-4" />
+                                  Reset Password
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  className="text-red-600"
+                                  onClick={() => handleDelete(admin)}
+                                >
+                                  <Trash2 className="mr-2 h-4 w-4" />
+                                  Delete
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  {admins.length > 0 &&
+                    admins.filter((a) => {
+                      const query = searchQuery.toLowerCase();
+                      const matchesSearch =
+                        a.name.toLowerCase().includes(query) ||
+                        a.email.toLowerCase().includes(query) ||
+                        (a.department?.code && a.department.code.toLowerCase().includes(query));
+                      const matchesRole = roleFilter === "all" || a.role === roleFilter;
+                      return matchesSearch && matchesRole;
+                    }).length === 0 && (
+                      <TableRow>
+                        <TableCell colSpan={isSuperAdmin ? 8 : 7} className="h-24 text-center">
+                          No administrators found matching your filters.
+                        </TableCell>
+                      </TableRow>
+                    )}
                 </TableBody>
               </Table>
               {admins.length === 0 && (

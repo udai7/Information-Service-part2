@@ -25,6 +25,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { ServicesMenu } from "@/components/ui/sidebar";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import {
@@ -44,6 +52,9 @@ import type { Grievance, CreateGrievanceRequest, Department } from "../types/api
 
 export default function UserGrievancesService() {
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [priorityFilter, setPriorityFilter] = useState("all");
   const [trackingId, setTrackingId] = useState("");
   const [trackingResult, setTrackingResult] = useState<Grievance | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -288,11 +299,18 @@ export default function UserGrievancesService() {
     }
   };
 
-  const filteredGrievances = userGrievances.filter(
-    (g) =>
+  const filteredGrievances = userGrievances.filter((g) => {
+    const matchesSearch =
       g.subject.toLowerCase().includes(search.toLowerCase()) ||
-      g.description.toLowerCase().includes(search.toLowerCase()),
-  );
+      g.description.toLowerCase().includes(search.toLowerCase()) ||
+      g.trackingId.toLowerCase().includes(search.toLowerCase());
+
+    const matchesStatus = statusFilter === "all" || g.status === statusFilter;
+    const matchesCategory = categoryFilter === "all" || g.category === categoryFilter;
+    const matchesPriority = priorityFilter === "all" || g.priority === priorityFilter;
+
+    return matchesSearch && matchesStatus && matchesCategory && matchesPriority;
+  });
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
@@ -761,15 +779,67 @@ export default function UserGrievancesService() {
             <h2 className="text-2xl font-bold mb-4">
               Recent Community Grievances
             </h2>
-            <div className="mb-4">
-              <Input
-                type="text"
-                placeholder="Search grievances..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="max-w-md"
-              />
-            </div>
+
+            <Card className="mb-6">
+              <CardContent className="pt-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Search</label>
+                    <Input
+                      type="text"
+                      placeholder="Search subject, description, ID..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Status</label>
+                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="All Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Statuses</SelectItem>
+                        <SelectItem value="new">New</SelectItem>
+                        <SelectItem value="pending">Pending</SelectItem>
+                        <SelectItem value="solved">Solved</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Category</label>
+                    <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="All Categories" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Categories</SelectItem>
+                        <SelectItem value="service-related">Service Related</SelectItem>
+                        <SelectItem value="technical">Technical</SelectItem>
+                        <SelectItem value="policy">Policy</SelectItem>
+                        <SelectItem value="infrastructure">Infrastructure</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Priority</label>
+                    <Select value={priorityFilter} onValueChange={setPriorityFilter}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="All Priorities" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Priorities</SelectItem>
+                        <SelectItem value="low">Low</SelectItem>
+                        <SelectItem value="medium">Medium</SelectItem>
+                        <SelectItem value="high">High</SelectItem>
+                        <SelectItem value="urgent">Urgent</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
             {loading ? (
               <LoadingSpinner
@@ -780,62 +850,62 @@ export default function UserGrievancesService() {
             ) : filteredGrievances.length === 0 ? (
               <Card>
                 <CardContent className="py-8 text-center text-gray-500">
-                  {search
-                    ? `No grievances found matching "${search}".`
+                  {search || statusFilter !== "all" || categoryFilter !== "all" || priorityFilter !== "all"
+                    ? "No grievances found matching your filters."
                     : "No grievances yet."}
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredGrievances.slice(0, 9).map((grievance) => (
-                  <Card
-                    key={grievance.id}
-                    className="hover:shadow-lg transition-shadow"
-                  >
-                    <CardHeader>
-                      <CardTitle className="flex items-center justify-between text-lg">
-                        <span className="truncate">{grievance.subject}</span>
-                        <Badge
-                          className={getPriorityColor(grievance.priority)}
-                          variant="secondary"
-                        >
-                          {grievance.priority}
-                        </Badge>
-                      </CardTitle>
-                      <CardDescription>
-                        <div className="flex items-center gap-2">
-                          <span>{grievance.name}</span>
-                          <Badge
-                            className={getStatusColor(grievance.status)}
-                            variant="secondary"
-                          >
-                            {grievance.status}
-                          </Badge>
-                        </div>
-                        <div className="mt-1 text-xs">
-                          <strong>ID:</strong> {grievance.trackingId}
-                        </div>
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-gray-600 line-clamp-3">
-                        {grievance.description}
-                      </p>
-                      {grievance.category && (
-                        <Badge variant="outline" className="mt-2">
-                          {grievance.category}
-                        </Badge>
-                      )}
-                    </CardContent>
-                    <CardFooter>
-                      <div className="text-xs text-gray-500">
-                        Submitted:{" "}
-                        {new Date(grievance.createdAt).toLocaleDateString()}
-                      </div>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </div>
+              <Card>
+                <CardContent className="p-0 overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Tracking ID</TableHead>
+                        <TableHead>Subject</TableHead>
+                        <TableHead>Category</TableHead>
+                        <TableHead>Priority</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Submitted On</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredGrievances.slice(0, 15).map((grievance) => (
+                        <TableRow key={grievance.id}>
+                          <TableCell className="font-mono text-xs">
+                            {grievance.trackingId}
+                          </TableCell>
+                          <TableCell className="max-w-[200px] truncate" title={grievance.subject}>
+                            {grievance.subject}
+                          </TableCell>
+                          <TableCell className="capitalize">
+                            {grievance.category?.replace("-", " ") || "N/A"}
+                          </TableCell>
+                          <TableCell>
+                            <Badge
+                              className={getPriorityColor(grievance.priority)}
+                              variant="secondary"
+                            >
+                              {grievance.priority}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Badge
+                              className={getStatusColor(grievance.status)}
+                              variant="secondary"
+                            >
+                              {grievance.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-sm text-gray-500">
+                            {new Date(grievance.createdAt).toLocaleDateString()}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
             )}
           </div>
         </div>

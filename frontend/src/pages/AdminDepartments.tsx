@@ -14,6 +14,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -40,6 +55,8 @@ import {
   BarChart3,
   Trash2,
   AlertTriangle,
+  Search,
+  Filter,
 } from "lucide-react";
 import AdminSidebar from "@/components/ui/AdminSidebar";
 import { useAuth } from "@/contexts/AuthContext";
@@ -62,6 +79,8 @@ export default function AdminDepartments() {
   const [showCreate, setShowCreate] = useState(false);
   const [editDept, setEditDept] = useState<Department | null>(null);
   const [saving, setSaving] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [deleteTarget, setDeleteTarget] = useState<Department | null>(null);
   const [deleteStep, setDeleteStep] = useState<0 | 1 | 2>(0); // 0=closed, 1=first confirm, 2=final confirm
   const [deleting, setDeleting] = useState(false);
@@ -355,120 +374,188 @@ export default function AdminDepartments() {
             )}
           </div>
 
-          {/* Department Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {departments.map((dept) => {
-              const deptStats = stats[dept.id];
-              return (
-                <Card
-                  key={dept.id}
-                  className={`relative overflow-hidden transition-shadow hover:shadow-lg ${!dept.isActive ? "opacity-60" : ""}`}
-                >
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-slate-600" />
-                  <CardHeader className="pb-3">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle className="text-lg">{dept.name}</CardTitle>
-                        <CardDescription className="font-mono text-xs mt-1">
-                          {dept.code}
-                        </CardDescription>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Badge
-                          variant={dept.isActive ? "default" : "secondary"}
+          {/* Search and Filters */}
+          <Card className="mb-6">
+            <CardContent className="pt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="search">Search Departments</Label>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="search"
+                      placeholder="Search by name or code..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="statusFilter">Status Filter</Label>
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger id="statusFilter">
+                      <SelectValue placeholder="All Departments" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Departments</SelectItem>
+                      <SelectItem value="active">Active Only</SelectItem>
+                      <SelectItem value="inactive">Inactive Only</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Department Table */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <Building2 className="h-5 w-5 text-teal-600" />
+                Departments List (
+                {
+                  departments.filter((d) => {
+                    const matchesSearch =
+                      d.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      d.code.toLowerCase().includes(searchQuery.toLowerCase());
+                    const matchesStatus =
+                      statusFilter === "all" ||
+                      (statusFilter === "active" && d.isActive) ||
+                      (statusFilter === "inactive" && !d.isActive);
+                    return matchesSearch && matchesStatus;
+                  }).length
+                }
+                )
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Department</TableHead>
+                    <TableHead>Code</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Grievances</TableHead>
+                    <TableHead>Services</TableHead>
+                    <TableHead>Feedback</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {departments
+                    .filter((d) => {
+                      const matchesSearch =
+                        d.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        d.code.toLowerCase().includes(searchQuery.toLowerCase());
+                      const matchesStatus =
+                        statusFilter === "all" ||
+                        (statusFilter === "active" && d.isActive) ||
+                        (statusFilter === "inactive" && !d.isActive);
+                      return matchesSearch && matchesStatus;
+                    })
+                    .map((dept) => {
+                      const deptStats = stats[dept.id];
+                      return (
+                        <TableRow
+                          key={dept.id}
+                          className={!dept.isActive ? "opacity-60" : ""}
                         >
-                          {dept.isActive ? "Active" : "Inactive"}
-                        </Badge>
-                        {isSuperAdmin && (
-                          <Switch
-                            checked={dept.isActive}
-                            onCheckedChange={() => handleToggle(dept)}
-                          />
-                        )}
-                      </div>
-                    </div>
-                    {dept.description && (
-                      <p className="text-sm text-gray-500 mt-2">
-                        {dept.description}
-                      </p>
+                          <TableCell className="font-medium">
+                            <div>
+                              {dept.name}
+                              {(dept.contactEmail || dept.contactPhone) && (
+                                <div className="text-xs text-gray-400 font-normal mt-1 flex gap-2">
+                                  {dept.contactEmail && <span>{dept.contactEmail}</span>}
+                                  {dept.contactPhone && <span>{dept.contactPhone}</span>}
+                                </div>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="font-mono">
+                              {dept.code}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              {isSuperAdmin ? (
+                                <Switch
+                                  checked={dept.isActive}
+                                  onCheckedChange={() => handleToggle(dept)}
+                                />
+                              ) : (
+                                <Badge
+                                  variant={dept.isActive ? "default" : "secondary"}
+                                >
+                                  {dept.isActive ? "Active" : "Inactive"}
+                                </Badge>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-1">
+                              <MessageSquare className="h-3 w-3 text-teal-600" />
+                              <span className="font-medium">{deptStats?.grievances?.total || 0}</span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-1">
+                              <FileText className="h-3 w-3 text-green-600" />
+                              <span className="font-medium">{deptStats?.services?.total || 0}</span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-1">
+                              <BarChart3 className="h-3 w-3 text-teal-600" />
+                              <span className="font-medium">{deptStats?.feedback?.total || 0}</span>
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {isSuperAdmin && (
+                              <div className="flex items-center justify-end gap-1">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => openEdit(dept)}
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                  onClick={() => openDeleteDialog(dept)}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  {departments.length > 0 &&
+                    departments.filter((d) => {
+                      const matchesSearch =
+                        d.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        d.code.toLowerCase().includes(searchQuery.toLowerCase());
+                      const matchesStatus =
+                        statusFilter === "all" ||
+                        (statusFilter === "active" && d.isActive) ||
+                        (statusFilter === "inactive" && !d.isActive);
+                      return matchesSearch && matchesStatus;
+                    }).length === 0 && (
+                      <TableRow>
+                        <TableCell colSpan={7} className="h-24 text-center">
+                          No departments found matching your filters.
+                        </TableCell>
+                      </TableRow>
                     )}
-                  </CardHeader>
-                  <CardContent>
-                    {deptStats ? (
-                      <div className="grid grid-cols-3 gap-3 text-center">
-                        <div className="bg-slate-50 rounded-lg p-2">
-                          <MessageSquare className="h-4 w-4 mx-auto text-teal-600 mb-1" />
-                          <div className="text-lg font-bold text-slate-700">
-                            {deptStats.grievances?.total || 0}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            Grievances
-                          </div>
-                        </div>
-                        <div className="bg-green-50 rounded-lg p-2">
-                          <FileText className="h-4 w-4 mx-auto text-green-600 mb-1" />
-                          <div className="text-lg font-bold text-green-700">
-                            {deptStats.services?.total || 0}
-                          </div>
-                          <div className="text-xs text-gray-500">Services</div>
-                        </div>
-                        <div className="bg-slate-50 rounded-lg p-2">
-                          <BarChart3 className="h-4 w-4 mx-auto text-teal-600 mb-1" />
-                          <div className="text-lg font-bold text-slate-700">
-                            {deptStats.feedback?.total || 0}
-                          </div>
-                          <div className="text-xs text-gray-500">Feedback</div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="text-sm text-gray-400 text-center py-4">
-                        No stats available
-                      </div>
-                    )}
-
-                    {/* Contact Info */}
-                    {(dept.contactEmail || dept.contactPhone) && (
-                      <div className="mt-3 pt-3 border-t text-xs text-gray-500 space-y-1">
-                        {dept.contactEmail && (
-                          <div>Email: {dept.contactEmail}</div>
-                        )}
-                        {dept.contactPhone && (
-                          <div>Phone: {dept.contactPhone}</div>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Admin count */}
-                    <div className="mt-3 pt-3 border-t flex items-center justify-between">
-                      <div className="flex items-center gap-1 text-sm text-gray-500">
-                        <Users className="h-4 w-4" />
-                        <span>Department admins</span>
-                      </div>
-                      {isSuperAdmin && (
-                        <div className="flex items-center gap-1">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => openEdit(dept)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                            onClick={() => openDeleteDialog(dept)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
 
           {departments.length === 0 && (
             <div className="text-center py-12 text-gray-500">

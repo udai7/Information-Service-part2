@@ -17,6 +17,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { ServicesMenu } from "@/components/ui/sidebar";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
@@ -47,6 +55,9 @@ export default function UserFeedbackService() {
   });
   const [departments, setDepartments] = useState<Department[]>([]);
   const [userFeedbacks, setUserFeedbacks] = useState<Feedback[]>([]);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [ratingFilter, setRatingFilter] = useState("all");
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
@@ -191,6 +202,18 @@ export default function UserFeedbackService() {
       setSubmitting(false);
     }
   };
+
+  const filteredFeedbacks = userFeedbacks.filter((f) => {
+    const matchesSearch =
+      f.subject.toLowerCase().includes(search.toLowerCase()) ||
+      f.message.toLowerCase().includes(search.toLowerCase()) ||
+      f.name.toLowerCase().includes(search.toLowerCase());
+
+    const matchesStatus = statusFilter === "all" || f.status === statusFilter;
+    const matchesRating = ratingFilter === "all" || (f.rating && f.rating.toString() === ratingFilter);
+
+    return matchesSearch && matchesStatus && matchesRating;
+  });
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
@@ -506,74 +529,131 @@ export default function UserFeedbackService() {
             <h2 className="text-2xl font-bold mb-4">
               Recent Community Feedbacks
             </h2>
+
+            <Card className="mb-6">
+              <CardContent className="pt-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Search</label>
+                    <Input
+                      type="text"
+                      placeholder="Search subject, message, or name..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Status</label>
+                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="All Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Statuses</SelectItem>
+                        <SelectItem value="new">New</SelectItem>
+                        <SelectItem value="reviewed">Reviewed</SelectItem>
+                        <SelectItem value="resolved">Resolved</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Rating</label>
+                    <Select value={ratingFilter} onValueChange={setRatingFilter}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="All Ratings" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Ratings</SelectItem>
+                        <SelectItem value="5">5 Stars</SelectItem>
+                        <SelectItem value="4">4 Stars</SelectItem>
+                        <SelectItem value="3">3 Stars</SelectItem>
+                        <SelectItem value="2">2 Stars</SelectItem>
+                        <SelectItem value="1">1 Star</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {loading ? (
               <LoadingSpinner
                 variant="card"
                 size="lg"
                 text="Loading feedbacks..."
               />
-            ) : userFeedbacks.length === 0 ? (
+            ) : filteredFeedbacks.length === 0 ? (
               <Card>
                 <CardContent className="py-8 text-center text-gray-500">
-                  No feedbacks yet. Be the first to share your thoughts!
+                  {search || statusFilter !== "all" || ratingFilter !== "all"
+                    ? "No feedbacks found matching your filters."
+                    : "No feedbacks yet. Be the first to share your thoughts!"}
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {userFeedbacks.slice(0, 6).map((feedback) => (
-                  <Card
-                    key={feedback.id}
-                    className="hover:shadow-lg transition-shadow"
-                  >
-                    <CardHeader>
-                      <CardTitle className="flex items-center justify-between text-lg">
-                        <span>{feedback.name}</span>
-                        <Badge
-                          variant={
-                            feedback.status === "resolved"
-                              ? "default"
-                              : "secondary"
-                          }
-                          className={
-                            feedback.status === "resolved"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-orange-100 text-orange-800"
-                          }
-                        >
-                          {feedback.status}
-                        </Badge>
-                      </CardTitle>
-                      <CardDescription>
-                        {feedback.subject}
-                        {feedback.rating && (
-                          <div className="mt-1">
-                            <span className="text-yellow-600">
-                              {"⭐".repeat(feedback.rating)} ({feedback.rating}
-                              /5)
-                            </span>
-                          </div>
-                        )}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-gray-600 line-clamp-3">
-                        {feedback.message}
-                      </p>
-                      {feedback.category && (
-                        <Badge variant="outline" className="mt-2">
-                          {feedback.category}
-                        </Badge>
-                      )}
-                    </CardContent>
-                    <CardFooter>
-                      <div className="text-xs text-gray-500">
-                        Submitted:{" "}
-                        {new Date(feedback.createdAt).toLocaleDateString()}
-                      </div>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </div>
+              <Card>
+                <CardContent className="p-0 overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>User</TableHead>
+                        <TableHead>Subject</TableHead>
+                        <TableHead>Message</TableHead>
+                        <TableHead>Rating</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Date</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredFeedbacks.slice(0, 15).map((feedback) => (
+                        <TableRow key={feedback.id}>
+                          <TableCell className="font-medium">
+                            <div className="truncate max-w-[120px]" title={feedback.name}>{feedback.name}</div>
+                          </TableCell>
+                          <TableCell className="truncate max-w-[150px]" title={feedback.subject}>
+                            {feedback.subject}
+                            {feedback.category && (
+                              <div className="mt-1">
+                                <Badge variant="outline" className="text-[10px] uppercase">
+                                  {feedback.category}
+                                </Badge>
+                              </div>
+                            )}
+                          </TableCell>
+                          <TableCell className="max-w-[250px] truncate" title={feedback.message}>
+                            {feedback.message}
+                          </TableCell>
+                          <TableCell>
+                            {feedback.rating ? (
+                              <div className="text-yellow-500 text-sm whitespace-nowrap">
+                                {"★".repeat(feedback.rating)}
+                                <span className="text-gray-300">{"★".repeat(5 - feedback.rating)}</span>
+                              </div>
+                            ) : (
+                              <span className="text-gray-400 text-xs text-center w-full block">—</span>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <Badge
+                              variant={feedback.status === "resolved" ? "default" : "secondary"}
+                              className={
+                                feedback.status === "resolved"
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-orange-100 text-orange-800"
+                              }
+                            >
+                              {feedback.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-sm text-gray-500 whitespace-nowrap">
+                            {new Date(feedback.createdAt).toLocaleDateString()}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
             )}
           </div>
         </div>
