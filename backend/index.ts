@@ -86,11 +86,8 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // In production, reject requests with no origin
+      // Allow server-to-server requests (no origin) e.g. health checks, self-ping
       if (!origin) {
-        if (process.env.NODE_ENV === "production") {
-          return callback(new Error("Origin required"));
-        }
         return callback(null, true);
       }
       if (allowedOrigins.includes(origin)) {
