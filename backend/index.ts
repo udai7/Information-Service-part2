@@ -212,6 +212,23 @@ setInterval(async () => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+
+  // ─── Keep-Alive: Prevent Render free tier from spinning down ───
+  if (process.env.RENDER_EXTERNAL_URL || process.env.NODE_ENV === "production") {
+    const keepAliveUrl = `${process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`}/api/health`;
+    const KEEP_ALIVE_INTERVAL = 14 * 60 * 1000; // 14 minutes (Render spins down after 15 min)
+
+    setInterval(async () => {
+      try {
+        const res = await fetch(keepAliveUrl);
+        console.log(`[Keep-Alive] Pinged ${keepAliveUrl} — Status: ${res.status}`);
+      } catch (err) {
+        console.error("[Keep-Alive] Ping failed:", err);
+      }
+    }, KEEP_ALIVE_INTERVAL);
+
+    console.log(`[Keep-Alive] Self-ping enabled every 14 min → ${keepAliveUrl}`);
+  }
 });
 
 export { prisma };
