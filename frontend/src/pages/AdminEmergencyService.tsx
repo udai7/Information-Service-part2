@@ -14,29 +14,24 @@ import { useEffect, useState } from "react";
 import {
   getServices,
   deleteService,
-  saveService,
 } from "../lib/localStorageUtils";
 
-const dummyDepartments = [
-  {
-    name: "Disaster Management Department",
-    category: "Disaster Management",
-    summary: "Handles disaster response and preparedness.",
-  },
-  {
-    name: "Healthcare Department",
-    category: "Healthcare",
-    summary: "Provides emergency medical services.",
-  },
-];
+interface EmergencyDept {
+  id?: string | number;
+  name: string;
+  category: string;
+  summary: string;
+  status?: string;
+  type?: string;
+}
 
 export default function AdminEmergencyService() {
   const [activeTab, setActiveTab] = useState("create");
   const navigate = useNavigate();
-  const [departments, setDepartments] = useState([]);
+  const [departments, setDepartments] = useState<EmergencyDept[]>([]);
 
   useEffect(() => {
-    let loaded = getServices();
+    let loaded = getServices() as EmergencyDept[];
     // If there are no published departments, add realistic dummy data
     setDepartments(loaded);
   }, []);
@@ -57,16 +52,16 @@ export default function AdminEmergencyService() {
   };
   // Dummy pending departments for display
 
-  const handleEdit = (dept) => {
+  const handleEdit = (dept: EmergencyDept) => {
     navigate(`/admin/edit-department/${encodeURIComponent(dept.name)}`);
   };
 
-  const handleView = (dept) => {
+  const handleView = (dept: EmergencyDept) => {
     navigate(`/admin/edit-department/${encodeURIComponent(dept.name)}`);
   };
-  const handleDelete = (dept) => {
-    deleteService(dept.id);
-    setDepartments(getServices());
+  const handleDelete = (dept: EmergencyDept) => {
+    deleteService(dept.id ?? "");
+    setDepartments(getServices() as EmergencyDept[]);
   };
 
   return (

@@ -32,10 +32,16 @@ export default function EditCertificateService() {
   const [isSaving, setIsSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
 
+  type ApplicationType = "New Application" | "Lost Application" | "Update Application" | "Surrender Application";
+
+  const handleApplicationTypeChange = (value: string) => {
+    setActiveApplicationType(value as ApplicationType);
+  };
+
   const [certificateService, setCertificateService] = useState<any>(null);
   const [step, setStep] = useState(1); // Start with step 1 for process
   const [activeApplicationType, setActiveApplicationType] =
-    useState("New Application");
+    useState<ApplicationType>("New Application");
 
   // Basic form fields
   const [name, setName] = useState("");
@@ -46,25 +52,25 @@ export default function EditCertificateService() {
   const [offlineAddress, setOfflineAddress] = useState("");
 
   // Detailed form fields - now application-specific
-  const [processSteps, setProcessSteps] = useState({
+  const [processSteps, setProcessSteps] = useState<Record<ApplicationType, { slNo: string; stepDetails: string }[]>>({
     "New Application": [{ slNo: "1", stepDetails: "" }],
     "Lost Application": [{ slNo: "1", stepDetails: "" }],
     "Update Application": [{ slNo: "1", stepDetails: "" }],
     "Surrender Application": [{ slNo: "1", stepDetails: "" }],
   });
-  const [documents, setDocuments] = useState({
+  const [documents, setDocuments] = useState<Record<ApplicationType, { slNo: string; documentType: string; validProof: string }[]>>({
     "New Application": [{ slNo: "1", documentType: "", validProof: "" }],
     "Lost Application": [{ slNo: "1", documentType: "", validProof: "" }],
     "Update Application": [{ slNo: "1", documentType: "", validProof: "" }],
     "Surrender Application": [{ slNo: "1", documentType: "", validProof: "" }],
   });
-  const [eligibility, setEligibility] = useState({
+  const [eligibility, setEligibility] = useState<Record<ApplicationType, string[]>>({
     "New Application": [""],
     "Lost Application": [""],
     "Update Application": [""],
     "Surrender Application": [""],
   });
-  const [contacts, setContacts] = useState({
+  const [contacts, setContacts] = useState<Record<ApplicationType, { serviceName: string; district: string; subDistrict: string; block: string; name: string; designation: string; contact: string; email: string }[]>>({
     "New Application": [
       {
         serviceName: "",
@@ -159,21 +165,21 @@ export default function EditCertificateService() {
             certificateService.processSteps.length > 0
           ) {
             // Group process steps by application type
-            const groupedProcessSteps = {
+            const groupedProcessSteps: Record<ApplicationType, { slNo: string; stepDetails: string }[]> = {
               "New Application": [],
               "Lost Application": [],
               "Update Application": [],
               "Surrender Application": [],
             };
             certificateService.processSteps.forEach((step: any) => {
-              const appType = step.applicationType || "New Application";
+              const appType = (step.applicationType || "New Application") as ApplicationType;
               groupedProcessSteps[appType].push({
                 slNo: String(step.slNo),
                 stepDetails: step.stepDetails,
               });
             });
             // Ensure each type has at least one step
-            Object.keys(groupedProcessSteps).forEach((type) => {
+            (Object.keys(groupedProcessSteps) as ApplicationType[]).forEach((type) => {
               if (groupedProcessSteps[type].length === 0) {
                 groupedProcessSteps[type] = [{ slNo: "1", stepDetails: "" }];
               }
@@ -186,18 +192,18 @@ export default function EditCertificateService() {
             certificateService.eligibilityItems.length > 0
           ) {
             // Group eligibility by application type
-            const groupedEligibility = {
+            const groupedEligibility: Record<ApplicationType, string[]> = {
               "New Application": [],
               "Lost Application": [],
               "Update Application": [],
               "Surrender Application": [],
             };
             certificateService.eligibilityItems.forEach((item: any) => {
-              const appType = item.applicationType || "New Application";
+              const appType = (item.applicationType || "New Application") as ApplicationType;
               groupedEligibility[appType].push(item.eligibilityDetail);
             });
             // Ensure each type has at least one eligibility
-            Object.keys(groupedEligibility).forEach((type) => {
+            (Object.keys(groupedEligibility) as ApplicationType[]).forEach((type) => {
               if (groupedEligibility[type].length === 0) {
                 groupedEligibility[type] = [""];
               }
@@ -210,14 +216,14 @@ export default function EditCertificateService() {
             certificateService.documents.length > 0
           ) {
             // Group documents by application type
-            const groupedDocuments = {
+            const groupedDocuments: Record<ApplicationType, { slNo: string; documentType: string; validProof: string }[]> = {
               "New Application": [],
               "Lost Application": [],
               "Update Application": [],
               "Surrender Application": [],
             };
             certificateService.documents.forEach((doc: any) => {
-              const appType = doc.applicationType || "New Application";
+              const appType = (doc.applicationType || "New Application") as ApplicationType;
               groupedDocuments[appType].push({
                 slNo: String(doc.slNo),
                 documentType: doc.documentType || "",
@@ -225,7 +231,7 @@ export default function EditCertificateService() {
               });
             });
             // Ensure each type has at least one document
-            Object.keys(groupedDocuments).forEach((type) => {
+            (Object.keys(groupedDocuments) as ApplicationType[]).forEach((type) => {
               if (groupedDocuments[type].length === 0) {
                 groupedDocuments[type] = [
                   { slNo: "1", documentType: "", validProof: "" },
@@ -240,18 +246,18 @@ export default function EditCertificateService() {
             certificateService.contacts.length > 0
           ) {
             // Group contacts by application type
-            const groupedContacts = {
+            const groupedContacts: Record<ApplicationType, { serviceName: string; district: string; subDistrict: string; block: string; name: string; designation: string; contact: string; email: string }[]> = {
               "New Application": [],
               "Lost Application": [],
               "Update Application": [],
               "Surrender Application": [],
             };
             certificateService.contacts.forEach((contact: any) => {
-              const appType = contact.applicationType || "New Application";
+              const appType = (contact.applicationType || "New Application") as ApplicationType;
               groupedContacts[appType].push(contact);
             });
             // Ensure each type has at least one contact
-            Object.keys(groupedContacts).forEach((type) => {
+            (Object.keys(groupedContacts) as ApplicationType[]).forEach((type) => {
               if (groupedContacts[type].length === 0) {
                 groupedContacts[type] = [
                   {
@@ -301,12 +307,12 @@ export default function EditCertificateService() {
     autoSaveTimeoutRef.current = setTimeout(async () => {
       try {
         // Flatten application-specific data for saving
-        const allProcessSteps = [];
-        const allEligibilityItems = [];
-        const allDocuments = [];
-        const allContacts = [];
+        const allProcessSteps: any[] = [];
+        const allEligibilityItems: any[] = [];
+        const allDocuments: any[] = [];
+        const allContacts: any[] = [];
 
-        Object.keys(processSteps).forEach((appType) => {
+        (Object.keys(processSteps) as ApplicationType[]).forEach((appType) => {
           processSteps[appType].forEach((step, index) => {
             if (step.stepDetails.trim()) {
               allProcessSteps.push({
@@ -318,7 +324,7 @@ export default function EditCertificateService() {
           });
         });
 
-        Object.keys(eligibility).forEach((appType) => {
+        (Object.keys(eligibility) as ApplicationType[]).forEach((appType) => {
           eligibility[appType].forEach((item) => {
             if (item.trim()) {
               allEligibilityItems.push({
@@ -329,7 +335,7 @@ export default function EditCertificateService() {
           });
         });
 
-        Object.keys(documents).forEach((appType) => {
+        (Object.keys(documents) as ApplicationType[]).forEach((appType) => {
           documents[appType].forEach((doc, index) => {
             if (doc.documentType.trim()) {
               allDocuments.push({
@@ -343,7 +349,7 @@ export default function EditCertificateService() {
           });
         });
 
-        Object.keys(contacts).forEach((appType) => {
+        (Object.keys(contacts) as ApplicationType[]).forEach((appType) => {
           contacts[appType].forEach((contact) => {
             if (contact.name.trim()) {
               allContacts.push({
@@ -392,17 +398,17 @@ export default function EditCertificateService() {
   };
 
   // Helper functions
-  const handleAdd = (setter: any, arr: any) => {
+  const handleAdd = (setter: (val: string[]) => void, arr: string[]) => {
     setter([...arr, ""]);
     autoSave();
   };
 
-  const handleChange = (setter: any, arr: any, idx: number, value: string) => {
+  const handleChange = (setter: (val: string[]) => void, arr: string[], idx: number, value: string) => {
     setter(arr.map((v: any, i: number) => (i === idx ? value : v)));
     autoSave();
   };
 
-  const handleRemove = (setter: any, arr: any, idx: number) => {
+  const handleRemove = (setter: (val: string[]) => void, arr: string[], idx: number) => {
     setter(arr.filter((_: any, i: number) => i !== idx));
     autoSave();
   };
@@ -528,12 +534,12 @@ export default function EditCertificateService() {
     setIsSaving(true);
     try {
       // Flatten application-specific data for saving
-      const allProcessSteps = [];
-      const allEligibilityItems = [];
-      const allDocuments = [];
-      const allContacts = [];
+      const allProcessSteps: { slNo: number; stepDetails: string; applicationType: string }[] = [];
+      const allEligibilityItems: { eligibilityDetail: string; applicationType: string }[] = [];
+      const allDocuments: { slNo: number; documentType: string; validProof: string; isRequired: boolean; applicationType: string }[] = [];
+      const allContacts: (typeof contacts[ApplicationType][number] & { applicationType: string })[] = [];
 
-      Object.keys(processSteps).forEach((appType) => {
+      (Object.keys(processSteps) as ApplicationType[]).forEach((appType) => {
         processSteps[appType].forEach((step, index) => {
           if (step.stepDetails.trim()) {
             allProcessSteps.push({
@@ -545,7 +551,7 @@ export default function EditCertificateService() {
         });
       });
 
-      Object.keys(eligibility).forEach((appType) => {
+      (Object.keys(eligibility) as ApplicationType[]).forEach((appType) => {
         eligibility[appType].forEach((item) => {
           if (item.trim()) {
             allEligibilityItems.push({
@@ -556,7 +562,7 @@ export default function EditCertificateService() {
         });
       });
 
-      Object.keys(documents).forEach((appType) => {
+      (Object.keys(documents) as ApplicationType[]).forEach((appType) => {
         documents[appType].forEach((doc, index) => {
           if (doc.documentType.trim()) {
             allDocuments.push({
@@ -570,7 +576,7 @@ export default function EditCertificateService() {
         });
       });
 
-      Object.keys(contacts).forEach((appType) => {
+      (Object.keys(contacts) as ApplicationType[]).forEach((appType) => {
         contacts[appType].forEach((contact) => {
           if (contact.name.trim()) {
             allContacts.push({
@@ -687,7 +693,7 @@ export default function EditCertificateService() {
                 <Label>Application Type</Label>
                 <Select
                   value={activeApplicationType}
-                  onValueChange={setActiveApplicationType}
+                  onValueChange={handleApplicationTypeChange}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -763,7 +769,7 @@ export default function EditCertificateService() {
                 <Label>Application Type</Label>
                 <Select
                   value={activeApplicationType}
-                  onValueChange={setActiveApplicationType}
+                  onValueChange={handleApplicationTypeChange}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -855,7 +861,7 @@ export default function EditCertificateService() {
                 <Label>Application Type</Label>
                 <Select
                   value={activeApplicationType}
-                  onValueChange={setActiveApplicationType}
+                  onValueChange={handleApplicationTypeChange}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -949,7 +955,7 @@ export default function EditCertificateService() {
                 <Label>Application Type</Label>
                 <Select
                   value={activeApplicationType}
-                  onValueChange={setActiveApplicationType}
+                  onValueChange={handleApplicationTypeChange}
                 >
                   <SelectTrigger>
                     <SelectValue />

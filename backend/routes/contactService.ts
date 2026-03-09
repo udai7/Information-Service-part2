@@ -350,7 +350,7 @@ router.patch(
       });
 
       // Invalidate public cache
-      queryCache.invalidate("contacts:public");
+      await queryCache.invalidate("contacts:public");
     } catch (error) {
       console.error("Error publishing contact service:", error);
       res.status(500).json({
@@ -471,9 +471,8 @@ router.patch(
 
       res.json({
         success: true,
-        message: `Contact service ${
-          isActive ? "activated" : "deactivated"
-        } successfully`,
+        message: `Contact service ${isActive ? "activated" : "deactivated"
+          } successfully`,
         contactService: updatedService,
       });
     } catch (error) {
@@ -546,13 +545,11 @@ router.get("/public/list", readLimiter, async (req: Request, res: Response) => {
     const offset = (pageNum - 1) * limitNum;
 
     // Use cache for non-search queries (deep include is expensive)
-    const cacheKey = search ? null : `contacts:public:${page}:${limitNum}`;
-    if (cacheKey) {
-      const cached = queryCache.get<any>(cacheKey);
-      if (cached) {
-        res.set("Cache-Control", "public, max-age=60, s-maxage=120");
-        return res.json(cached);
-      }
+    const cacheKey = "contacts:public:list";
+    const cached = await queryCache.get<any>(cacheKey);
+    if (cached) {
+      res.set("Cache-Control", "public, max-age=60, s-maxage=120");
+      return res.json(cached);
     }
 
     let whereClause: any = {
@@ -605,10 +602,8 @@ router.get("/public/list", readLimiter, async (req: Request, res: Response) => {
     };
 
     // Cache non-search results for 2 minutes
-    if (cacheKey) {
-      queryCache.set(cacheKey, result, 120_000);
-    }
-
+    await queryCache.set(cacheKey, result, 120_000); // Cache 2 min
+    res.set("X-Cache", "MISS");
     res.set("Cache-Control", "public, max-age=60, s-maxage=120");
     res.json(result);
   } catch (error) {

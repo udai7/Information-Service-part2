@@ -5,7 +5,6 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,8 +36,9 @@ import {
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "../types/api";
-import type { Feedback, CreateFeedbackRequest, Department } from "../types/api";
+import type { CreateFeedbackRequest } from "../types/api";
 
 export default function UserFeedbackService() {
   const [formData, setFormData] = useState<CreateFeedbackRequest>({
@@ -53,12 +53,10 @@ export default function UserFeedbackService() {
     website: "",
     otp: "",
   });
-  const [departments, setDepartments] = useState<Department[]>([]);
-  const [userFeedbacks, setUserFeedbacks] = useState<Feedback[]>([]);
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [ratingFilter, setRatingFilter] = useState("all");
-  const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -70,33 +68,27 @@ export default function UserFeedbackService() {
     resolvedFeedbacks: 0,
   });
 
+  const { data: deptsData } = useQuery({
+    queryKey: ["publicDepartments"],
+    queryFn: () => apiClient.getPublicDepartments(),
+  });
+
+  const { data: feedbacksData, isLoading: loading } = useQuery({
+    queryKey: ["publicFeedbacks"],
+    queryFn: () => apiClient.getPublicFeedbacks(),
+  });
+
+  const departments = deptsData?.departments || [];
+  const userFeedbacks = feedbacksData?.feedbacks || [];
+
+  // Calculate stats on data load
   useEffect(() => {
-    fetchFeedbacks();
-    fetchDepartments();
-  }, []);
-
-  const fetchDepartments = async () => {
-    try {
-      const response = await apiClient.getPublicDepartments();
-      setDepartments(response.departments || []);
-    } catch (error) {
-      console.error("Error fetching departments:", error);
-    }
-  };
-
-  const fetchFeedbacks = async () => {
-    setLoading(true);
-    try {
-      const response = await apiClient.getPublicFeedbacks();
-      const feedbacks = response.feedbacks || [];
-      setUserFeedbacks(feedbacks);
-
-      // Calculate stats
-      const totalFeedbacks = feedbacks.length;
-      const ratingsSum = feedbacks
+    if (userFeedbacks.length > 0) {
+      const totalFeedbacks = userFeedbacks.length;
+      const ratingsSum = userFeedbacks
         .filter((f) => f.rating)
         .reduce((sum, f) => sum + (f.rating || 0), 0);
-      const ratingsCount = feedbacks.filter((f) => f.rating).length;
+      const ratingsCount = userFeedbacks.filter((f) => f.rating).length;
 
       setStats({
         totalFeedbacks,
@@ -104,16 +96,11 @@ export default function UserFeedbackService() {
           ratingsCount > 0
             ? Math.round((ratingsSum / ratingsCount) * 10) / 10
             : 0,
-        newFeedbacks: feedbacks.filter((f) => f.status === "new").length,
-        resolvedFeedbacks: feedbacks.filter((f) => f.status === "resolved")
-          .length,
+        newFeedbacks: userFeedbacks.filter((f) => f.status === "new").length,
+        resolvedFeedbacks: userFeedbacks.filter((f) => f.status === "resolved").length,
       });
-    } catch (error) {
-      console.error("Error fetching feedbacks:", error);
-    } finally {
-      setLoading(false);
     }
-  };
+  }, [userFeedbacks]);
 
   const handleInputChange = (
     field: keyof CreateFeedbackRequest,
@@ -184,8 +171,8 @@ export default function UserFeedbackService() {
       setOtpSent(false);
       setTurnstileToken("");
 
-      // Refresh feedback list
-      fetchFeedbacks();
+      // Refetch feedbacks gracefully
+      queryClient.invalidateQueries({ queryKey: ["publicFeedbacks"] });
 
       toast({
         title: "Success",

@@ -763,8 +763,13 @@ export class ApiClient {
   }
 
   // ─── Admin Management Methods ───
-  async getAdmins(): Promise<{ admins: Admin[] }> {
-    return this.makeRequest<{ admins: Admin[] }>("/admin");
+  async getAdmins(params?: { page?: number; limit?: number; }): Promise<{ admins: Admin[]; pagination?: any }> {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append("page", params.page.toString());
+    if (params?.limit) queryParams.append("limit", params.limit.toString());
+
+    const query = queryParams.toString();
+    return this.makeRequest<{ admins: Admin[]; pagination?: any }>(`/admin${query ? `?${query}` : ""}`);
   }
 
   async getAdmin(id: number): Promise<{ admin: Admin }> {

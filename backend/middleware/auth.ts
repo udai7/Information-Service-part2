@@ -56,7 +56,7 @@ export const authenticateAdmin = async (
 
     // Check cache first — avoids DB hit on every authenticated request
     const cacheKey = `admin:${decoded.adminId}`;
-    let admin = queryCache.get<any>(cacheKey);
+    let admin = await queryCache.get<any>(cacheKey);
 
     if (!admin) {
       // Cache miss — fetch from DB
@@ -79,7 +79,7 @@ export const authenticateAdmin = async (
 
       if (admin && admin.isActive) {
         // Cache for 2 minutes — short enough to catch deactivations quickly
-        queryCache.set(cacheKey, admin, 2 * 60 * 1000);
+        await queryCache.set(cacheKey, admin, 2 * 60 * 1000);
       }
     }
 

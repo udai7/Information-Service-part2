@@ -40,7 +40,6 @@ const UserEmergencyService = lazy(() => import("./pages/UserEmergencyService"));
 const UserFeedbackService = lazy(() => import("./pages/UserFeedbackService"));
 
 // Admin pages — lazy loaded since they're behind auth
-const AdminDashboardModule = lazy(() => import("./pages/AdminDashboard"));
 const AdminSchemeService = lazy(() => import("./pages/AdminSchemeService"));
 const AdminCertificateService = lazy(() => import("./pages/AdminCertificateService"));
 const AdminContactService = lazy(() => import("./pages/AdminContactService"));

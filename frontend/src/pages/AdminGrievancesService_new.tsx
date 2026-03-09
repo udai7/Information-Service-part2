@@ -15,7 +15,6 @@ import {
   CheckCircle,
   Clock,
   FileText,
-  MessageSquare,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { apiClient } from "../types/api";

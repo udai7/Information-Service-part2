@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { body, validationResult, query } from "express-validator";
-import { prisma } from "../lib/prisma";
+import { prisma, queryCache } from "../lib/prisma";
 import { authenticateAdmin, getDepartmentScope } from "../middleware/auth";
 import {
   submissionLimiter,
@@ -168,6 +168,9 @@ router.post(
       }
 
       res.status(201).json({ message: "Feedback submitted successfully", feedback });
+
+      // Invalidate public recent cache in background
+      queryCache.invalidate("feedbacks:public").catch(() => {});
     } catch (error) {
       console.error("Error creating feedback:", error);
       res.status(500).json({ message: "Failed to submit feedback" });
@@ -175,9 +178,17 @@ router.post(
   }
 );
 
-// Get recent community feedbacks (public endpoint)
+// Get recent community feedbacks (public endpoint, cached)
 router.get("/public/recent", readLimiter, async (req: Request, res: Response) => {
   try {
+    const cacheKey = "feedbacks:public:recent";
+    const cached = await queryCache.get<any>(cacheKey);
+    if (cached) {
+      res.set("X-Cache", "HIT");
+      res.set("Cache-Control", "public, max-age=30");
+      return res.json(cached);
+    }
+
     const feedbacks = await prisma.feedback.findMany({
       take: 10,
       orderBy: { createdAt: "desc" },
@@ -193,7 +204,11 @@ router.get("/public/recent", readLimiter, async (req: Request, res: Response) =>
       },
     });
 
-    res.json({ message: "Recent feedbacks retrieved successfully", feedbacks });
+    const result = { message: "Recent feedbacks retrieved successfully", feedbacks };
+    await queryCache.set(cacheKey, result, 30_000); // Cache 30 sec
+    res.set("X-Cache", "MISS");
+    res.set("Cache-Control", "public, max-age=30");
+    res.json(result);
   } catch (error) {
     console.error("Error fetching recent feedbacks:", error);
     res.status(500).json({ message: "Failed to fetch recent feedbacks" });
@@ -379,6 +394,9 @@ router.patch(
       });
 
       res.json({ message: "Feedback resolved successfully", feedback });
+
+      // Invalidate public recent cache in background
+      queryCache.invalidate("feedbacks:public").catch(() => {});
     } catch (error) {
       console.error("Error resolving feedback:", error);
       res.status(500).json({ message: "Failed to resolve feedback" });
@@ -412,6 +430,9 @@ router.delete("/:id", authenticateAdmin, async (req: Request, res: Response) => 
     });
 
     res.json({ message: "Feedback deleted successfully" });
+
+    // Invalidate public recent cache in background
+    queryCache.invalidate("feedbacks:public").catch(() => {});
   } catch (error) {
     console.error("Error deleting feedback:", error);
     res.status(500).json({ message: "Failed to delete feedback" });

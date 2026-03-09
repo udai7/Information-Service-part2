@@ -12,16 +12,46 @@ import { ServicesMenu } from "@/components/ui/sidebar";
 import { Search } from "lucide-react";
 import { getServices } from "../lib/localStorageUtils";
 
+interface ServiceOffice {
+  officeName: string;
+  address: string;
+  district: string;
+  block: string;
+}
+
+interface ServicePost {
+  postName: string;
+  officeIndex: number;
+}
+
+interface ServiceEmployee {
+  employeeName: string;
+  postIndex: number;
+  email?: string;
+  phone?: string;
+}
+
+interface EmergencyService {
+  id: string | number;
+  name: string;
+  summary: string;
+  status: string;
+  category: string;
+  offices?: ServiceOffice[];
+  posts?: ServicePost[];
+  employees?: ServiceEmployee[];
+}
+
 export default function UserEmergencyService() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
-  const [modalDept, setModalDept] = useState(null);
+  const [modalDept, setModalDept] = useState<EmergencyService | null>(null);
   const stats = {
     published: 156,
     active: 23,
     total: 179,
   };
-  const publishedDepartments = getServices().filter(
+  const publishedDepartments = (getServices() as EmergencyService[]).filter(
     (d) => d.status === "published" && d.category === "Emergency",
   );
   const filteredDepartments = publishedDepartments.filter((d) =>
@@ -155,7 +185,7 @@ export default function UserEmergencyService() {
                   <h3 className="font-semibold mb-2">Offices</h3>
                   <ul className="list-disc pl-6">
                     {modalDept.offices &&
-                      modalDept.offices.map((office, idx) => (
+                      modalDept.offices.map((office: ServiceOffice, idx: number) => (
                         <li key={idx} className="mb-1">
                           <span className="font-medium">
                             {office.officeName}
@@ -170,7 +200,7 @@ export default function UserEmergencyService() {
                   <h3 className="font-semibold mb-2">Posts</h3>
                   <ul className="list-disc pl-6">
                     {modalDept.posts &&
-                      modalDept.posts.map((post, idx) => (
+                      modalDept.posts.map((post: ServicePost, idx: number) => (
                         <li key={idx} className="mb-1">
                           <span className="font-medium">{post.postName}</span>{" "}
                           (Office:{" "}
@@ -185,7 +215,7 @@ export default function UserEmergencyService() {
                   <h3 className="font-semibold mb-2">Employees</h3>
                   <ul className="list-disc pl-6">
                     {modalDept.employees &&
-                      modalDept.employees.map((emp, idx) => (
+                      modalDept.employees.map((emp: ServiceEmployee, idx: number) => (
                         <li key={idx} className="mb-1">
                           <span className="font-medium">
                             {emp.employeeName}

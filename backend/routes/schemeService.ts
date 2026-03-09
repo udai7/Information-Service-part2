@@ -524,8 +524,8 @@ router.patch(
         schemeService: updatedService,
       });
 
-      // Invalidate public cache
-      queryCache.invalidate("schemes:public");
+      // Invalidate appropriate caches
+      await queryCache.invalidate("schemes:public");
     } catch (error) {
       console.error("Publish scheme service error:", error);
       res.status(500).json({ error: "Internal server error" });
@@ -700,7 +700,7 @@ router.get("/public/list", readLimiter, async (req, res) => {
     // Use cache for non-search queries
     const cacheKey = search ? null : `schemes:public:${page}:${limitNum}`;
     if (cacheKey) {
-      const cached = queryCache.get<any>(cacheKey);
+      const cached = await queryCache.get<any>(cacheKey);
       if (cached) {
         res.set("Cache-Control", "public, max-age=60, s-maxage=120");
         return res.json(cached);
@@ -754,7 +754,7 @@ router.get("/public/list", readLimiter, async (req, res) => {
 
     // Cache non-search results for 2 minutes
     if (cacheKey) {
-      queryCache.set(cacheKey, result, 120_000);
+      await queryCache.set(cacheKey, result, 120_000);
     }
 
     res.set("Cache-Control", "public, max-age=60, s-maxage=120");

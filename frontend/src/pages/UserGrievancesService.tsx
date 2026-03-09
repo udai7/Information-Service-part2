@@ -5,7 +5,6 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "@/components/ui/card";
 import {
   Dialog,
@@ -47,8 +46,9 @@ import {
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "../types/api";
-import type { Grievance, CreateGrievanceRequest, Department } from "../types/api";
+import type { Grievance, CreateGrievanceRequest } from "../types/api";
 
 export default function UserGrievancesService() {
   const [search, setSearch] = useState("");
@@ -74,9 +74,7 @@ export default function UserGrievancesService() {
     website: "",
     otp: "",
   });
-  const [departments, setDepartments] = useState<Department[]>([]);
-  const [userGrievances, setUserGrievances] = useState<Grievance[]>([]);
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
   const [submitting, setSubmitting] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -111,45 +109,33 @@ export default function UserGrievancesService() {
     }
   };
 
+  const { data: deptsData } = useQuery({
+    queryKey: ["publicDepartments"],
+    queryFn: () => apiClient.getPublicDepartments(),
+  });
+
+  const { data: grievancesData, isLoading: loading } = useQuery({
+    queryKey: ["publicGrievances"],
+    queryFn: () => apiClient.getPublicGrievances(),
+  });
+
+  const departments = deptsData?.departments || [];
+  const userGrievances = grievancesData?.grievances || [];
+
+  // Calculate stats
   useEffect(() => {
-    fetchGrievances();
-    fetchDepartments();
-  }, []);
-
-  const fetchDepartments = async () => {
-    try {
-      const response = await apiClient.getPublicDepartments();
-      setDepartments(response.departments || []);
-    } catch (error) {
-      console.error("Error fetching departments:", error);
-    }
-  };
-
-  const fetchGrievances = async () => {
-    setLoading(true);
-    try {
-      const response = await apiClient.getPublicGrievances();
-      const grievances = response.grievances || [];
-      setUserGrievances(grievances);
-
-      // Calculate stats
+    if (userGrievances.length > 0) {
       setStats({
-        totalGrievances: grievances.length,
-        newGrievances: grievances.filter((g) => g.status === "new").length,
-        pendingGrievances: grievances.filter((g) => g.status === "pending")
-          .length,
-        solvedGrievances: grievances.filter((g) => g.status === "solved")
-          .length,
-        highPriority: grievances.filter(
+        totalGrievances: userGrievances.length,
+        newGrievances: userGrievances.filter((g) => g.status === "new").length,
+        pendingGrievances: userGrievances.filter((g) => g.status === "pending").length,
+        solvedGrievances: userGrievances.filter((g) => g.status === "solved").length,
+        highPriority: userGrievances.filter(
           (g) => g.priority === "high" || g.priority === "urgent",
         ).length,
       });
-    } catch (error) {
-      console.error("Error fetching grievances:", error);
-    } finally {
-      setLoading(false);
     }
-  };
+  }, [userGrievances]);
 
   const handleInputChange = (
     field: keyof CreateGrievanceRequest,
@@ -232,15 +218,16 @@ export default function UserGrievancesService() {
       setImageFile(null);
       setImagePreview(null);
       setOtpSent(false);
+      setTrackingResult(null);
       setTurnstileToken("");
 
-      // Refresh grievance list
-      fetchGrievances();
+      // Invalidate the grievances query to trigger a refetch in the background
+      queryClient.invalidateQueries({ queryKey: ["publicGrievances"] });
 
       // Show success modal with tracking ID
       setNewTrackingId(response.grievance?.trackingId || "");
       setShowSuccessModal(true);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error submitting grievance:", error);
       toast({
         title: "Submission failed",

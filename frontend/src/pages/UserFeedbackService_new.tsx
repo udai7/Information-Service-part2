@@ -22,7 +22,6 @@ import { ServicesMenu } from "@/components/ui/sidebar";
 import {
   MessageSquare,
   Star,
-  ThumbsUp,
   Send,
   CheckCircle,
   Clock,

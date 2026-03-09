@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -49,18 +48,17 @@ import {
   Building2,
   Plus,
   Edit,
-  Users,
   FileText,
   MessageSquare,
   BarChart3,
   Trash2,
   AlertTriangle,
   Search,
-  Filter,
 } from "lucide-react";
 import AdminSidebar from "@/components/ui/AdminSidebar";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "../types/api";
 import type { Department } from "../types/api";
 
@@ -73,8 +71,7 @@ interface DepartmentStats {
 export default function AdminDepartments() {
   const { isSuperAdmin } = useAuth();
   const { toast } = useToast();
-  const [departments, setDepartments] = useState<Department[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [stats, setStats] = useState<Record<number, DepartmentStats>>({});
   const [showCreate, setShowCreate] = useState(false);
   const [editDept, setEditDept] = useState<Department | null>(null);
@@ -92,37 +89,35 @@ export default function AdminDepartments() {
     contactPhone: "",
   });
 
-  useEffect(() => {
-    fetchDepartments(true);
-  }, []);
+  const { data, isLoading: loading } = useQuery({
+    queryKey: ["departments"],
+    queryFn: () => apiClient.getDepartments(),
+  });
 
-  const fetchDepartments = async (showSpinner = false) => {
-    if (showSpinner) setLoading(true);
-    try {
-      const res = await apiClient.getDepartments();
-      const depts = res.departments || [];
-      setDepartments(depts);
-      // Fetch stats for all departments in parallel
-      const statsResults = await Promise.allSettled(
-        depts.map((dept) => apiClient.getDepartmentStats(dept.id))
-      );
-      const newStats: Record<number, DepartmentStats> = {};
-      statsResults.forEach((result, idx) => {
-        if (result.status === "fulfilled") {
-          newStats[depts[idx].id] = result.value.stats;
+  const departments = data?.departments || [];
+
+  // Fetch stats when departments are loaded and we don't have stats yet
+  useEffect(() => {
+    if (departments.length > 0 && Object.keys(stats).length === 0) {
+      const fetchStats = async () => {
+        try {
+          const statsResults = await Promise.allSettled(
+            departments.map((dept) => apiClient.getDepartmentStats(dept.id))
+          );
+          const newStats: Record<number, DepartmentStats> = {};
+          statsResults.forEach((result, idx) => {
+            if (result.status === "fulfilled") {
+              newStats[departments[idx].id] = result.value.stats;
+            }
+          });
+          setStats((prev) => ({ ...prev, ...newStats }));
+        } catch (error) {
+          console.error("Failed to fetch department stats", error);
         }
-      });
-      setStats((prev) => ({ ...prev, ...newStats }));
-    } catch {
-      toast({
-        title: "Error",
-        description: "Failed to load departments",
-        variant: "destructive",
-      });
-    } finally {
-      if (showSpinner) setLoading(false);
+      };
+      fetchStats();
     }
-  };
+  }, [departments, stats]);
 
   const resetForm = () => {
     setForm({
@@ -173,7 +168,7 @@ export default function AdminDepartments() {
       setShowCreate(false);
       resetForm();
       setEditDept(null);
-      fetchDepartments(false);
+      queryClient.invalidateQueries({ queryKey: ["departments"] });
     } catch (error: any) {
       toast({
         title: "Error",
@@ -187,9 +182,16 @@ export default function AdminDepartments() {
 
   const handleToggle = async (dept: Department) => {
     // Optimistic update
-    setDepartments((prev) =>
-      prev.map((d) => (d.id === dept.id ? { ...d, isActive: !d.isActive } : d))
-    );
+    queryClient.setQueryData(["departments"], (old: any) => {
+      if (!old?.departments) return old;
+      return {
+        ...old,
+        departments: old.departments.map((d: Department) =>
+          d.id === dept.id ? { ...d, isActive: !d.isActive } : d
+        ),
+      };
+    });
+
     try {
       await apiClient.toggleDepartment(dept.id);
       toast({
@@ -198,9 +200,7 @@ export default function AdminDepartments() {
       });
     } catch {
       // Revert on failure
-      setDepartments((prev) =>
-        prev.map((d) => (d.id === dept.id ? { ...d, isActive: dept.isActive } : d))
-      );
+      queryClient.invalidateQueries({ queryKey: ["departments"] });
       toast({
         title: "Error",
         description: "Failed to toggle department",
@@ -223,7 +223,15 @@ export default function AdminDepartments() {
     setDeleting(true);
     try {
       await apiClient.deleteDepartment(deleteTarget.id);
-      setDepartments((prev) => prev.filter((d) => d.id !== deleteTarget.id));
+
+      queryClient.setQueryData(["departments"], (old: any) => {
+        if (!old?.departments) return old;
+        return {
+          ...old,
+          departments: old.departments.filter((d: Department) => d.id !== deleteTarget.id),
+        };
+      });
+
       setStats((prev) => {
         const next = { ...prev };
         delete next[deleteTarget.id];

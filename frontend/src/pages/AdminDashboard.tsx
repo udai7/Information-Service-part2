@@ -126,7 +126,6 @@ export function DashboardHome() {
     certificateServices,
     contactServices,
     allServices,
-    activeServices,
     inactiveServices,
     stats,
   } = useMemo(() => {

@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { body, validationResult, query } from "express-validator";
 import crypto from "crypto";
-import { prisma } from "../lib/prisma";
+import { prisma, queryCache } from "../lib/prisma";
 import { authenticateAdmin, getDepartmentScope } from "../middleware/auth";
 import { submissionLimiter, readLimiter } from "../middleware/rateLimiter";
 import { createAuditLog, AuditActions } from "../lib/auditLog";
@@ -223,6 +223,9 @@ router.post(
         },
         trackingId,
       });
+
+      // Invalidate public recent cache in background
+      queryCache.invalidate("grievances:public").catch(() => {});
     } catch (error) {
       console.error("Error creating grievance:", error);
       res.status(500).json({ message: "Failed to submit grievance" });
@@ -230,9 +233,17 @@ router.post(
   },
 );
 
-// Get recent community grievances (public endpoint)
+// Get recent community grievances (public endpoint, cached)
 router.get("/public/recent", readLimiter, async (req: Request, res: Response) => {
   try {
+    const cacheKey = "grievances:public:recent";
+    const cached = await queryCache.get<any>(cacheKey);
+    if (cached) {
+      res.set("X-Cache", "HIT");
+      res.set("Cache-Control", "public, max-age=30");
+      return res.json(cached);
+    }
+
     const grievances = await prisma.grievance.findMany({
       take: 10,
       orderBy: { createdAt: "desc" },
@@ -249,7 +260,11 @@ router.get("/public/recent", readLimiter, async (req: Request, res: Response) =>
       },
     });
 
-    res.json({ message: "Recent grievances retrieved successfully", grievances });
+    const result = { message: "Recent grievances retrieved successfully", grievances };
+    await queryCache.set(cacheKey, result, 30_000); // Cache 30 sec
+    res.set("X-Cache", "MISS");
+    res.set("Cache-Control", "public, max-age=30");
+    res.json(result);
   } catch (error) {
     console.error("Error fetching recent grievances:", error);
     res.status(500).json({ message: "Failed to fetch recent grievances" });
@@ -353,10 +368,16 @@ router.get("/:id", authenticateAdmin, async (req: Request, res: Response) => {
   }
 });
 
-// Get grievance by tracking ID (public endpoint)
-router.get("/track/:trackingId", async (req: Request, res: Response) => {
+// Get grievance by tracking ID (public endpoint, rate-limited & cached)
+router.get("/track/:trackingId", readLimiter, async (req: Request, res: Response) => {
   try {
     const { trackingId } = req.params;
+    const cacheKey = `grievances:track:${trackingId}`;
+    const cached = await queryCache.get<any>(cacheKey);
+    if (cached) {
+      res.set("X-Cache", "HIT");
+      return res.json(cached);
+    }
 
     const grievance = await prisma.grievance.findUnique({
       where: { trackingId },
@@ -382,7 +403,10 @@ router.get("/track/:trackingId", async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Grievance not found with this tracking ID" });
     }
 
-    res.json({ message: "Grievance status retrieved successfully", grievance });
+    const result = { message: "Grievance status retrieved successfully", grievance };
+    await queryCache.set(cacheKey, result, 15_000); // Cache 15 sec
+    res.set("X-Cache", "MISS");
+    res.json(result);
   } catch (error) {
     console.error("Error fetching grievance by tracking ID:", error);
     res.status(500).json({ message: "Failed to fetch grievance status" });
@@ -471,6 +495,9 @@ router.put(
       });
 
       res.json({ message: "Grievance updated successfully", grievance });
+
+      // Invalidate related caches in background
+      queryCache.invalidate("grievances").catch(() => {});
     } catch (error) {
       console.error("Error updating grievance:", error);
       res.status(500).json({ message: "Failed to update grievance" });
@@ -520,6 +547,9 @@ router.patch(
       });
 
       res.json({ message: "Grievance marked as solved successfully", grievance });
+
+      // Invalidate related caches in background
+      queryCache.invalidate("grievances").catch(() => {});
     } catch (error) {
       console.error("Error solving grievance:", error);
       res.status(500).json({ message: "Failed to solve grievance" });
@@ -567,6 +597,9 @@ router.patch(
       });
 
       res.json({ message: "Grievance marked as pending successfully", grievance });
+
+      // Invalidate related caches in background
+      queryCache.invalidate("grievances").catch(() => {});
     } catch (error) {
       console.error("Error marking grievance as pending:", error);
       res.status(500).json({ message: "Failed to mark grievance as pending" });
@@ -656,6 +689,9 @@ router.patch(
       }
 
       res.json({ message: "Grievance forwarded successfully", grievance });
+
+      // Invalidate related caches in background
+      queryCache.invalidate("grievances").catch(() => {});
     } catch (error) {
       console.error("Error forwarding grievance:", error);
       res.status(500).json({ message: "Failed to forward grievance" });
@@ -704,6 +740,9 @@ router.patch(
       });
 
       res.json({ message: "Grievance assigned successfully", grievance });
+
+      // Invalidate related caches in background
+      queryCache.invalidate("grievances").catch(() => {});
     } catch (error) {
       console.error("Error assigning grievance:", error);
       res.status(500).json({ message: "Failed to assign grievance" });

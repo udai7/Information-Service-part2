@@ -52,7 +52,7 @@ router.post(
       });
 
       // Invalidate department caches
-      queryCache.invalidate("departments");
+      await queryCache.invalidate("departments");
 
       await createAuditLog({
         action: AuditActions.CREATE,
@@ -79,7 +79,7 @@ router.post(
 router.get("/", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const cacheKey = "departments:list:all";
-    const cached = queryCache.get<any>(cacheKey);
+    const cached = await queryCache.get<any>(cacheKey);
     if (cached) {
       res.set("X-Cache", "HIT");
       return res.json(cached);
@@ -102,7 +102,7 @@ router.get("/", authenticateAdmin, async (req: Request, res: Response) => {
     });
 
     const result = { departments };
-    queryCache.set(cacheKey, result, 60_000); // Cache 1 min
+    await queryCache.set(cacheKey, result, 60_000); // Cache 1 min
     res.set("X-Cache", "MISS");
     res.json(result);
   } catch (error) {
@@ -120,7 +120,7 @@ router.get(
     try {
       const id = parseInt(req.params.id);
       const cacheKey = `departments:${id}`;
-      const cached = queryCache.get<any>(cacheKey);
+      const cached = await queryCache.get<any>(cacheKey);
       if (cached) {
         res.set("X-Cache", "HIT");
         return res.json(cached);
@@ -149,7 +149,7 @@ router.get(
       }
 
       const result = { department };
-      queryCache.set(cacheKey, result, 60_000); // Cache 1 min
+      await queryCache.set(cacheKey, result, 60_000); // Cache 1 min
       res.set("X-Cache", "MISS");
       res.json(result);
     } catch (error) {
@@ -168,7 +168,7 @@ router.get(
     try {
       const id = parseInt(req.params.id);
       const cacheKey = `departments:${id}:stats`;
-      const cached = queryCache.get<any>(cacheKey);
+      const cached = await queryCache.get<any>(cacheKey);
       if (cached) {
         res.set("X-Cache", "HIT");
         return res.json(cached);
@@ -202,7 +202,7 @@ router.get(
         },
       };
 
-      queryCache.set(cacheKey, result, 30_000); // Cache 30 sec
+      await queryCache.set(cacheKey, result, 30_000); // Cache 30 sec
       res.set("X-Cache", "MISS");
       res.json(result);
     } catch (error) {
@@ -245,7 +245,7 @@ router.put(
       });
 
       // Invalidate department caches
-      queryCache.invalidate("departments");
+      await queryCache.invalidate("departments");
 
       await createAuditLog({
         action: AuditActions.UPDATE,
@@ -289,7 +289,7 @@ router.patch(
       });
 
       // Invalidate department caches
-      queryCache.invalidate("departments");
+      await queryCache.invalidate("departments");
 
       await createAuditLog({
         action: AuditActions.TOGGLE_ACTIVE,
@@ -406,7 +406,7 @@ router.delete(
       }, { timeout: 30000 });
 
       // Invalidate department caches
-      queryCache.invalidate("departments");
+      await queryCache.invalidate("departments");
 
       await createAuditLog({
         action: AuditActions.DELETE,
@@ -433,7 +433,7 @@ router.delete(
 router.get("/public/list", async (_req: Request, res: Response) => {
   try {
     const cacheKey = "departments:public:list";
-    const cached = queryCache.get<any>(cacheKey);
+    const cached = await queryCache.get<any>(cacheKey);
     if (cached) {
       res.set("X-Cache", "HIT");
       res.set("Cache-Control", "public, max-age=300"); // Browser cache 5 min
@@ -447,7 +447,7 @@ router.get("/public/list", async (_req: Request, res: Response) => {
     });
 
     const result = { departments };
-    queryCache.set(cacheKey, result, 5 * 60_000); // Cache 5 min
+    await queryCache.set(cacheKey, result, 5 * 60_000); // Cache 5 min
     res.set("X-Cache", "MISS");
     res.set("Cache-Control", "public, max-age=300");
     res.json(result);

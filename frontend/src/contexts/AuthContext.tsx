@@ -18,6 +18,7 @@ interface AuthContextType {
   department: Department | null;
   assignedServices: string[];
   login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
   refreshAuth: () => Promise<void>;
@@ -120,6 +121,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const register = async (email: string, password: string, name: string) => {
+    const response = await apiClient.register({ email, password, name });
+
+    if (response.admin && response.token) {
+      setAdmin(response.admin);
+      setToken(response.token);
+      apiClient.setToken(response.token);
+      localStorage.setItem("admin_token", response.token);
+    } else {
+      throw new Error("Invalid response from server");
+    }
+  };
+
   const logout = async () => {
     try {
       await apiClient.logout();
@@ -154,6 +168,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     department,
     assignedServices,
     login,
+    register,
     logout,
     isAuthenticated: !!admin && !!token,
     refreshAuth,

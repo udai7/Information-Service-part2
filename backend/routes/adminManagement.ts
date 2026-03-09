@@ -36,33 +36,50 @@ router.get(
         where.role = "individual_admin";
       }
 
-      const admins = await prisma.admin.findMany({
-        where,
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          role: true,
-          phone: true,
-          isActive: true,
-          lastLogin: true,
-          departmentId: true,
-          assignedServices: true,
-          createdById: true,
-          department: { select: { id: true, name: true, code: true } },
-          createdAt: true,
-          _count: {
-            select: {
-              schemeServices: true,
-              certificateServices: true,
-              contactServices: true,
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const skip = (page - 1) * limit;
+
+      const [admins, total] = await Promise.all([
+        prisma.admin.findMany({
+          where,
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            role: true,
+            phone: true,
+            isActive: true,
+            lastLogin: true,
+            departmentId: true,
+            assignedServices: true,
+            createdById: true,
+            department: { select: { id: true, name: true, code: true } },
+            createdAt: true,
+            _count: {
+              select: {
+                schemeServices: true,
+                certificateServices: true,
+                contactServices: true,
+              },
             },
           },
-        },
-        orderBy: { createdAt: "desc" },
-      });
+          orderBy: { createdAt: "desc" },
+          skip,
+          take: limit,
+        }),
+        prisma.admin.count({ where }),
+      ]);
 
-      res.json({ admins });
+      res.json({
+        admins,
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit),
+        },
+      });
     } catch (error) {
       console.error("Error fetching admins:", error);
       res.status(500).json({ error: "Internal server error" });

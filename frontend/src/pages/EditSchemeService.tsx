@@ -81,7 +81,7 @@ export default function EditSchemeService() {
         const scheme = response.schemeService;
         console.log("Extracted scheme:", scheme);
 
-        setSchemeService(scheme);
+        setSchemeService(scheme ?? null);
 
         // Populate basic fields
         if (scheme?.name) setName(scheme.name);
@@ -120,18 +120,18 @@ export default function EditSchemeService() {
     };
   }, []);
 
-  const handleAdd = (setter, arr) => {
+  const handleAdd = (setter: React.Dispatch<React.SetStateAction<string[]>>, arr: string[]) => {
     setter([...arr, ""]);
     autoSave();
   };
 
-  const handleChange = (setter, arr, idx, value) => {
-    setter(arr.map((v, i) => (i === idx ? value : v)));
+  const handleChange = (setter: React.Dispatch<React.SetStateAction<string[]>>, arr: string[], idx: number, value: string) => {
+    setter(arr.map((v: string, i: number) => (i === idx ? value : v)));
     autoSave();
   };
 
-  const handleRemove = (setter, arr, idx) => {
-    setter(arr.filter((_, i) => i !== idx));
+  const handleRemove = (setter: React.Dispatch<React.SetStateAction<string[]>>, arr: string[], idx: number) => {
+    setter(arr.filter((_: string, i: number) => i !== idx));
     autoSave();
   };
 
@@ -261,7 +261,7 @@ export default function EditSchemeService() {
     }
   };
 
-  const handleContactChange = (idx, e) => {
+  const handleContactChange = (idx: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setContacts(
       contacts.map((contact, i) =>
@@ -286,8 +286,8 @@ export default function EditSchemeService() {
     ]);
   };
 
-  const removeContact = (idx) => {
-    setContacts(contacts.filter((_, i) => i !== idx));
+  const removeContact = (idx: number) => {
+    setContacts(contacts.filter((_: any, i: number) => i !== idx));
   };
 
   const renderStep = () => {

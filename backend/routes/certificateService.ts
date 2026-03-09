@@ -359,7 +359,7 @@ router.patch(
       });
 
       // Invalidate public cache
-      queryCache.invalidate("certs:public");
+      await queryCache.invalidate("certs:public");
     } catch (error) {
       console.error("Error publishing certificate service:", error);
       res.status(500).json({
@@ -499,9 +499,8 @@ router.patch(
 
       res.json({
         success: true,
-        message: `Certificate service ${
-          isActive ? "activated" : "deactivated"
-        } successfully`,
+        message: `Certificate service ${isActive ? "activated" : "deactivated"
+          } successfully`,
         certificateService: updatedService,
       });
     } catch (error) {
@@ -575,13 +574,11 @@ router.get("/public/list", readLimiter, async (req: Request, res: Response) => {
     const offset = (pageNum - 1) * limitNum;
 
     // Use cache for non-search queries
-    const cacheKey = search ? null : `certs:public:${page}:${limitNum}`;
-    if (cacheKey) {
-      const cached = queryCache.get<any>(cacheKey);
-      if (cached) {
-        res.set("Cache-Control", "public, max-age=60, s-maxage=120");
-        return res.json(cached);
-      }
+    const cacheKey = "certs:public:list";
+    const cached = await queryCache.get<any>(cacheKey);
+    if (cached) {
+      res.set("Cache-Control", "public, max-age=60, s-maxage=120");
+      return res.json(cached);
     }
 
     let whereClause: any = {
@@ -628,10 +625,8 @@ router.get("/public/list", readLimiter, async (req: Request, res: Response) => {
     };
 
     // Cache non-search results for 2 minutes
-    if (cacheKey) {
-      queryCache.set(cacheKey, result, 120_000);
-    }
-
+    await queryCache.set(cacheKey, result, 120_000); // 2min cache
+    res.set("X-Cache", "MISS");
     res.set("Cache-Control", "public, max-age=60, s-maxage=120");
     res.json(result);
   } catch (error) {

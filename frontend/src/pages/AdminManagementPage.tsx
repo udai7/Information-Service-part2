@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -63,13 +63,15 @@ import {
   Edit,
   AlertTriangle,
   Search,
-  Filter,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import AdminSidebar from "@/components/ui/AdminSidebar";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "../types/api";
-import type { Admin, Department } from "../types/api";
+import type { Admin } from "../types/api";
 
 const AVAILABLE_SERVICES = [
   { key: "schemes", label: "Scheme Services" },
@@ -82,9 +84,7 @@ const AVAILABLE_SERVICES = [
 export default function AdminManagement() {
   const { admin: currentAdmin, isSuperAdmin, isDepartmentAdmin } = useAuth();
   const { toast } = useToast();
-  const [admins, setAdmins] = useState<Admin[]>([]);
-  const [departments, setDepartments] = useState<Department[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [showCreate, setShowCreate] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [editingAdmin, setEditingAdmin] = useState<Admin | null>(null);
@@ -102,30 +102,26 @@ export default function AdminManagement() {
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(15);
 
-  useEffect(() => {
-    fetchData(true);
-  }, []);
+  const { data: adminsData, isLoading: loadingAdmins } = useQuery({
+    queryKey: ["admins", page, pageSize],
+    queryFn: () => apiClient.getAdmins({ page, limit: pageSize }),
+    placeholderData: (prev) => prev, // keep previous data while fetching next page
+  });
 
-  const fetchData = async (showSpinner = false) => {
-    if (showSpinner) setLoading(true);
-    try {
-      const [adminsRes, deptsRes] = await Promise.all([
-        apiClient.getAdmins(),
-        isSuperAdmin ? apiClient.getDepartments() : Promise.resolve({ departments: [] }),
-      ]);
-      setAdmins(adminsRes.admins || []);
-      setDepartments(deptsRes.departments || []);
-    } catch {
-      toast({
-        title: "Error",
-        description: "Failed to load data",
-        variant: "destructive",
-      });
-    } finally {
-      if (showSpinner) setLoading(false);
-    }
-  };
+  const { data: deptsData, isLoading: loadingDepts } = useQuery({
+    queryKey: ["departments"],
+    queryFn: () => (isSuperAdmin ? apiClient.getDepartments() : Promise.resolve({ departments: [] })),
+  });
+
+  const admins = adminsData?.admins || [];
+  const pagination = adminsData?.pagination;
+  const totalAdmins = pagination?.total ?? admins.length;
+  const totalPages = pagination?.pages ?? 1;
+  const departments = deptsData?.departments || [];
+  const loading = loadingAdmins || loadingDepts;
 
   const resetForm = () => {
     setForm({
@@ -179,7 +175,7 @@ export default function AdminManagement() {
       toast({ title: "Success", description: "Admin created successfully" });
       setShowCreate(false);
       resetForm();
-      fetchData(false);
+      queryClient.invalidateQueries({ queryKey: ["admins"] });
     } catch (error: any) {
       toast({
         title: "Error",
@@ -229,7 +225,7 @@ export default function AdminManagement() {
       setShowEdit(false);
       setEditingAdmin(null);
       resetForm();
-      fetchData(false);
+      queryClient.invalidateQueries({ queryKey: ["admins"] });
     } catch (error: any) {
       toast({
         title: "Error",
@@ -243,10 +239,18 @@ export default function AdminManagement() {
 
   const handleToggle = async (admin: Admin) => {
     if (admin.id === currentAdmin?.id) return;
-    // Optimistic update
-    setAdmins((prev) =>
-      prev.map((a) => (a.id === admin.id ? { ...a, isActive: !a.isActive } : a))
-    );
+
+    // Optimistically update the cache
+    queryClient.setQueryData(["admins"], (old: any) => {
+      if (!old?.admins) return old;
+      return {
+        ...old,
+        admins: old.admins.map((a: Admin) =>
+          a.id === admin.id ? { ...a, isActive: !a.isActive } : a
+        ),
+      };
+    });
+
     try {
       await apiClient.toggleAdmin(admin.id);
       toast({
@@ -254,13 +258,11 @@ export default function AdminManagement() {
         description: `Admin ${admin.isActive ? "deactivated" : "activated"}`,
       });
     } catch {
-      // Revert on failure
-      setAdmins((prev) =>
-        prev.map((a) => (a.id === admin.id ? { ...a, isActive: admin.isActive } : a))
-      );
+      // Invalidate queries to refetch the true state
+      queryClient.invalidateQueries({ queryKey: ["admins"] });
       toast({
         title: "Error",
-        description: "Failed to toggle admin",
+        description: "Failed to toggle admin status",
         variant: "destructive",
       });
     }
@@ -271,18 +273,27 @@ export default function AdminManagement() {
     setDeleteTarget(admin);
   };
 
-  const confirmDeleteAdmin = async () => {
+  const confirmDelete = async () => {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
       await apiClient.deleteAdmin(deleteTarget.id);
-      setAdmins((prev) => prev.filter((a) => a.id !== deleteTarget.id));
-      toast({ title: "Success", description: "Admin deleted" });
+
+      // Update cache
+      queryClient.setQueryData(["admins"], (old: any) => {
+        if (!old?.admins) return old;
+        return {
+          ...old,
+          admins: old.admins.filter((a: Admin) => a.id !== deleteTarget.id),
+        };
+      });
+
+      toast({ title: "Success", description: "Admin deleted successfully" });
       setDeleteTarget(null);
-    } catch {
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "Failed to delete admin",
+        description: error?.message || "Failed to delete admin",
         variant: "destructive",
       });
     } finally {
@@ -293,10 +304,14 @@ export default function AdminManagement() {
   const handleUnlock = async (admin: Admin) => {
     try {
       await apiClient.unlockAdmin(admin.id);
-      // Update in-place
-      setAdmins((prev) =>
-        prev.map((a) => (a.id === admin.id ? { ...a, loginAttempts: 0, lockedUntil: null } : a))
-      );
+      // Update in-place using queryClient
+      queryClient.setQueryData(["admins"], (old: any) => {
+        if (!old?.admins) return old;
+        return {
+          ...old,
+          admins: old.admins.map((a: Admin) => (a.id === admin.id ? { ...a, loginAttempts: 0, lockedUntil: null } : a))
+        };
+      });
       toast({ title: "Success", description: "Admin account unlocked" });
     } catch {
       toast({
@@ -664,19 +679,19 @@ export default function AdminManagement() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{admins.length}</div>
+                <div className="text-2xl font-bold">{totalAdmins}</div>
               </CardContent>
             </Card>
             {isSuperAdmin && (
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm text-gray-500">
-                    Super Admins
+                    On This Page
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-teal-600">
-                    {admins.filter((a) => a.role === "super_admin").length}
+                    {admins.length}
                   </div>
                 </CardContent>
               </Card>
@@ -684,29 +699,15 @@ export default function AdminManagement() {
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm text-gray-500">
-                  Active
+                  Page
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-green-600">
-                  {admins.filter((a) => a.isActive).length}
+                  {page} / {totalPages}
                 </div>
               </CardContent>
             </Card>
-            {isDepartmentAdmin && (
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm text-gray-500">
-                    Individual Admins
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-teal-600">
-                    {admins.filter((a) => a.role === "individual_admin").length}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
             {isSuperAdmin && (
               <Card>
                 <CardHeader className="pb-2">
@@ -956,6 +957,57 @@ export default function AdminManagement() {
                   No administrators found
                 </div>
               )}
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between pt-4 border-t mt-4">
+                  <p className="text-sm text-gray-500">
+                    Showing {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, totalAdmins)} of {totalAdmins} admins
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={page <= 1}
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    >
+                      <ChevronLeft className="h-4 w-4 mr-1" /> Previous
+                    </Button>
+                    {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                      // Show pages around current page
+                      let pageNum: number;
+                      if (totalPages <= 5) {
+                        pageNum = i + 1;
+                      } else if (page <= 3) {
+                        pageNum = i + 1;
+                      } else if (page >= totalPages - 2) {
+                        pageNum = totalPages - 4 + i;
+                      } else {
+                        pageNum = page - 2 + i;
+                      }
+                      return (
+                        <Button
+                          key={pageNum}
+                          variant={pageNum === page ? "default" : "outline"}
+                          size="sm"
+                          className="w-9"
+                          onClick={() => setPage(pageNum)}
+                        >
+                          {pageNum}
+                        </Button>
+                      );
+                    })}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={page >= totalPages}
+                      onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    >
+                      Next <ChevronRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -982,7 +1034,11 @@ export default function AdminManagement() {
             <Button variant="outline" onClick={() => setDeleteTarget(null)} disabled={deleting}>
               Cancel
             </Button>
-            <Button variant="destructive" onClick={confirmDeleteAdmin} disabled={deleting}>
+            <Button
+              variant="destructive"
+              onClick={confirmDelete}
+              disabled={deleting}
+            >
               {deleting ? "Deleting..." : "Delete Permanently"}
             </Button>
           </AlertDialogFooter>

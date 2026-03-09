@@ -108,7 +108,7 @@ export default function AdminAuditLogs() {
   const filteredLogs = searchTerm
     ? logs.filter(
         (l) =>
-          l.adminName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          l.admin?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           l.entity?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           l.action?.toLowerCase().includes(searchTerm.toLowerCase()),
       )
@@ -228,7 +228,7 @@ export default function AdminAuditLogs() {
                             {new Date(log.createdAt).toLocaleString()}
                           </TableCell>
                           <TableCell className="font-medium">
-                            {log.adminName || `Admin #${log.adminId}`}
+                            {log.admin?.name || `Admin #${log.adminId}`}
                           </TableCell>
                           <TableCell>
                             <Badge
