@@ -75,13 +75,14 @@ const allowedOrigins = [
   process.env.FRONTEND_URL || "http://localhost:5173",
   ...(process.env.NODE_ENV !== "production"
     ? [
+      "http://localhost:5173",
       "http://localhost:5174",
       "http://localhost:8080",
       "http://localhost:8081",
       "http://localhost:3000",
     ]
     : []),
-].filter(Boolean);
+].map(o => o.replace(/\/$/, "")).filter(Boolean);
 
 app.use(
   cors({
@@ -90,7 +91,7 @@ app.use(
       if (!origin) {
         return callback(null, true);
       }
-      if (allowedOrigins.includes(origin)) {
+      if (allowedOrigins.includes(origin.replace(/\/$/, ""))) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));

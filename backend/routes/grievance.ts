@@ -44,10 +44,12 @@ router.post(
 
       const { email, turnstileToken } = req.body;
 
-      // 1. Verify Turnstile
-      const isHuman = await verifyTurnstile(turnstileToken, req.ip || "");
-      if (!isHuman) {
-        return res.status(403).json({ message: "Turnstile verification failed" });
+      // 1. Verify Turnstile (skip in development)
+      if (process.env.NODE_ENV !== "development") {
+        const isHuman = await verifyTurnstile(turnstileToken, req.ip || "");
+        if (!isHuman) {
+          return res.status(403).json({ message: "Turnstile verification failed" });
+        }
       }
 
       // 2. Check daily limit (3 grievances per day)
