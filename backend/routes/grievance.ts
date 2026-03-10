@@ -115,14 +115,13 @@ router.post(
     body("subject").trim().notEmpty().withMessage("Subject is required"),
     body("description").trim().notEmpty().withMessage("Description is required"),
     body("category").optional().isString(),
-    body("departmentId").optional().isInt(),
+    body("departmentId").isInt().withMessage("Department is required"),
     body("priority")
       .optional()
       .isIn(["low", "medium", "high", "urgent"])
       .withMessage("Invalid priority"),
     body("attachments").optional().isArray(),
     body("website").optional().isString(),
-    body("otp").trim().notEmpty().withMessage("OTP is required"),
   ],
   async (req: Request, res: Response) => {
     try {
@@ -136,7 +135,7 @@ router.post(
 
       const {
         name, email, phone, address, subject, description,
-        category, departmentId, priority = "medium", attachments = [], website, otp
+        category, departmentId, priority = "medium", attachments = [], website
       } = req.body;
 
       if (website && website.trim() !== "") {
@@ -160,18 +159,6 @@ router.post(
       if (countToday >= 3) {
         return res.status(429).json({ message: "Daily limit of 3 grievances reached for this email." });
       }
-
-      // 2. Verify OTP
-      const storedOtp = await prisma.verificationOTP.findUnique({
-        where: { email },
-      });
-
-      if (!storedOtp || storedOtp.otp !== otp || storedOtp.expiresAt < new Date()) {
-        return res.status(400).json({ message: "Invalid or expired OTP" });
-      }
-
-      // Burn OTP
-      await prisma.verificationOTP.delete({ where: { email } });
 
       const trackingId = generateTrackingId();
       const slaDeadline = calculateSlaDeadline(priority);

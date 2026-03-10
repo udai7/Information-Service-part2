@@ -557,9 +557,8 @@ export interface CreateFeedbackRequest {
   message: string;
   rating?: number; // 1-5 star rating
   category?: string; // General, Service, Technical, etc.
-  departmentId?: number; // Optional department to route directly to
+  departmentId: number; // Required department
   website?: string; // Honeypot field for bot spam prevention
-  otp?: string; // One time password for verification
 }
 
 export interface UpdateFeedbackRequest {
@@ -578,9 +577,8 @@ export interface CreateGrievanceRequest {
   category?: string; // Service Related, Technical, Policy, etc.
   priority?: "low" | "medium" | "high" | "urgent";
   attachments?: string[]; // File paths or URLs
-  departmentId?: number; // Optional department to route directly to
+  departmentId: number; // Required department
   website?: string; // Honeypot field for bot spam prevention
-  otp?: string; // One time password for verification
 }
 
 export interface UpdateGrievanceRequest {

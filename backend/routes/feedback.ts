@@ -97,9 +97,8 @@ router.post(
     body("phone").optional().isMobilePhone("any").withMessage("Valid phone number required"),
     body("rating").optional().isInt({ min: 1, max: 5 }).withMessage("Rating must be between 1 and 5"),
     body("category").optional().isString(),
-    body("departmentId").optional().isInt(),
+    body("departmentId").isInt().withMessage("Department is required"),
     body("website").optional().isString(),
-    body("otp").trim().notEmpty().withMessage("OTP is required"),
   ],
   async (req: Request, res: Response) => {
     try {
@@ -108,7 +107,7 @@ router.post(
         return res.status(400).json({ message: "Validation failed", errors: errors.array() });
       }
 
-      const { name, email, phone, subject, message, rating, category, departmentId, website, otp } = req.body;
+      const { name, email, phone, subject, message, rating, category, departmentId, website } = req.body;
 
       if (website && website.trim() !== "") {
         console.warn(`Spam bot detected via honeypot (IP: ${req.ip}). Discarding feedback silently.`);
@@ -126,20 +125,6 @@ router.post(
         if (countToday >= 3) {
           return res.status(429).json({ message: "Daily limit of 3 feedbacks reached for this email." });
         }
-      }
-
-      // 2. Verify OTP
-      if (emailToCheck !== "anonymous") {
-        const storedOtp = await prisma.verificationOTP.findUnique({
-          where: { email: emailToCheck },
-        });
-
-        if (!storedOtp || storedOtp.otp !== otp || storedOtp.expiresAt < new Date()) {
-          return res.status(400).json({ message: "Invalid or expired OTP" });
-        }
-
-        // Burn OTP
-        await prisma.verificationOTP.delete({ where: { email: emailToCheck } });
       }
 
       const feedback = await prisma.feedback.create({

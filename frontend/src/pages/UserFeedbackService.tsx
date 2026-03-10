@@ -49,9 +49,8 @@ export default function UserFeedbackService() {
     message: "",
     rating: undefined,
     category: "",
-    departmentId: undefined,
+    departmentId: undefined as unknown as number,
     website: "",
-    otp: "",
   });
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
@@ -59,8 +58,6 @@ export default function UserFeedbackService() {
   const [ratingFilter, setRatingFilter] = useState("all");
   const [submitting, setSubmitting] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [sendingOtp, setSendingOtp] = useState(false);
   const [stats, setStats] = useState({
     totalFeedbacks: 0,
     avgRating: 0,
@@ -112,15 +109,17 @@ export default function UserFeedbackService() {
     }));
   };
 
-  const handleSendOtp = async (e: React.MouseEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.email) {
+
+    if (!formData.departmentId) {
       return toast({
-        title: "Email Required",
-        description: "Please enter your email first.",
+        title: "Department Required",
+        description: "Please select a department.",
         variant: "destructive",
       });
     }
+
     if (!turnstileToken) {
       return toast({
         title: "Verification Required",
@@ -129,27 +128,6 @@ export default function UserFeedbackService() {
       });
     }
 
-    setSendingOtp(true);
-    try {
-      await apiClient.sendFeedbackOtp(formData.email, turnstileToken);
-      setOtpSent(true);
-      toast({
-        title: "OTP Sent",
-        description: "Check your email for the 6-digit verification code.",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Failed to send OTP",
-        description: error.message || "An error occurred while sending OTP.",
-        variant: "destructive",
-      });
-    } finally {
-      setSendingOtp(false);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
     setSubmitting(true);
 
     try {
@@ -164,11 +142,9 @@ export default function UserFeedbackService() {
         message: "",
         rating: undefined,
         category: "",
-        departmentId: undefined,
+        departmentId: undefined as unknown as number,
         website: "",
-        otp: "",
       });
-      setOtpSent(false);
       setTurnstileToken("");
 
       // Refetch feedbacks gracefully
@@ -384,19 +360,18 @@ export default function UserFeedbackService() {
 
                 <div>
                   <label className="block text-sm font-medium mb-1">
-                    Department (Optional)
+                    Department *
                   </label>
                   <Select
-                    value={formData.departmentId?.toString() || "none"}
+                    value={formData.departmentId?.toString() || ""}
                     onValueChange={(value) =>
-                      handleInputChange("departmentId", value === "none" ? undefined : parseInt(value))
+                      handleInputChange("departmentId", parseInt(value))
                     }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select department" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="none">No specific department</SelectItem>
                       {departments.map((dept) => (
                         <SelectItem key={dept.id} value={dept.id.toString()}>
                           {dept.name}
@@ -461,52 +436,21 @@ export default function UserFeedbackService() {
                   </Select>
                 </div>
 
-                {!otpSent ? (
-                  <div className="space-y-4">
-                    <div className="flex justify-center my-4">
-                      <Turnstile
-                        siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY || "1x00000000000000000000AA"}
-                        onSuccess={(token: string) => setTurnstileToken(token)}
-                        options={{
-                          // extra config if needed
-                        }}
-                      />
-                    </div>
-                    <Button
-                      type="button"
-                      onClick={handleSendOtp}
-                      className="w-full bg-teal-600 hover:bg-teal-700"
-                      disabled={sendingOtp || !turnstileToken}
-                    >
-                      {sendingOtp ? "Sending OTP..." : "Verify Identity & Send OTP"}
-                    </Button>
+                <div className="space-y-4">
+                  <div className="flex justify-center my-4">
+                    <Turnstile
+                      siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY || "1x00000000000000000000AA"}
+                      onSuccess={(token: string) => setTurnstileToken(token)}
+                    />
                   </div>
-                ) : (
-                  <div className="space-y-4 mt-8">
-                    <div className="p-4 bg-teal-50 border border-teal-200 rounded-lg">
-                      <label className="block text-sm font-medium mb-1">
-                        Enter 6-digit OTP sent to {formData.email} *
-                      </label>
-                      <Input
-                        type="text"
-                        value={formData.otp || ""}
-                        onChange={(e) =>
-                          handleInputChange("otp", e.target.value)
-                        }
-                        required
-                        placeholder="123456"
-                        maxLength={6}
-                      />
-                    </div>
-                    <Button
-                      type="submit"
-                      className="w-full bg-teal-600 hover:bg-teal-700"
-                      disabled={submitting}
-                    >
-                      {submitting ? "Submitting..." : "Submit Feedback"}
-                    </Button>
-                  </div>
-                )}
+                  <Button
+                    type="submit"
+                    className="w-full bg-teal-600 hover:bg-teal-700"
+                    disabled={submitting || !turnstileToken}
+                  >
+                    {submitting ? "Submitting..." : "Submit Feedback"}
+                  </Button>
+                </div>
               </form>
             </CardContent>
           </Card>
