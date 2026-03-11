@@ -37,7 +37,8 @@ router.get(
       }
 
       const page = parseInt(req.query.page as string) || 1;
-      const limit = parseInt(req.query.limit as string) || 10;
+      const parsedLimit = parseInt(req.query.limit as string);
+      const limit = Math.max(1, Math.min(isNaN(parsedLimit) ? 10 : parsedLimit, 100));
       const skip = (page - 1) * limit;
 
       const [admins, total] = await Promise.all([
