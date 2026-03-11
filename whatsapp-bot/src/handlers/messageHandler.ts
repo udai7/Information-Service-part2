@@ -1,4 +1,4 @@
-import { WhatsAppMessage, UserSession, ServiceData } from "../types";
+import { WhatsAppMessage, UserSession, ServiceData, GrievanceInput, FeedbackInput } from "../types";
 import { DatabaseService } from "../services/databaseService";
 import { SessionManager } from "../services/sessionService";
 import { translationService } from "../translations";
@@ -1937,7 +1937,7 @@ export class MessageHandler {
             };
 
             const referenceId = await this.databaseService.submitGrievance(
-              finalFormData,
+              finalFormData as GrievanceInput,
             );
             this.sessionManager.resetToMainMenu(phoneNumber);
 
@@ -2107,7 +2107,7 @@ export class MessageHandler {
             }
           }
 
-          await this.databaseService.submitFeedback(finalFormData);
+          await this.databaseService.submitFeedback(finalFormData as FeedbackInput);
           this.sessionManager.resetToMainMenu(phoneNumber);
 
           const successMsg = translationService.translate(
