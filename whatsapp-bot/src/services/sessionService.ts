@@ -1,5 +1,5 @@
 import NodeCache from "node-cache";
-import { UserSession } from "../types";
+import { UserSession, SessionFormData } from "../types";
 
 export class SessionManager {
   private cache: NodeCache;
@@ -130,7 +130,7 @@ export class SessionManager {
   }
 
   // Set form data for grievance/feedback
-  setFormData(phoneNumber: string, formData: any): boolean {
+  setFormData(phoneNumber: string, formData: Partial<SessionFormData>): boolean {
     const session = this.getSession(phoneNumber);
 
     if (session) {
