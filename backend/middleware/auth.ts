@@ -30,6 +30,7 @@ export interface JwtPayload {
   email: string;
   role: string;
   sessionId?: string;
+  type?: string;
 }
 
 // Authenticate admin via Bearer token — with cache for DB lookup
@@ -50,7 +51,7 @@ export const authenticateAdmin = async (
     const decoded = jwt.verify(token, getJwtSecret()) as JwtPayload;
 
     // Reject refresh tokens being used as access tokens
-    if ((decoded as any).type === "refresh") {
+    if (decoded.type === "refresh") {
       return res.status(401).json({ error: "Invalid token type." });
     }
 
