@@ -58,24 +58,18 @@ function sanitizeObject(obj: any): void {
     if (typeof obj[key] === "string") {
       // Strip dangerous HTML tags but keep safe content
       obj[key] = obj[key]
-        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
-        .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
+        .replace(/<script\b[\s\S]*?<\/script>/gi, "")
+        .replace(/<iframe\b[\s\S]*?<\/iframe>/gi, "")
         .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "")
-        .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, "")
+        .replace(/<object\b[\s\S]*?<\/object>/gi, "")
         .replace(/<embed\b[^>]*>/gi, "")
         .replace(/<link\b[^>]*>/gi, "");
     } else if (Array.isArray(obj[key])) {
       obj[key].forEach((item: any, index: number) => {
         if (typeof item === "string") {
           obj[key][index] = item
-            .replace(
-              /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-              "",
-            )
-            .replace(
-              /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
-              "",
-            )
+            .replace(/<script\b[\s\S]*?<\/script>/gi, "")
+            .replace(/<iframe\b[\s\S]*?<\/iframe>/gi, "")
             .replace(/on\w+\s*=\s*["'][^"']*["']/gi, "");
         } else if (typeof item === "object" && item !== null) {
           sanitizeObject(item);
