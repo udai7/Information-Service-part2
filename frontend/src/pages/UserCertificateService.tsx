@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Card,
   CardHeader,
@@ -43,15 +43,20 @@ export default function UserCertificateService() {
   >([]);
   const [loading, setLoading] = useState(false);
 
-  const filteredApiCerts = apiCertificateServices.filter((s) =>
-    s.name.toLowerCase().includes(search.toLowerCase()),
-  );
+  // ⚡ Bolt: Memoize filtered services
+  const filteredApiCerts = useMemo(() => {
+    const lowerSearch = search.toLowerCase();
+    return apiCertificateServices.filter((s) =>
+      s.name.toLowerCase().includes(lowerSearch),
+    );
+  }, [apiCertificateServices, search]);
 
-  const stats = {
+  // ⚡ Bolt: Memoize stats separately
+  const stats = useMemo(() => ({
     published: apiCertificateServices.length,
-    active: apiCertificateServices.length, // All services in apiCertificateServices are active (published and isActive !== false)
+    active: apiCertificateServices.length,
     total: apiCertificateServices.length,
-  };
+  }), [apiCertificateServices]);
 
   useEffect(() => {
     fetchApiCertificateServices();
