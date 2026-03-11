@@ -7,6 +7,44 @@ import "../types/express";
 
 const router = Router();
 
+/**
+ * Helper to check if an admin has permission to manage a specific office.
+ * Returns the office object if authorized, otherwise returns null.
+ */
+async function getAuthorizedOffice(officeId: number, admin: any) {
+  if (!admin) return null;
+
+  const office = await prisma.contactServiceContact.findUnique({
+    where: { id: officeId },
+    include: {
+      contactService: true,
+    },
+  });
+
+  if (!office) return null;
+
+  // Super Admin access
+  if (admin.role === "super_admin") return office;
+
+  // Department Admin access
+  if (
+    admin.role === "department_admin" &&
+    office.contactService.departmentId === admin.departmentId
+  ) {
+    return office;
+  }
+
+  // Individual Admin access
+  if (
+    admin.role === "individual_admin" &&
+    office.contactService.adminId === admin.id
+  ) {
+    return office;
+  }
+
+  return null;
+}
+
 // GET /api/offices/by-id/:officeId - Get office by id
 router.get(
   "/by-id/:officeId",
@@ -25,17 +63,13 @@ router.get(
 
       const officeId = parseInt(req.params.officeId);
 
-      // Find office by name
-      const office = await prisma.contactServiceContact.findFirst({
-        where: {
-          id: officeId,
-        },
-      });
+      // Find office and verify permissions
+      const office = await getAuthorizedOffice(officeId, req.admin);
 
       if (!office) {
         return res.status(404).json({
           success: false,
-          message: "Office not found",
+          message: "Office not found or access denied",
         });
       }
 
@@ -72,15 +106,13 @@ router.get(
 
       const officeId = parseInt(req.params.officeId);
 
-      // First verify the office exists
-      const office = await prisma.contactServiceContact.findUnique({
-        where: { id: officeId },
-      });
+      // Verify the office exists and admin has access
+      const office = await getAuthorizedOffice(officeId, req.admin);
 
       if (!office) {
         return res.status(404).json({
           success: false,
-          message: "Office not found",
+          message: "Office not found or access denied",
         });
       }
 
@@ -132,15 +164,13 @@ router.post(
       const officeId = parseInt(req.params.officeId);
       const { postName, rank, description, department } = req.body;
 
-      // Verify the office exists
-      const office = await prisma.contactServiceContact.findUnique({
-        where: { id: officeId },
-      });
+      // Verify the office exists and admin has access
+      const office = await getAuthorizedOffice(officeId, req.admin);
 
       if (!office) {
         return res.status(404).json({
           success: false,
-          message: "Office not found",
+          message: "Office not found or access denied",
         });
       }
 
@@ -207,6 +237,16 @@ router.post(
 
       const officeId = parseInt(req.params.officeId);
       const postId = parseInt(req.params.postId);
+
+      // Verify the office exists and admin has access
+      const office = await getAuthorizedOffice(officeId, req.admin);
+      if (!office) {
+        return res.status(404).json({
+          success: false,
+          message: "Office not found or access denied",
+        });
+      }
+
       const {
         name,
         email,
@@ -290,6 +330,16 @@ router.put(
       const officeId = parseInt(req.params.officeId);
       const postId = parseInt(req.params.postId);
       const employeeId = parseInt(req.params.employeeId);
+
+      // Verify the office exists and admin has access
+      const office = await getAuthorizedOffice(officeId, req.admin);
+      if (!office) {
+        return res.status(404).json({
+          success: false,
+          message: "Office not found or access denied",
+        });
+      }
+
       const { name, email, phone, designation } = req.body;
 
       // Verify the employee exists and belongs to the correct post/office
@@ -359,6 +409,16 @@ router.put(
 
       const officeId = parseInt(req.params.officeId);
       const postId = parseInt(req.params.postId);
+
+      // Verify the office exists and admin has access
+      const office = await getAuthorizedOffice(officeId, req.admin);
+      if (!office) {
+        return res.status(404).json({
+          success: false,
+          message: "Office not found or access denied",
+        });
+      }
+
       const { postName, rank } = req.body;
 
       // Check if the post exists and belongs to the office
@@ -429,6 +489,15 @@ router.delete(
       const officeId = parseInt(req.params.officeId);
       const postId = parseInt(req.params.postId);
       const employeeId = parseInt(req.params.employeeId);
+
+      // Verify the office exists and admin has access
+      const office = await getAuthorizedOffice(officeId, req.admin);
+      if (!office) {
+        return res.status(404).json({
+          success: false,
+          message: "Office not found or access denied",
+        });
+      }
 
       // Verify the employee exists and belongs to the correct post/office
       const employee = await prisma.employee.findFirst({
