@@ -193,7 +193,7 @@ process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
 // ─── Periodic Session Cleanup (every 6 hours) ───
 setInterval(async () => {
   try {
-    const result = await prisma.session.deleteMany({
+    await prisma.session.deleteMany({
       where: {
         OR: [
           { expiresAt: { lt: new Date() } },
@@ -201,9 +201,6 @@ setInterval(async () => {
         ],
       },
     });
-    if (result.count > 0) {
-      console.log(`Cleaned up ${result.count} expired/inactive sessions`);
-    }
   } catch (e) {
     console.error("Session cleanup error:", e);
   }
