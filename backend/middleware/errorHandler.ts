@@ -1,8 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 
+export interface ApiError extends Error {
+  statusCode?: number;
+  status?: number;
+}
+
 // Sanitize error responses — never leak internal details to clients
 export const errorHandler = (
-  err: any,
+  err: ApiError,
   req: Request,
   res: Response,
   _next: NextFunction,
