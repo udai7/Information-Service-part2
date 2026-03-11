@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Card,
   CardHeader,
@@ -29,20 +29,26 @@ export default function UserSchemeService() {
   );
   const [loading, setLoading] = useState(false);
 
-  const filteredApiSchemes = apiSchemeServices.filter((s) => {
-    const matchesSearch = s.name.toLowerCase().includes(search.toLowerCase());
-    const matchesType =
-      !schemeTypeFilter ||
-      schemeTypeFilter === "all" ||
-      s.type === schemeTypeFilter;
-    return matchesSearch && matchesType;
-  });
+  // ⚡ Bolt: Memoize filtered services
+  const filteredApiSchemes = useMemo(() => {
+    const lowerSearch = search.toLowerCase();
 
-  const stats = {
+    return apiSchemeServices.filter((s) => {
+      const matchesSearch = s.name.toLowerCase().includes(lowerSearch);
+      const matchesType =
+        !schemeTypeFilter ||
+        schemeTypeFilter === "all" ||
+        s.type === schemeTypeFilter;
+      return matchesSearch && matchesType;
+    });
+  }, [apiSchemeServices, search, schemeTypeFilter]);
+
+  // ⚡ Bolt: Memoize stats separately
+  const stats = useMemo(() => ({
     published: apiSchemeServices.length,
-    active: apiSchemeServices.length, // All services in apiSchemeServices are active (published and isActive !== false)
+    active: apiSchemeServices.length,
     total: apiSchemeServices.length,
-  };
+  }), [apiSchemeServices]);
 
   useEffect(() => {
     fetchApiSchemeServices();

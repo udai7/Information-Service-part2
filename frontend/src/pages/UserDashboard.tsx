@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -113,27 +113,44 @@ export default function UserDashboard() {
     }
   };
 
-  const filteredServices = allServices.filter(
-    (service) =>
-      service.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      service.summary?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      service.type?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (service.targetAudience &&
-        service.targetAudience.some((audience) =>
-          audience.toLowerCase().includes(searchQuery.toLowerCase()),
-        )) ||
-      (service.departmentType &&
-        service.departmentType
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase())),
-  );
+  // ⚡ Bolt: Memoize filtered services to prevent unnecessary recalculations on every render
+  const filteredServices = useMemo(() => {
+    const lowerQuery = searchQuery.toLowerCase();
 
-  const stats = {
-    published: allServices.length,
-    schemes: allServices.filter((s) => s.type === "scheme").length,
-    certificates: allServices.filter((s) => s.type === "certificate").length,
-    contacts: allServices.filter((s) => s.type === "contact").length,
-  };
+    return allServices.filter(
+      (service) =>
+        service.name?.toLowerCase().includes(lowerQuery) ||
+        service.summary?.toLowerCase().includes(lowerQuery) ||
+        service.type?.toLowerCase().includes(lowerQuery) ||
+        (service.targetAudience &&
+          service.targetAudience.some((audience) =>
+            audience.toLowerCase().includes(lowerQuery),
+          )) ||
+        (service.departmentType &&
+          service.departmentType.toLowerCase().includes(lowerQuery)),
+    );
+  }, [allServices, searchQuery]);
+
+  // ⚡ Bolt: Memoize stats separately so it doesn't recalculate when search changes
+  const stats = useMemo(() => {
+    // Calculate stats efficiently in one pass instead of 3 separate filters
+    let schemesCount = 0;
+    let certsCount = 0;
+    let contactsCount = 0;
+
+    for (const s of allServices) {
+      if (s.type === "scheme") schemesCount++;
+      else if (s.type === "certificate") certsCount++;
+      else if (s.type === "contact") contactsCount++;
+    }
+
+    return {
+      published: allServices.length,
+      schemes: schemesCount,
+      certificates: certsCount,
+      contacts: contactsCount,
+    };
+  }, [allServices]);
 
   const getServiceIcon = (type: string) => {
     switch (type) {
