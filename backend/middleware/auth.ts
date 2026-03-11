@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { prisma, queryCache } from "../lib/prisma";
+import { AdminRequest } from "../types/express";
 
 // Ensure JWT_SECRET is set - crash if missing in production
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -57,7 +58,7 @@ export const authenticateAdmin = async (
 
     // Check cache first — avoids DB hit on every authenticated request
     const cacheKey = `admin:${decoded.adminId}`;
-    let admin = await queryCache.get<any>(cacheKey);
+    let admin = await queryCache.get<AdminRequest["admin"]>(cacheKey);
 
     if (!admin) {
       // Cache miss — fetch from DB
@@ -88,7 +89,7 @@ export const authenticateAdmin = async (
       return res.status(401).json({ error: "Invalid or inactive account" });
     }
 
-    req.admin = admin as any;
+    req.admin = admin;
     next();
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
