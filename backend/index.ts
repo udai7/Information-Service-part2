@@ -84,6 +84,8 @@ const allowedOrigins = [
     : []),
 ].map(o => o.replace(/\/$/, "")).filter(Boolean);
 
+const allowedOriginsSet = new Set(allowedOrigins);
+
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -91,7 +93,7 @@ app.use(
       if (!origin) {
         return callback(null, true);
       }
-      if (allowedOrigins.includes(origin.replace(/\/$/, ""))) {
+      if (allowedOriginsSet.has(origin.replace(/\/$/, ""))) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
