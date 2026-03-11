@@ -404,12 +404,12 @@ export default function EditCertificateService() {
   };
 
   const handleChange = (setter: (val: string[]) => void, arr: string[], idx: number, value: string) => {
-    setter(arr.map((v: any, i: number) => (i === idx ? value : v)));
+    setter(arr.map((v: string, i: number) => (i === idx ? value : v)));
     autoSave();
   };
 
   const handleRemove = (setter: (val: string[]) => void, arr: string[], idx: number) => {
-    setter(arr.filter((_: any, i: number) => i !== idx));
+    setter(arr.filter((_: string, i: number) => i !== idx));
     autoSave();
   };
 
