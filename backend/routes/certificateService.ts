@@ -9,11 +9,21 @@ import "../types/express";
 
 const router = express.Router();
 
+const getServiceAccessWhere = (admin: NonNullable<Request["admin"]>) => {
+  if (admin.role === "super_admin") return {};
+  if (admin.role === "department_admin" && admin.departmentId) {
+    return { departmentId: admin.departmentId };
+  }
+  return { adminId: admin.id };
+};
+
 // GET /api/certificate-services - Get all certificate services
 router.get("/", authenticateAdmin, async (req: Request, res: Response) => {
   try {
+    const adminWhereClause = getServiceAccessWhere(req.admin!);
 
     const certificateServices = await prisma.certificateService.findMany({
+      where: adminWhereClause,
       include: {
         contacts: true,
         documents: true,
@@ -58,9 +68,13 @@ router.get(
       }
 
       const id = parseInt(req.params.id);
+      const adminWhereClause = getServiceAccessWhere(req.admin!);
 
-      const certificateService = await prisma.certificateService.findUnique({
-        where: { id },
+      const certificateService = await prisma.certificateService.findFirst({
+        where: {
+          id,
+          ...adminWhereClause,
+        },
         include: {
           contacts: true,
           documents: true,
@@ -119,6 +133,10 @@ router.post(
       }
 
       const adminId = req.admin!.id;
+      const departmentId =
+        req.admin!.role === "super_admin"
+          ? req.body.departmentId ?? null
+          : req.admin!.departmentId ?? null;
 
       const {
         name,
@@ -141,6 +159,7 @@ router.post(
           offlineAddress,
           status: "draft",
           adminId,
+          departmentId,
           eligibilityDetails: [],
           certificateDetails: [],
           processDetails: [],
@@ -187,10 +206,14 @@ router.patch(
       }
 
       const id = parseInt(req.params.id);
+      const adminWhereClause = getServiceAccessWhere(req.admin!);
 
       // Check if certificate service exists
-      const existingService = await prisma.certificateService.findUnique({
-        where: { id },
+      const existingService = await prisma.certificateService.findFirst({
+        where: {
+          id,
+          ...adminWhereClause,
+        },
       });
 
       if (!existingService) {
@@ -319,9 +342,13 @@ router.patch(
       }
 
       const id = parseInt(req.params.id);
+      const adminWhereClause = getServiceAccessWhere(req.admin!);
 
-      const existingService = await prisma.certificateService.findUnique({
-        where: { id },
+      const existingService = await prisma.certificateService.findFirst({
+        where: {
+          id,
+          ...adminWhereClause,
+        },
       });
 
       if (!existingService) {
@@ -388,8 +415,11 @@ router.post(
         });
       }
 
-      const existingService = await prisma.certificateService.findUnique({
-        where: { id },
+      const existingService = await prisma.certificateService.findFirst({
+        where: {
+          id,
+          ...getServiceAccessWhere(req.admin!),
+        },
       });
 
       if (!existingService) {
@@ -469,7 +499,7 @@ router.patch(
       const existingService = await prisma.certificateService.findFirst({
         where: {
           id: serviceId,
-          adminId: req.admin.id,
+          ...getServiceAccessWhere(req.admin),
         },
       });
 
@@ -534,9 +564,13 @@ router.delete(
       }
 
       const id = parseInt(req.params.id);
+      const adminWhereClause = getServiceAccessWhere(req.admin!);
 
-      const existingService = await prisma.certificateService.findUnique({
-        where: { id },
+      const existingService = await prisma.certificateService.findFirst({
+        where: {
+          id,
+          ...adminWhereClause,
+        },
       });
 
       if (!existingService) {

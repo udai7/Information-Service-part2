@@ -9,6 +9,14 @@ import "../types/express";
 
 const router = express.Router();
 
+const getServiceAccessWhere = (admin: NonNullable<Request["admin"]>) => {
+  if (admin.role === "super_admin") return {};
+  if (admin.role === "department_admin" && admin.departmentId) {
+    return { departmentId: admin.departmentId };
+  }
+  return { adminId: admin.id };
+};
+
 // Create new scheme service (basic information)
 router.post(
   "/create",
@@ -68,11 +76,17 @@ router.post(
         return res.status(401).json({ error: "Authentication required" });
       }
 
+      const admin = req.admin;
+      const departmentId =
+        admin.role === "super_admin"
+          ? req.body.departmentId ?? null
+          : admin.departmentId ?? null;
+
       // Check if scheme service with same name exists
       const existingService = await prisma.schemeService.findFirst({
         where: {
           name: name,
-          adminId: req.admin.id,
+          adminId: admin.id,
         },
       });
 
@@ -99,7 +113,8 @@ router.post(
             applicationMode === "offline" || applicationMode === "both"
               ? offlineAddress
               : null,
-          adminId: req.admin.id,
+          adminId: admin.id,
+          departmentId,
           status: "draft",
           eligibilityDetails: [],
           schemeDetails: [],
@@ -131,7 +146,9 @@ router.get("/", authenticateAdmin, async (req: any, res) => {
     const { status, page = 1, limit = 10 } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
-    const where: any = { adminId: req.admin.id };
+    const where: any = {
+      ...getServiceAccessWhere(req.admin),
+    };
     if (status && ["draft", "pending", "published"].includes(status)) {
       where.status = status;
     }
@@ -162,7 +179,9 @@ router.get("/", authenticateAdmin, async (req: any, res) => {
     // Get statistics
     const stats = await prisma.schemeService.groupBy({
       by: ["status"],
-      where: { adminId: req.admin.id },
+      where: {
+        ...getServiceAccessWhere(req.admin),
+      },
       _count: {
         status: true,
       },
@@ -215,7 +234,7 @@ router.get(
       const schemeService = await prisma.schemeService.findFirst({
         where: {
           id: serviceId,
-          adminId: req.admin.id,
+          ...getServiceAccessWhere(req.admin),
         },
         include: {
           admin: {
@@ -292,7 +311,7 @@ router.put(
       const existingService = await prisma.schemeService.findFirst({
         where: {
           id: serviceId,
-          adminId: req.admin.id,
+          ...getServiceAccessWhere(req.admin),
         },
       });
 
@@ -453,7 +472,7 @@ router.patch(
       const existingService = await prisma.schemeService.findFirst({
         where: {
           id: serviceId,
-          adminId: req.admin.id,
+          ...getServiceAccessWhere(req.admin),
         },
         include: {
           contacts: true,
@@ -560,7 +579,7 @@ router.patch(
       const existingService = await prisma.schemeService.findFirst({
         where: {
           id: serviceId,
-          adminId: req.admin.id,
+          ...getServiceAccessWhere(req.admin),
         },
       });
 
@@ -621,7 +640,7 @@ router.delete(
       const existingService = await prisma.schemeService.findFirst({
         where: {
           id: serviceId,
-          adminId: req.admin.id,
+          ...getServiceAccessWhere(req.admin),
         },
       });
 
@@ -659,8 +678,11 @@ router.post(
         return res.status(400).json({ error: "No PDF file uploaded" });
       }
 
-      const existingService = await prisma.schemeService.findUnique({
-        where: { id },
+      const existingService = await prisma.schemeService.findFirst({
+        where: {
+          id,
+          ...getServiceAccessWhere(req.admin!),
+        },
       });
 
       if (!existingService) {

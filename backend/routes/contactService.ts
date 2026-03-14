@@ -146,6 +146,11 @@ router.post(
         offlineAddress,
       } = req.body;
 
+      const departmentId =
+        req.admin!.role === "super_admin"
+          ? req.body.departmentId ?? null
+          : req.admin!.departmentId ?? null;
+
       const contactService = await prisma.contactService.create({
         data: {
           name,
@@ -157,6 +162,7 @@ router.post(
           offlineAddress,
           status: "draft",
           adminId,
+          departmentId,
           eligibilityDetails: [],
           contactDetails: [],
           processDetails: [],
