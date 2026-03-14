@@ -73,13 +73,10 @@ export default function EditSchemeService() {
 
       setLoading(true);
       try {
-        console.log("Fetching scheme service with ID:", id);
         const response = await apiClient.getSchemeService(parseInt(id));
-        console.log("API response:", response);
 
         // The response is the JSON directly, not wrapped in data
         const scheme = response.schemeService;
-        console.log("Extracted scheme:", scheme);
 
         setSchemeService(scheme ?? null);
 

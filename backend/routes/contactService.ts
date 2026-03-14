@@ -9,6 +9,15 @@ import "../types/express";
 
 const router = express.Router();
 
+// Helper to get authorization where clause based on admin role
+const getAdminWhereClause = (admin: NonNullable<Request["admin"]>) => {
+  if (admin.role === "super_admin") return {};
+  if (admin.role === "department_admin" && admin.departmentId) {
+    return { departmentId: admin.departmentId };
+  }
+  return { adminId: admin.id };
+};
+
 // Deep include for full contact service with offices, posts, employees
 const fullInclude = {
   contacts: {
@@ -30,7 +39,9 @@ const fullInclude = {
 // GET /api/contact-services - Get all contact services
 router.get("/", authenticateAdmin, async (req: Request, res: Response) => {
   try {
+    const adminWhereClause = getAdminWhereClause(req.admin!);
     const contactServices = await prisma.contactService.findMany({
+      where: adminWhereClause,
       include: fullInclude,
       orderBy: { createdAt: "desc" },
     });
@@ -67,8 +78,12 @@ router.get(
 
       const id = parseInt(req.params.id);
 
-      const contactService = await prisma.contactService.findUnique({
-        where: { id },
+      const adminWhereClause = getAdminWhereClause(req.admin!);
+      const contactService = await prisma.contactService.findFirst({
+        where: {
+          id,
+          ...adminWhereClause,
+        },
         include: fullInclude,
       });
 
@@ -184,8 +199,12 @@ router.patch(
 
       const id = parseInt(req.params.id);
 
-      const existingService = await prisma.contactService.findUnique({
-        where: { id },
+      const adminWhereClause = getAdminWhereClause(req.admin!);
+      const existingService = await prisma.contactService.findFirst({
+        where: {
+          id,
+          ...adminWhereClause,
+        },
       });
 
       if (!existingService) {
@@ -196,7 +215,13 @@ router.patch(
       }
 
       // Only update whitelisted scalar fields to prevent mass assignment
-      const allowedFields = ["name", "summary", "type", "applicationMode", "isActive"] as const;
+      const allowedFields = [
+        "name",
+        "summary",
+        "type",
+        "applicationMode",
+        "isActive",
+      ] as const;
       const updateData: Record<string, any> = {};
       for (const field of allowedFields) {
         if (req.body[field] !== undefined) {
@@ -248,8 +273,12 @@ router.post(
 
       const serviceId = parseInt(req.params.id);
 
-      const existingService = await prisma.contactService.findUnique({
-        where: { id: serviceId },
+      const adminWhereClause = getAdminWhereClause(req.admin!);
+      const existingService = await prisma.contactService.findFirst({
+        where: {
+          id: serviceId,
+          ...adminWhereClause,
+        },
       });
 
       if (!existingService) {
@@ -318,8 +347,12 @@ router.patch(
       const id = parseInt(req.params.id);
       const admin = req.admin!;
 
-      const existingService = await prisma.contactService.findUnique({
-        where: { id },
+      const adminWhereClause = getAdminWhereClause(req.admin!);
+      const existingService = await prisma.contactService.findFirst({
+        where: {
+          id,
+          ...adminWhereClause,
+        },
       });
 
       if (!existingService) {
@@ -330,8 +363,7 @@ router.patch(
       }
 
       // Determine publisher name for accountability
-      const publisherName =
-        admin.role === "super_admin" ? "Admin" : admin.name;
+      const publisherName = admin.role === "super_admin" ? "Admin" : admin.name;
 
       const publishedService = await prisma.contactService.update({
         where: { id },
@@ -379,8 +411,12 @@ router.post(
         });
       }
 
-      const existingService = await prisma.contactService.findUnique({
-        where: { id },
+      const adminWhereClause = getAdminWhereClause(req.admin!);
+      const existingService = await prisma.contactService.findFirst({
+        where: {
+          id,
+          ...adminWhereClause,
+        },
       });
 
       if (!existingService) {
@@ -449,8 +485,12 @@ router.patch(
         });
       }
 
-      const existingService = await prisma.contactService.findUnique({
-        where: { id: serviceId },
+      const adminWhereClause = getAdminWhereClause(req.admin!);
+      const existingService = await prisma.contactService.findFirst({
+        where: {
+          id: serviceId,
+          ...adminWhereClause,
+        },
       });
 
       if (!existingService) {
@@ -471,8 +511,9 @@ router.patch(
 
       res.json({
         success: true,
-        message: `Contact service ${isActive ? "activated" : "deactivated"
-          } successfully`,
+        message: `Contact service ${
+          isActive ? "activated" : "deactivated"
+        } successfully`,
         contactService: updatedService,
       });
 
@@ -507,8 +548,12 @@ router.delete(
 
       const id = parseInt(req.params.id);
 
-      const existingService = await prisma.contactService.findUnique({
-        where: { id },
+      const adminWhereClause = getAdminWhereClause(req.admin!);
+      const existingService = await prisma.contactService.findFirst({
+        where: {
+          id,
+          ...adminWhereClause,
+        },
       });
 
       if (!existingService) {
@@ -551,7 +596,9 @@ router.get("/public/list", readLimiter, async (req: Request, res: Response) => {
     const offset = (pageNum - 1) * limitNum;
 
     // Use cache for non-search queries (deep include is expensive)
-    const cacheKey = search ? null : `contacts:public:list:${pageNum}:${limitNum}`;
+    const cacheKey = search
+      ? null
+      : `contacts:public:list:${pageNum}:${limitNum}`;
     if (cacheKey) {
       const cached = await queryCache.get<any>(cacheKey);
       if (cached) {
@@ -646,8 +693,12 @@ router.delete(
       const serviceId = parseInt(req.params.serviceId);
       const contactId = parseInt(req.params.contactId);
 
-      const existingService = await prisma.contactService.findUnique({
-        where: { id: serviceId },
+      const adminWhereClause = getAdminWhereClause(req.admin!);
+      const existingService = await prisma.contactService.findFirst({
+        where: {
+          id: serviceId,
+          ...adminWhereClause,
+        },
       });
 
       if (!existingService) {

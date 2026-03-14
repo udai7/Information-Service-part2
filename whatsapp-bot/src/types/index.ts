@@ -1,3 +1,17 @@
+export interface SessionFormData {
+  contactType?: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  subject?: string;
+  description?: string;
+  department?: string;
+  priority?: "low" | "medium" | "high";
+  rating?: number;
+  comment?: string;
+  serviceType?: string;
+}
+
 export interface UserSession {
   phoneNumber: string;
   language: "en" | "bn";
@@ -14,7 +28,7 @@ export interface UserSession {
       | "grievance"
       | "feedback";
     serviceId?: string;
-    formData?: any;
+    formData?: SessionFormData;
     step?: number;
   };
 }

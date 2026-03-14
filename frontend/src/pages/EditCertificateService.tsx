@@ -307,16 +307,16 @@ export default function EditCertificateService() {
     autoSaveTimeoutRef.current = setTimeout(async () => {
       try {
         // Flatten application-specific data for saving
-        const allProcessSteps: any[] = [];
-        const allEligibilityItems: any[] = [];
-        const allDocuments: any[] = [];
-        const allContacts: any[] = [];
+        const allProcessSteps: (typeof processSteps[ApplicationType][number] & { applicationType: string })[] = [];
+        const allEligibilityItems: { eligibilityDetail: string; applicationType: string }[] = [];
+        const allDocuments: (typeof documents[ApplicationType][number] & { isRequired?: boolean; applicationType: string })[] = [];
+        const allContacts: (typeof contacts[ApplicationType][number] & { applicationType: string })[] = [];
 
         (Object.keys(processSteps) as ApplicationType[]).forEach((appType) => {
           processSteps[appType].forEach((step, index) => {
             if (step.stepDetails.trim()) {
               allProcessSteps.push({
-                slNo: index + 1,
+                slNo: String(index + 1),
                 stepDetails: step.stepDetails,
                 applicationType: appType,
               });
@@ -339,7 +339,7 @@ export default function EditCertificateService() {
           documents[appType].forEach((doc, index) => {
             if (doc.documentType.trim()) {
               allDocuments.push({
-                slNo: index + 1,
+                slNo: String(index + 1),
                 documentType: doc.documentType,
                 validProof: doc.validProof,
                 isRequired: true,
@@ -404,12 +404,12 @@ export default function EditCertificateService() {
   };
 
   const handleChange = (setter: (val: string[]) => void, arr: string[], idx: number, value: string) => {
-    setter(arr.map((v: any, i: number) => (i === idx ? value : v)));
+    setter(arr.map((v: string, i: number) => (i === idx ? value : v)));
     autoSave();
   };
 
   const handleRemove = (setter: (val: string[]) => void, arr: string[], idx: number) => {
-    setter(arr.filter((_: any, i: number) => i !== idx));
+    setter(arr.filter((_: string, i: number) => i !== idx));
     autoSave();
   };
 
@@ -534,16 +534,16 @@ export default function EditCertificateService() {
     setIsSaving(true);
     try {
       // Flatten application-specific data for saving
-      const allProcessSteps: { slNo: number; stepDetails: string; applicationType: string }[] = [];
+      const allProcessSteps: (typeof processSteps[ApplicationType][number] & { applicationType: string })[] = [];
       const allEligibilityItems: { eligibilityDetail: string; applicationType: string }[] = [];
-      const allDocuments: { slNo: number; documentType: string; validProof: string; isRequired: boolean; applicationType: string }[] = [];
+      const allDocuments: (typeof documents[ApplicationType][number] & { isRequired?: boolean; applicationType: string })[] = [];
       const allContacts: (typeof contacts[ApplicationType][number] & { applicationType: string })[] = [];
 
       (Object.keys(processSteps) as ApplicationType[]).forEach((appType) => {
         processSteps[appType].forEach((step, index) => {
           if (step.stepDetails.trim()) {
             allProcessSteps.push({
-              slNo: index + 1,
+              slNo: String(index + 1),
               stepDetails: step.stepDetails,
               applicationType: appType,
             });
@@ -566,7 +566,7 @@ export default function EditCertificateService() {
         documents[appType].forEach((doc, index) => {
           if (doc.documentType.trim()) {
             allDocuments.push({
-              slNo: index + 1,
+              slNo: String(index + 1),
               documentType: doc.documentType,
               validProof: doc.validProof,
               isRequired: true,

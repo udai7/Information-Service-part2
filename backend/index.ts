@@ -84,6 +84,8 @@ const allowedOrigins = [
     : []),
 ].map(o => o.replace(/\/$/, "")).filter(Boolean);
 
+const allowedOriginsSet = new Set(allowedOrigins);
+
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -91,7 +93,7 @@ app.use(
       if (!origin) {
         return callback(null, true);
       }
-      if (allowedOrigins.includes(origin.replace(/\/$/, ""))) {
+      if (allowedOriginsSet.has(origin.replace(/\/$/, ""))) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
@@ -191,7 +193,7 @@ process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
 // ─── Periodic Session Cleanup (every 6 hours) ───
 setInterval(async () => {
   try {
-    const result = await prisma.session.deleteMany({
+    await prisma.session.deleteMany({
       where: {
         OR: [
           { expiresAt: { lt: new Date() } },
@@ -199,9 +201,6 @@ setInterval(async () => {
         ],
       },
     });
-    if (result.count > 0) {
-      console.log(`Cleaned up ${result.count} expired/inactive sessions`);
-    }
   } catch (e) {
     console.error("Session cleanup error:", e);
   }
