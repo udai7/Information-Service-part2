@@ -31,16 +31,31 @@ export default function UserContactService() {
   const [departmentTypeFilter, setDepartmentTypeFilter] = useState("all"); // 'all', 'emergency', 'regular'
   const [loading, setLoading] = useState(false);
 
-  const tripuraDistricts = [
-    "Dhalai",
-    "Gomati",
-    "Khowai",
-    "North Tripura",
-    "Sepahijala",
-    "South Tripura",
-    "Unakoti",
-    "West Tripura",
-  ];
+  const inferOfficeLevel = (contact: any): "State" | "District" => {
+    const district = (contact?.district || "").toLowerCase();
+    const subDistrict = (contact?.subDistrict || "").toLowerCase();
+    const block = (contact?.block || "").toLowerCase();
+    const designation = (contact?.designation || "").toLowerCase();
+
+    if (
+      district.includes("state capital") ||
+      district.includes("all districts") ||
+      designation.includes("chief") ||
+      designation.includes("state")
+    ) {
+      return "State";
+    }
+
+    if (
+      subDistrict.includes("district") ||
+      block.includes("district") ||
+      designation.includes("district")
+    ) {
+      return "District";
+    }
+
+    return "District";
+  };
 
   const fetchOfficeDetails = async (service: any) => {
     try {
@@ -107,7 +122,7 @@ export default function UserContactService() {
             officeDetails.push({
               officeName: contact.name,
               officeId: contact.id,
-              level: contact.designation,
+              level: inferOfficeLevel(contact),
               district: contact.district,
               subDistrict: contact.subDistrict,
               block: contact.block,
@@ -319,7 +334,7 @@ export default function UserContactService() {
                                 service.contacts?.map((contact) => ({
                                   officeName: contact.name, // Use the actual office name
                                   officeId: contact.id,
-                                  level: contact.designation, // Use designation which stores the correct level
+                                  level: inferOfficeLevel(contact),
                                   district: contact.district,
                                   subDistrict: contact.subDistrict,
                                   block: contact.block,
@@ -476,7 +491,13 @@ export default function UserContactService() {
                               <SelectValue placeholder="Select District" />
                             </SelectTrigger>
                             <SelectContent>
-                              {tripuraDistricts.map((district) => (
+                              {Array.from(
+                                new Set(
+                                  modalService.offices
+                                    .map((office: any) => office.district)
+                                    .filter(Boolean),
+                                ),
+                              ).map((district) => (
                                 <SelectItem key={district} value={district}>
                                   {district}
                                 </SelectItem>
@@ -509,7 +530,10 @@ export default function UserContactService() {
                               return office.level === "District";
                             }
                             // If specific district selected, show offices in that district
-                            return office.district === selectedDistrict;
+                            return (
+                              office.level === "District" &&
+                              office.district === selectedDistrict
+                            );
                           }
                           // Default: show all offices
                           return true;
